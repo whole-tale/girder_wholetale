@@ -1,38 +1,16 @@
-machine:
-  environment:
-    CXX: g++-4.8
-    BABEL_ENV: cover
-    CACHE: $HOME/cache
-    CMAKE_SHORT_VERSION: 3.4
-    CMAKE_VERSION: 3.4.3
-    PATH: $CACHE/cmake-$CMAKE_VERSION/bin:$PATH
-    JASMINE_TIMEOUT: 15000
-    DEBIAN_FRONTEND: noninteractive
-  node:
-    version: 6
-  post:
-    - pyenv global 3.4.4
+version: 2.0
+jobs:
+  build:
+    docker:
+      - image: xarthisius/girder:test
 
-dependencies:
-  cache_directories:
-    - "~/cache"
-    - "~/.npm"
-  override:
-    - git clone https://github.com/xarthisius/girder "$HOME"/girder
-    - ln -s "$HOME"/girder_ythub "$HOME"/girder/plugins/wholetale
-    - cd "$HOME"/girder
-    - sudo apt-get -qqy update; sudo apt-get install -qqy libgif-dev libsasl2-dev python-dev libldap2-dev libssl-dev
-    - cd "$HOME"/girder; ./scripts/install_cmake.sh
-    - cd "$HOME"/girder; rm -rf ./node_modules
-    - npm install -g npm
-    - npm config set progress false
-    - set -o pipefail; cd "$HOME"/girder; pyenv exec pip install -U pip | cat
-    - set -o pipefail; cd "$HOME"/girder; pyenv exec pip install -r requirements-dev.txt -r plugins/wholetale/requirements.txt -e .[plugins,sftp] -e clients/python | cat
-    - pyenv rehash
-    - set -o pipefail; cd "$HOME"/girder; pyenv exec girder-install web --all --dev | cat
-
-test:
-  override:
-    - ~/girder_ythub/cmake/run_circleci.sh:
-        parallel: true
-        pwd: "~/girder"
+    steps:
+      - checkout
+      - run: |
+          ln -s /root/project /girder/plugins/wholetale
+          ls -l /girder/plugins
+          ls -l /girder/plugins/wholetale
+          set -o pipefail; pip install -r requirements.txt | cat
+          cd /girder ; girder-install web --all --dev | cat
+      - run: |
+          /bin/sh /girder/plugins/wholetale/cmake/run_circleci.sh

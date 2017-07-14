@@ -1,10 +1,10 @@
 #!/bin/bash
 
-export PYTHON_VERSION=`pyenv version-name`
-export COVERAGE_EXECUTABLE=`pyenv which coverage`
-export FLAKE8_EXECUTABLE=`pyenv which flake8`
-export VIRTUALENV_EXECUTABLE=`pyenv which virtualenv`
-export PYTHON_EXECUTABLE=`pyenv which python`
+export PYTHON_VERSION=3.4
+export COVERAGE_EXECUTABLE=/usr/bin/coverage
+export FLAKE8_EXECUTABLE=/usr/bin/flake8
+export VIRTUALENV_EXECUTABLE=/usr/bin/virtualenv
+export PYTHON_EXECUTABLE=/usr/bin/python3
 
 case $CIRCLE_NODE_INDEX in
 	0|1)
