@@ -15,3 +15,5 @@ jobs:
           cd /girder ; girder-install web --all --dev | cat
       - run: |
           /bin/sh /girder/plugins/wholetale/cmake/run_circleci.sh
+      - run: |
+          bash <(curl -s https://codecov.io/bash)
