@@ -1,5 +1,5 @@
-set(CTEST_SOURCE_DIRECTORY "$ENV{HOME}/girder")
-set(CTEST_BINARY_DIRECTORY "$ENV{HOME}/build")
+set(CTEST_SOURCE_DIRECTORY "/girder")
+set(CTEST_BINARY_DIRECTORY "/girder/build")
 
 include(${CTEST_SOURCE_DIRECTORY}/CTestConfig.cmake)
 

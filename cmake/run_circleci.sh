@@ -1,9 +1,9 @@
 #!/bin/bash
 
 export PYTHON_VERSION=3.4
-export COVERAGE_EXECUTABLE=/usr/bin/coverage
-export FLAKE8_EXECUTABLE=/usr/bin/flake8
-export VIRTUALENV_EXECUTABLE=/usr/bin/virtualenv
+export COVERAGE_EXECUTABLE=/usr/local/bin/coverage
+export FLAKE8_EXECUTABLE=/usr/local/bin/flake8
+export VIRTUALENV_EXECUTABLE=/usr/local/bin/virtualenv
 export PYTHON_EXECUTABLE=/usr/bin/python3
 
 case $CIRCLE_NODE_INDEX in
@@ -21,16 +21,15 @@ case $CIRCLE_NODE_INDEX in
 		exit 0
 esac
 
-mkdir $HOME/build
-touch $HOME/build/test_failed
-ctest -VV -S $HOME/girder/plugins/wholetale/cmake/circle_continuous.cmake
-if [ -f $HOME/build/test_failed ] ; then
+mkdir /girder/build
+touch /girder/build/test_failed
+ctest -VV -S /girder/plugins/wholetale/cmake/circle_continuous.cmake
+if [ -f /gitder/build/test_failed ] ; then
 	exit 1
 fi
 
-cd $HOME/girder_ythub
-cp -r ~/build/coverage.xml $HOME/girder_ythub/
+cd /girder
 mkdir -p $CIRCLE_ARTIFACTS/coverage/python $CIRCLE_ARTIFACTS/coverage/js
-cp -r ~/build/coverage.xml ~/girder/clients/web/dev/built/py_coverage/* $CIRCLE_ARTIFACTS/coverage/python
-cp -r ~/build/coverage/* $CIRCLE_ARTIFACTS/coverage/js
+cp -r build/coverage.xml girder/clients/web/dev/built/py_coverage/* $CIRCLE_ARTIFACTS/coverage/python
+cp -r build/coverage/* $CIRCLE_ARTIFACTS/coverage/js
 bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
