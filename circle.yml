@@ -4,24 +4,29 @@ jobs:
     docker:
       - image: xarthisius/girder:test
       - image: mongo:3.2
-
     steps:
       - checkout
       - run:
           name: Installing Plugin Dependencies
           command: |
             ln -s /root/project /girder/plugins/wholetale
-            ls -l /girder/plugins
-            ls -l /girder/plugins/wholetale
             set -o pipefail; pip install -r requirements.txt | cat
             cd /girder ; girder-install web --all --dev | cat
       - run:
           name: Running Tests
+          environment:
+            - FOO: "bar"
+            - PYTHON_VERSION: "3.4"
+            - COVERAGE_EXECUTABLE: "/usr/local/bin/coverage"
+            - FLAKE8_EXECUTABLE: "/usr/local/bin/flake8"
+            - VIRTUALENV_EXECUTABLE: "/usr/local/bin/virtualenv"
+            - PYTHON_EXECUTABLE: "/usr/bin/python3"
+            - TEST_GROUP: "python"
           command: |
-            /bin/sh /girder/plugins/wholetale/cmake/run_circleci.sh
+            mkdir /girder/build
+            ctest -VV -S /girder/plugins/wholetale/cmake/circle_continuous.cmake
       - run:
           name: Uploading Coverage Results
+          working_directory: /girder/build
           command: |
-            pwd
-            ls -l
             bash <(curl -s https://codecov.io/bash)
