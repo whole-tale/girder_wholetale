@@ -7,13 +7,21 @@ jobs:
 
     steps:
       - checkout
-      - run: |
-          ln -s /root/project /girder/plugins/wholetale
-          ls -l /girder/plugins
-          ls -l /girder/plugins/wholetale
-          set -o pipefail; pip install -r requirements.txt | cat
-          cd /girder ; girder-install web --all --dev | cat
-      - run: |
-          /bin/sh /girder/plugins/wholetale/cmake/run_circleci.sh
-      - run: |
-          bash <(curl -s https://codecov.io/bash)
+      - run:
+          name: Installing Plugin Dependencies
+          command: |
+            ln -s /root/project /girder/plugins/wholetale
+            ls -l /girder/plugins
+            ls -l /girder/plugins/wholetale
+            set -o pipefail; pip install -r requirements.txt | cat
+            cd /girder ; girder-install web --all --dev | cat
+      - run:
+          name: Running Tests
+          command: |
+            /bin/sh /girder/plugins/wholetale/cmake/run_circleci.sh
+      - run:
+          name: Uploading Coverage Results
+          command: |
+            pwd
+            ls -l
+            bash <(curl -s https://codecov.io/bash)
