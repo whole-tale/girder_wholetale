@@ -3,6 +3,7 @@ jobs:
   build:
     docker:
       - image: xarthisius/girder:test
+      - image: mongo:3.2
 
     steps:
       - checkout
