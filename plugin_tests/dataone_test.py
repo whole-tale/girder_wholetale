@@ -10,6 +10,7 @@ from tests import base
 from girder.constants import ROOT_DIR
 from girder.api.rest import RestException
 
+base.TestCase.maxDiff = None
 
 D1_QUERY_URL = (
     'https://cn.dataone.org/cn/v2/query/solr/'
@@ -329,3 +330,84 @@ class DataONEHarversterTestCase(base.TestCase):
         self.model('user').remove(self.user)
         self.model('user').remove(self.admin)
         self.patcher.stop()
+
+
+class ListFilesTestCase(base.TestCase):
+
+    @httmock.all_requests
+    def mockOtherRequest(self, url, request):
+        raise Exception('Unexpected url %s' % str(request.url))
+
+    def setUp(self):
+        users = ({
+            'email': 'root@dev.null',
+            'login': 'admin',
+            'firstName': 'Root',
+            'lastName': 'van Klompf',
+            'password': 'secret'
+        }, {
+            'email': 'joe@dev.null',
+            'login': 'joeregular',
+            'firstName': 'Joe',
+            'lastName': 'Regular',
+            'password': 'secret'
+        })
+        self.admin, self.user = [self.model('user').createUser(**user)
+                                 for user in users]
+        self.patcher = mock.patch('rdflib.parser.urlopen', fake_urlopen)
+        self.patcher.start()
+
+    def testListFiles(self):
+        """Test the listFiles endpoint"""
+        @httmock.urlmatch(scheme='https', netloc='^cn.dataone.org$',
+                          path='^/cn/v2/query/solr/$', method='GET')
+        def mockSearchDataONE(url, request):
+            if '944d8537' in request.url:
+                raise RestException(
+                    'No object was found in the index for %s.' % request.url)
+            if url.query.startswith('q=identifier'):
+                return json.dumps(D1_QUERY)
+            elif url.query.startswith('q=resourceMap'):
+                return json.dumps(D1_MAP)
+            raise Exception('Unexpected query in url %s' % str(request.url))
+
+        @httmock.urlmatch(scheme='http', netloc='^use.yt$',
+                          path='^/upload/944d8537$', method='HEAD')
+        def mockCurldrop(url, request):
+            headers = {
+                'Content-Type': 'application/octet-stream',
+                'Content-Length': '8792',
+                'Content-Disposition': 'attachment; filename=nginx.tmpl'
+            }
+            return httmock.response(200, {}, headers, None, 5, request)
+
+        with httmock.HTTMock(mockSearchDataONE, mockCurldrop,
+                             self.mockOtherRequest):
+            resp = self.request(
+                path='/repository/listFiles', method='GET',
+                params={'dataId':
+                        json.dumps(['urn:uuid:c878ae53-06cf-40c9-a830-7f6f564133f9'])})
+            self.assertStatus(resp, 200)
+            dataMap = resp.json
+
+        """
+        DEVNOTE: Current behavior falls back on the file identifier. This will
+        eventually be changed to parse the metadata for the fileName. When that
+        is implemented, this test will break. To fix it, replace the 'name' fields
+        below to the corresponding file name.
+        """
+        self.assertEqual(
+            dataMap, [[{
+            'name': 'Thaw depth in the ITEX plots at Barrow and Atqasuk, Alaska',
+            'size': 21702
+        }, {
+            'name': 'urn:uuid:dc29f3cf-022a-4a33-9eed-8dc9ba6e0218',
+            'size': 7770
+        }, {
+            'name': 'urn:uuid:428fcb96-03a9-42b3-81d1-2944ac686e55',
+            'size': 3971
+        }, {
+            'name': 'urn:uuid:bd7754a7-d4db-4217-8bf0-4c5d3691c0bc',
+            'size': 7439
+        }]]
+        )
