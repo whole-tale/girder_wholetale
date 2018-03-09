@@ -67,7 +67,7 @@ fileMap = {
     'required': ['name', 'size'],
     'example': {
         'name': 'urn:uuid:42969280-e11c-41a9-92dc-33964bf785c8',
-        'size': '10.5063/F1Z899CZ'
+        'size': '178679'
     },
 }
 
@@ -143,7 +143,7 @@ class Repository(Resource):
         Description('Retrieve a list of files in a DataONE repository')
         .notes('Given a list of external data identifiers, '
                'returns a list of files inside along with '
-               'their size')
+               'their sizes')
         .jsonParam('dataId', paramType='query', required=True,
                    description='List of external datasets identificators.')
         .responseClass('fileMap', array=True))
