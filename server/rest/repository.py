@@ -63,11 +63,22 @@ fileMap = {
             'type': 'integer',
             'description': 'Size of the file in bytes.'
         },
+        'id': {
+            'type': 'string',
+            'description': 'The document identifier.'
+        },
+        'parentPackage': {
+            'type': 'string',
+            'description': 'The package that the file belongs in.'
+        }
     },
     'required': ['name', 'size'],
     'example': {
-        'name': 'urn:uuid:42969280-e11c-41a9-92dc-33964bf785c8',
-        'size': '178679'
+        'name': 'Data from a dynamically downscaled projection of past and'
+        'future microclimates covering North America from 1980-1999 and 2080-2099',
+        'size': '178679',
+        'id': 'urn:uuid:42969280-e11c-41a9-92dc-33964bf785c8',
+        'parentPackage': 'urn:uuid:072f9a3f-9778-47dd-b5a4-d6d8981f2e44',
     },
 }
 

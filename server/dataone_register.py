@@ -229,7 +229,7 @@ def D1_lookup(path):
     package_pid = get_package_pid(path)
     logger.debug('Found package PID of {}.'.format(package_pid))
 
-    docs = get_file_list(package_pid)
+    docs = get_documents(package_pid)
 
     # Filter the Solr result by TYPE so we can construct the package
     metadata = [doc for doc in docs if doc['formatType'] == 'METADATA']
@@ -246,7 +246,7 @@ def D1_lookup(path):
     return dataMap
 
 
-def get_file_list(package_pid):
+def get_documents(package_pid):
     """
     Retrieve a list of all the files in a data package.The metadata
     record providing information about the package is also in this list.
@@ -263,6 +263,25 @@ def get_file_list(package_pid):
     return result['response']['docs']
 
 
+def get_object_name(doc):
+    """
+    When setting the name of objects in a package, we want to be sure to
+    use 'title' for METADATA objects and 'fileName for others.
+    """
+    if doc['formatType'] == 'METADATA':
+        return doc['title']
+    if 'fileName' not in doc:
+        return doc['identifier']
+    return doc['fileName']
+
+
+def get_package_title(docs):
+    for doc in docs:
+        if doc['formatType'] == 'METADATA':
+            return doc['title']
+    return ""
+
+
 def get_package_list(path):
     """
     Retrieves a list of all the files in a package with
@@ -272,13 +291,19 @@ def get_package_list(path):
     package_pid = get_package_pid(path)
     logger.debug('Found package PID of {}.'.format(package_pid))
 
-    docs = get_file_list(package_pid)
+    docs = get_documents(package_pid)
+
+    packageName = get_package_title(docs)
+
     files = list()
     for doc in docs:
-        data_map = {
-            'name': doc.get('title', doc.get('identifier')),
-            'size': doc.get('size', -1)
+
+        dataMap = {
+            'name': get_object_name(doc),
+            'size': doc.get('size', -1),
+            'id': doc.get('identifier', -1),
+            'packageParent': packageName
             }
-        files.append(data_map)
+        files.append(dataMap)
 
     return files

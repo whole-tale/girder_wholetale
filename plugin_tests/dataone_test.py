@@ -10,7 +10,6 @@ from tests import base
 from girder.constants import ROOT_DIR
 from girder.api.rest import RestException
 
-base.TestCase.maxDiff = None
 
 D1_QUERY_URL = (
     'https://cn.dataone.org/cn/v2/query/solr/'
@@ -390,24 +389,26 @@ class ListFilesTestCase(base.TestCase):
             self.assertStatus(resp, 200)
             dataMap = resp.json
 
-        """
-        DEVNOTE: Current behavior falls back on the file identifier. This will
-        eventually be changed to parse the metadata for the fileName. When that
-        is implemented, this test will break. To fix it, replace the 'name' fields
-        below to the corresponding file name.
-        """
         self.assertEqual(
             dataMap, [[{
+            'id' : 'urn:uuid:c878ae53-06cf-40c9-a830-7f6f564133f9',
             'name': 'Thaw depth in the ITEX plots at Barrow and Atqasuk, Alaska',
-            'size': 21702
+            'packageParent': 'Thaw depth in the ITEX plots at Barrow and Atqasuk, Alaska',
+            'size': 21702,
         }, {
-            'name': 'urn:uuid:dc29f3cf-022a-4a33-9eed-8dc9ba6e0218',
-            'size': 7770
+            'id': 'urn:uuid:dc29f3cf-022a-4a33-9eed-8dc9ba6e0218',
+            'name': '2015 Barrow Atqasuk ITEX Thaw v1.csv',
+            'packageParent': 'Thaw depth in the ITEX plots at Barrow and Atqasuk, Alaska',
+            'size': 7770,
         }, {
-            'name': 'urn:uuid:428fcb96-03a9-42b3-81d1-2944ac686e55',
-            'size': 3971
+            'id': 'urn:uuid:428fcb96-03a9-42b3-81d1-2944ac686e55',
+            'name': '1995-20XX Barrow Atqasuk ITEX Thaw metadata - Copy.txt',
+            'packageParent': 'Thaw depth in the ITEX plots at Barrow and Atqasuk, Alaska',
+            'size': 3971,
         }, {
-            'name': 'urn:uuid:bd7754a7-d4db-4217-8bf0-4c5d3691c0bc',
-            'size': 7439
+            'id': 'urn:uuid:bd7754a7-d4db-4217-8bf0-4c5d3691c0bc',
+            'name': '2016 Barrow Atqasuk ITEX Thaw v1.csv',
+            'packageParent': 'Thaw depth in the ITEX plots at Barrow and Atqasuk, Alaska',
+            'size': 7439,
         }]]
         )
