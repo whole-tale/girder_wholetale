@@ -329,3 +329,86 @@ class DataONEHarversterTestCase(base.TestCase):
         self.model('user').remove(self.user)
         self.model('user').remove(self.admin)
         self.patcher.stop()
+
+
+class ListFilesTestCase(base.TestCase):
+
+    @httmock.all_requests
+    def mockOtherRequest(self, url, request):
+        raise Exception('Unexpected url %s' % str(request.url))
+
+    def setUp(self):
+        users = ({
+            'email': 'root@dev.null',
+            'login': 'admin',
+            'firstName': 'Root',
+            'lastName': 'van Klompf',
+            'password': 'secret'
+        }, {
+            'email': 'joe@dev.null',
+            'login': 'joeregular',
+            'firstName': 'Joe',
+            'lastName': 'Regular',
+            'password': 'secret'
+        })
+        self.admin, self.user = [self.model('user').createUser(**user)
+                                 for user in users]
+        self.patcher = mock.patch('rdflib.parser.urlopen', fake_urlopen)
+        self.patcher.start()
+
+    def testListFiles(self):
+        """Test the listFiles endpoint"""
+        @httmock.urlmatch(scheme='https', netloc='^cn.dataone.org$',
+                          path='^/cn/v2/query/solr/$', method='GET')
+        def mockSearchDataONE(url, request):
+            if '944d8537' in request.url:
+                raise RestException(
+                    'No object was found in the index for %s.' % request.url)
+            if url.query.startswith('q=identifier'):
+                return json.dumps(D1_QUERY)
+            elif url.query.startswith('q=resourceMap'):
+                return json.dumps(D1_MAP)
+            raise Exception('Unexpected query in url %s' % str(request.url))
+
+        @httmock.urlmatch(scheme='http', netloc='^use.yt$',
+                          path='^/upload/944d8537$', method='HEAD')
+        def mockCurldrop(url, request):
+            headers = {
+                'Content-Type': 'application/octet-stream',
+                'Content-Length': '8792',
+                'Content-Disposition': 'attachment; filename=nginx.tmpl'
+            }
+            return httmock.response(200, {}, headers, None, 5, request)
+
+        with httmock.HTTMock(mockSearchDataONE, mockCurldrop,
+                             self.mockOtherRequest):
+            resp = self.request(
+                path='/repository/listFiles', method='GET',
+                params={'dataId':
+                        json.dumps(['urn:uuid:c878ae53-06cf-40c9-a830-7f6f564133f9'])})
+            self.assertStatus(resp, 200)
+            dataMap = resp.json
+
+        self.assertEqual(
+            dataMap, [[{
+            'id' : 'urn:uuid:c878ae53-06cf-40c9-a830-7f6f564133f9',
+            'name': 'Thaw depth in the ITEX plots at Barrow and Atqasuk, Alaska',
+            'packageParent': 'Thaw depth in the ITEX plots at Barrow and Atqasuk, Alaska',
+            'size': 21702,
+        }, {
+            'id': 'urn:uuid:dc29f3cf-022a-4a33-9eed-8dc9ba6e0218',
+            'name': '2015 Barrow Atqasuk ITEX Thaw v1.csv',
+            'packageParent': 'Thaw depth in the ITEX plots at Barrow and Atqasuk, Alaska',
+            'size': 7770,
+        }, {
+            'id': 'urn:uuid:428fcb96-03a9-42b3-81d1-2944ac686e55',
+            'name': '1995-20XX Barrow Atqasuk ITEX Thaw metadata - Copy.txt',
+            'packageParent': 'Thaw depth in the ITEX plots at Barrow and Atqasuk, Alaska',
+            'size': 3971,
+        }, {
+            'id': 'urn:uuid:bd7754a7-d4db-4217-8bf0-4c5d3691c0bc',
+            'name': '2016 Barrow Atqasuk ITEX Thaw v1.csv',
+            'packageParent': 'Thaw depth in the ITEX plots at Barrow and Atqasuk, Alaska',
+            'size': 7439,
+        }]]
+        )

@@ -87,7 +87,7 @@ def find_package_pid(pid):
 
     if len(result['response']['docs'][0]['resourceMap']) == 1:
         return result['response']['docs'][0]['resourceMap'][0]
-    
+
     if len(result['response']['docs'][0]['resourceMap']) > 1:
         # Extract all of the candidate resource map PIDs (list of lists)
         resmaps = [doc['resourceMap'] for doc in result['response']['docs']]
@@ -122,7 +122,7 @@ def find_nonobsolete_resmaps(pids):
 
     result = query(
         "identifier:(\"{}\")+AND+-obsoletedBy:*".format("\" OR \"".join(pids),
-        fields = "identifier")
+                                                        fields="identifier")
     )
     result_len = int(result['response']['numFound'])
 
@@ -133,7 +133,8 @@ def find_nonobsolete_resmaps(pids):
 
 
 def find_initial_pid(path):
-    """Given some arbitrary path, which may be a landing page, resolve URI or
+    """
+    Given some arbitrary path, which may be a landing page, resolve URI or
     something else, find the PID the user intended (the package PID).
 
     This can parse the PID out of the HTTP and HTTPS versions of...
@@ -208,26 +209,27 @@ def get_documenting_identifiers(pid):
     return pids
 
 
-def D1_lookup(path):
-    """Create the map (JSON) describing a Data Package."""
+def get_package_pid(path):
+    """Get the pid of a package from its path."""
+
     initial_pid = find_initial_pid(path)
     if initial_pid is None:
+        logger.warning('Failed to find the initial pid of the package with path {}.'.format(path))
         return
-    logger.debug('Parsed initial PID of {}.'.format(initial_pid))
 
-    package_pid = find_package_pid(initial_pid)
+    logger.debug('Parsed initial PID of {}.'.format(initial_pid))
+    return find_package_pid(initial_pid)
+
+
+def D1_lookup(path):
+    """Lookup and return information about a package on the
+    DataONE network.
+    """
+
+    package_pid = get_package_pid(path)
     logger.debug('Found package PID of {}.'.format(package_pid))
 
-    # query for things in the resource map
-    result = query('resourceMap:"{}"'.format(esc(package_pid)),
-                   ["identifier", "formatType", "title", "size", "formatId",
-                    "fileName", "documents"])
-
-    if 'response' not in result or 'docs' not in result['response']:
-        raise RestException(
-            "Failed to get a result for the query\n {}".format(result))
-
-    docs = result['response']['docs']
+    docs = get_documents(package_pid)
 
     # Filter the Solr result by TYPE so we can construct the package
     metadata = [doc for doc in docs if doc['formatType'] == 'METADATA']
@@ -242,3 +244,66 @@ def D1_lookup(path):
         'repository': 'DataONE',
     }
     return dataMap
+
+
+def get_documents(package_pid):
+    """
+    Retrieve a list of all the files in a data package.The metadata
+    record providing information about the package is also in this list.
+    """
+
+    result = query('resourceMap:"{}"'.format(esc(package_pid)),
+                   ["identifier", "formatType", "title", "size", "formatId",
+                    "fileName", "documents"])
+
+    if 'response' not in result or 'docs' not in result['response']:
+        raise RestException(
+            "Failed to get a result for the query\n {}".format(result))
+
+    return result['response']['docs']
+
+
+def get_object_name(doc):
+    """
+    When setting the name of objects in a package, we want to be sure to
+    use 'title' for METADATA objects and 'fileName for others.
+    """
+    if doc['formatType'] == 'METADATA':
+        return doc['title']
+    if 'fileName' not in doc:
+        return doc['identifier']
+    return doc['fileName']
+
+
+def get_package_title(docs):
+    for doc in docs:
+        if doc['formatType'] == 'METADATA':
+            return doc['title']
+    return ""
+
+
+def get_package_list(path):
+    """
+    Retrieves a list of all the files in a package with
+    their sizes
+    """
+
+    package_pid = get_package_pid(path)
+    logger.debug('Found package PID of {}.'.format(package_pid))
+
+    docs = get_documents(package_pid)
+
+    packageName = get_package_title(docs)
+
+    files = list()
+    for doc in docs:
+
+        dataMap = {
+            'name': get_object_name(doc),
+            'size': doc.get('size', -1),
+            'id': doc.get('identifier', -1),
+            'packageParent': packageName
+            }
+        files.append(dataMap)
+
+    return files
