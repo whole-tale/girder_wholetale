@@ -1,6 +1,8 @@
 girder_wholetale |build-status| |codecov-badge|
 ###############################################
 
+DO NOT MERGE
+
 Girder plugin enabling intergration with tmpnb
 
 .. |build-status| image:: https://circleci.com/gh/girder/girder.png?style=shield
