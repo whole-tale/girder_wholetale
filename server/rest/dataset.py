@@ -8,7 +8,9 @@ from girder.constants import AccessType, SortDir, TokenScope
 from girder.models.model_base import ValidationException
 from girder.utility import path as path_util
 from girder.utility.progress import ProgressContext
-from ..constants import CATALOG_NAME
+from ..constants import \
+    CATALOG_NAME,\
+    DataONELocations
 from ..schema.misc import dataMapListSchema
 from ..utils import getOrCreateRootFolder
 from .harvester import \
@@ -196,9 +198,22 @@ class Dataset(Resource):
                required=False, dataType='boolean', default=True)
         .jsonParam('dataMap', 'A list of data mappings',
                    paramType='body', schema=dataMapListSchema)
+        .param('base_url', 'The node endpoint url. This can be used '
+                           'to register datasets from custom networks, '
+                           'such as the DataONE development network. This can '
+                           'be passed in as an ordinary string. Examples '
+                           'include https://dev.nceas.ucsb.edu/knb/d1/mn/v2 and '
+                           'https://cn.dataone.org/cn/v2',
+               required=False, dataType='string', default=DataONELocations.prod_cn)
         .errorResponse('Write access denied for parent collection.', 403)
     )
-    def importData(self, parentId, parentType, public, copyToHome, dataMap,
+    def importData(self,
+                   parentId,
+                   parentType,
+                   public,
+                   copyToHome,
+                   dataMap,
+                   base_url,
                    params):
         user = self.getCurrentUser()
 
@@ -217,8 +232,13 @@ class Dataset(Resource):
                 if data['repository'] == 'DataONE':
                     importedData['folder'].append(
                         register_DataONE_resource(
-                            parent, parentType, ctx, user,
-                            data['dataId'], name=data['name'])
+                            parent,
+                            parentType,
+                            ctx,
+                            user,
+                            data['dataId'],
+                            name=data['name'],
+                            base_url=base_url)
                     )
                 elif data['repository'] == 'HTTP':
                     importedData['item'].append(

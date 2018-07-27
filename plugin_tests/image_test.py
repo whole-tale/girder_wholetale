@@ -67,6 +67,7 @@ class ImageTestCase(base.TestCase):
 
     def testImageFlow(self):
         from girder.plugins.wholetale.constants import ImageStatus
+        from server.utils import create_repository_file
         # test search modes
         resp = self.request(
             path='/image', method='POST', user=self.user,
@@ -93,10 +94,10 @@ class ImageTestCase(base.TestCase):
             sendTaskCalls = celeryMock.return_value.send_task.mock_calls
             mock_repo_url = 'https://github.com/{}/archive/{}.tar.gz'.format(GOOD_REPO, GOOD_COMMIT)
             self.assertEqual(len(sendTaskCalls), 1)
+            file_id = create_repository_file(str(self.recipe['_id']))
             self.assertEqual(sendTaskCalls[0][1], (
                 'gwvolman.tasks.build_image',
-                (image['_id'], self.recipe['url'], self.recipe['commitId']), {})
-            )
+                (image['_id'], image['fullName'], mock_repo_url), {'file_id': file_id}))
 
             job = resp.json
             imageId = job['args'][0]

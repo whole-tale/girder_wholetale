@@ -2,18 +2,19 @@
 # -*- coding: utf-8 -*-
 import requests
 
+from girder import logger
 from girder.api import access
 from girder.api.describe import Description, autoDescribeRoute
 from girder.api.rest import boundHandler, filtermodel
 from girder.constants import TokenScope
 from girder.utility.model_importer import ModelImporter
 from ..dataone_register import \
-    D1_BASE, \
     extract_metadata_docs, \
     get_documents, \
     extract_data_docs, \
     extract_resource_docs, \
     check_multiple_metadata
+from ..constants import DataONELocations
 
 
 def register_http_resource(parent, parentType, progress, user, url, name):
@@ -36,13 +37,20 @@ def register_http_resource(parent, parentType, progress, user, url, name):
     return gc_item
 
 
-def register_DataONE_resource(parent, parentType, progress, user, pid, name=None):
+def register_DataONE_resource(parent,
+                              parentType,
+                              progress,
+                              user,
+                              pid,
+                              name=None,
+                              base_url=DataONELocations.prod_cn):
     """Create a package description (Dict) suitable for dumping to JSON."""
     progress.update(increment=1, message='Processing package {}.'.format(pid))
 
     # query for things in the resource map. At this point, it is assumed that the pid
     # has been correctly identified by the user in the UI.
-    docs = get_documents(pid)
+
+    docs = get_documents(pid, base_url)
 
     # Filter the Solr result by TYPE so we can construct the package
     metadata = extract_metadata_docs(docs)
@@ -52,11 +60,11 @@ def register_DataONE_resource(parent, parentType, progress, user, pid, name=None
     # Add in URLs to resolve each metadata/data object by
     for i in range(len(metadata)):
         metadata[i]['url'] = \
-            "{}/resolve/{}".format(D1_BASE, metadata[i]['identifier'])
+            "{}/resolve/{}".format(base_url, metadata[i]['identifier'])
 
     for i in range(len(data)):
         data[i]['url'] = \
-            "{}/resolve/{}".format(D1_BASE, data[i]['identifier'])
+            "{}/resolve/{}".format(base_url, data[i]['identifier'])
 
     # Determine the folder name. This is usually the title of the metadata file
     # in the package but when there are multiple metadata files in the package,
@@ -103,8 +111,15 @@ def register_DataONE_resource(parent, parentType, progress, user, pid, name=None
     # Recurse and add child packages if any exist
     if children is not None and len(children) > 0:
         for child in children:
-            register_DataONE_resource(gc_folder, 'folder', progress, user,
-                                      child['identifier'])
+            logger.debug('Registering child package, {}'.debug(child['identifier']))
+            register_DataONE_resource(gc_folder,
+                                      'folder',
+                                      progress,
+                                      user,
+                                      child['identifier'],
+                                      base_url)
+
+    logger.debug('Finished registering dataset')
     return gc_folder
 
 

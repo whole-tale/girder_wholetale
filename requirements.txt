@@ -3,4 +3,8 @@ cryptography
 tornado
 celery[redis]
 requests
-git+https://github.com/whole-tale/gwvolman#egg=gwvolman
+redis
+pyyaml
+dataone.common
+dataone.libclient
+dataone.cli
