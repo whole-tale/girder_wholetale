@@ -424,8 +424,6 @@ def upload_license_file(client, license_id, rights_holder):
 
     # Path to the license file
     license_path = os.path.join(ROOT_DIR,
-                                'girder',
-                                'plugins',
                                 'wholetale',
                                 'licenses',
                                 license_files[license_id])
