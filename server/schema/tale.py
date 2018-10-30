@@ -22,7 +22,7 @@ taleModel = {
             "description": "Title of the Tale"
         },
         "description": {
-            "type": "string",
+            "type": ["string", "null"],
             "description": "The description of the Tale (Markdown)"
         },
         "imageId": {
@@ -103,6 +103,16 @@ taleModel = {
         "icon": {
             "type": "string",
             "description": "A URL to an image icon"
+        },
+        "doi": {
+            "type": ["string", "null"],
+            "description": "A unique identifier assigned to this tale from a "
+                           "publishing source."
+        },
+        "publishedURI": {
+            "type": ["string", "null"],
+            "description": "A URI pointing to the location of the published "
+                           "Tale."
         }
     },
     'example': {
@@ -119,5 +129,7 @@ taleModel = {
         'public': True,
         'published': True,
         'updated': '2017-01-10T16:15:17.313000+00:00',
+        'doi': 'doi:x.xx.xxx',
+        'publishedURI': 'www.databank/this-tale',
     },
 }

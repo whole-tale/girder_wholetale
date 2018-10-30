@@ -137,7 +137,9 @@ class TaleTestCase(base.TestCase):
                 'description': 'new description',
                 'config': {'memLimit': '2g'},
                 'public': True,
-                'published': False
+                'published': False,
+                'doi': 'doi:10.x.x.xx',
+                'publishedURI': 'publishedURI_URL'
             })
         )
         self.assertStatusOk(resp)
@@ -499,6 +501,126 @@ class TaleTestCase(base.TestCase):
         self.assertEqual(tale['involatileData'],
                          [{'id': str(data_dir['_id']), 'type': 'folder'}])
         self.model('tale', 'wholetale').remove(tale)
+
+    def testTaleCreation(self):
+        # Test that a Tale properly saves the input data
+
+        resp = self.request(
+            path='/folder', method='GET', user=self.user, params={
+                'parentType': 'user',
+                'parentId': self.user['_id'],
+                'sort': 'title',
+                'sortdir': 1
+            })
+        publicFolder = resp.json[1]
+        involatile_data = [{'type': 'folder', 'id': publicFolder['_id']}]
+        title = str('new name')
+        description = 'new description'
+        config = {'memLimit': '2g'}
+        public = True
+        published = False
+        doi = 'doi:10.x.zz'
+        published_uri = 'atestURI'
+
+        resp = self.request(
+            path='/tale', method='POST', user=self.user,
+            type='application/json',
+            body=json.dumps({
+                'folderId': '1234',
+                'involatileData': involatile_data,
+                'imageId': str(self.image['_id']),
+                'title': title,
+                'description': description,
+                'config': config,
+                'public': public,
+                'published': published,
+                'doi': doi,
+                'publishedURI': published_uri
+            })
+        )
+        self.assertStatus(resp, 200)
+        self.assertEqual(resp.json['involatileData'], involatile_data)
+        self.assertEqual(str(resp.json['imageId']), str(self.image['_id']))
+        self.assertEqual(resp.json['title'], title)
+        self.assertEqual(resp.json['description'], description)
+        self.assertEqual(resp.json['config'], config)
+        self.assertEqual(resp.json['public'], public)
+        self.assertEqual(resp.json['published'], published)
+        self.assertEqual(resp.json['doi'], doi)
+        self.assertEqual(resp.json['publishedURI'], published_uri)
+
+    def testTaleUpdate(self):
+        # Test that Tale updating works
+
+        resp = self.request(
+            path='/folder', method='GET', user=self.user, params={
+                'parentType': 'user',
+                'parentId': self.user['_id'],
+                'sort': 'title',
+                'sortdir': 1
+            }
+        )
+
+        public_folder = resp.json[1]
+        involatile_data = [{'type': 'folder', 'id': public_folder['_id']}]
+        title = 'new name'
+        description = 'new description'
+        config = {'memLimit': '2g'}
+        public = True
+        published = True
+        doi = 'doi:10.x.zz'
+        published_uri = 'atestURI'
+
+        # Create a new Tale
+        resp = self.request(
+            path='/tale', method='POST', user=self.user,
+            type='application/json',
+            body=json.dumps({
+                'folderId': '1234',
+                'imageId': str(self.image['_id']),
+                'involatileData': involatile_data,
+                'title': 'tale tile',
+                'description': 'description',
+                'config': {},
+                'public': False,
+                'published': False,
+                'doi': 'doi',
+                'publishedURI': 'published_uri'
+            })
+        )
+
+        self.assertStatus(resp, 200)
+
+        # Update the Tale with new values
+        resp = self.request(
+            path='/tale/{}'.format(str(resp.json['_id'])),
+            method='PUT',
+            user=self.user,
+            type='application/json',
+            body=json.dumps({
+                'folderId': '1234',
+                'imageId': str(self.image['_id']),
+                'involatileData': involatile_data,
+                'title': title,
+                'description': description,
+                'config':config,
+                'public': public,
+                'published': published,
+                'doi': doi,
+                'publishedURI': published_uri
+            })
+        )
+
+        # Check that the updates happened
+        # self.assertStatus(resp, 200)
+        self.assertEqual(resp.json['imageId'], str(self.image['_id']))
+        self.assertEqual(resp.json['title'], title)
+        self.assertEqual(resp.json['description'], description)
+        self.assertEqual(resp.json['config'], config)
+        self.assertEqual(resp.json['public'], public)
+        self.assertEqual(resp.json['published'], published)
+        self.assertEqual(resp.json['doi'], doi)
+        self.assertEqual(resp.json['publishedURI'], published_uri)
 
     def tearDown(self):
         self.model('user').remove(self.user)
