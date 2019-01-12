@@ -309,7 +309,8 @@ def getJobResult(self, job):
 def load(info):
     info['apiRoot'].wholetale = wholeTale()
     info['apiRoot'].instance = Instance()
-    info['apiRoot'].tale = Tale()
+    tale = Tale()
+    info['apiRoot'].tale = tale
 
     from girder.plugins.wholetale.models.tale import Tale as TaleModel
     from girder.plugins.wholetale.models.tale import _currentTaleFormat
@@ -326,9 +327,8 @@ def load(info):
 
     info['apiRoot'].recipe = Recipe()
     info['apiRoot'].dataset = Dataset()
-    image = Image()
-    info['apiRoot'].image = image
-    events.bind('jobs.job.update.after', 'wholetale', image.updateImageStatus)
+    info['apiRoot'].image = Image()
+    events.bind('jobs.job.update.after', 'wholetale', tale.updateBuildStatus)
     events.bind('jobs.job.update.after', 'wholetale', finalizeInstance)
     events.bind('model.file.validate', 'wholetale', validateFileLink)
     events.unbind('model.user.save.created', CoreEventHandler.USER_DEFAULT_FOLDERS)

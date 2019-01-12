@@ -36,7 +36,7 @@ class Tale(AccessControlledModel):
         self.exposeFields(
             level=AccessType.READ,
             fields=({'_id', 'folderId', 'imageId', 'creatorId', 'created',
-                     'format', 'dataSet', 'narrative', 'narrativeId',
+                     'format', 'dataSet', 'narrative', 'narrativeId', 'imageInfo',
                      'doi', 'publishedURI', 'workspaceId'} | self.modifiableFields))
         self.exposeFields(level=AccessType.ADMIN, fields={'published'})
 
@@ -251,3 +251,4 @@ class Tale(AccessControlledModel):
                     setPublic=setPublic, publicFlags=publicFlags)
 
         return doc
+

@@ -15,11 +15,20 @@ from girder.utility.progress import ProgressContext
 from girder.models.token import Token
 from girder.models.folder import Folder
 from girder.plugins.jobs.constants import REST_CREATE_JOB_TOKEN_SCOPE
-from gwvolman.tasks import import_tale
+from girder import events
+from gwvolman.tasks import import_tale, build_tale_image
+
+from girder.plugins.jobs.constants import JobStatus
+from girder.plugins.jobs.models.job import Job
 
 from ..schema.tale import taleModel as taleSchema
 from ..models.tale import Tale as taleModel
 from ..models.image import Image as imageModel
+
+from girder.plugins.worker import getCeleryApp
+
+from ..constants import ImageStatus
+
 
 addModel('tale', taleSchema, resources='tale')
 
@@ -40,6 +49,7 @@ class Tale(Resource):
         self.route('GET', (':id', 'access'), self.getTaleAccess)
         self.route('PUT', (':id', 'access'), self.updateTaleAccess)
         self.route('GET', (':id', 'export'), self.exportTale)
+        self.route('PUT', (':id', 'build'), self.buildImage)
 
     @access.public
     @filtermodel(model='tale', plugin='wholetale')
@@ -320,3 +330,56 @@ class Tale(Resource):
             yield zip.footer()
 
         return stream
+
+    @access.user
+    @autoDescribeRoute(
+        Description('Build the image for the Tale')
+        .modelParam('id', model='tale', plugin='wholetale', level=AccessType.WRITE,
+                    description='The ID of the Tale.')
+        .errorResponse('ID was invalid.')
+        .errorResponse('Admin access was denied for the tale.', 403)
+    )
+    def buildImage(self, tale, params):
+        user = self.getCurrentUser()
+
+        token = self.getCurrentToken()
+
+        jobTitle = 'Building image for Tale %s' % tale['_id']
+        jobModel = Job()
+
+        args = (
+            str(tale['_id']),
+            str(token['_id'])
+        )
+
+        job = jobModel.createJob(
+            title=jobTitle, type='build_tale_image', handler='worker_handler',
+            user=user, public=False, args=args, kwargs={},
+            otherFields={
+                'celeryTaskName': 'gwvolman.tasks.build_tale_image'
+            })
+        jobModel.scheduleJob(job)
+        return job
+
+    def updateBuildStatus(self, event):
+        job = event.info['job']
+        if job['title'] == 'Build Tale Image' and job.get('status') is not None:
+            status = int(job['status'])
+            tale = self.model('tale', 'wholetale').load(
+                job['args'][0], force=True)
+
+            if 'imageInfo' not in tale:
+                tale['imageInfo'] = {}
+
+            if status == JobStatus.SUCCESS:
+                result = getCeleryApp().AsyncResult(job['celeryTaskId']).get()
+                tale['imageInfo']['digest'] = result
+                tale['imageInfo']['status'] = ImageStatus.AVAILABLE
+            elif status == JobStatus.ERROR:
+                tale['imageInfo']['status'] = ImageStatus.INVALID
+            elif status in (JobStatus.QUEUED, JobStatus.RUNNING):
+                tale['imageInfo']['status'] = ImageStatus.BUILDING
+            tale['imageInfo']['jobId'] = job['_id']
+            self.model('tale', 'wholetale').updateTale(tale)
+
+            events.trigger('wholetale.image.status.update', info=tale)
