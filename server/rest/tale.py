@@ -344,22 +344,11 @@ class Tale(Resource):
 
         token = self.getCurrentToken()
 
-        jobTitle = 'Building image for Tale %s' % tale['_id']
-        jobModel = Job()
-
-        args = (
-            str(tale['_id']),
-            str(token['_id'])
+        buildTask = build_tale_image.delay(
+            str(tale['_id']), 
+            girder_client_token=str(token['_id'])
         )
-
-        job = jobModel.createJob(
-            title=jobTitle, type='build_tale_image', handler='worker_handler',
-            user=user, public=False, args=args, kwargs={},
-            otherFields={
-                'celeryTaskName': 'gwvolman.tasks.build_tale_image'
-            })
-        jobModel.scheduleJob(job)
-        return job
+        return buildTask.job
 
     def updateBuildStatus(self, event):
         job = event.info['job']
@@ -367,6 +356,8 @@ class Tale(Resource):
             status = int(job['status'])
             tale = self.model('tale', 'wholetale').load(
                 job['args'][0], force=True)
+            #tale = self.model('tale', 'wholetale').load(
+            #    job['kwargs']['tale_id'], force=True)
 
             if 'imageInfo' not in tale:
                 tale['imageInfo'] = {}
