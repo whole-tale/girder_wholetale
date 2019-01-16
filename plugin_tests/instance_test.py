@@ -155,7 +155,7 @@ class InstanceTestCase(base.TestCase):
             setting.set(PluginSettings.INSTANCE_CAP, '0')
             resp = self.request(
                 path='/instance', method='POST', user=self.user,
-                params={'imageId': str(self.image['_id'])})
+                params={'taleId': str(self.tale_one['_id'])})
             self.assertStatus(resp, 400)
             self.assertEqual(
                 resp.json['message'], instanceCapErrMsg.format('0'))
