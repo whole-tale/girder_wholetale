@@ -5,20 +5,13 @@ from girder.api.docs import addModel
 from girder.api.describe import Description, autoDescribeRoute
 from girder.api.rest import Resource, filtermodel, RestException
 from girder.constants import AccessType, SortDir, TokenScope
-from girder.plugins.jobs.constants import JobStatus
-from girder.plugins.jobs.models.job import Job
-from girder.plugins.worker import getCeleryApp
-from ..constants import ImageStatus
 from ..schema.misc import containerConfigSchema, tagsSchema
 
 imageModel = {
     "description": "Object representing a WT Image.",
     "required": [
         "_id",
-        "fullName",
-        "status",
-        "imageId",
-        "digest",
+        "name",
         "tags",
         "parentId"
     ],
@@ -30,11 +23,6 @@ imageModel = {
         "name": {
             "type": "string",
             "description": "A user-friendly name"
-        },
-        "fullName": {
-            "type": "string",
-            "description": ("An image name following docker format: "
-                            "namespace/repository(@digest)"),
         },
         "description": {
             "type": "string"
@@ -50,36 +38,16 @@ imageModel = {
             "type": "boolean",
             "description": "If 'true', the tale can be embedded in an iframe"
         },
-        "digest": {
-            "type": "string",
-            "description": ("Checksum of a successfully built image "
-                            "that can be used to pull a specific version "
-                            " of the image."),
-        },
         "tags": {
             "type": "array",
             "items": {
                 "type": "string"
             },
-            "description": "A human readable identification of the Recipe.",
-            "default": [
-                "latest"
-            ]
+            "description": "A human readable identification of the environment."
         },
         "parentId": {
             "type": "string",
             "description": "ID of a previous version of the Image"
-        },
-        "status": {
-            "type": "string",
-            "default": "unavailable",
-            "description": "Status of the image.",
-            "enum": [
-                "invalid",
-                "unavailable",
-                "building",
-                "available"
-            ]
         },
         "public": {
             "type": "boolean",
@@ -105,15 +73,13 @@ imageModel = {
         '_accessLevel': 2,
         '_id': '5873dcdbaec030000144d233',
         '_modelType': 'image',
-        'fullName': 'Xarthisius/wt_image',
+        'name': 'Jupyter Notebook',
         'creatorId': '18312dcdbaec030000144d233',
         'created': '2017-01-09T18:56:27.262000+00:00',
-        'description': 'My fancy image',
-        'digest': '123456',
+        'description': 'Jupyter Notebook environment',
         'parentId': 'null',
         'public': True,
-        'tags': ['latest', 'py3'],
-        'status': 'building',
+        'tags': ['jupyter', 'py3'],
         'updated': '2017-01-10T16:15:17.313000+00:00',
     },
 }
@@ -131,9 +97,6 @@ class Image(Resource):
         self.route('GET', (':id',), self.getImage)
         self.route('PUT', (':id',), self.updateImage)
         self.route('DELETE', (':id',), self.deleteImage)
-        self.route('PUT', (':id', 'build'), self.buildImage)
-        self.route('PUT', (':id', 'check'), self.checkImage)
-        self.route('POST', (':id', 'copy'), self.copyImage)
         self.route('GET', (':id', 'access'), self.getImageAccess)
         self.route('PUT', (':id', 'access'), self.updateImageAccess)
 
@@ -242,10 +205,6 @@ class Image(Resource):
     @filtermodel(model='image', plugin='wholetale')
     @autoDescribeRoute(
         Description('Create a new image.')
-        .param('recipeId', 'The ID of a recipe used to build the image',
-               dataType='string', required=True)
-        .param('fullName', 'An image name conforming to docker standard',
-               dataType='string', required=True)
         .param('name', 'A name of the image.', required=False)
         .param('description', 'A description of the image.',
                required=False)
@@ -262,12 +221,11 @@ class Image(Resource):
         .responseClass('image')
         .errorResponse('Query parameter was invalid')
     )
-    def createImage(self, recipeId, fullName, name, description, public, icon,
+    def createImage(self, name, description, public, icon,
                     iframe, tags, config, params):
         user = self.getCurrentUser()
-        recipe = self.model('recipe', 'wholetale').load(
-            recipeId, user=user, level=AccessType.READ, exc=True)
         return self.model('image', 'wholetale').createImage(
+<<<<<<< HEAD
             recipe, fullName, name=name, tags=tags, creator=user,
             save=True, parent=None, description=description, public=public,
             config=config, icon=icon, iframe=iframe)
@@ -358,6 +316,10 @@ class Image(Resource):
         recipe = self.model('recipe', 'wholetale').load(
             recipeId, user=user, level=AccessType.READ, exc=True)
         return self.model('image', 'wholetale').copyImage(image, recipe, creator=user)
+=======
+            name=name, tags=tags, creator=user, save=True, parent=None,
+            description=description, public=public, config=config, icon=icon, iframe=iframe)
+>>>>>>> Removes Recipe object and references throughout
 
     @access.user(scope=TokenScope.DATA_OWN)
     @autoDescribeRoute(

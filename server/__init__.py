@@ -20,7 +20,6 @@ from girder.utility.model_importer import ModelImporter
 
 from .constants import PluginSettings, SettingDefault
 from .rest.dataset import Dataset
-from .rest.recipe import Recipe
 from .rest.image import Image
 from .rest.integration import Integration
 from .rest.repository import Repository
@@ -325,7 +324,6 @@ def load(info):
         except GirderException as exc:
             logprint(exc)
 
-    info['apiRoot'].recipe = Recipe()
     info['apiRoot'].dataset = Dataset()
     info['apiRoot'].image = Image()
     events.bind('jobs.job.update.after', 'wholetale', tale.updateBuildStatus)

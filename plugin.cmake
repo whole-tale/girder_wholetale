@@ -6,7 +6,6 @@ add_python_test(harvester
   plugins/wholetale/dataone_listFiles.json
   plugins/wholetale/test_list_files.txt
 )
-add_python_test(recipe PLUGIN wholetale)
 add_python_test(image PLUGIN wholetale)
 add_python_test(tale PLUGIN wholetale)
 add_python_test(instance PLUGIN wholetale)

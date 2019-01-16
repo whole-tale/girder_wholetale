@@ -2,13 +2,9 @@ import time
 import json
 import copy
 import mock
-import httmock
 import six
 from tests import base
 from girder.exceptions import ValidationException
-from .tests_helpers import \
-    GOOD_REPO, GOOD_COMMIT, \
-    mockOtherRequest, mockCommitRequest, mockReposRequest
 
 
 JobStatus = None
@@ -71,13 +67,9 @@ class InstanceTestCase(base.TestCase):
         })
         self.admin, self.user = [self.model('user').createUser(**user)
                                  for user in users]
-        with httmock.HTTMock(mockReposRequest, mockCommitRequest,
-                             mockOtherRequest):
-            self.recipe = self.model('recipe', 'wholetale').createRecipe(
-                GOOD_COMMIT, 'https://github.com/' + GOOD_REPO,
-                creator=self.user, public=True)
+
         self.image = self.model('image', 'wholetale').createImage(
-            self.recipe, GOOD_REPO, name="my name", creator=self.user,
+            name="image my name", creator=self.user,
             public=True)
 
         self.userPrivateFolder = self.model('folder').createFolder(
@@ -309,7 +301,6 @@ class InstanceTestCase(base.TestCase):
     def tearDown(self):
         self.model('folder').remove(self.userPrivateFolder)
         self.model('folder').remove(self.userPublicFolder)
-        self.model('recipe', 'wholetale').remove(self.recipe)
         self.model('image', 'wholetale').remove(self.image)
         self.model('tale', 'wholetale').remove(self.tale_one)
         self.model('tale', 'wholetale').remove(self.tale_two)

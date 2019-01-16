@@ -3,16 +3,12 @@ import httmock
 import os
 import json
 from tests import base
-from .tests_helpers import \
-    GOOD_REPO, GOOD_COMMIT, XPRA_REPO, XPRA_COMMIT, \
-    mockOtherRequest, mockCommitRequest, mockReposRequest
 from girder.models.item import Item
 from girder.models.folder import Folder
 
 
 SCRIPTDIRS_NAME = None
 DATADIRS_NAME = None
-
 
 def setUpModule():
     base.enabledPlugins.append('wholetale')
@@ -46,20 +42,12 @@ class TaleTestCase(base.TestCase):
         })
         self.admin, self.user = [self.model('user').createUser(**user)
                                  for user in users]
-        with httmock.HTTMock(mockReposRequest, mockCommitRequest,
-                             mockOtherRequest):
-            self.recipe = self.model('recipe', 'wholetale').createRecipe(
-                GOOD_COMMIT, 'https://github.com/' + GOOD_REPO,
-                creator=self.user, public=True)
-            recipe_admin = self.model('recipe', 'wholetale').createRecipe(
-                XPRA_COMMIT, 'https://github.com/' + XPRA_REPO,
-                creator=self.admin, public=True)
-            self.image_admin = self.model('image', 'wholetale').createImage(
-                recipe_admin, XPRA_REPO, name="xpra name", creator=self.admin,
-                public=True)
+
+        self.image_admin = self.model('image', 'wholetale').createImage(
+            name="test admin image", creator=self.admin, public=True)
+
         self.image = self.model('image', 'wholetale').createImage(
-            self.recipe, GOOD_REPO, name="my name", creator=self.user,
-            public=True)
+            name="test my name", creator=self.user, public=True)
 
     def testTaleFlow(self):
         resp = self.request(
@@ -240,8 +228,7 @@ class TaleTestCase(base.TestCase):
         self.assertStatus(resp, 200)
 
     def testTaleAccess(self):
-        with httmock.HTTMock(mockReposRequest, mockCommitRequest,
-                             mockOtherRequest):
+        with httmock.HTTMock(mockOtherRequest):
             # Grab the default user folders
             resp = self.request(
                 path='/folder', method='GET', user=self.user, params={
@@ -605,6 +592,5 @@ class TaleTestCase(base.TestCase):
     def tearDown(self):
         self.model('user').remove(self.user)
         self.model('user').remove(self.admin)
-        self.model('recipe', 'wholetale').remove(self.recipe)
         self.model('image', 'wholetale').remove(self.image)
         super(TaleTestCase, self).tearDown()

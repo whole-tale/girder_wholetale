@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import re
-import requests
 
 from girder.api import access
 from girder.api.docs import addModel
@@ -19,7 +18,6 @@ from girder import events
 from gwvolman.tasks import import_tale, build_tale_image
 
 from girder.plugins.jobs.constants import JobStatus
-from girder.plugins.jobs.models.job import Job
 
 from ..schema.tale import taleModel as taleSchema
 from ..models.tale import Tale as taleModel
@@ -285,8 +283,6 @@ class Tale(Resource):
             exc=True)
         image = self.model('image', 'wholetale').load(
             tale['imageId'], user=user, level=AccessType.READ, exc=True)
-        recipe = self.model('recipe', 'wholetale').load(
-            image['recipeId'], user=user, level=AccessType.READ, exc=True)
 
         # Construct a sanitized name for the ZIP archive using a whitelist
         # approach
@@ -294,12 +290,6 @@ class Tale(Resource):
 
         setResponseHeader('Content-Type', 'application/zip')
         setContentDisposition(zip_name + '.zip')
-
-        # Temporary: Fetch the GitHub archive of the recipe. Note that this is
-        # done in a streaming fashion because ziputil makes use of generators
-        # when files are added to the zip
-        url = '{}/archive/{}.tar.gz'.format(recipe['url'], recipe['commitId'])
-        req = requests.get(url, stream=True)
 
         def stream():
             zip = ziputil.ZipGenerator(zip_name)
@@ -316,17 +306,6 @@ class Tale(Resource):
             for data in zip.addFile(lambda: image.__str__(), 'image.txt'):
                 yield data
 
-            # Temporary: Add Recipe metadata
-            for data in zip.addFile(lambda: recipe.__str__(), 'recipe.txt'):
-                yield data
-
-            # Temporary: Add a zip of the recipe archive
-            # TODO: Grab proper filename from header
-            # e.g. 'Content-Disposition': 'attachment; filename= \
-            # jupyter-base-b45f9a575602e6038b4da6333f2c3e679ee01c58.tar.gz'
-            for data in zip.addFile(req.iter_content, 'archive.tar.gz'):
-                yield data
-
             yield zip.footer()
 
         return stream
@@ -340,12 +319,10 @@ class Tale(Resource):
         .errorResponse('Admin access was denied for the tale.', 403)
     )
     def buildImage(self, tale, params):
-        user = self.getCurrentUser()
-
         token = self.getCurrentToken()
 
         buildTask = build_tale_image.delay(
-            str(tale['_id']), 
+            str(tale['_id']),
             girder_client_token=str(token['_id'])
         )
         return buildTask.job
@@ -356,8 +333,6 @@ class Tale(Resource):
             status = int(job['status'])
             tale = self.model('tale', 'wholetale').load(
                 job['args'][0], force=True)
-            #tale = self.model('tale', 'wholetale').load(
-            #    job['kwargs']['tale_id'], force=True)
 
             if 'imageInfo' not in tale:
                 tale['imageInfo'] = {}
