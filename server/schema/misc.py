@@ -94,7 +94,7 @@ dataSetSchema = {
 tagsSchema = {
     'title': 'tags',
     '$schema': 'http://json-schema.org/draft-04/schema#',
-    'description': 'A schema for recipe/image tags',
+    'description': 'A schema for image tags',
     'type': 'array',
     'items': {
         'type': 'string'
@@ -184,6 +184,28 @@ containerInfoSchema = {
         }
     },
     'required': ['name', 'mountPoint', 'nodeId', 'volumeName'],
+}
+
+imageInfoSchema = {
+    'title': 'imageInfo',
+    '$schema': 'http://json-schema.org/draft-04/schema#',
+    'description': 'Attributes describing a Tale image',
+    'type': 'object',
+    'properties': {
+        'created': {
+            'type': 'string',
+            'format': 'date-time',
+        },
+        'jobId': {
+            'type': 'string',
+        },
+        'digest': {
+            'type': 'string',
+        },
+        'fullName': {
+            'type': 'string',
+        }
+    }
 }
 
 addModel('containerConfig', containerConfigSchema)

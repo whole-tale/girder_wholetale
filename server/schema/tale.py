@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from .misc import containerConfigSchema, dataSetSchema
+from .misc import containerConfigSchema, dataSetSchema, imageInfoSchema
 
 taleModel = {
     "definitions": {
         "containerConfig": containerConfigSchema,
         "dataSet": dataSetSchema
+        'imageInfo': imageInfoSchema
     },
     "description": "Object representing a Tale.",
     "required": [
@@ -29,6 +30,9 @@ taleModel = {
         "imageId": {
             "type": "string",
             "description": "ID of a WT Image used by the Tale"
+        },
+        "imageInfo": {
+            "$ref": "#/definitions/imageInfo"
         },
         "folderId": {
             "type": "string",
@@ -143,6 +147,11 @@ taleModel = {
         "illustration": ("https://raw.githubusercontent.com/whole-tale/dashboard/"
                          "master/public/images/demo-graph2.jpg"),
         "imageId": "5c4886279759c200017b22a3",
+        'imageInfo': {
+            'jobId': '5873dcdbaec03000014x123',
+            'digest': 'sha256:9aaece098841b13cdc64ea6756767357f5c9eb1ab10f67b9e67a90960b894053',
+            'fullName': 'registry.local.wholetale.org/5c3cd7faa697bf0001ce6cc0-1547494547'
+        },
         "narrative": [],
         "narrativeId": "5c4887409759c200017b2319",
         "public": False,
