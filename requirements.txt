@@ -3,7 +3,7 @@ celery[redis]
 idna==2.7  # pin for requests
 requests==2.20.1  # https://github.com/requests/requests/issues/4890
 redis
-git+https://github.com/whole-tale/gwvolman@v0.6rc2#egg=gwvolman
+git+https://github.com/whole-tale/gwvolman@40-tale-build-repo2docker#egg=gwvolman
 dataone.common
 dataone.libclient
 dataone.cli
