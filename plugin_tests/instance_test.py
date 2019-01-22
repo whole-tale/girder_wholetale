@@ -297,8 +297,49 @@ class InstanceTestCase(base.TestCase):
             resp = self.request(
                 path='/instance/{_id}'.format(**instance), method='DELETE',
                 user=self.user)
-            self.assertStatusOk(resp)
+            self.assertStatus(resp, 202)
             mock_apply_async.assert_called_once()
+
+        # Create a job to be handled by the worker plugin
+        from girder.plugins.jobs.models.job import Job
+        jobModel = Job()
+        job = jobModel.createJob(
+            title='Shutdown Instance', type='celery', handler='worker_handler',
+            user=self.user, public=False, args=[instance['_id']], kwargs={})
+        job = jobModel.save(job)
+        self.assertEqual(job['status'], JobStatus.INACTIVE)
+        with mock.patch('celery.Celery') as celeryMock, \
+                mock.patch('girder.plugins.worker.getCeleryApp') as gca:
+
+            celeryMock().AsyncResult.return_value = FakeAsyncResult(instance['_id'])
+            gca().send_task.return_value = FakeAsyncResult(instance['_id'])
+
+            jobModel.scheduleJob(job)
+            for i in range(20):
+                job = jobModel.load(job['_id'], force=True)
+                if job['status'] == JobStatus.QUEUED:
+                    break
+                time.sleep(0.1)
+            self.assertEqual(job['status'], JobStatus.QUEUED)
+
+            instance = Instance().load(instance['_id'], force=True)
+            self.assertEqual(instance['status'], InstanceStatus.DELETING)
+
+            # Make sure we sent the job to celery
+            sendTaskCalls = gca.return_value.send_task.mock_calls
+
+            self.assertEqual(len(sendTaskCalls), 1)
+            self.assertEqual(sendTaskCalls[0][1], (
+                'girder_worker.run', job['args'], job['kwargs']))
+
+            self.assertTrue('headers' in sendTaskCalls[0][2])
+            self.assertTrue('jobInfoSpec' in sendTaskCalls[0][2]['headers'])
+
+            # Make sure we got and saved the celery task id
+            job = jobModel.load(job['_id'], force=True)
+            self.assertEqual(job['celeryTaskId'], 'fake_id')
+            Job().updateJob(job, log='job running', status=JobStatus.RUNNING)
+            Job().updateJob(job, log='job ran', status=JobStatus.SUCCESS)
 
         resp = self.request(
             path='/instance/{_id}'.format(**instance), method='GET',
