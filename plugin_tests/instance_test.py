@@ -1,6 +1,5 @@
 import time
 import json
-import copy
 import mock
 import httmock
 import six
@@ -168,7 +167,7 @@ class InstanceTestCase(base.TestCase):
             self.assertEqual(
                 resp.json['message'], instanceCapErrMsg.format('0'))
             setting.set(PluginSettings.INSTANCE_CAP, current_cap)
-        
+
     @mock.patch('gwvolman.tasks.create_volume')
     @mock.patch('gwvolman.tasks.launch_container')
     @mock.patch('gwvolman.tasks.update_container')
@@ -245,7 +244,7 @@ class InstanceTestCase(base.TestCase):
         self.assertEqual(resp.json['containerInfo']['nodeId'], '123456')
         self.assertEqual(resp.json['containerInfo']['volumeName'], 'blah_volume')
         self.assertEqual(resp.json['status'], InstanceStatus.RUNNING)
-        
+
         # Save this response to populate containerInfo
         instance = resp.json
 
@@ -261,7 +260,7 @@ class InstanceTestCase(base.TestCase):
         # Update/restart the instance
         with mock.patch('girder_worker.task.celery.Task.apply_async', spec=True) \
                 as mock_apply_async:
-                    
+
             # PUT /instance/:id (currently a no-op)
             resp = self.request(
                 path='/instance/{_id}'.format(**instance), method='PUT', user=self.user,
@@ -275,12 +274,12 @@ class InstanceTestCase(base.TestCase):
                     'sessionId': instance['status'],
                     'url': instance['url'],
                     'containerInfo': {
-                       'digest': instance['containerInfo']['digest'],
-                       'imageId': instance['containerInfo']['imageId'],
-                       'mountPoint': instance['containerInfo']['mountPoint'],
-                       'name': instance['containerInfo']['name'],
-                       'nodeId': instance['containerInfo']['nodeId'],
-                       'urlPath': instance['containerInfo']['urlPath'],
+                        'digest': instance['containerInfo']['digest'],
+                        'imageId': instance['containerInfo']['imageId'],
+                        'mountPoint': instance['containerInfo']['mountPoint'],
+                        'name': instance['containerInfo']['name'],
+                        'nodeId': instance['containerInfo']['nodeId'],
+                        'urlPath': instance['containerInfo']['urlPath'],
                     }
                 })
             )
@@ -301,6 +300,18 @@ class InstanceTestCase(base.TestCase):
             self.assertStatusOk(resp)
             mock_apply_async.assert_called_once()
 
+        resp = self.request(
+            path='/instance/{_id}'.format(**instance), method='GET',
+            user=self.user)
+        self.assertStatus(resp, 400)
+
+    def testForcefulRemoval(self):
+        instance = Instance().createInstance(
+            self.tale_one, self.user, None, save=True, spawn=False)
+        resp = self.request(
+            path='/instance/{_id}'.format(**instance), method='DELETE',
+            user=self.user, params={'force': True})
+        self.assertStatus(resp, 200)
         resp = self.request(
             path='/instance/{_id}'.format(**instance), method='GET',
             user=self.user)

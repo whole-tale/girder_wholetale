@@ -159,7 +159,7 @@ class Instance(Resource):
         .errorResponse('ID was invalid.')
         .errorResponse('Write access was denied for the instance.', 403)
     )
-    def deleteInstance(self, instance, params):
+    def deleteInstance(self, instance):
         self.model('instance', 'wholetale').deleteInstance(
             instance, self.getCurrentToken())
 

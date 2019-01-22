@@ -30,7 +30,6 @@ from .rest.tale import Tale
 from .rest.instance import Instance
 from .rest.wholetale import wholeTale
 from .rest.workspace import Workspace
-from .models.instance import finalizeInstance
 
 
 @setting_utilities.validator(PluginSettings.DATAVERSE_EXTRA_HOSTS)
@@ -329,7 +328,6 @@ def load(info):
     image = Image()
     info['apiRoot'].image = image
     events.bind('jobs.job.update.after', 'wholetale', image.updateImageStatus)
-    events.bind('jobs.job.update.after', 'wholetale', finalizeInstance)
     events.bind('model.file.validate', 'wholetale', validateFileLink)
     events.unbind('model.user.save.created', CoreEventHandler.USER_DEFAULT_FOLDERS)
     events.bind('model.user.save.created', 'wholetale', addDefaultFolders)

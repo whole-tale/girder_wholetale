@@ -7,7 +7,7 @@ import time
 from urllib.request import urlopen
 from urllib.error import HTTPError, URLError
 
-from girder import logger
+from girder import logger, events
 from girder.constants import AccessType, SortDir
 from girder.exceptions import ValidationException
 from girder.models.model_base import AccessControlledModel
@@ -44,6 +44,8 @@ class Instance(AccessControlledModel):
         self.exposeFields(
             level=AccessType.WRITE,
             fields={'containerInfo', 'lastActivity', 'status', 'url', 'sessionId'})
+
+        events.bind('jobs.job.update.after', 'wholetale', self.updateInstanceStatus)
 
     def validate(self, instance):
         if not InstanceStatus.isValid(instance['status']):
@@ -131,7 +133,6 @@ class Instance(AccessControlledModel):
         except KeyError:
             pass
 
-        # TODO: handle error
         self.remove(instance)
 
     def createInstance(self, tale, user, token, name=None, save=True,
@@ -168,6 +169,53 @@ class Instance(AccessControlledModel):
             (volumeTask | serviceTask).apply_async()
         return instance
 
+    def updateInstanceStatus(self, event):
+        job = event.info['job']
+        relevant_jobs = {
+            'Spawn Instance', 'Create Tale Data Volume',
+            'Shutdown Instance'
+        }
+        if job['title'] not in relevant_jobs or job.get('status') is None:
+            return
+
+        status = int(job['status'])
+        if job['title'] == 'Spawn Instance':
+            instanceId = job['args'][0]['instanceId']
+        else:
+            instanceId = job['args'][0]
+        instance = Instance().load(instanceId, force=True)
+
+        update = True
+        if status == JobStatus.ERROR:
+            instance['status'] = InstanceStatus.ERROR
+        elif status in (JobStatus.QUEUED, JobStatus.RUNNING):
+            if job['title'] in {'Spawn Instance', 'Create Tale Data Volume'}:
+                instance['status'] = InstanceStatus.LAUNCHING
+            else:
+                instance['status'] = InstanceStatus.DELETING
+        elif job['title'] == 'Spawn Instance' and status == JobStatus.SUCCESS:
+            service = getCeleryApp().AsyncResult(job['celeryTaskId']).get()
+            valid_keys = set(containerInfoSchema['properties'].keys())
+            containerInfo = {key: service.get(key, '') for key in valid_keys}
+            url = service.get('url', 'https://google.com')
+            _wait_for_server(url)
+            # Preserve the imageId / current digest in containerInfo
+            tale = Tale().load(instance['taleId'], force=True)
+            containerInfo['imageId'] = tale['imageId']
+            image = Image().load(tale['imageId'], force=True)
+            containerInfo['digest'] = image['digest']
+            instance.update({
+                'url': url,
+                'status': InstanceStatus.RUNNING,
+                'containerInfo': containerInfo,
+                'sessionId': service.get('sessionId')
+            })
+        else:
+            update = False
+
+        if update:
+            self.updateInstance(instance)
+
 
 def _wait_for_server(url, timeout=30, wait_time=0.5):
     """Wait for a server to show up within a newly launched instance."""
@@ -196,35 +244,3 @@ def _wait_for_server(url, timeout=30, wait_time=0.5):
                 'Booting server at [%s], getting "%s"', url, str(ex))
         else:
             break
-
-
-def finalizeInstance(event):
-    job = event.info['job']
-    if job['title'] == 'Spawn Instance' and job.get('status') is not None:
-        status = int(job['status'])
-        instance = Instance().load(
-            job['args'][0]['instanceId'], force=True)
-        if status == JobStatus.SUCCESS:
-            service = getCeleryApp().AsyncResult(job['celeryTaskId']).get()
-            valid_keys = set(containerInfoSchema['properties'].keys())
-            containerInfo = {key: service.get(key, '') for key in valid_keys}
-            url = service.get('url', 'https://google.com')
-            _wait_for_server(url)
-
-            # Preserve the imageId / current digest in containerInfo
-            tale = Tale().load(instance['taleId'], force=True)
-            containerInfo['imageId'] = tale['imageId']
-            image = Image().load(tale['imageId'], force=True)
-            containerInfo['digest'] = image['digest']
-
-            instance.update({
-                'url': url,
-                'status': InstanceStatus.RUNNING,
-                'containerInfo': containerInfo,
-                'sessionId': service.get('sessionId')
-            })
-        elif status == JobStatus.ERROR:
-            instance['status'] = InstanceStatus.ERROR
-        elif status in (JobStatus.QUEUED, JobStatus.RUNNING):
-            instance['status'] = InstanceStatus.LAUNCHING
-        Instance().updateInstance(instance)
