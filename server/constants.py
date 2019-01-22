@@ -38,6 +38,7 @@ class InstanceStatus(object):
     LAUNCHING = 0
     RUNNING = 1
     ERROR = 2
+    DELETING = 3
 
     @staticmethod
     def isValid(status):
@@ -47,7 +48,7 @@ class InstanceStatus(object):
             return event.responses[-1]
 
         return status in (InstanceStatus.RUNNING, InstanceStatus.ERROR,
-                          InstanceStatus.LAUNCHING)
+                          InstanceStatus.LAUNCHING, InstanceStatus.DELETING)
 
 
 class ImageStatus(object):
