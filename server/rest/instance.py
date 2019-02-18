@@ -6,7 +6,7 @@ from girder.api.docs import addModel
 from girder.api.rest import Resource, filtermodel, RestException
 from girder.constants import AccessType, SortDir
 from girder.utility import path as path_util
-from ..constants import PluginSettings
+from ..constants import PluginSettings, InstanceStatus
 
 
 instanceModel = {
@@ -218,9 +218,11 @@ class Instance(Resource):
         if existing:
             return existing
 
-        running_instances = list(
-            instanceModel.list(user=user, currentUser=user)
-        )
+        running_instances = [
+            instance
+            for instance in instanceModel.list(user=user, currentUser=user)
+            if instance['status'] in {InstanceStatus.LAUNCHING, InstanceStatus.RUNNING}
+        ]
         instance_cap = self.model('setting').get(PluginSettings.INSTANCE_CAP)
         if len(running_instances) + 1 > int(instance_cap):
             raise RestException(instanceCapErrMsg.format(instance_cap))
