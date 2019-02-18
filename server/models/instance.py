@@ -187,12 +187,12 @@ class Instance(AccessControlledModel):
 
         update = True
         if status == JobStatus.ERROR:
-            instance['status'] = InstanceStatus.ERROR
+            InstanceStatus.transitionTo(instance, InstanceStatus.ERROR)
         elif status in (JobStatus.QUEUED, JobStatus.RUNNING):
             if job['title'] in {'Spawn Instance', 'Create Tale Data Volume'}:
-                instance['status'] = InstanceStatus.LAUNCHING
+                InstanceStatus.transitionTo(instance, InstanceStatus.LAUNCHING)
             else:
-                instance['status'] = InstanceStatus.DELETING
+                InstanceStatus.transitionTo(instance, InstanceStatus.DELETING)
         elif job['title'] == 'Spawn Instance' and status == JobStatus.SUCCESS:
             service = getCeleryApp().AsyncResult(job['celeryTaskId']).get()
             valid_keys = set(containerInfoSchema['properties'].keys())
@@ -206,10 +206,10 @@ class Instance(AccessControlledModel):
             containerInfo['digest'] = image['digest']
             instance.update({
                 'url': url,
-                'status': InstanceStatus.RUNNING,
                 'containerInfo': containerInfo,
                 'sessionId': service.get('sessionId')
             })
+            InstanceStatus.transitionTo(instance, InstanceStatus.RUNNING),
         else:
             update = False
 

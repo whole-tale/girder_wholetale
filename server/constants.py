@@ -40,6 +40,14 @@ class InstanceStatus(object):
     ERROR = 2
     DELETING = 3
 
+    # Mapping of states to valid previous states
+    valid_transitions = {
+        LAUNCHING: [RUNNING, ERROR, DELETING],
+        RUNNING: [DELETING, ERROR],
+        ERROR: [LAUNCHING, RUNNING, DELETING, ERROR],
+        DELETING: [LAUNCHING, RUNNING]
+    }
+
     @staticmethod
     def isValid(status):
         event = events.trigger('instance.status.validate', info=status)
@@ -49,6 +57,20 @@ class InstanceStatus(object):
 
         return status in (InstanceStatus.RUNNING, InstanceStatus.ERROR,
                           InstanceStatus.LAUNCHING, InstanceStatus.DELETING)
+
+    @staticmethod
+    def transitionTo(instance, status):
+        """Check if the new instance status is a valid transition
+
+        Verify that the current status of an instance can be transitioned to
+        'status' and apply it. Set instance's status to ERROR otherwise.
+        """
+        previous_states = InstanceStatus.valid_transitions.get(status)
+        if previous_states is None or instance['status'] not in previous_states:
+            instance['status'] = InstanceStatus.ERROR
+        else:
+            instance['status'] = status
+        return instance
 
 
 class ImageStatus(object):
