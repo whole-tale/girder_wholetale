@@ -42,10 +42,10 @@ class InstanceStatus(object):
 
     # Mapping of states to valid previous states
     valid_transitions = {
-        LAUNCHING: [RUNNING, ERROR, DELETING],
-        RUNNING: [DELETING, ERROR],
+        LAUNCHING: [LAUNCHING],
+        RUNNING: [LAUNCHING, RUNNING],
         ERROR: [LAUNCHING, RUNNING, DELETING, ERROR],
-        DELETING: [LAUNCHING, RUNNING]
+        DELETING: [DELETING, LAUNCHING, RUNNING]
     }
 
     @staticmethod
