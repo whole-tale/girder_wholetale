@@ -347,7 +347,7 @@ class Tale(Resource):
             "@id": str(tale['_id']),
             "createdOn": str(tale['created']),
             "schema:name": tale['title'],
-            "schema:description": tale.get('description', str()),
+            "schema:description": tale.get('description', 'None'),
             "schema:category": tale['category'],
             "schema:identifier": str(tale['_id']),
             "schema:version": tale['format'],
