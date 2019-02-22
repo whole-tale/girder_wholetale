@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import re
-import requests
 import json
 import os
 
@@ -314,7 +313,8 @@ class Tale(Resource):
                 yield data
 
             # Add top level README
-            for data in zip_generator.addFile(lambda: 'Instructions on running the docker container',
+            for data in zip_generator.addFile(lambda:
+                                              'Instructions on running the docker container',
                                               'README.txt'):
                 yield data
 
@@ -379,7 +379,7 @@ class Tale(Resource):
         datasets = set()
         """
         Handle objects that are in the dataSet, ie files that point to external sources.
-        Some of these sources may be datasets from publishers. We need to save information 
+        Some of these sources may be datasets from publishers. We need to save information
         about the source so that they can added to the Datasets section.
         """
         for obj in tale['dataSet']:
@@ -417,11 +417,14 @@ class Tale(Resource):
                         folder_meta = item_folder.get('meta')
                         if folder_meta:
                             datasets.add(root_item['folderId'])
-                            folder_files.append({"dataset_identifier": folder_meta.get('identifier'),
-                                                 "provider": folder_meta.get('provider'),
-                                                 "file_iterator": self.model('item').fileList(root_item,
-                                                                                              user=user,
-                                                                                              data=False)
+                            folder_files.append({"dataset_identifier":
+                                                folder_meta.get('identifier'),
+                                                 "provider":
+                                                     folder_meta.get('provider'),
+                                                 "file_iterator":
+                                                 self.model('item').fileList(root_item,
+                                                                             user=user,
+                                                                             data=False)
                                                  })
 
         """
