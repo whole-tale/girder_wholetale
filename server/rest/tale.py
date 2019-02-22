@@ -338,13 +338,15 @@ class Tale(Resource):
 
     def _generateManifest(self, tale):
         user = self.getCurrentUser()
+        data_root = 'https://data.wholetale.org/api/v1/'
         doc = {
             "@context": [
                 "https://w3id.org/bundle/context",
                 {"schema": "http://schema.org/"},
                 {"parent_dataset": {"@type": "@id"}}
             ],
-            "@id": str(tale['_id']),
+
+            "@id": data_root+'tale/'+str(tale['_id']),
             "createdOn": str(tale['created']),
             "schema:name": tale['title'],
             "schema:description": tale.get('description', 'None'),
