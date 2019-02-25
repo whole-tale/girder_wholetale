@@ -330,13 +330,18 @@ class Tale(Resource):
     @autoDescribeRoute(
         Description('Generate the Tale manifest.')
         .modelParam('id', model='tale', plugin='wholetale', level=AccessType.ADMIN)
+        .jsonParam(name='itemIds',
+                   required=False,
+                   description='A list of item ids of files that are aggregated.\n'
+                               'Example: ["item1", "item2", "item3"]')
         .errorResponse('ID was invalid.')
         .errorResponse('Admin access was denied for the tale.', 403)
     )
-    def generateManifest(self, tale):
-        return self._generateManifest(tale)
+    def generateManifest(self, tale, itemIds=set()):
+        return self._generateManifest(tale, itemIds)
 
-    def _generateManifest(self, tale):
+    def _generateManifest(self, tale, itemIds=set()):
+
         user = self.getCurrentUser()
         doc = {
             "@context": [
@@ -344,7 +349,7 @@ class Tale(Resource):
                 {"schema": "http://schema.org/"},
                 {"parent_dataset": {"@type": "@id"}}
             ],
-            "@id": str(tale['_id']),
+            "@id": 'https://data.wholetale.org/api/v1/tale/' + str(tale['_id']),
             "createdOn": str(tale['created']),
             "schema:name": tale['title'],
             "schema:description": tale.get('description', str()),
@@ -364,79 +369,121 @@ class Tale(Resource):
             "schema:familyName": tale_user.get('lastName', ''),
             "schema:email": tale_user.get('email', '')
         }
-
-        # Handle the files in the workspace
-        folder = self.model('folder').load(tale['workspaceId'], user=user)
-        if folder:
-            workspace_folder_files = self.model('folder').fileList(folder, user=user)
-            for workspace_file in workspace_folder_files:
-                doc['aggregates'].append({'uri': '../workspace/' + clean_workspace_path(tale['_id'],
-                                                                                        workspace_file[0])})
-
-        folder_files = list()
         datasets = set()
-        """
-        Handle objects that are in the dataSet, ie files that point to external sources.
-        Some of these sources may be datasets from publishers. We need to save information 
-        about the source so that they can added to the Datasets section.
-        """
-        for obj in tale['dataSet']:
-            if obj['_modelType'] == 'folder':
-                folder = self.model('folder').load(obj['itemId'], user=user)
+        if itemIds:
+            for item_id in itemIds:
+                item = self.model('item').load(item_id, user=user)
+                if item:
+                    root = self.model('item').parentsToRoot(item, user=user)
+
+                    # Recreate the path
+                    item_path = str()
+                    for path in root:
+                        item_path += path['object']['name']+'/'
+                    # Check if the item belongs to workspace or external data
+                    if 'WholeTale Workspaces/WholeTale Workspaces' in item_path:
+                        item_path = item_path.replace('WholeTale Workspaces/WholeTale Workspaces', '')
+                        full_path = '../workspace'+clean_workspace_path(tale['_id'], item_path+item['name'])
+                        doc['aggregates'].append({'uri': full_path})
+                        continue
+                    elif 'WholeTale Catalog/WholeTale Catalog/' in item_path:
+                        item_path = item_path.replace('WholeTale Catalog/WholeTale Catalog/', '')
+                        bundle = create_bundle('../data/'+item_path, clean_workspace_path(tale['_id'], item['name']))
+
+                        # Get the linkURL from the file object
+                        item_files = self.model('item').fileList(item,
+                                                                 user=user,
+                                                                 data=False)
+                        for file_item in item_files:
+                            agg_record = create_aggregation_record(file_item[1]['linkUrl'],
+                                                                   bundle,
+                                                                   get_folder_identifier(self, item['folderId'], user))
+                        doc['aggregates'].append(agg_record)
+                        datasets.add(item['folderId'])
+
+                folder = self.model('folder').load(item_id, user=user)
                 if folder:
-                    # Check if it's a dataset by checking for meta.identifier
-                    folder_meta = folder.get('meta')
-                    if folder_meta:
-                        dataset_identifier = folder_meta.get('identifier')
-                        if dataset_identifier:
-                            datasets.add(obj['itemId'])
-                            folder_files.append({"dataset_identifier": dataset_identifier,
-                                                 "provider": folder_meta.get('provider'),
-                                                 "file_iterator": get_folder_files(self,
-                                                                                   folder,
-                                                                                   user)
-                                                 })
+                    parent = self.model('folder').parentsToRoot(folder, user=user)
+                    # Check if the folder is in the workspace
+                    if parent[0].get('object').get('name') == 'WholeTale Workspaces':
+                        folder_items = self.model('folder').fileList(folder, user=user)
+                        for folder_item in folder_items:
+                            doc['aggregates'].append({'uri': '../workspace/' + folder_item[0]})
 
-                    else:
-                        folder_files.append({"file_iterator": get_folder_files(self,
-                                                                               folder,
-                                                                               user)})
-            elif obj['_modelType'] == 'item':
-                """
-                If there is a file that was added to a tale that came from a dataset, but outside
-                the dataset folder, we need to get metadata about the parent folder and the file.
+        else:
 
-                """
-                root_item = self.model('item').load(obj['itemId'], user=user)
-                if root_item:
-                    # Should always be true since the item is in dataSet
-                    if root_item.get('meta'):
-                        item_folder = self.model('folder').load(root_item['folderId'], user=user)
-                        folder_meta = item_folder.get('meta')
+            # Handle the files in the workspace
+            folder = self.model('folder').load(tale['workspaceId'], user=user)
+            if folder:
+                workspace_folder_files = self.model('folder').fileList(folder, user=user)
+                for workspace_file in workspace_folder_files:
+                    doc['aggregates'].append({'uri': '../workspace/' + clean_workspace_path(tale['_id'],
+                                                                                            workspace_file[0])})
+
+            folder_files = list()
+
+            """
+            Handle objects that are in the dataSet, ie files that point to external sources.
+            Some of these sources may be datasets from publishers. We need to save information 
+            about the source so that they can added to the Datasets section.
+            """
+            for obj in tale['dataSet']:
+                if obj['_modelType'] == 'folder':
+                    folder = self.model('folder').load(obj['itemId'], user=user)
+                    if folder:
+                        # Check if it's a dataset by checking for meta.identifier
+                        folder_meta = folder.get('meta')
                         if folder_meta:
-                            datasets.add(root_item['folderId'])
-                            folder_files.append({"dataset_identifier": folder_meta.get('identifier'),
-                                                 "provider": folder_meta.get('provider'),
-                                                 "file_iterator": self.model('item').fileList(root_item,
-                                                                                              user=user,
-                                                                                              data=False)
-                                                 })
+                            dataset_identifier = folder_meta.get('identifier')
+                            if dataset_identifier:
+                                datasets.add(obj['itemId'])
+                                folder_files.append({"dataset_identifier": dataset_identifier,
+                                                     "provider": folder_meta.get('provider'),
+                                                     "file_iterator": get_folder_files(self,
+                                                                                       folder,
+                                                                                       user)
+                                                     })
 
-        """
-        Add records for the remote files that exist under a folder
-        """
-        for folder_record in folder_files:
-            if folder_record['file_iterator'] is None:
-                continue
-            for file_record in folder_record['file_iterator']:
-                # Check if the file points to an external resource
-                if 'linkUrl' in file_record[1]:
-                    bundle = create_bundle('../data/' + get_dataset_file_path(file_record),
-                                           file_record[1]['name'])
-                    record = create_aggregation_record(file_record[1]['linkUrl'],
-                                                       bundle,
-                                                       folder_record.get('dataset_identifier'))
-                    doc['aggregates'].append(record)
+                        else:
+                            folder_files.append({"file_iterator": get_folder_files(self,
+                                                                                   folder,
+                                                                                   user)})
+                elif obj['_modelType'] == 'item':
+                    """
+                    If there is a file that was added to a tale that came from a dataset, but outside
+                    the dataset folder, we need to get metadata about the parent folder and the file.
+    
+                    """
+                    root_item = self.model('item').load(obj['itemId'], user=user)
+                    if root_item:
+                        # Should always be true since the item is in dataSet
+                        if root_item.get('meta'):
+                            item_folder = self.model('folder').load(root_item['folderId'], user=user)
+                            folder_meta = item_folder.get('meta')
+                            if folder_meta:
+                                datasets.add(root_item['folderId'])
+                                folder_files.append({"dataset_identifier": folder_meta.get('identifier'),
+                                                     "provider": folder_meta.get('provider'),
+                                                     "file_iterator": self.model('item').fileList(root_item,
+                                                                                                  user=user,
+                                                                                                  data=False)
+                                                     })
+
+            """
+            Add records for the remote files that exist under a folder
+            """
+            for folder_record in folder_files:
+                if folder_record['file_iterator'] is None:
+                    continue
+                for file_record in folder_record['file_iterator']:
+                    # Check if the file points to an external resource
+                    if 'linkUrl' in file_record[1]:
+                        bundle = create_bundle('../data/' + get_dataset_file_path(file_record),
+                                               file_record[1]['name'])
+                        record = create_aggregation_record(file_record[1]['linkUrl'],
+                                                           bundle,
+                                                           folder_record.get('dataset_identifier'))
+                        doc['aggregates'].append(record)
 
         """
         Add Dataset records
@@ -506,10 +553,9 @@ def clean_workspace_path(tale_id, path):
 
 def create_dataset_record(self, user, folder_id):
     """
-    Creates
-    :param self:
-    :param user:
-    :param folder_id:
+    Creates a record that describes a Dataset
+    :param user: The user
+    :param folder_id: Folder that represents a dataset
     :return:
     """
     folder = self.model('folder').load(folder_id, user=user)
@@ -529,11 +575,29 @@ def create_dataset_record(self, user, folder_id):
 
 def get_dataset_file_path(file_info):
     """
-    Removes a filename from a full path
+    Given a full path, remove the filename
     :param file_info:
-    :return:
+    :return: The full path without the filename
     """
     res = file_info[0].replace('/' + file_info[1]['name'], '')
     if res != file_info[0]:
         return res
     return ''
+
+
+def get_folder_identifier(self, folder_id, user):
+    """
+    Gets the 'identifier' field out of a folder. If it isn't present in the
+    folder, it will navigate to the folder above until it reaches the collection
+    :param folder_id: The ID of the folder
+    :return:
+    """
+    folder = self.model('folder').load(folder_id, user=user)
+    if folder:
+        meta = folder.get('meta')
+        if meta:
+            identifier = meta.get('identifier')
+            if identifier:
+                return identifier
+
+        get_folder_identifier(self, folder['parentID'], user)
