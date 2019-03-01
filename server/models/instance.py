@@ -233,7 +233,7 @@ def finalizeInstance(event):
             tale = Tale().load(instance['taleId'], force=True)
             containerInfo['imageId'] = tale['imageId']
             image = Image().load(tale['imageId'], force=True)
-            containerInfo['digest'] = image['digest']
+            containerInfo['digest'] = tale['imageInfo']['digest']
 
             instance.update({
                 'url': url,

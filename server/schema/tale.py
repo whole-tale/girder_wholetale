@@ -6,7 +6,7 @@ from .misc import containerConfigSchema, dataSetSchema, imageInfoSchema
 taleModel = {
     "definitions": {
         "containerConfig": containerConfigSchema,
-        "dataSet": dataSetSchema
+        "dataSet": dataSetSchema,
         'imageInfo': imageInfoSchema
     },
     "description": "Object representing a Tale.",

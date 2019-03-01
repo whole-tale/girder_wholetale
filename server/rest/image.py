@@ -225,8 +225,7 @@ class Image(Resource):
                     iframe, tags, config, params):
         user = self.getCurrentUser()
         return self.model('image', 'wholetale').createImage(
-<<<<<<< HEAD
-            recipe, fullName, name=name, tags=tags, creator=user,
+            name=name, tags=tags, creator=user,
             save=True, parent=None, description=description, public=public,
             config=config, icon=icon, iframe=iframe)
 
@@ -289,37 +288,6 @@ class Image(Resource):
             elif status in (JobStatus.QUEUED, JobStatus.RUNNING):
                 image['status'] = ImageStatus.BUILDING
             self.model('image', 'wholetale').updateImage(image)
-
-    @access.admin
-    @autoDescribeRoute(
-        Description('Update/verify the status of the image')
-        .modelParam('id', model='image', plugin='wholetale', level=AccessType.WRITE,
-                    description='The ID of the image.')
-        .errorResponse('ID was invalid.')
-        .errorResponse('Admin access was denied for the image.', 403)
-    )
-    def checkImage(self, image, params):
-        return self.model('image', 'wholetale').checkImage(image)
-
-    @access.user
-    @autoDescribeRoute(
-        Description('Create a copy of an image using an updated recipe')
-        .notes('Create a copy of an image preserving original fullName. '
-               'Operation will only succeed if the new recipe is '
-               'a descendant of the recipe used by the original image.')
-        .modelParam('id', model='image', plugin='wholetale', level=AccessType.READ,
-                    description='The ID of the image.')
-        .param('recipeId', 'The ID of the new recipe', required=True)
-    )
-    def copyImage(self, image, recipeId, params):
-        user = self.getCurrentUser()
-        recipe = self.model('recipe', 'wholetale').load(
-            recipeId, user=user, level=AccessType.READ, exc=True)
-        return self.model('image', 'wholetale').copyImage(image, recipe, creator=user)
-=======
-            name=name, tags=tags, creator=user, save=True, parent=None,
-            description=description, public=public, config=config, icon=icon, iframe=iframe)
->>>>>>> Removes Recipe object and references throughout
 
     @access.user(scope=TokenScope.DATA_OWN)
     @autoDescribeRoute(
