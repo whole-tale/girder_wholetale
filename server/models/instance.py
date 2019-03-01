@@ -15,7 +15,8 @@ from girder.models.token import Token
 from girder.plugins.worker import getCeleryApp
 from girder.plugins.jobs.constants import JobStatus, REST_CREATE_JOB_TOKEN_SCOPE
 from gwvolman.tasks import \
-    create_volume, launch_container, update_container, shutdown_container, remove_volume
+    create_volume, launch_container, update_container, shutdown_container, remove_volume, build_tale_image
+from celery import chord
 
 from ..constants import InstanceStatus
 from ..schema.misc import containerInfoSchema
@@ -25,6 +26,7 @@ from girder.plugins.wholetale.models.image import Image
 
 
 TASK_TIMEOUT = 15.0
+BUILD_TIMEOUT = 360.0
 
 
 class Instance(AccessControlledModel):
@@ -157,15 +159,31 @@ class Instance(AccessControlledModel):
         if spawn:
             # Create single job
             Token().addScope(token, scope=REST_CREATE_JOB_TOKEN_SCOPE)
-            volumeTask = create_volume.signature(
-                args=[str(instance['_id'])],
-                kwargs={'girder_client_token': str(token['_id'])}
+
+            #buildTask = build_tale_image.delay(
+            #    str(tale['_id']),
+            #    girder_client_token=str(token['_id'])
+            #)
+
+            buildTask = build_tale_image.si(
+                str(tale['_id']),
+                girder_client_token=str(token['_id'])
+            )
+            #volumeTask = create_volume.signature(
+            #    args=[str(instance['_id'])],
+            #    kwargs={'girder_client_token': str(token['_id'])}
+            #)
+            volumeTask = create_volume.si(
+                str(instance['_id']),
+                girder_client_token=str(token['_id'])
             )
             serviceTask = launch_container.signature(
                 kwargs={'girder_client_token': str(token['_id'])},
                 queue='manager'
             )
-            (volumeTask | serviceTask).apply_async()
+
+            (buildTask | volumeTask | serviceTask).apply_async()
+            #chord([buildTask], (volumeTask | serviceTask)).apply_async()
         return instance
 
 
