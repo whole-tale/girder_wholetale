@@ -2,6 +2,8 @@ import mock
 import httmock
 import os
 import json
+from bson import ObjectId
+
 from tests import base
 from .tests_helpers import \
     GOOD_REPO, GOOD_COMMIT, XPRA_REPO, XPRA_COMMIT, \
@@ -601,6 +603,100 @@ class TaleTestCase(base.TestCase):
         self.assertEqual(resp.json['published'], published)
         self.assertEqual(resp.json['doi'], doi)
         self.assertEqual(resp.json['publishedURI'], published_uri)
+
+    def testTaleTree(self):
+        # Tests that the correct jsTree is generated
+        assetstore = {'_id': 0}
+        data_collection = self.model('collection').createCollection('WholeTale Catalog', self.user)
+        workspace_collection = self.model('collection').createCollection('WholeTale Workspaces', self.user)
+
+        workspace_folder = self.model('folder').createFolder(
+            workspace_collection, 'WholeTale Workspaces', parentType='collection')
+        data_folder = self.model('folder').createFolder(
+            data_collection, 'Data', parentType='collection')
+        data_folder2 = self.model('folder').createFolder(
+            data_collection, 'Data2', parentType='collection')
+        workspace_top_item1 = self.model('item').createItem('workspace file1.csv',
+                                                            self.user,
+                                                            workspace_folder)
+
+        data_top_item1 = self.model('item').createItem('data file1.csv',
+                                                       self.user,
+                                                       data_folder)
+
+        data_top_item2 = self.model('item').createItem('data file2.csv',
+                                                       self.user,
+                                                       data_folder2)
+
+        self.model('file').createFile(self.user,
+                                      workspace_top_item1,
+                                      'workspace file1.csv',
+                                      7,
+                                      assetstore)
+
+        fake_url1 = 'http:Fake_URI'
+
+        self.model('file').createLinkFile('data file1.csv',
+                                          data_top_item1,
+                                          'item',
+                                          fake_url1,
+                                          self.user)
+        data_fl2 = self.model('file').createLinkFile('data file2.csv',
+                                                     data_top_item2,
+                                                     'item',
+                                                     fake_url1,
+                                                     self.user)
+
+        tale_info = {'_id': ObjectId(),
+                     'name': 'Main Tale',
+                     'description': 'Tale Desc',
+                     'authors': self.user['firstName'] + ' ' + self.user['lastName'],
+                     'creator': self.user,
+                     'public': True,
+                     'data': [{'itemId': data_folder2['_id'],
+                               '_mountPath': data_folder2['name'],
+                               '_modelType': 'folder'},
+                              {'itemId': data_top_item1['_id'],
+                               '_mountPath': data_top_item1['name'],
+                               '_modelType': 'item'}],
+                     'illustration': 'linkToImage',
+                     'workspaceId': workspace_folder['_id']}
+
+        tale = self.model('tale', 'wholetale').createTale(
+            {'_id': tale_info['_id']},
+            data=tale_info['data'],
+            creator=tale_info['creator'],
+            title=tale_info['name'],
+            public=tale_info['public'],
+            description=tale_info['description'],
+            authors=tale_info['authors']
+        )
+
+        resp = self.request(
+            path='/tale/{}/generateTree'.format(str(tale['_id'])),
+            method='GET',
+            user=self.user,
+            type='application/json'
+        )
+
+        # Check for the workspace record
+        workspace_record = (x for x in resp.json if (x['text'] == 'Workspace'))
+        self.assertTrue(bool(workspace_record))
+
+        # Check for the data record
+        data_record = (x for x in resp.json if (x['text'] == 'Data'))
+        self.assertTrue(bool(workspace_record))
+
+        # Check that the data record has the Data folder and the top level item
+        data_folder_top = (x for x in data_record if (x['text'] == data_folder2['name']))
+        self.assertTrue(bool(data_folder_top))
+
+        item__top = (x for x in data_record if (x['text'] == data_top_item1['name']))
+        self.assertTrue(bool(item__top))
+
+        # Check that the top level folder has the file record
+        file_record = all(x for x in data_folder_top if (x['text'] == data_fl2['name']))
+        self.assertTrue(file_record)
 
     def tearDown(self):
         self.model('user').remove(self.user)

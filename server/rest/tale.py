@@ -20,7 +20,7 @@ from gwvolman.tasks import import_tale
 from ..schema.tale import taleModel as taleSchema
 from ..models.tale import Tale as taleModel
 from ..models.image import Image as imageModel
-
+from ..utils import create_tree_from_root, create_tree_record
 addModel('tale', taleSchema, resources='tale')
 
 
@@ -325,7 +325,7 @@ class Tale(Resource):
     @access.public
     @autoDescribeRoute(
         Description('Returns a tree of file and folder nodes that jsTree can parse.')
-        .modelParam('id', model='tale', plugin='wholetale', level=AccessType.ADMIN)
+        .modelParam('id', model='tale', plugin='wholetale', level=AccessType.READ)
         .errorResponse('ID was invalid.')
         .errorResponse('Admin access was denied for the tale.', 403)
     )
@@ -338,83 +338,25 @@ class Tale(Resource):
         :return: List of root nodes
         """
         current_user = self.getCurrentUser()
-
         # Generate the Workspace Tree
         workspace_folder = self.model('folder').load(tale['workspaceId'],
                                                      user=current_user)
 
         # This folder doesn't have a name, so set it to the Workspace name
         workspace_folder['name'] = 'Workspace'
-        workspace_records = self.create_tree_from_root(workspace_folder,
-                                                       current_user,
-                                                       True)
-
+        workspace_records = create_tree_from_root(workspace_folder,
+                                                  current_user,
+                                                  'folder',
+                                                  True)
         # Generate the Data Tree. Since there isn't a containing folder, create a fake one
-        data_folder = self.create_tree_record(None, 'Data', 'linkify', None)
+        data_folder = create_tree_record(None, 'Data', 'linkify', None)
         for data_item in tale['dataSet']:
-            if data_item['_modelType'] == 'folder':
-                data_item = self.model('folder').load(data_item['itemId'], user=current_user)
-            data_folder['children'].append(self.create_tree_from_root(data_item,
-                                                                      current_user,
-                                                                      True))
+            loaded_obj = self.model(data_item['_modelType']).load(data_item['itemId'],
+                                                                  force=True,
+                                                                  user=current_user)
+            data_folder['children'].append(create_tree_from_root(loaded_obj,
+                                                                 current_user,
+                                                                 data_item['_modelType'],
+                                                                 True))
+
         return [workspace_records, data_folder]
-
-    def create_tree_record(self, object_id, name, model, parent_id):
-        """
-        Node records make up the jsTree, and are added to the 'children'
-        attribute. This method takes the needed parameters to make a
-        full node. The icon attribute maps to an icon in the dashboard,
-        which is why we append icon to the end. The possibilites are
-        'folder icon', 'file icon', and 'linkify icon' (for the data directory)
-
-        :param object_id: The ID of the node
-        :param name: The name of the node
-        :param model: The node's model
-        :param parent_id: The potential parent
-        :return:
-        """
-        record = {
-            'id': object_id,
-            'text': name,
-            'icon': model + ' icon',
-            'state': {
-                'opened': False,
-                'disabled': False,
-                'selected': True
-            },
-            'children': [],
-            'li_attr': {},
-            'a_attr': {}
-        }
-
-        if parent_id:
-            record['parent'] = parent_id
-        return record
-
-    def create_tree_from_root(self, root, user, is_root=False):
-        """
-        Recursively constructs a tree conforming to jsTree's JSON format
-        :param root: The root node that the tree starts at
-        :param user: The logged in user
-        :param is_root: Set to true when there shouldn't be a parent node
-        :return:
-        """
-        record = self.create_tree_record(str(root['_id']),
-                                         root['name'],
-                                         'folder',
-                                         None if is_root else str(root['parentId']))
-        records = list()
-        records.append(record)
-        folders = self.model('folder').childFolders(root,
-                                                    parentType='folder',
-                                                    user=user)
-        for folder in folders:
-            record['children'].append(self.create_tree_from_root(folder, user=user))
-        child_files = self.model('folder').childItems(folder=root, user=user)
-        for child_file in child_files:
-            file_record = self.create_tree_record(str(child_file['_id']),
-                                                  child_file['name'],
-                                                  'file',
-                                                  str(child_file['folderId']))
-            record['children'].append(file_record)
-        return record
