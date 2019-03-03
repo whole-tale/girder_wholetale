@@ -229,66 +229,6 @@ class Image(Resource):
             save=True, parent=None, description=description, public=public,
             config=config, icon=icon, iframe=iframe)
 
-    @access.user
-    @autoDescribeRoute(
-        Description('Build an existing image')
-        .modelParam('id', model='image', plugin='wholetale', level=AccessType.WRITE,
-                    description='The ID of the image.')
-        .errorResponse('ID was invalid.')
-        .errorResponse('Admin access was denied for the image.', 403)
-    )
-    def buildImage(self, image, params):
-        user = self.getCurrentUser()
-        recipe = self.model('recipe', 'wholetale').load(
-            image['recipeId'], user=user, level=AccessType.READ, exc=True)
-        jobTitle = 'Building image %s' % image['fullName']
-        jobModel = Job()
-
-        # Create a job to be handled by the worker plugin
-        args = (
-            str(image['_id']),
-            recipe['url'],
-            recipe['commitId']
-        )
-        job = jobModel.createJob(
-            title=jobTitle, type='build_image', handler='worker_handler',
-            user=user, public=False, args=args, kwargs={},
-            otherFields={
-                'celeryTaskName': 'gwvolman.tasks.build_image',
-                'celeryQueue': 'manager'
-            })
-        jobModel.scheduleJob(job)
-        return job
-
-    def updateImageStatus(self, event):
-        job = event.info['job']
-        if job['type'] == 'build_image' and job.get('status') is not None:
-            status = int(job['status'])
-            # FIXME: Who should be able to build images?
-            image = self.model('image', 'wholetale').load(
-                job['args'][0], force=True)
-            if status == JobStatus.SUCCESS:
-                result = getCeleryApp().AsyncResult(job['celeryTaskId']).get()
-                digest = result['image_digest']
-                if digest:
-                    if '@' in digest:
-                        # Grab just the SHA from the end of the digest
-                        image['digest'] = digest.split('@')[1]
-                        image['status'] = ImageStatus.AVAILABLE
-                    else:
-                        image['status'] = ImageStatus.INVALID
-                        print(
-                            'Invalid image digest produced for ' + str(image['_id']) + ': ' + digest
-                        )
-                else:
-                    image['status'] = ImageStatus.INVALID
-                    print('No image digest produced for ' + str(image['_id']))
-            elif status == JobStatus.ERROR:
-                image['status'] = ImageStatus.INVALID
-            elif status in (JobStatus.QUEUED, JobStatus.RUNNING):
-                image['status'] = ImageStatus.BUILDING
-            self.model('image', 'wholetale').updateImage(image)
-
     @access.user(scope=TokenScope.DATA_OWN)
     @autoDescribeRoute(
         Description('Get the access control list for an image')
