@@ -148,7 +148,7 @@ class Instance(Resource):
             instance,
             self.getCurrentToken(),
             image['_id'],
-            image['digest'])
+            tale['imageInfo']['digest'])
         return instance
 
     @access.user

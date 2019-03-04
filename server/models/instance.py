@@ -85,12 +85,22 @@ class Instance(AccessControlledModel):
         :type image: dict
         :returns: The instance document that was edited.
         """
+        
+        # Strip the registry info out (instance launcher now adds this)
+        segments = digest.split('/')
+        registry = segments[0]
+        
+        # Make sure to include imgId, patchNumber, and shaHash
+        imgId = segments[1]
+        segments = segments[2].split('@')
+        patchNumber = segments[0]           # this is new
+        shaHash = segments[1]
 
         instanceTask = update_container.signature(
             args=[str(instance['_id'])], queue='manager',
             kwargs={
                 'girder_client_token': str(token['_id']),
-                'image': str(imageId) + '@' + str(digest)
+                'image': str(imgId) + '/' + str(patchNumber) + '@' + str(shaHash)
             }
         ).apply_async()
         instanceTask.get(timeout=TASK_TIMEOUT)
