@@ -340,7 +340,8 @@ class Tale(Resource):
         current_user = self.getCurrentUser()
         # Generate the Workspace Tree
         workspace_folder = self.model('folder').load(tale['workspaceId'],
-                                                     user=current_user)
+                                                     user=current_user,
+                                                     level=AccessType.READ))
 
         # This folder doesn't have a name, so set it to the Workspace name
         workspace_folder['name'] = 'Workspace'
@@ -352,8 +353,8 @@ class Tale(Resource):
         data_folder = create_tree_record(None, 'Data', 'linkify', None)
         for data_item in tale['dataSet']:
             loaded_obj = self.model(data_item['_modelType']).load(data_item['itemId'],
-                                                                  force=True,
-                                                                  user=current_user)
+                                                                  user=current_user,
+                                                                  level=AccessType.READ)
             data_folder['children'].append(create_tree_from_root(loaded_obj,
                                                                  current_user,
                                                                  data_item['_modelType'],
