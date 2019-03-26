@@ -60,6 +60,9 @@ class Tale(AccessControlledModel):
         if tale['licenseSPDX'] not in tale_licenses.supported_spdxes():
             tale['licenseSPDX'] = WholeTaleLicense.default_spdx()
 
+        if tale.get('config') is None:
+            tale['config'] = {}
+
         return tale
 
     def list(self, user=None, data=None, image=None, limit=0, offset=0,
@@ -111,7 +114,7 @@ class Tale(AccessControlledModel):
         tale = {
             'authors': authors,
             'category': category,
-            'config': config,
+            'config': config or {},
             'creatorId': creatorId,
             'dataSet': data or [],
             'description': description,
