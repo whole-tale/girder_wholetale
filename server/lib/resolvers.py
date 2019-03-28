@@ -1,7 +1,29 @@
+import re
 from .entity import Entity
 from typing import Optional
 import contextlib
 from urllib.request import HTTPRedirectHandler, build_opener, Request
+
+"""Regex that matches:
+
+http://dx.doi.org/doi:10.24431/rw1k118
+http://dx.doi.org/10.24431/rw1k118
+https://dx.doi.org/doi:10.24431/rw1k118
+http://doi.org/doi:10.24431/rw1k118
+https://hdl.handle.net/doi:10.24431/rw1k118
+doi:10.24431/rw1k118
+10.24431/rw1k118
+http://dx.doi.org/10.24431/rw1k118
+http://dx.doi.org/10.24431/rw1k118
+https://dx.doi.org/10.24431/rw1k118
+https://doi.org/10.24431/rw1k118
+http://hdl.handle.net/10.24431/rw1k118
+"""
+
+_DOI_RESOLVERS_RE = re.compile(
+    r'^(|https?://(dx.doi.org|doi.org|hdl.handle.net)/)(doi:)?(10.\d{4,9}/[-._;()/:A-Z0-9]+)$',
+    re.IGNORECASE
+)
 
 
 class RedirectHandler(HTTPRedirectHandler):
@@ -64,11 +86,9 @@ class DOIResolver(Resolver):
 
     @staticmethod
     def extractDOI(url: str):
-        for prefix in ['doi:', 'http://dx.doi.org/doi:', 'https://dx.doi.org/doi:',
-                       'http://doi.org/', 'https://doi.org/', 'https://hdl.handle.net/']:
-            if url.startswith(prefix):
-                return url[len(prefix):]
-        return None
+        doi_match = _DOI_RESOLVERS_RE.match(url)
+        if doi_match:
+            return doi_match.groups()[-1]
 
     def resolve(self, entity: Entity) -> Optional[Entity]:
         value = entity.getValue()
