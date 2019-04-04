@@ -9,7 +9,6 @@ import urllib.request
 import tempfile
 import zipfile
 import shutil
-from bson import ObjectId
 from tests import base
 from .tests_helpers import mockOtherRequest
 from girder.models.item import Item
@@ -185,10 +184,9 @@ class TaleTestCase(base.TestCase):
                 'licenseSPDX': taleLicense,
                 'publishInfo': [
                     {
-                
-                       'pid': 'published_pid',
-                       'uri': 'published_url',
-                       'date': '2019-01-23T15:48:17.476000+00:00',
+                        'pid': 'published_pid',
+                        'uri': 'published_url',
+                        'date': '2019-01-23T15:48:17.476000+00:00',
                     }
                 ]
             })
@@ -616,9 +614,9 @@ class TaleTestCase(base.TestCase):
                 'licenseSPDX': taleLicense,
                 'publishInfo': [
                     {
-                       'pid': 'published_pid',
-                       'uri': 'published_url',
-                       'date': '2019-01-23T15:48:17.476000+00:00',
+                        'pid': 'published_pid',
+                        'uri': 'published_url',
+                        'date': '2019-01-23T15:48:17.476000+00:00',
                     }
                 ]
             })
@@ -791,8 +789,9 @@ class TaleTestCase(base.TestCase):
             }], creator=self.user, title="Export Tale", public=True, authors=self.authors)
         workspace = self.model('folder').load(tale['workspaceId'], force=True)
         with urllib.request.urlopen(
-            'https://wholetale.readthedocs.io/en/stable/'
-            '_downloads/wt_quickstart.ipynb'
+            'https://raw.githubusercontent.com/whole-tale/wt-design-docs/'
+            '3305527f7eb28d0e0364f4e54fd9e7155a2614d3'
+            '/users_guide/wt_quickstart.ipynb'
         ) as url:
             self.uploadFile(
                 name=item['name'], contents=url.read(), user=self.user,
