@@ -31,6 +31,7 @@ class Manifest:
         self.user = user
         self.expand_folders = expand_folders
 
+        self.validate()
         self.manifest = dict()
         # Create a set that represents any external data packages
         self.datasets = set()
@@ -42,6 +43,7 @@ class Manifest:
         self.manifest.update(self.create_context())
         self.manifest.update(self.create_basic_attributes())
         self.add_tale_creator()
+        self.manifest.update(self.create_author_record())
         self.add_tale_records()
         # Add any external datasets to the manifest
         self.add_dataset_records()
@@ -63,6 +65,23 @@ class Manifest:
                 "Description": "A simple way to publish, discover, and access materials datasets"
             }
     }
+
+    def validate(self):
+        """
+        Checks for the presence of required tale information so
+        that we can fail early.
+        """
+        try:
+            # Check that each author has an ORCID, first name, and last name
+            for author in self.tale['authors']:
+                if not len(author['orcid']):
+                    raise ValueError('A Tale author is missing an ORCID')
+                if not len(author['firstName']):
+                    raise ValueError('A Tale author is missing a first name')
+                if not len(author['lastName']):
+                    raise ValueError('A Tale author is missing a last name')
+        except KeyError:
+            raise ValueError('A Tale author is missing an ORCID')
 
     def create_basic_attributes(self):
         """
@@ -92,11 +111,28 @@ class Manifest:
                                         user=self.user,
                                         force=True)
         self.manifest['createdBy'] = {
-            "@id": self.tale['authors'],
+            "@id": tale_user['email'],
             "@type": "schema:Person",
             "schema:givenName": tale_user.get('firstName', ''),
             "schema:familyName": tale_user.get('lastName', ''),
             "schema:email": tale_user.get('email', '')
+        }
+
+    def create_author_record(self):
+        """
+        Creates records for authors that are associated with a Tale
+        :return: A dictionary listing of the authors
+        """
+        return {
+            'schema:author': [
+                {
+                    "@id": author["orcid"],
+                    "@type": "schema:Person",
+                    "schema:givenName": author["firstName"],
+                    "schema:familyName": author["lastName"]
+                }
+                for author in self.tale['authors']
+            ]
         }
 
     def create_context(self):

@@ -2,7 +2,6 @@ import json
 import os
 from tests import base
 from bson import ObjectId
-from girder.exceptions import AccessException
 from girder.utility.path import lookUpPath
 
 
@@ -53,6 +52,19 @@ class ManifestTestCase(base.TestCase):
         )
         self.admin, self.user, self.userHenry = [
             self.model('user').createUser(**user) for user in self.users
+        ]
+
+        self.new_authors = [
+            {
+                "firstName": self.admin['firstName'],
+                "lastName": self.admin['lastName'],
+                "orcid": 'https://orcid.org/1234'
+            },
+            {
+                "firstName": self.user['firstName'],
+                "lastName": self.user['lastName'],
+                "orcid": 'https://orcid.org/9876'
+            }
         ]
 
         data_collection = self.model('collection').createCollection(
@@ -132,11 +144,11 @@ class ManifestTestCase(base.TestCase):
                 }
             )
 
-        tale_info = {
+        self.tale_info = {
             '_id': ObjectId(),
             'name': 'Main Tale',
             'description': 'Tale Desc',
-            'authors': self.user['firstName'] + ' ' + self.user['lastName'],
+            'authors': self.new_authors,
             'creator': self.user,
             'public': True,
             'data': dataSet,
@@ -144,23 +156,23 @@ class ManifestTestCase(base.TestCase):
         }
 
         self.tale = self.model('tale', 'wholetale').createTale(
-            {'_id': tale_info['_id']},
-            data=tale_info['data'],
-            creator=tale_info['creator'],
-            title=tale_info['name'],
-            public=tale_info['public'],
-            description=tale_info['description'],
-            authors=tale_info['authors'],
+            {'_id': self.tale_info['_id']},
+            data=self.tale_info['data'],
+            creator=self.tale_info['creator'],
+            title=self.tale_info['name'],
+            public=self.tale_info['public'],
+            description=self.tale_info['description'],
+            authors=self.tale_info['authors'],
         )
 
         self.tale2 = self.model('tale', 'wholetale').createTale(
-            {'_id': tale_info['_id']},
+            {'_id': self.tale_info['_id']},
             data=[],
-            creator=tale_info['creator'],
-            title=tale_info['name'],
-            public=tale_info['public'],
-            description=tale_info['description'],
-            authors=tale_info['authors'],
+            creator=self.tale_info['creator'],
+            title=self.tale_info['name'],
+            public=self.tale_info['public'],
+            description=self.tale_info['description'],
+            authors=self.tale_info['authors'],
         )
 
     def testManifest(self):
@@ -173,6 +185,7 @@ class ManifestTestCase(base.TestCase):
         self._testDataSet()
         self._test_different_user()
         self._testWorkspace()
+        self._testValidate()
 
     def _testCreateBasicAttributes(self):
         # Test that the basic attributes are correct
@@ -240,6 +253,11 @@ class ManifestTestCase(base.TestCase):
         parent_dataset = 'urn:uuid:100.99.xx'
         agg = manifest_doc.create_aggregation_record(uri, bundle, parent_dataset)
         self.assertEqual(agg['schema:isPartOf'], parent_dataset)
+
+    def _testAddTaleCreator(self):
+        from server.lib.manifest import Manifest
+        manifest_doc = Manifest(self.tale, self.user)
+        self.assertTrue(len(manifest_doc.manifest['schema:author']))
 
     def _testGetFolderIdentifier(self):
         from server.lib.manifest import get_folder_identifier
@@ -374,6 +392,38 @@ class ManifestTestCase(base.TestCase):
             Manifest(self.tale, self.userHenry)
         except AccessException:
             self.assertFalse(1)
+
+    def _testValidate(self):
+        from server.lib.manifest import Manifest
+
+        missing_orcid = {'firstName': 'Lord',
+                         'lastName': 'Kelvin'}
+        blank_orcid = {'firstName': 'Isaac',
+                       'lastName': 'Newton',
+                       'orcid': ''}
+
+        tale_missing_orcid = self.model('tale', 'wholetale').createTale(
+            {'_id': self.tale_info['_id']},
+            data=[],
+            creator=self.tale_info['creator'],
+            title=self.tale_info['name'],
+            public=self.tale_info['public'],
+            description=self.tale_info['description'],
+            authors=missing_orcid)
+
+        with self.assertRaises(ValueError):
+            Manifest(tale_missing_orcid, self.user)
+
+        tale_blank_orcid = self.model('tale', 'wholetale').createTale(
+            {'_id': self.tale_info['_id']},
+            data=[],
+            creator=self.tale_info['creator'],
+            title=self.tale_info['name'],
+            public=self.tale_info['public'],
+            description=self.tale_info['description'],
+            authors=missing_orcid)
+        with self.assertRaises(ValueError):
+            Manifest(tale_blank_orcid, self.user)
 
     def tearDown(self):
         self.model('user').remove(self.user)

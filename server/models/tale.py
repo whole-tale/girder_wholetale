@@ -17,7 +17,7 @@ from girder.exceptions import AccessException
 # Whenever the Tale object schema is modified (e.g. fields are added or
 # removed) increase `_currentTaleFormat` to retroactively apply those
 # changes to existing Tales.
-_currentTaleFormat = 6
+_currentTaleFormat = 7
 
 
 class Tale(AccessControlledModel):
@@ -63,6 +63,12 @@ class Tale(AccessControlledModel):
         if tale.get('config') is None:
             tale['config'] = {}
 
+        if not isinstance(tale['authors'], list):
+            # Set the authors to the Tale creator
+            tale_creator = self.model('user').load(tale['creatorId'], force=True)
+            tale['authors'] = [{'firstName': tale_creator['firstName'],
+                                'lastName': tale_creator['lastName'],
+                                'orcid': ''}]
         return tale
 
     def list(self, user=None, data=None, image=None, limit=0, offset=0,
