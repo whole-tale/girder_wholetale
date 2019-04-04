@@ -88,12 +88,11 @@ taleModel = {
             "description": "The last time when the tale was modified."
         },
         "authors": {
-            "type": "array",
-            "items": {
-                'type': 'object',
-                'description': "A JSON structure representing a Tale author."
-            },
-            "description": "A list of authors that are associated with the Tale"
+            "type": "string",
+            "description": (
+                "BEWARE: it's a string for now, but in the future it should "
+                "be a map of Author/User entities"
+            )
         },
         "category": {
             "type": "string",
@@ -123,18 +122,7 @@ taleModel = {
         "_accessLevel": 2,
         "_id": "5c4887409759c200017b2310",
         "_modelType": "tale",
-        "authors": [
-            {
-                "firstName": "Kacper",
-                "lastName": "Kowalik",
-                "orcid": "https://www.orcid.org/0000-0003-1709-3744"
-            },
-            {
-                "firstName": "Tommy",
-                "lastName": "Thelen",
-                "orcid": "https://www.orcid.org/0000-0003-1709-3754"
-            }
-        ],
+        "authors": "Kacper Kowalik",
         "category": "science",
         "config": {},
         "created": "2019-01-23T15:24:48.217000+00:00",
