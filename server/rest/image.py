@@ -110,8 +110,8 @@ class Image(Resource):
         .param('text', 'Perform a full text search for image with a matching '
                'name or description.', required=False)
         .param('tag', 'Search all images with a given tag.', required=False)
-        .pagingParams(defaultSort='lowerName',
-                      defaultSortDir=SortDir.DESCENDING)
+        .pagingParams(defaultSort='name',
+                      defaultSortDir=SortDir.ASCENDING)
     )
     def listImages(self, parentId, text, tag, limit, offset, sort, params):
         user = self.getCurrentUser()
