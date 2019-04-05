@@ -93,7 +93,7 @@ class Manifest:
             "createdOn": str(self.tale['created']),
             "name": self.tale['title'],
             "description": self.tale.get('description', str()),
-            "category": self.tale['category'],
+            "keywords": self.tale['category'],
             "identifier": str(self.tale['_id']),
             "version": self.tale['format'],
             "image": self.tale['illustration'],

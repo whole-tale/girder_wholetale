@@ -197,7 +197,7 @@ class ManifestTestCase(base.TestCase):
         self.assertEqual(attributes['identifier'], str(self.tale['_id']))
         self.assertEqual(attributes['name'], self.tale['title'])
         self.assertEqual(attributes['description'], self.tale['description'])
-        self.assertEqual(attributes['category'], self.tale['category'])
+        self.assertEqual(attributes['keywords'], self.tale['category'])
         self.assertEqual(attributes['version'], self.tale['format'])
         self.assertEqual(attributes['image'], self.tale['illustration'])
 
