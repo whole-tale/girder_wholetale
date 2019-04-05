@@ -98,7 +98,7 @@ class Manifest:
             "version": self.tale['format'],
             "image": self.tale['illustration'],
             "aggregates": list(),
-            "Datasets": list()
+            "dataset": list()
         }
 
     def add_tale_creator(self):
@@ -145,7 +145,6 @@ class Manifest:
                 "https://w3id.org/bundle/context",
                 "https://schema.org/",
                 {"name": "http://schema.org/name"},
-                {"Datasets": {"@type": "@id"}}
             ]
         }
 
@@ -343,7 +342,7 @@ class Manifest:
         for folder_id in self.datasets:
             dataset_record = self.create_dataset_record(folder_id)
             if dataset_record:
-                self.manifest['Datasets'].append(dataset_record)
+                self.manifest['dataset'].append(dataset_record)
 
     def create_bundle(self, folder, filename):
         """

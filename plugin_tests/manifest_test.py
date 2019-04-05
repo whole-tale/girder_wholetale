@@ -381,7 +381,7 @@ class ManifestTestCase(base.TestCase):
 
         reference_datasets = sorted(reference_datasets, key=itemgetter('@id'))
         for i, dataset in enumerate(
-            sorted(manifest_doc.manifest['Datasets'], key=itemgetter('@id'))
+            sorted(manifest_doc.manifest['dataset'], key=itemgetter('@id'))
         ):
             self.assertDictEqual(dataset, reference_datasets[i])
 
