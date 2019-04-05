@@ -194,21 +194,21 @@ class ManifestTestCase(base.TestCase):
         manifest_doc = Manifest(self.tale, self.user)
 
         attributes = manifest_doc.create_basic_attributes()
-        self.assertEqual(attributes['schema:identifier'], str(self.tale['_id']))
-        self.assertEqual(attributes['schema:name'], self.tale['title'])
-        self.assertEqual(attributes['schema:description'], self.tale['description'])
-        self.assertEqual(attributes['schema:category'], self.tale['category'])
-        self.assertEqual(attributes['schema:version'], self.tale['format'])
-        self.assertEqual(attributes['schema:image'], self.tale['illustration'])
+        self.assertEqual(attributes['identifier'], str(self.tale['_id']))
+        self.assertEqual(attributes['name'], self.tale['title'])
+        self.assertEqual(attributes['description'], self.tale['description'])
+        self.assertEqual(attributes['category'], self.tale['category'])
+        self.assertEqual(attributes['version'], self.tale['format'])
+        self.assertEqual(attributes['image'], self.tale['illustration'])
 
     def _testAddTaleCreator(self):
         from server.lib.manifest import Manifest
 
         manifest_doc = Manifest(self.tale, self.user)
         manifest_creator = manifest_doc.manifest['createdBy']
-        self.assertEqual(manifest_creator['schema:givenName'], self.user['firstName'])
-        self.assertEqual(manifest_creator['schema:familyName'], self.user['lastName'])
-        self.assertEqual(manifest_creator['schema:email'], self.user['email'])
+        self.assertEqual(manifest_creator['givenName'], self.user['firstName'])
+        self.assertEqual(manifest_creator['familyName'], self.user['lastName'])
+        self.assertEqual(manifest_creator['email'], self.user['email'])
         self.assertEqual(manifest_creator['@id'], self.tale['authors'])
 
     def _testCreateContext(self):
@@ -252,12 +252,12 @@ class ManifestTestCase(base.TestCase):
         # Test with a parent dataset
         parent_dataset = 'urn:uuid:100.99.xx'
         agg = manifest_doc.create_aggregation_record(uri, bundle, parent_dataset)
-        self.assertEqual(agg['schema:isPartOf'], parent_dataset)
+        self.assertEqual(agg['isPartOf'], parent_dataset)
 
     def _testAddTaleCreator(self):
         from server.lib.manifest import Manifest
         manifest_doc = Manifest(self.tale, self.user)
-        self.assertTrue(len(manifest_doc.manifest['schema:author']))
+        self.assertTrue(len(manifest_doc.manifest['author']))
 
     def _testGetFolderIdentifier(self):
         from server.lib.manifest import get_folder_identifier
@@ -298,7 +298,7 @@ class ManifestTestCase(base.TestCase):
             {
                 'uri': 'https://cn.dataone.org/cn/v2/resolve/urn:uuid:01a53103-8db1-46b3-967c-b42acf69ae08',
                 'bundledAs': {'folder': '../data/', 'filename': 'usco2005.xls'},
-                'schema:isPartOf': 'doi:10.5065/D6862DM8',
+                'isPartOf': 'doi:10.5065/D6862DM8',
                 'size': 6427136,
             },
             {
@@ -307,13 +307,13 @@ class ManifestTestCase(base.TestCase):
                     'folder': '../data/',
                     'filename': 'D_whites_darks_AJS.hdf',
                 },
-                'schema:isPartOf': 'doi:10.18126/M2301J',
+                'isPartOf': 'doi:10.18126/M2301J',
                 'size': 8786120536,
             },
             {
                 'uri': 'globus://82f1b5c6-6e9b-11e5-ba47-22000b92c6ec//published/publication_1106/data/Dmax',
                 'bundledAs': {'folder': '../data/Dmax/'},
-                'schema:isPartOf': 'doi:10.18126/M2662X',
+                'isPartOf': 'doi:10.18126/M2662X',
                 'size': 105050561,
             },
             {
@@ -346,7 +346,7 @@ class ManifestTestCase(base.TestCase):
                 'size': 1005007,
             },
             {'uri': '../LICENSE'},
-            {'uri': '../README.md', '@type': 'schema:HowTo'},
+            {'uri': '../README.md', '@type': 'HowTo'},
         ]
         from operator import itemgetter
 

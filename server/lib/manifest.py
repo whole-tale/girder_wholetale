@@ -91,12 +91,12 @@ class Manifest:
         return {
             "@id": 'https://data.wholetale.org/api/v1/tale/' + str(self.tale['_id']),
             "createdOn": str(self.tale['created']),
-            "schema:name": self.tale['title'],
-            "schema:description": self.tale.get('description', str()),
-            "schema:category": self.tale['category'],
-            "schema:identifier": str(self.tale['_id']),
-            "schema:version": self.tale['format'],
-            "schema:image": self.tale['illustration'],
+            "name": self.tale['title'],
+            "description": self.tale.get('description', str()),
+            "category": self.tale['category'],
+            "identifier": str(self.tale['_id']),
+            "version": self.tale['format'],
+            "image": self.tale['illustration'],
             "aggregates": list(),
             "Datasets": list()
         }
@@ -111,10 +111,10 @@ class Manifest:
                                         force=True)
         self.manifest['createdBy'] = {
             "@id": tale_user['email'],
-            "@type": "schema:Person",
-            "schema:givenName": tale_user.get('firstName', ''),
-            "schema:familyName": tale_user.get('lastName', ''),
-            "schema:email": tale_user.get('email', '')
+            "@type": "Person",
+            "givenName": tale_user.get('firstName', ''),
+            "familyName": tale_user.get('lastName', ''),
+            "email": tale_user.get('email', '')
         }
 
     def create_author_record(self):
@@ -123,12 +123,12 @@ class Manifest:
         :return: A dictionary listing of the authors
         """
         return {
-            'schema:author': [
+            'author': [
                 {
                     "@id": author["orcid"],
-                    "@type": "schema:Person",
-                    "schema:givenName": author["firstName"],
-                    "schema:familyName": author["lastName"]
+                    "@type": "Person",
+                    "givenName": author["firstName"],
+                    "familyName": author["lastName"]
                 }
                 for author in self.tale['authors']
             ]
@@ -143,7 +143,8 @@ class Manifest:
         return {
             "@context": [
                 "https://w3id.org/bundle/context",
-                {"schema": "http://schema.org/"},
+                "https://schema.org/",
+                {"name": "http://schema.org/name"},
                 {"Datasets": {"@type": "@id"}}
             ]
         }
@@ -192,7 +193,7 @@ class Manifest:
             aggregation['bundledAs'] = bundle
         # TODO: in case parent_dataset_id == uri do something special?
         if parent_dataset_identifier and parent_dataset_identifier != uri:
-            aggregation['schema:isPartOf'] = parent_dataset_identifier
+            aggregation['isPartOf'] = parent_dataset_identifier
         return aggregation
 
     def add_tale_records(self):
@@ -370,7 +371,7 @@ class Manifest:
         self.manifest['aggregates'].append({'uri': '../LICENSE'})
 
         self.manifest['aggregates'].append({'uri': '../README.md',
-                                            '@type': 'schema:HowTo'})
+                                            '@type': 'HowTo'})
 
 
 def clean_workspace_path(tale_id, path):
