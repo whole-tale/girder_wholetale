@@ -1,6 +1,5 @@
 import os
 
-from .license import WholeTaleLicense
 from . import IMPORT_PROVIDERS
 
 from girder import logger
@@ -368,10 +367,7 @@ class Manifest:
         Add records for files that we inject (README, LICENSE, etc)
         """
 
-        self.manifest['aggregates'].append({'uri': '../LICENSE',
-                                            'schema:license':
-                                                self.tale.get('licenseSPDX',
-                                                              WholeTaleLicense.default_spdx())})
+        self.manifest['aggregates'].append({'uri': '../LICENSE'})
 
         self.manifest['aggregates'].append({'uri': '../README.md',
                                             '@type': 'schema:HowTo'})
