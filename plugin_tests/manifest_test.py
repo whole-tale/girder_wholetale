@@ -205,9 +205,11 @@ class ManifestTestCase(base.TestCase):
         from server.lib.manifest import Manifest
 
         manifest_doc = Manifest(self.tale, self.user)
-        manifest_creator = manifest_doc.manifest['createdBy']
+        manifest_creator = manifest_doc.manifest['creator']
         self.assertEqual(manifest_creator['givenName'], self.user['firstName'])
         self.assertEqual(manifest_creator['familyName'], self.user['lastName'])
+        self.assertEqual(manifest_creator['name'],
+                         self.user['firstName'] + ' ' + self.user['lastName'])
         self.assertEqual(manifest_creator['email'], self.user['email'])
         self.assertEqual(manifest_creator['@id'], self.tale['authors'])
 
