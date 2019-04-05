@@ -90,6 +90,7 @@ class Manifest:
 
         return {
             "@id": 'https://data.wholetale.org/api/v1/tale/' + str(self.tale['_id']),
+            "@type": ["DataCatalog", "ro:ResearchObject"],
             "createdOn": str(self.tale['created']),
             "name": self.tale['title'],
             "description": self.tale.get('description', str()),

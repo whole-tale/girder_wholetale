@@ -195,6 +195,7 @@ class ManifestTestCase(base.TestCase):
 
         attributes = manifest_doc.create_basic_attributes()
         self.assertEqual(attributes['identifier'], str(self.tale['_id']))
+        self.assertEqual(attributes['@type'], ["DataCatalog", "ro:ResearchObject"])
         self.assertEqual(attributes['name'], self.tale['title'])
         self.assertEqual(attributes['description'], self.tale['description'])
         self.assertEqual(attributes['keywords'], self.tale['category'])
