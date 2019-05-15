@@ -18,6 +18,8 @@ from girder.plugins.jobs.models.job import Job as JobModel
 from girder.plugins.worker import getCeleryApp
 from girder.utility import assetstore_utilities, setting_utilities
 from girder.utility.model_importer import ModelImporter
+from girder.plugins.oauth.providers.agavebase import AgaveBase #DesignSafe, CyVerse
+from girder.models.user import User
 
 from .constants import PluginSettings, SettingDefault
 from .rest.dataset import Dataset
@@ -357,6 +359,21 @@ def getJobResult(self, job):
     return result
 
 
+def _saveAgaveToken(event):
+    # When a user logs in with agave oauth, we save their token
+    if issubclass(event.info['provider'], AgaveBase):
+        accessToken = event.info['token']['access_token']
+        refreshToken = event.info['token']['refresh_token']
+        User().update({
+            '_id': event.info['user']['_id']
+        }, {
+            '$set': {
+                'agaveAccessToken': accessToken,
+                'agaveRefreshToken': refreshToken,
+            }
+        }, multi=False)
+
+
 def load(info):
     info['apiRoot'].wholetale = wholeTale()
     info['apiRoot'].instance = Instance()
@@ -376,8 +393,11 @@ def load(info):
         except GirderException as exc:
             logprint(exc)
 
+    # Add save Agave token function and bind below
+
     info['apiRoot'].dataset = Dataset()
     info['apiRoot'].image = Image()
+    events.bind('oauth.auth_callback.after', 'wholetale', _saveAgaveToken)
     events.bind('jobs.job.update.after', 'wholetale', tale.updateBuildStatus)
     events.bind('jobs.job.update.after', 'wholetale', finalizeInstance)
     events.bind('jobs.job.update.after', 'wholetale', updateNotification)
