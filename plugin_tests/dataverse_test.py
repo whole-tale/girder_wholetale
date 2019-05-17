@@ -117,7 +117,7 @@ class DataverseHarversterTestCase(base.TestCase):
         ])
 
     def testConfigValidators(self):
-        from girder.plugins.wholetale.constants import PluginSettings, SettingDefault
+        from girder.plugins.wholetale.constants import PluginSettings, PluginSettingDefault
         resp = self.request('/system/setting', user=self.admin, method='PUT',
                             params={'key': PluginSettings.DATAVERSE_URL,
                                     'value': 'random_string'})
@@ -131,7 +131,7 @@ class DataverseHarversterTestCase(base.TestCase):
         resp = self.request(
             '/system/setting', user=self.admin, method='PUT',
             params={'key': PluginSettings.DATAVERSE_URL,
-                    'value': SettingDefault.defaults[PluginSettings.DATAVERSE_URL]})
+                    'value': PluginSettingDefault.defaults[PluginSettings.DATAVERSE_URL]})
         self.assertStatusOk(resp)
 
         resp = self.request(
@@ -145,11 +145,11 @@ class DataverseHarversterTestCase(base.TestCase):
         self.assertStatusOk(resp)
         self.assertEqual(
             resp.body[0].decode(),
-            '"{}"'.format(SettingDefault.defaults[PluginSettings.DATAVERSE_URL]))
+            '"{}"'.format(PluginSettingDefault.defaults[PluginSettings.DATAVERSE_URL]))
 
     @vcr.use_cassette(os.path.join(DATA_PATH, 'dataverse_single.txt'))
     def testSingleDataverseInstance(self):
-        from girder.plugins.wholetale.constants import PluginSettings, SettingDefault
+        from girder.plugins.wholetale.constants import PluginSettings, PluginSettingDefault
         resp = self.request('/system/setting', user=self.admin, method='PUT',
                             params={'key': PluginSettings.DATAVERSE_URL,
                                     'value': 'https://demo.dataverse.org/'})
@@ -193,11 +193,11 @@ class DataverseHarversterTestCase(base.TestCase):
         resp = self.request(
             '/system/setting', user=self.admin, method='PUT',
             params={'key': PluginSettings.DATAVERSE_URL,
-                    'value': SettingDefault.defaults[PluginSettings.DATAVERSE_URL]})
+                    'value': PluginSettingDefault.defaults[PluginSettings.DATAVERSE_URL]})
         self.assertStatusOk(resp)
 
     def testExtraHosts(self):
-        from girder.plugins.wholetale.constants import PluginSettings, SettingDefault
+        from girder.plugins.wholetale.constants import PluginSettings, PluginSettingDefault
         resp = self.request('/system/setting', user=self.admin, method='PUT',
                             params={'key': PluginSettings.DATAVERSE_EXTRA_HOSTS,
                                     'value': 'https://dataverse.org/'})
@@ -230,7 +230,7 @@ class DataverseHarversterTestCase(base.TestCase):
         self.assertStatusOk(resp)
         self.assertEqual(
             resp.body[0].decode(),
-            str(SettingDefault.defaults[PluginSettings.DATAVERSE_EXTRA_HOSTS]))
+            str(PluginSettingDefault.defaults[PluginSettings.DATAVERSE_EXTRA_HOSTS]))
 
         resp = self.request(
             '/system/setting', user=self.admin, method='PUT',
@@ -254,7 +254,7 @@ class DataverseHarversterTestCase(base.TestCase):
         resp = self.request(
             '/system/setting', user=self.admin, method='PUT',
             params={'key': PluginSettings.DATAVERSE_URL,
-                    'value': SettingDefault.defaults[PluginSettings.DATAVERSE_URL]})
+                    'value': PluginSettingDefault.defaults[PluginSettings.DATAVERSE_URL]})
 
     def tearDown(self):
         self.model('user').remove(self.user)

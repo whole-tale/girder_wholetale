@@ -144,7 +144,7 @@ class InstanceTestCase(base.TestCase):
             self.assertStatusOk(resp)
 
     def testInstanceCap(self):
-        from girder.plugins.wholetale.constants import PluginSettings, SettingDefault
+        from girder.plugins.wholetale.constants import PluginSettings, PluginSettingDefault
         with six.assertRaisesRegex(self, ValidationException,
                                    '^Instance Cap needs to be an integer.$'):
             self.model('setting').set(PluginSettings.INSTANCE_CAP, 'a')
@@ -162,7 +162,7 @@ class InstanceTestCase(base.TestCase):
         self.assertStatusOk(resp)
         self.assertEqual(
             resp.body[0].decode(),
-            str(SettingDefault.defaults[PluginSettings.INSTANCE_CAP]))
+            str(PluginSettingDefault.defaults[PluginSettings.INSTANCE_CAP]))
 
         with mock.patch('celery.Celery') as celeryMock:
             instance = celeryMock.return_value

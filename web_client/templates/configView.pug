@@ -18,5 +18,10 @@ form#g-wholetale-config-form(role="form")
       placeholder=`Default: ${defaults['wholetale.dataverse_extra_hosts'] || '[]'}`,
       title="Additional supported Dataverse installations. (JSON array [\"data1\", \"data2\", ...])")
         = JSON.stringify(settings['wholetale.dataverse_extra_hosts'] || defaults['wholetale.dataverse_extra_hosts'], 4)
+    label.control-label(for="wholetale_publishers") Publishers
+    textarea#wholetale_publishers.form-control
+      = JSON.stringify(settings['wholetale.publishers'] || defaults['wholetale.publishers'], 4)
   p#g-wholetale-error-message.g-validation-failed-message
   input.btn.btn-sm.btn-primary(type="submit", value="Save")
+  input#wholetale_defaults.btn.btn-sm.btn-default(
+    type="button", value="Reset to defaults")

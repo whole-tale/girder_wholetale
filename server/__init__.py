@@ -9,7 +9,7 @@ from girder.api import access
 from girder.api.describe import Description, describeRoute, autoDescribeRoute
 from girder.api.rest import \
     boundHandler, loadmodel, RestException
-from girder.constants import AccessType, TokenScope, CoreEventHandler
+from girder.constants import AccessType, TokenScope, CoreEventHandler, SettingDefault
 from girder.exceptions import GirderException
 from girder.models.model_base import ValidationException
 from girder.plugins.jobs.constants import JobStatus
@@ -18,12 +18,13 @@ from girder.plugins.worker import getCeleryApp
 from girder.utility import assetstore_utilities, setting_utilities
 from girder.utility.model_importer import ModelImporter
 
-from .constants import PluginSettings, SettingDefault
+from .constants import PluginSettings, PluginSettingDefault
 from .rest.dataset import Dataset
 from .rest.image import Image
 from .rest.integration import Integration
 from .rest.repository import Repository
 from .rest.publish import Publish
+from .rest.publisher import Publisher
 from .rest.harvester import listImportedData
 from .rest.tale import Tale
 from .rest.instance import Instance
@@ -65,17 +66,29 @@ def validateDataverseURL(doc):
 
 @setting_utilities.default(PluginSettings.INSTANCE_CAP)
 def defaultInstanceCap():
-    return SettingDefault.defaults[PluginSettings.INSTANCE_CAP]
+    return PluginSettingDefault.defaults[PluginSettings.INSTANCE_CAP]
 
 
 @setting_utilities.default(PluginSettings.DATAVERSE_URL)
 def defaultDataverseURL():
-    return SettingDefault.defaults[PluginSettings.DATAVERSE_URL]
+    return PluginSettingDefault.defaults[PluginSettings.DATAVERSE_URL]
 
 
 @setting_utilities.default(PluginSettings.DATAVERSE_EXTRA_HOSTS)
 def defaultDataverseExtraHosts():
-    return SettingDefault.defaults[PluginSettings.DATAVERSE_EXTRA_HOSTS]
+    return PluginSettingDefault.defaults[PluginSettings.DATAVERSE_EXTRA_HOSTS]
+
+
+@setting_utilities.validator(PluginSettings.PUBLISHERS)
+def validatePublishers(doc):
+    val = doc['value']
+    if not isinstance(val, list):
+        raise ValidationException('Publishers setting must be a list.', 'value')
+    for publisher in val:
+        name = publisher.get('name')
+        if not (name and isinstance(name, str)):
+            raise ValidationException(
+                'Publisher "name" is required and must be a non-empty string.', 'name')
 
 
 @access.public(scope=TokenScope.DATA_READ)
@@ -337,6 +350,7 @@ def load(info):
     events.bind('model.file.remove', 'wholetale', tale.updateWorkspaceModTime)
     info['apiRoot'].repository = Repository()
     info['apiRoot'].publish = Publish()
+    info['apiRoot'].publisher = Publisher()
     info['apiRoot'].license = License()
     info['apiRoot'].integration = Integration()
     info['apiRoot'].workspace = Workspace()
@@ -351,3 +365,5 @@ def load(info):
     info['apiRoot'].user.route('GET', ('settings',), getUserMetadata)
     ModelImporter.model('user').exposeFields(
         level=AccessType.WRITE, fields=('meta', 'myData'))
+    SettingDefault.defaults[PluginSettings.PUBLISHERS] = \
+        PluginSettingDefault.defaults[PluginSettings.PUBLISHERS]

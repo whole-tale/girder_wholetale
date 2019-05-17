@@ -23,7 +23,24 @@ var ConfigView = View.extend({
             }, {
                 key: 'wholetale.dataverse_extra_hosts',
                 value: this.$('#wholetale_extra_hosts').val().trim()
+            }, {
+                key: 'wholetale.publishers',
+                value: this.$('#wholetale_publishers').val().trim()
             }]);
+        },
+        'click #wholetale_defaults': function (event) {
+            event.preventDefault();
+            restRequest({
+                url: 'system/setting',
+                type: 'GET',
+                data: {
+                    list: JSON.stringify(this.keys),
+                    default: 'default'
+                }
+            }).done(_.bind(function (resp) {
+                this.settings = resp;
+                this.render();
+            }, this));
         }
     },
     initialize: function () {
@@ -32,17 +49,18 @@ var ConfigView = View.extend({
             parentView: this
         });
 
-        var keys = [
+        this.keys = [
             'wholetale.instance_cap',
             'wholetale.dataverse_url',
-            'wholetale.dataverse_extra_hosts'
+            'wholetale.dataverse_extra_hosts',
+            'wholetale.publishers'
         ];
 
         restRequest({
             url: 'system/setting',
             type: 'GET',
             data: {
-                list: JSON.stringify(keys),
+                list: JSON.stringify(this.keys),
                 default: 'none'
             }
         }).done(_.bind(function (resp) {
@@ -51,7 +69,7 @@ var ConfigView = View.extend({
                 url: 'system/setting',
                 type: 'GET',
                 data: {
-                    list: JSON.stringify(keys),
+                    list: JSON.stringify(this.keys),
                     default: 'default'
                 }
             }).done(_.bind(function (resp) {
