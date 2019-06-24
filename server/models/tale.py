@@ -18,11 +18,8 @@ from ..lib.license import WholeTaleLicense
 
 from gwvolman.tasks import build_tale_image, BUILD_TALE_IMAGE_STEP_TOTAL
 
-
-# Whenever the Tale object schema is modified (e.g. fields are added or
-# removed) increase `_currentTaleFormat` to retroactively apply those
-# changes to existing Tales.
-_currentTaleFormat = 7
+# Whenever changes are made the the manifest scheme, this should get bumped a version
+_currentMetadataFormat = 8
 
 
 class Tale(AccessControlledModel):
@@ -79,7 +76,7 @@ class Tale(AccessControlledModel):
         if 'copyOfTale' not in tale:
             tale['copyOfTale'] = None
 
-        tale['format'] = _currentTaleFormat
+        tale['format'] = _currentMetadataFormat
 
         if not isinstance(tale['authors'], list):
             tale['authors'] = []
@@ -139,7 +136,7 @@ class Tale(AccessControlledModel):
             'creatorId': creatorId,
             'dataSet': data or [],
             'description': description,
-            'format': _currentTaleFormat,
+            'format': _currentMetadataFormat,
             'created': now,
             'icon': icon,
             'iframe': image.get('iframe', False),

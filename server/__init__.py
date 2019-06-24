@@ -4,13 +4,12 @@
 import six
 import validators
 
-from girder import events, logprint, logger
+from girder import events, logger
 from girder.api import access
 from girder.api.describe import Description, describeRoute, autoDescribeRoute
 from girder.api.rest import \
     boundHandler, loadmodel, RestException
 from girder.constants import AccessType, TokenScope, CoreEventHandler
-from girder.exceptions import GirderException
 from girder.models.model_base import ValidationException
 from girder.models.notification import Notification, ProgressState
 from girder.plugins.jobs.constants import JobStatus
@@ -362,20 +361,6 @@ def load(info):
     info['apiRoot'].instance = Instance()
     tale = Tale()
     info['apiRoot'].tale = tale
-
-    from girder.plugins.wholetale.models.tale import Tale as TaleModel
-    from girder.plugins.wholetale.models.tale import _currentTaleFormat
-    q = {
-        '$or': [
-            {'format': {'$exists': False}},
-            {'format': {'$lt': _currentTaleFormat}}
-        ]}
-    for obj in TaleModel().find(q):
-        try:
-            TaleModel().save(obj, validate=True)
-        except GirderException as exc:
-            logprint(exc)
-
     info['apiRoot'].dataset = Dataset()
     info['apiRoot'].image = Image()
     events.bind('jobs.job.update.after', 'wholetale', tale.updateBuildStatus)
