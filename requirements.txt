@@ -12,3 +12,4 @@ dataone.cli==3.2.0
 validators
 html2markdown
 fs.webdavfs
+agavepy
