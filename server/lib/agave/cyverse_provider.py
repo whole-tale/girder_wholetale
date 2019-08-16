@@ -7,7 +7,6 @@ import urllib.parse
 
 from plugins.wholetale.server.lib.file_map import FileMap
 from ..import_providers import ImportProvider
-from ..resolvers import DOIResolver
 from ..entity import Entity
 from ..data_map import DataMap
 from ..import_item import ImportItem
@@ -34,7 +33,8 @@ class CyVerseImportProvider(ImportProvider):
             "http://datacommons.cyverse.org/angular/reverse/?%s" % encoded)
         projectId = resp["id"]
         resp = self._getDocument(
-            "http://datacommons.cyverse.org/angular/reverse/?djng_url_name=api_metadata&djng_url_kwarg_item_id=%s" % projectId)
+            "http://datacommons.cyverse.org/angular/reverse/"
+            "?djng_url_name=api_metadata&djng_url_kwarg_item_id=%s" % projectId)
         doi = None
         title = None
         for meta in resp["sorted_meta"]:
@@ -78,7 +78,8 @@ class CyVerseImportProvider(ImportProvider):
         refreshToken = user["agaveRefreshToken"]
         path = pid.split("http://datacommons.cyverse.org/browse/iplant/home", 1)[1]
         endpoint = "data.iplantcollaborative.org"
-        ag = Agave(api_server="https://agave.iplantc.org", token=accessToken, refresh_token=refreshToken)
+        ag = Agave(api_server="https://agave.iplantc.org", token=accessToken,
+                   refresh_token=refreshToken)
         yield from self._listRecursive2(ag, endpoint, path, progress)
         yield ImportItem(ImportItem.END_FOLDER)
 
@@ -96,4 +97,5 @@ class CyVerseImportProvider(ImportProvider):
                 yield ImportItem(
                     ImportItem.FILE, entry['name'], size=entry['length'],
                     mimeType='application/octet-stream',
-                    url='https://agave.iplantc.org/files/v2/media/system/%s/%s%s' % (endpoint, path, entry['name']))
+                    url='https://agave.iplantc.org/files/v2/media/system/%s/%s%s' %
+                        (endpoint, path, entry['name']))

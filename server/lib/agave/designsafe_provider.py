@@ -67,7 +67,8 @@ class DesignSafeImportProvider(ImportProvider):
         url = pid.split("https://www.designsafe-ci.org/data/browser/public/", 1)[1].split("/")
         endpoint = url[0]
         path = "/" + url[1]
-        ag = Agave(api_server="https://agave.designsafe-ci.org", token=accessToken, refresh_token=refreshToken)
+        ag = Agave(api_server="https://agave.designsafe-ci.org", token=accessToken,
+                   refresh_token=refreshToken)
         yield from self._listRecursive2(ag, endpoint, path, progress)
         yield ImportItem(ImportItem.END_FOLDER)
 
@@ -85,7 +86,8 @@ class DesignSafeImportProvider(ImportProvider):
                 yield ImportItem(
                     ImportItem.FILE, entry['name'], size=entry['length'],
                     mimeType='application/octet-stream',
-                    url='https://agave.designsafe-ci.org/files/v2/media/system/%s/%s%s' % (endpoint, path, entry['name']))
+                    url='https://agave.designsafe-ci.org/files/v2/media/system/%s/%s%s'
+                        % (endpoint, path, entry['name']))
 
 
 class DocParser(HTMLParser):

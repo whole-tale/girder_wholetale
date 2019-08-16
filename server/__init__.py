@@ -18,7 +18,7 @@ from girder.plugins.jobs.models.job import Job as JobModel
 from girder.plugins.worker import getCeleryApp
 from girder.utility import assetstore_utilities, setting_utilities
 from girder.utility.model_importer import ModelImporter
-from girder.plugins.oauth.providers.agavebase import AgaveBase #DesignSafe, CyVerse
+from girder.plugins.oauth.providers.agavebase import AgaveBase
 from girder.models.user import User
 
 from .constants import PluginSettings, SettingDefault
