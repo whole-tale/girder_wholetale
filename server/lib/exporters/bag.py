@@ -92,9 +92,22 @@ class BagTaleExporter(TaleExporter):
             port=container_config['port'],
             urlPath=urlPath,
         )
-        extra_files = {
+
+        # data/ level files that we place in the user's data folder. These
+        # should end up in the manifest, but not the tag-manifest
+        extra_data_files = {
             'data/LICENSE': self.tale_license['text'],
         }
+        # Bag-root level files that should be in the tag-manifest. Note that these
+        # are paths relative to the bag-root and not manifest.json
+        extra_tag_files = {
+            'README.md': top_readme,
+            'run-local.sh': run_file,
+        }
+        # Python 3.6 can do this more elegantly {**extra_data_files, **extra_tag_files}
+        all_extra_items = extra_data_files.copy()
+        all_extra_items.update(extra_tag_files)
+
         oxum = dict(size=0, num=0)
 
         # Add files from the workspace computing their checksum
@@ -110,10 +123,12 @@ class BagTaleExporter(TaleExporter):
             oxum['num'] += 1
             oxum['size'] += fobj['size']
 
-        # Compute checksums for the extrafiles
-        for path, content in extra_files.items():
-            oxum['num'] += 1
-            oxum['size'] += len(content)
+        # Compute checksums for the extra files
+        for path, content in all_extra_items.items():
+            # Avoid adding information about tag files to the bag info file
+            if path not in extra_tag_files:
+                oxum['num'] += 1
+                oxum['size'] += len(content)
             payload = self.stream_string(content)
             yield from self.dump_and_checksum(payload, path)
 
@@ -121,7 +136,7 @@ class BagTaleExporter(TaleExporter):
         for i in range(len(self.manifest['aggregates'])):
             uri = self.manifest['aggregates'][i]['uri']
             # Don't touch any of the extra files
-            if len([key for key in extra_files.keys() if '../' + key in uri]):
+            if len([key for key in all_extra_items.keys() if '../' + key in uri]):
                 continue
             if uri.startswith('../'):
                 self.manifest['aggregates'][i]['uri'] = uri.replace('..', '../data')
@@ -136,8 +151,8 @@ class BagTaleExporter(TaleExporter):
         # Update manifest with filesizes and mimeTypes for workspace items
         self.append_aggregate_filesize_mimetypes('../data/workspace/')
 
-        # Update manifest with filesizes and mimeTypes for extra items
-        self.append_extras_filesize_mimetypes(extra_files)
+        # Update manifest with filesizes and mimeTypes for all extra items
+        self.append_extras_filesize_mimetypes(all_extra_items)
 
         # Create the fetch file
         fetch_file = ""
@@ -159,10 +174,19 @@ class BagTaleExporter(TaleExporter):
             oxum="{size}.{num}".format(**oxum),
         )
 
-        def dump_checksums(alg):
+        def dump_checksums(alg, exclusions=[]):
+            """
+            Returns all of the checksums for a prticular algorithm, neglecting
+            any specified by 'exclusions'
+
+            :param alg: The hash algorithm
+            :param exclusions: A
+            :return: A string dump of the checksum and path
+            """
             dump = ""
             for path, chksum in self.state[alg]:
-                dump += "{} {}\n".format(chksum, path)
+                if path not in exclusions:
+                    dump += "{} {}\n".format(chksum, path)
             return dump
 
         tagmanifest = dict(md5="", sha256="")
@@ -172,8 +196,8 @@ class BagTaleExporter(TaleExporter):
             (lambda: self.default_bagit, 'bagit.txt'),
             (lambda: bag_info, 'bag-info.txt'),
             (lambda: fetch_file, 'fetch.txt'),
-            (lambda: dump_checksums('md5'), 'manifest-md5.txt'),
-            (lambda: dump_checksums('sha256'), 'manifest-sha256.txt'),
+            (lambda: dump_checksums('md5', extra_tag_files.keys()), 'manifest-md5.txt'),
+            (lambda: dump_checksums('sha256', extra_tag_files.keys()), 'manifest-sha256.txt'),
             (
                 lambda: json.dumps(
                     self.image,
