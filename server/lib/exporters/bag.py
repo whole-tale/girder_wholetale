@@ -71,6 +71,46 @@ Access on http://localhost:{port}/{urlPath}
 
 
 class BagTaleExporter(TaleExporter):
+
+    def generate_fetch_file(self):
+        """
+        Generates the bytes of the fetch file and returns them
+
+        :return: A string holding the contents of the fetch file
+        """
+        fetch_file = ""
+        for bundle in self.manifest['aggregates']:
+            if 'bundledAs' not in bundle:
+                continue
+            folder = bundle['bundledAs']['folder']
+            fetch_file += "{uri} {size} {folder}".format(
+                uri=bundle['uri'], size=bundle['size'], folder=folder.replace('../', '')
+            )  # fetch.txt is located in the root level, need to adjust paths
+            fetch_file += bundle['bundledAs'].get('filename', '')
+            fetch_file += '\n'
+        return fetch_file
+
+    def append_data_paths(self, all_extra_items):
+        """
+        Given the base paths for workspace items, this method appends ../data
+        to their paths, which makes them relative to metadata/manifest.json
+
+        :param all_extra_items: A list of paths for extra files that we add to the bag
+        :return: None
+        """
+        for i in range(len(self.manifest['aggregates'])):
+            uri = self.manifest['aggregates'][i]['uri']
+            # Don't touch any of the extra files
+            if len([key for key in all_extra_items.keys() if '../' + key in uri]):
+                continue
+            if uri.startswith('../'):
+                self.manifest['aggregates'][i]['uri'] = uri.replace('..', '../data')
+            if 'bundledAs' in self.manifest['aggregates'][i]:
+                folder = self.manifest['aggregates'][i]['bundledAs']['folder']
+                self.manifest['aggregates'][i]['bundledAs']['folder'] = folder.replace(
+                    '..', '../data'
+                )
+
     def stream(self):
         token = 'wholetale'
         container_config = self.image['config']
@@ -132,19 +172,9 @@ class BagTaleExporter(TaleExporter):
             payload = self.stream_string(content)
             yield from self.dump_and_checksum(payload, path)
 
-        # In Bag there's an additional 'data' folder where everything lives
-        for i in range(len(self.manifest['aggregates'])):
-            uri = self.manifest['aggregates'][i]['uri']
-            # Don't touch any of the extra files
-            if len([key for key in all_extra_items.keys() if '../' + key in uri]):
-                continue
-            if uri.startswith('../'):
-                self.manifest['aggregates'][i]['uri'] = uri.replace('..', '../data')
-            if 'bundledAs' in self.manifest['aggregates'][i]:
-                folder = self.manifest['aggregates'][i]['bundledAs']['folder']
-                self.manifest['aggregates'][i]['bundledAs']['folder'] = folder.replace(
-                    '..', '../data'
-                )
+        # Make the data paths relative to manifest.json
+        self.append_data_paths(all_extra_items)
+
         # Update manifest with hashes
         self.append_aggergate_checksums()
 
@@ -155,16 +185,7 @@ class BagTaleExporter(TaleExporter):
         self.append_extras_filesize_mimetypes(all_extra_items)
 
         # Create the fetch file
-        fetch_file = ""
-        for bundle in self.manifest['aggregates']:
-            if 'bundledAs' not in bundle:
-                continue
-            folder = bundle['bundledAs']['folder']
-            fetch_file += "{uri} {size} {folder}".format(
-                uri=bundle['uri'], size=bundle['size'], folder=folder.replace('../', '')
-            )  # fetch.txt is located in the root level, need to adjust paths
-            fetch_file += bundle['bundledAs'].get('filename', '')
-            fetch_file += '\n'
+        fetch_file = self.generate_fetch_file()
 
         now = datetime.now(timezone.utc)
         bag_info = bag_info_tpl.format(
