@@ -277,6 +277,7 @@ class Manifest:
                 bundle = self.create_bundle('../data/' + obj['name'], None)
             record = self.create_aggregation_record(obj['uri'], bundle, obj['dataset_identifier'])
             record['size'] = obj['size']
+            record["schema:identifier"] = obj["schema:identifier"]
             self.manifest['aggregates'].append(record)
 
     def _expand_folder_into_items(self, folder, user, relpath=''):
@@ -335,7 +336,8 @@ class Manifest:
                     'dataset_identifier': top_identifier,
                     'provider': provider_name,
                     '_modelType': obj['_modelType'],
-                    'relpath': relpath
+                    'relpath': relpath,
+                    "schema:identifier": str(doc["_id"]),
                 }
 
                 if obj['_modelType'] == 'folder':

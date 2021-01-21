@@ -409,10 +409,13 @@ class ManifestTestCase(base.TestCase):
         from operator import itemgetter
 
         reference_aggregates = sorted(reference_aggregates, key=itemgetter("uri"))
-        manifest_doc = Manifest(self.tale, self.user)
+        manifest_doc = Manifest(self.tale, self.user, expand_folders=True)
+        tale_dataset_ids = {str(_["itemId"]) for _ in self.tale["dataSet"]}
         for i, aggregate in enumerate(
             sorted(manifest_doc.manifest["aggregates"], key=itemgetter("uri"))
         ):
+            if "schema:identifier" in aggregate:
+                aggregate.pop("schema:identifier")
             self.assertDictEqual(aggregate, reference_aggregates[i])
 
         # Check the datasets
