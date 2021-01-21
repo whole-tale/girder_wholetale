@@ -505,8 +505,8 @@ class ManifestTestCase(base.TestCase):
         # won't be 1:1, reverse dataset will have more items
         dataset = ManifestParser.get_dataset_from_manifest(manifest)
         self.assertEqual(
-            [_["itemId"] for _ in dataset][:-3],
-            [str(_["itemId"]) for _ in self.tale["dataSet"][:-1]]
+            [_["itemId"] for _ in dataset],
+            [str(_["itemId"]) for _ in self.tale["dataSet"]]
         )
 
     def tearDown(self):

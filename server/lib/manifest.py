@@ -342,16 +342,20 @@ class Manifest:
 
                 if obj['_modelType'] == 'folder':
                     is_root_folder = doc['meta'].get('identifier') == top_identifier
-                    if provider_name == 'HTTP' or (self.expand_folders and not is_root_folder):
+                    try:
+                        if is_root_folder:
+                            uri = top_identifier
+                        else:
+                            uri = provider.getURI(doc, self.user)
+                    except NotImplementedError:
+                        uri = None
+
+                    if uri is None and self.expand_folders and not is_root_folder:
                         external_objects += self._expand_folder_into_items(doc, self.user)
                         continue
 
+                    ext_obj['uri'] = uri or "undefined"
                     ext_obj['name'] = doc['name']
-                    if is_root_folder:
-                        ext_obj['uri'] = top_identifier
-                    else:
-                        ext_obj['uri'] = provider.getURI(doc, self.user)
-                        #  Find path to root?
                     ext_obj['size'] = 0
                     for _, f in Folder().fileList(
                         doc, user=self.user, subpath=False, data=False
