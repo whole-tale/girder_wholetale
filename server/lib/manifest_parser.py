@@ -2,8 +2,10 @@ import json
 import os
 import pathlib
 
+from girder.exceptions import ValidationException
 from girder.models.file import File
 from girder.models.folder import Folder
+from girder.models.item import Item
 
 from .license import WholeTaleLicense
 from ..models.image import Image
@@ -22,16 +24,34 @@ class ManifestParser:
 
             folder_path = bundle["folder"].replace(data_prefix, "")
             if "filename" in bundle:
-                file_obj = File().findOne({"linkUrl": obj["uri"]}, fields=["itemId"])
-                itemId = file_obj["itemId"]
+                try:
+                    item = Item().load(obj["schema:identifier"], force=True, exc=True)
+                    assert item["name"] == bundle["filename"]
+                    itemId = item["_id"]
+                except (KeyError, ValidationException, AssertionError):
+                    file_obj = File().findOne(
+                        {"linkUrl": obj["uri"]}, fields=["itemId"]
+                    )
+                    itemId = file_obj["itemId"]
                 path = os.path.join(folder_path, bundle["filename"])
                 model_type = "item"
             else:
-                folder = Folder().findOne({"meta.identifier": obj["uri"]}, fields=[])
+                fname = pathlib.Path(bundle["folder"]).parts[-1]
+                try:
+                    folder = Folder().load(
+                        obj["schema:identifier"], force=True, exc=True
+                    )
+                    assert folder["name"] == fname
+                except (KeyError, ValidationException, AssertionError):
+                    folder = Folder().findOne(
+                        {"meta.identifier": obj["uri"]}, fields=[]
+                    )
+
                 if not folder:
-                    fname = pathlib.Path(obj["bundledAs"]["folder"]).parts[-1]
                     # TODO: There should be a better way to do it...
-                    folder = Folder().findOne({"name": fname, "size": obj["size"]}, fields=[])
+                    folder = Folder().findOne(
+                        {"name": fname, "size": obj["size"]}, fields=[]
+                    )
                 itemId = folder["_id"]
                 path = folder_path
                 model_type = "folder"
