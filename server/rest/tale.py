@@ -344,6 +344,7 @@ class Tale(Resource):
         return tale
 
     @access.user
+    @filtermodel(model="tale", plugin="wholetale")
     @autoDescribeRoute(
         Description('Create a new tale.')
         .jsonParam('tale', 'A new tale', paramType='body', schema=taleSchema,
