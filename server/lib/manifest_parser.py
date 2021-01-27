@@ -23,6 +23,8 @@ class ManifestParser:
                 continue
 
             folder_path = bundle["folder"].replace(data_prefix, "")
+            if folder_path.endswith("/"):
+                folder_path = folder_path[:-1]
             if "filename" in bundle:
                 try:
                     item = Item().load(obj["schema:identifier"], force=True, exc=True)

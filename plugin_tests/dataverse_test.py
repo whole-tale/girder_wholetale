@@ -342,7 +342,7 @@ class DataverseHarversterTestCase(base.TestCase):
         self.assertEqual(
             [(_["mountPath"], _["_modelType"]) for _ in dataset],
             [
-                (ds_root["name"] + "/", "folder"),
+                (ds_root["name"], "folder"),
                 (f"{ds_subfolder['name']}/Source Data.zip", "item"),
                 (ds_item["name"], "item")
             ]
