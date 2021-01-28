@@ -11,6 +11,45 @@ from .license import WholeTaleLicense
 from ..models.image import Image
 
 
+def fold_hierarchy(objs):
+    reduced = []
+    covered_ids = set()
+    reiterate = False
+
+    for obj in objs:
+        mount_path = pathlib.Path(obj["mountPath"])
+        if len(mount_path.parts) > 1:
+            reiterate = True
+            if obj["itemId"] in covered_ids:
+                continue
+
+            if obj["_modelType"] == "item":
+                parentId = Item().load(obj["itemId"], force=True)["folderId"]
+            else:
+                parentId = Folder().load(obj["itemId"], force=True)["parentId"]
+
+            parent = Folder().load(parentId, force=True)
+            covered_ids |= set([str(_["_id"]) for _ in Folder().childItems(parent)])
+            covered_ids |= set(
+                [str(_["_id"]) for _ in Folder().childFolders(parent, "folder")]
+            )
+
+            reduced.append(
+                {
+                    "itemId": str(parent["_id"]),
+                    "_modelType": "folder",
+                    "mountPath": mount_path.parent.as_posix(),
+                }
+            )
+        else:
+            reduced.append(obj)
+
+    if reiterate:
+        return fold_hierarchy(reduced)
+
+    return reduced
+
+
 class ManifestParser:
     @staticmethod
     def get_dataset_from_manifest(manifest, data_prefix="../data/"):
@@ -60,7 +99,7 @@ class ManifestParser:
             dataSet.append(
                 dict(mountPath=path, _modelType=model_type, itemId=str(itemId))
             )
-        return dataSet
+        return fold_hierarchy(dataSet)
 
     @staticmethod
     def get_tale_fields_from_manifest(manifest):

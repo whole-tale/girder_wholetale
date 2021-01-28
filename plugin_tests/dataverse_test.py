@@ -338,15 +338,8 @@ class DataverseHarversterTestCase(base.TestCase):
             image, dataSet, creator=self.user, title="Blah", public=True
         )
         manifest = Manifest(tale, self.user, expand_folders=True).manifest
-        dataset = ManifestParser.get_dataset_from_manifest(manifest)
-        self.assertEqual(
-            [(_["mountPath"], _["_modelType"]) for _ in dataset],
-            [
-                (ds_root["name"], "folder"),
-                (f"{ds_subfolder['name']}/Source Data.zip", "item"),
-                (ds_item["name"], "item")
-            ]
-        )
+        restored_dataset = ManifestParser.get_dataset_from_manifest(manifest)
+        self.assertEqual(restored_dataset, dataSet)
 
         Tale().remove(tale)
         Image().remove(image)
