@@ -442,3 +442,15 @@ class Tale(AccessControlledModel):
         )
         Job().scheduleJob(job)
         return tale
+
+    def restoreTale(self, manifest: dict, environment: dict):
+        """
+        Restore a Tale from manifest/environment JSON.
+
+        NOTE: it will be missing a lot of keywords that makes it a model,
+        e.g. _id, acls etc.
+        """
+        restored_tale = mp.get_tale_fields_from_manifest(manifest)
+        restored_tale.update(mp.get_tale_fields_from_environment(environment))
+        restored_tale["dataSet"] = mp.get_dataset_from_manifest(manifest)
+        return restored_tale
