@@ -1,5 +1,3 @@
-import json
-from girder.utility import JsonEncoder
 from . import TaleExporter
 
 
@@ -8,9 +6,7 @@ class NativeTaleExporter(TaleExporter):
         extra_files = {
             'README.md': self.default_top_readme,
             'LICENSE': self.tale_license['text'],
-            'metadata/environment.json': json.dumps(
-                self.get_environment(), indent=4, cls=JsonEncoder, sort_keys=True, allow_nan=False
-            ),
+            'metadata/environment.json': self.manifest_obj.dump_environment(indent=4),
         }
 
         # Add files from the workspace
@@ -34,7 +30,7 @@ class NativeTaleExporter(TaleExporter):
         self.append_extras_filesize_mimetypes(extra_files)
 
         for data in self.zip_generator.addFile(
-            lambda: json.dumps(self.manifest, indent=4), 'metadata/manifest.json'
+            lambda: self.manifest_obj.dump_manifest(indent=4), 'metadata/manifest.json'
         ):
             yield data
 

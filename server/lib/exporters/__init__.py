@@ -1,4 +1,3 @@
-import copy
 from hashlib import sha256, md5
 import magic
 import os
@@ -7,7 +6,6 @@ from girder.constants import AccessType
 from girder.models.folder import Folder
 from ..license import WholeTaleLicense
 from ..manifest import Manifest
-from ...models.image import Image
 
 
 class HashFileStream:
@@ -66,17 +64,11 @@ class TaleExporter:
             self.algs = ["md5", "sha256"]
         self.tale = tale
         self.user = user
-        self.image = Image().load(
-            tale['imageId'],
-            user=user,
-            fields=['config', 'description', 'icon', 'iframe', 'name', 'tags'],
-            level=AccessType.READ,
-        )
-        self.image.pop('_id')
         self.workspace = Folder().load(
             tale['workspaceId'], user=user, level=AccessType.READ
         )
-        self.manifest = Manifest(tale, user, expand_folders).manifest
+        self.manifest_obj = Manifest(tale, user, expand_folders)
+        self.manifest = self.manifest_obj.manifest
         self.zip_generator = ziputil.ZipGenerator(str(tale['_id']))
         self.tale_license = WholeTaleLicense().license_from_spdx(
             tale.get('licenseSPDX', WholeTaleLicense.default_spdx())
@@ -116,11 +108,6 @@ class TaleExporter:
 
     def stream(self):
         raise NotImplementedError
-
-    def get_environment(self):
-        env = copy.deepcopy(self.image)
-        env["taleConfig"] = self.tale.get("config", {})
-        return env
 
     @staticmethod
     def stream_string(string):

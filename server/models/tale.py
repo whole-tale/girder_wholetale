@@ -25,7 +25,7 @@ from ..constants import TaleStatus
 from ..schema.misc import related_identifiers_schema
 from ..utils import getOrCreateRootFolder, init_progress
 from ..lib.license import WholeTaleLicense
-from ..lib.manifest_parser import ManifestParser
+from ..lib.manifest_parser import ManifestParser as mp
 
 from gwvolman.tasks import build_tale_image, BUILD_TALE_IMAGE_STEP_TOTAL
 
@@ -369,9 +369,9 @@ class Tale(AccessControlledModel):
             stream
         )
 
-        new_tale = ManifestParser.get_tale_fields_from_environment(environment)
+        new_tale = mp.get_tale_fields_from_environment(environment)
         image = imageModel().load(new_tale.pop("imageId"), user=user, level=AccessType.READ)
-        new_tale.update(ManifestParser.get_tale_fields_from_manifest(manifest))
+        new_tale.update(mp.get_tale_fields_from_manifest(manifest))
 
         if relatedIdentifiers is None:
             relatedIdentifiers = []
@@ -393,7 +393,7 @@ class Tale(AccessControlledModel):
             )
         )
 
-        # We don't call ManifestParser.get_dataset_from_manifest now, cause it might require
+        # We don't call mp.get_dataset_from_manifest now, cause it might require
         # a registration step. It's going to be called inside import_tale job.
 
         tale = self.createTale(

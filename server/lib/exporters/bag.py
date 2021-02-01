@@ -2,7 +2,6 @@ from datetime import datetime, timezone
 from hashlib import sha256, md5
 import json
 import os
-from girder.utility import JsonEncoder
 from . import TaleExporter
 from gwvolman.constants import REPO2DOCKER_VERSION
 
@@ -73,7 +72,7 @@ Access on http://localhost:{port}/{urlPath}
 class BagTaleExporter(TaleExporter):
     def stream(self):
         token = 'wholetale'
-        container_config = self.image['config']
+        container_config = json.loads(self.manifest_obj.dump_environment())["config"]
         rendered_command = container_config.get('command', '').format(
             base_path='', port=container_config['port'], ip='0.0.0.0', token=token
         )
@@ -169,17 +168,8 @@ class BagTaleExporter(TaleExporter):
             (lambda: fetch_file, 'fetch.txt'),
             (lambda: dump_checksums('md5'), 'manifest-md5.txt'),
             (lambda: dump_checksums('sha256'), 'manifest-sha256.txt'),
-            (
-                lambda: json.dumps(
-                    self.get_environment(),
-                    indent=4,
-                    cls=JsonEncoder,
-                    sort_keys=True,
-                    allow_nan=False,
-                ),
-                'metadata/environment.json',
-            ),
-            (lambda: json.dumps(self.manifest, indent=4), 'metadata/manifest.json'),
+            (lambda: self.manifest_obj.dump_environment(indent=4), 'metadata/environment.json'),
+            (lambda: self.manifest_obj.dump_manifest(indent=4), 'metadata/manifest.json'),
         ):
             tagmanifest['md5'] += "{} {}\n".format(
                 md5(payload().encode()).hexdigest(), fname
