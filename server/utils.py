@@ -3,7 +3,7 @@ import six.moves.urllib as urllib
 
 from girder.utility.model_importer import ModelImporter
 from girder.models.notification import Notification
-
+from girder.models.user import User
 
 NOTIFICATION_EXP_HOURS = 1
 
@@ -46,8 +46,32 @@ def esc(value):
     return urllib.parse.quote_plus(value)
 
 
-def init_progress(resource, user, title, message, total):
+def notify_event(users, event, modelType, objid):
+    """
+    Notify multiple users of a particular WT event
+    :param users: Arrayof user IDs
+    :param event: WT Event name
+    :param modelType: Girder model type (e.g., tale)
+    :param objid: Object ID of referenced object
+    """
+    data = {
+        'event': event,
+        'modelType': modelType,
+        'resource': objid,
+        'resourceName': 'WT event'
+    }
 
+    expires = datetime.datetime.utcnow() + datetime.timedelta(hours=NOTIFICATION_EXP_HOURS)
+
+    for user_id in users:
+        user = User().load(user_id, force=True)
+        # Why doesn't logger work for me?
+        print("NOTIFYING %s %s" % (user_id, str(data)))
+        Notification().createNotification(
+            type="wt_event", data=data, user=user, expires=expires)
+
+
+def init_progress(resource, user, title, message, total):
     data = {
         'title': title,
         'total': total,
@@ -82,3 +106,14 @@ def deep_get(dikt, path):
         else:
             value = value[component]
     return value
+
+
+def diff_access(access1, access2):
+    """Diff two access lists to identify which users
+    were added or removed.
+    """
+    existing = [str(user['id']) for user in access1['users']]
+    new = [str(user['id']) for user in access2['users']]
+    added = list(set(new) - set(existing))
+    removed = list(set(existing) - set(new))
+    return (added, removed)

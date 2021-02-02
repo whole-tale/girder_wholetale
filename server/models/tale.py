@@ -23,7 +23,7 @@ from .image import Image as imageModel
 from ..schema.misc import dataSetSchema
 from ..constants import TaleStatus
 from ..schema.misc import related_identifiers_schema
-from ..utils import getOrCreateRootFolder, init_progress
+from ..utils import getOrCreateRootFolder, init_progress, notify_event, diff_access
 from ..lib.license import WholeTaleLicense
 from ..lib.manifest_parser import ManifestParser
 
@@ -207,6 +207,7 @@ class Tale(AccessControlledModel):
 
         if save:
             tale = self.save(tale)
+            notify_event([str(creator["_id"])], "wt_tale_created", "tale", tale['_id'])
 
         return tale
 
@@ -239,7 +240,10 @@ class Tale(AccessControlledModel):
         :returns: The tale document that was edited.
         """
         tale['updated'] = datetime.datetime.utcnow()
-        return self.save(tale)
+        ret = self.save(tale)
+        users = [str(user['id']) for user in tale['access']['users']]
+        notify_event(users, "wt_tale_updated", "tale", str(tale["_id"]))
+        return ret
 
     def setAccessList(self, doc, access, save=False, user=None, force=False,
                       setPublic=None, publicFlags=None):
@@ -271,6 +275,10 @@ class Tale(AccessControlledModel):
         if publicFlags is not None:
             doc = self.setPublicFlags(doc, publicFlags, user=user, save=False,
                                       force=force)
+
+        added, removed = diff_access(doc['access'], access)
+        notify_event(added, "wt_tale_shared", "tale", str(doc["_id"]))
+        notify_event(removed, "wt_tale_unshared", "tale", str(doc["_id"]))
 
         doc = super().setAccessList(
             doc, access, user=user, save=save, force=force)
