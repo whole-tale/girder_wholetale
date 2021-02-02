@@ -402,12 +402,25 @@ class Tale(AccessControlledModel):
             **new_tale
         )
 
+        resource = {
+            "type": "wt_zip_import",
+            "tale_id": tale["_id"],
+            "tale_title": tale["title"]
+        }
+        notification = init_progress(
+            resource, user, "Importing Tale", "Initializing", 1
+        )
+
         job = Job().createLocalJob(
             title='Import Tale from zip', user=user,
             type='wholetale.import_tale', public=False, _async=True,
             module='girder.plugins.wholetale.tasks.import_tale',
             args=(temp_dir, manifest_file),
-            kwargs={'taleId': tale["_id"]}
+            kwargs={'taleId': tale["_id"]},
+            otherFields={
+                "taleId": tale["_id"],
+                "wt_notification_id": str(notification["_id"])
+            },
         )
         Job().scheduleJob(job)
         return tale
