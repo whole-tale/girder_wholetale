@@ -501,8 +501,19 @@ class ManifestTestCase(base.TestCase):
         from server.lib.manifest_parser import ManifestParser
         from server.lib.manifest import Manifest
         manifest = Manifest(self.tale, self.user).manifest
-        # NOTE: http(s) folders are expanded into individual files in manifest so the result
-        # won't be 1:1, reverse dataset will have more items
+        dataset = ManifestParser.get_dataset_from_manifest(manifest)
+        self.assertEqual(
+            [_["itemId"] for _ in dataset],
+            [str(_["itemId"]) for _ in self.tale["dataSet"]]
+        )
+
+        # test it still works if schema:identifier is not present
+        aggregates = []
+        for obj in manifest["aggregates"]:
+            if "schema:identifier" in obj:
+                obj.pop("schema:identifier")
+            aggregates.append(obj)
+        manifest["aggregates"] = aggregates
         dataset = ManifestParser.get_dataset_from_manifest(manifest)
         self.assertEqual(
             [_["itemId"] for _ in dataset],
