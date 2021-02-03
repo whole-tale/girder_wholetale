@@ -16,6 +16,8 @@ def fold_hierarchy(objs):
     covered_ids = set()
     reiterate = False
 
+    current_ids = set([obj["itemId"] for obj in objs])
+
     for obj in objs:
         mount_path = pathlib.Path(obj["mountPath"])
         if len(mount_path.parts) > 1:
@@ -27,6 +29,9 @@ def fold_hierarchy(objs):
                 parentId = Item().load(obj["itemId"], force=True)["folderId"]
             else:
                 parentId = Folder().load(obj["itemId"], force=True)["parentId"]
+
+            if str(parentId) in current_ids:
+                continue
 
             parent = Folder().load(parentId, force=True)
             covered_ids |= set([str(_["_id"]) for _ in Folder().childItems(parent)])
