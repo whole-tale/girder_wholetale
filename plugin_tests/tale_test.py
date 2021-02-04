@@ -717,8 +717,7 @@ class TaleWithWorkspaceTestCase(base.TestCase):
         self.admin, self.user = [self.model('user').createUser(**user)
                                  for user in users]
         self.image = Image().createImage(
-            {'_id': ObjectId()},
-            'test image',
+            name='test image',
             creator=self.admin,
             public=True,
             config=dict(template='base.tpl', buildpack='SomeBuildPack',
@@ -818,13 +817,21 @@ class TaleWithWorkspaceTestCase(base.TestCase):
             }
         ]
 
-        tale = self.model('tale', 'wholetale').createTale(
-            self.image,
-            [{
-                'itemId': item['_id'],
-                '_modelType': 'item',
-                'mountPath': item['name']
-            }], creator=self.user, title="Export Tale", public=True, authors=authors)
+        resp = self.request(
+            path='/tale', method='POST', user=self.user,
+            type='application/json',
+            body=json.dumps({
+                'imageId': str(self.image['_id']),
+                'dataSet': [
+                    {'itemId': item['_id'], '_modelType': 'item', 'mountPath': item['name']}
+                ],
+                "title": "Export Tale",
+                "public": True,
+                "authors": authors,
+            })
+        )
+        self.assertStatusOk(resp)
+        tale = resp.json
         workspace = self.model('folder').load(tale['workspaceId'], force=True)
         nb_file = os.path.join(workspace["fsPath"], "wt_quickstart.ipynb")
         with urllib.request.urlopen(
@@ -937,6 +944,20 @@ class TaleWithWorkspaceTestCase(base.TestCase):
 
         self.assertTrue(tale['description'] is not None)
         self.assertTrue(tale['description'].startswith("This Tale"))
+
+    def testTaleManifestTaleCycle(self):
+        from server.lib.manifest import Manifest
+        tale = self._create_water_tale()
+        manifest_obj = Manifest(tale, self.user)
+        manifest = json.loads(manifest_obj.dump_manifest())
+        environment = json.loads(manifest_obj.dump_environment())
+        restored_tale = Tale().restoreTale(manifest, environment)
+        for key in restored_tale.keys():
+            if key == "imageId":
+                self.assertEqual(tale[key], str(restored_tale[key]))
+            else:
+                self.assertEqual(tale[key], restored_tale[key])
+        Tale().remove(tale)
 
     def tearDown(self):
         self.model('user').remove(self.user)

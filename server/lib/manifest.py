@@ -1,7 +1,9 @@
+import json
 import os
 
 from girder import logger
 from girder.models.folder import Folder
+from girder.utility import JsonEncoder
 from girder.utility.model_importer import ModelImporter
 from girder.exceptions import ValidationException
 from girder.constants import AccessType
@@ -37,6 +39,7 @@ class Manifest:
         # Create a set that represents any external data packages
         self.datasets = set()
 
+        self.imageModel = ModelImporter.model("image", "wholetale")
         self.itemModel = ModelImporter.model('item')
         self.userModel = ModelImporter.model('user')
 
@@ -411,10 +414,32 @@ class Manifest:
         Adds a record for the License file. When exporting to a bag, this gets placed
         in their data/ folder.
         """
-        self.manifest['aggregates'].append({'uri': '../LICENSE',
-                                            'schema:license':
-                                                self.tale.get('licenseSPDX',
-                                                              WholeTaleLicense.default_spdx())})
+        license = self.tale.get('licenseSPDX', WholeTaleLicense.default_spdx())
+        self.manifest['aggregates'].append(
+            {'uri': '../LICENSE', 'schema:license': license}
+        )
+
+    def dump_manifest(self, **kwargs):
+        return json.dumps(
+            self.manifest,
+            cls=JsonEncoder,
+            sort_keys=True,
+            allow_nan=False,
+            **kwargs
+        )
+
+    def dump_environment(self, **kwargs):
+        image = self.imageModel.load(
+            self.tale["imageId"], user=self.user, level=AccessType.READ
+        )
+        image["taleConfig"] = self.tale.get("config", {})
+        return json.dumps(
+            self.imageModel.filter(image, self.user),
+            cls=JsonEncoder,
+            sort_keys=True,
+            allow_nan=False,
+            **kwargs
+        )
 
 
 def get_folder_identifier(folder_id, user):
