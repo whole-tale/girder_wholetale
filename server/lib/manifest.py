@@ -20,7 +20,7 @@ class Manifest:
     create<someProperty>
     """
 
-    def __init__(self, tale, user, expand_folders=False):
+    def __init__(self, tale, user, expand_folders=True):
         """
         Initialize the manifest document with base variables
         :param tale: The Tale whose data is being serialized
@@ -277,6 +277,7 @@ class Manifest:
                 bundle = self.create_bundle('../data/' + obj['name'], None)
             record = self.create_aggregation_record(obj['uri'], bundle, obj['dataset_identifier'])
             record['size'] = obj['size']
+            record["schema:identifier"] = obj["schema:identifier"]
             self.manifest['aggregates'].append(record)
 
     def _expand_folder_into_items(self, folder, user, relpath=''):
@@ -335,21 +336,26 @@ class Manifest:
                     'dataset_identifier': top_identifier,
                     'provider': provider_name,
                     '_modelType': obj['_modelType'],
-                    'relpath': relpath
+                    'relpath': relpath,
+                    "schema:identifier": str(doc["_id"]),
                 }
 
                 if obj['_modelType'] == 'folder':
                     is_root_folder = doc['meta'].get('identifier') == top_identifier
-                    if provider_name == 'HTTP' or (self.expand_folders and not is_root_folder):
+                    try:
+                        if is_root_folder:
+                            uri = top_identifier
+                        else:
+                            uri = provider.getURI(doc, self.user)
+                    except NotImplementedError:
+                        uri = None
+
+                    if uri is None and self.expand_folders and not is_root_folder:
                         external_objects += self._expand_folder_into_items(doc, self.user)
                         continue
 
+                    ext_obj['uri'] = uri or "undefined"
                     ext_obj['name'] = doc['name']
-                    if is_root_folder:
-                        ext_obj['uri'] = top_identifier
-                    else:
-                        ext_obj['uri'] = provider.getURI(doc, self.user)
-                        #  Find path to root?
                     ext_obj['size'] = 0
                     for _, f in Folder().fileList(
                         doc, user=self.user, subpath=False, data=False

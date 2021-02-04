@@ -344,6 +344,7 @@ class Tale(Resource):
         return tale
 
     @access.user
+    @filtermodel(model="tale", plugin="wholetale")
     @autoDescribeRoute(
         Description('Create a new tale.')
         .jsonParam('tale', 'A new tale', paramType='body', schema=taleSchema,
@@ -433,7 +434,7 @@ class Tale(Resource):
         .modelParam('id', model='tale', plugin='wholetale', level=AccessType.READ)
         .param('expandFolders', "If True, folders in Tale's dataSet are recursively "
                "expanded to items in the 'aggregates' section",
-               required=False, dataType='boolean', default=False)
+               required=False, dataType='boolean', default=True)
         .errorResponse('ID was invalid.')
     )
     def generateManifest(self, tale, expandFolders):

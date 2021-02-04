@@ -409,10 +409,13 @@ class ManifestTestCase(base.TestCase):
         from operator import itemgetter
 
         reference_aggregates = sorted(reference_aggregates, key=itemgetter("uri"))
-        manifest_doc = Manifest(self.tale, self.user)
+        manifest_doc = Manifest(self.tale, self.user, expand_folders=True)
+        tale_dataset_ids = {str(_["itemId"]) for _ in self.tale["dataSet"]}
         for i, aggregate in enumerate(
             sorted(manifest_doc.manifest["aggregates"], key=itemgetter("uri"))
         ):
+            if "schema:identifier" in aggregate:
+                aggregate.pop("schema:identifier")
             self.assertDictEqual(aggregate, reference_aggregates[i])
 
         # Check the datasets
@@ -498,12 +501,23 @@ class ManifestTestCase(base.TestCase):
         from server.lib.manifest_parser import ManifestParser
         from server.lib.manifest import Manifest
         manifest = Manifest(self.tale, self.user).manifest
-        # NOTE: http(s) folders are expanded into individual files in manifest so the result
-        # won't be 1:1, reverse dataset will have more items
         dataset = ManifestParser.get_dataset_from_manifest(manifest)
         self.assertEqual(
-            [_["itemId"] for _ in dataset][:-3],
-            [str(_["itemId"]) for _ in self.tale["dataSet"][:-1]]
+            [_["itemId"] for _ in dataset],
+            [str(_["itemId"]) for _ in self.tale["dataSet"]]
+        )
+
+        # test it still works if schema:identifier is not present
+        aggregates = []
+        for obj in manifest["aggregates"]:
+            if "schema:identifier" in obj:
+                obj.pop("schema:identifier")
+            aggregates.append(obj)
+        manifest["aggregates"] = aggregates
+        dataset = ManifestParser.get_dataset_from_manifest(manifest)
+        self.assertEqual(
+            [_["itemId"] for _ in dataset],
+            [str(_["itemId"]) for _ in self.tale["dataSet"]]
         )
 
     def tearDown(self):

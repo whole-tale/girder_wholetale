@@ -2,11 +2,57 @@ import json
 import os
 import pathlib
 
+from girder.exceptions import ValidationException
 from girder.models.file import File
 from girder.models.folder import Folder
+from girder.models.item import Item
 
 from .license import WholeTaleLicense
 from ..models.image import Image
+
+
+def fold_hierarchy(objs):
+    reduced = []
+    covered_ids = set()
+    reiterate = False
+
+    current_ids = set([obj["itemId"] for obj in objs])
+
+    for obj in objs:
+        mount_path = pathlib.Path(obj["mountPath"])
+        if len(mount_path.parts) > 1:
+            reiterate = True
+            if obj["itemId"] in covered_ids:
+                continue
+
+            if obj["_modelType"] == "item":
+                parentId = Item().load(obj["itemId"], force=True)["folderId"]
+            else:
+                parentId = Folder().load(obj["itemId"], force=True)["parentId"]
+
+            if str(parentId) in current_ids:
+                continue
+
+            parent = Folder().load(parentId, force=True)
+            covered_ids |= set([str(_["_id"]) for _ in Folder().childItems(parent)])
+            covered_ids |= set(
+                [str(_["_id"]) for _ in Folder().childFolders(parent, "folder")]
+            )
+
+            reduced.append(
+                {
+                    "itemId": str(parent["_id"]),
+                    "_modelType": "folder",
+                    "mountPath": mount_path.parent.as_posix(),
+                }
+            )
+        else:
+            reduced.append(obj)
+
+    if reiterate:
+        return fold_hierarchy(reduced)
+
+    return reduced
 
 
 class ManifestParser:
@@ -21,24 +67,44 @@ class ManifestParser:
                 continue
 
             folder_path = bundle["folder"].replace(data_prefix, "")
+            if folder_path.endswith("/"):
+                folder_path = folder_path[:-1]
             if "filename" in bundle:
-                file_obj = File().findOne({"linkUrl": obj["uri"]}, fields=["itemId"])
-                itemId = file_obj["itemId"]
+                try:
+                    item = Item().load(obj["schema:identifier"], force=True, exc=True)
+                    assert item["name"] == bundle["filename"]
+                    itemId = item["_id"]
+                except (KeyError, ValidationException, AssertionError):
+                    file_obj = File().findOne(
+                        {"linkUrl": obj["uri"]}, fields=["itemId"]
+                    )
+                    itemId = file_obj["itemId"]
                 path = os.path.join(folder_path, bundle["filename"])
                 model_type = "item"
             else:
-                folder = Folder().findOne({"meta.identifier": obj["uri"]}, fields=[])
+                fname = pathlib.Path(bundle["folder"]).parts[-1]
+                try:
+                    folder = Folder().load(
+                        obj["schema:identifier"], force=True, exc=True
+                    )
+                    assert folder["name"] == fname
+                except (KeyError, ValidationException, AssertionError):
+                    folder = Folder().findOne(
+                        {"meta.identifier": obj["uri"]}, fields=[]
+                    )
+
                 if not folder:
-                    fname = pathlib.Path(obj["bundledAs"]["folder"]).parts[-1]
                     # TODO: There should be a better way to do it...
-                    folder = Folder().findOne({"name": fname, "size": obj["size"]}, fields=[])
+                    folder = Folder().findOne(
+                        {"name": fname, "size": obj["size"]}, fields=[]
+                    )
                 itemId = folder["_id"]
                 path = folder_path
                 model_type = "folder"
             dataSet.append(
                 dict(mountPath=path, _modelType=model_type, itemId=str(itemId))
             )
-        return dataSet
+        return fold_hierarchy(dataSet)
 
     @staticmethod
     def get_tale_fields_from_manifest(manifest):
