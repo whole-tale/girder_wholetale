@@ -20,7 +20,7 @@ class Manifest:
     create<someProperty>
     """
 
-    def __init__(self, tale, user, expand_folders=False):
+    def __init__(self, tale, user, expand_folders=True):
         """
         Initialize the manifest document with base variables
         :param tale: The Tale whose data is being serialized
