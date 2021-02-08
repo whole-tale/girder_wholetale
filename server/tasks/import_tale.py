@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import json
 import os
 import pathlib
 import sys
@@ -41,8 +40,7 @@ def run(job):
 
     try:
         os.chdir(tale_dir)
-        with open(manifest_file, "r") as manifest_fp:
-            manifest = json.load(manifest_fp)
+        mp = ManifestParser(manifest_file)
 
         # 1. Register data
         progressCurrent += 1
@@ -53,12 +51,7 @@ def run(job):
             progressCurrent=progressCurrent,
             progressMessage="Registering external data",
         )
-        dataIds = [obj["identifier"] for obj in manifest["Datasets"]]
-        dataIds += [
-            obj["uri"]
-            for obj in manifest["aggregates"]
-            if obj["uri"].startswith("http")
-        ]
+        dataIds = mp.get_external_data_ids()
         if dataIds:
             dataMap = pids_to_entities(
                 dataIds, user=user, base_url=DataONELocations.prod_cn, lookup=True
@@ -72,7 +65,7 @@ def run(job):
             )
 
         # 2. Construct the dataSet
-        dataSet = ManifestParser.get_dataset_from_manifest(manifest, data_prefix="../data/data/")
+        dataSet = mp.get_dataset(data_prefix="../data/data/")
 
         # 3. Update Tale's dataSet
         update_citations = {_["itemId"] for _ in tale["dataSet"]} ^ {

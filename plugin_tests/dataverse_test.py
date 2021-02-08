@@ -338,7 +338,7 @@ class DataverseHarversterTestCase(base.TestCase):
             image, dataSet, creator=self.user, title="Blah", public=True
         )
         manifest = Manifest(tale, self.user, expand_folders=True).manifest
-        restored_dataset = ManifestParser.get_dataset_from_manifest(manifest)
+        restored_dataset = ManifestParser(manifest).get_dataset()
         self.assertEqual(restored_dataset, dataSet)
 
         Tale().remove(tale)

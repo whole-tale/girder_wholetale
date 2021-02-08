@@ -1,6 +1,6 @@
 import json
 import os
-import pathlib
+from pathlib import Path
 
 from girder.exceptions import ValidationException
 from girder.models.file import File
@@ -19,7 +19,7 @@ def fold_hierarchy(objs):
     current_ids = set([obj["itemId"] for obj in objs])
 
     for obj in objs:
-        mount_path = pathlib.Path(obj["mountPath"])
+        mount_path = Path(obj["mountPath"])
         if len(mount_path.parts) > 1:
             reiterate = True
             if obj["itemId"] in covered_ids:
@@ -56,11 +56,61 @@ def fold_hierarchy(objs):
 
 
 class ManifestParser:
-    @staticmethod
-    def get_dataset_from_manifest(manifest, data_prefix="../data/"):
+    def __init__(self, manifest_obj):
+        """
+        manifest_obj: dict, str (either filename or json.dump), file-like object
+        """
+        if isinstance(manifest_obj, dict):
+            self.manifest = manifest_obj
+        elif isinstance(manifest_obj, (Path, str)) and os.path.isfile(manifest_obj):
+            with open(manifest_obj, "r") as fp:
+                self.manifest = json.load(fp)
+        else:
+            self.manifest = json.loads(manifest_obj)
+        self.verify_schema()
+
+    def is_valid(self):
+        return self.manifest["@id"].startswith("https://data.wholetale.org")
+
+    def verify_schema(self):
+        if "@type" not in self.manifest:
+            self.wt_ontology_update()
+
+    def wt_ontology_update(self):
+        self.manifest["@type"] = "wt:Tale"
+        self.manifest["schema:schemaVersion"] = self.manifest.pop("schema:version")
+        self.manifest["schema:keywords"] = self.manifest.pop("schema:category")
+        new_context = [
+            obj
+            for obj in self.manifest["@context"]
+            if not (isinstance(obj, dict) and obj.get("Datasets"))
+        ]
+        new_context.append({"wt": "https://vocabularies.wholetale.org/wt/1.0/wt#"})
+        self.manifest["@context"] = new_context
+
+        self.manifest["wt:usesDataset"] = [
+            {
+                "schema:identifier": ds["identifier"],
+                "schema:name": ds["name"],
+                "@type": "schema:Dataset",
+                "@id": ds["@id"],
+            }
+            for ds in self.manifest.pop("Datasets")
+        ]
+
+    def get_external_data_ids(self):
+        dataIds = [obj["schema:identifier"] for obj in self.manifest["wt:usesDataset"]]
+        dataIds += [
+            obj["uri"]
+            for obj in self.manifest["aggregates"]
+            if obj["uri"].startswith("http")
+        ]
+        return dataIds
+
+    def get_dataset(self, data_prefix="../data/"):
         """Creates a 'dataSet' using manifest's aggregates section."""
         dataSet = []
-        for obj in manifest.get("aggregates", []):
+        for obj in self.manifest.get("aggregates", []):
             try:
                 bundle = obj["bundledAs"]
             except KeyError:
@@ -82,7 +132,7 @@ class ManifestParser:
                 path = os.path.join(folder_path, bundle["filename"])
                 model_type = "item"
             else:
-                fname = pathlib.Path(bundle["folder"]).parts[-1]
+                fname = Path(bundle["folder"]).parts[-1]
                 try:
                     folder = Folder().load(
                         obj["schema:identifier"], force=True, exc=True
@@ -106,12 +156,11 @@ class ManifestParser:
             )
         return fold_hierarchy(dataSet)
 
-    @staticmethod
-    def get_tale_fields_from_manifest(manifest):
+    def get_tale_fields(self):
         licenseSPDX = next(
             (
                 _["schema:license"]
-                for _ in manifest["aggregates"]
+                for _ in self.manifest["aggregates"]
                 if "schema:license" in _
             ),
             WholeTaleLicense.default_spdx(),
@@ -123,7 +172,7 @@ class ManifestParser:
                 "lastName": author["schema:familyName"],
                 "orcid": author["@id"],
             }
-            for author in manifest["schema:author"]
+            for author in self.manifest["schema:author"]
         ]
 
         related_ids = [
@@ -133,7 +182,7 @@ class ManifestParser:
                     "DataCite:relationType"
                 ].split(":")[-1],
             }
-            for rel_id in manifest.get("DataCite:relatedIdentifiers", [])
+            for rel_id in self.manifest.get("DataCite:relatedIdentifiers", [])
         ]
         related_ids = [
             json.loads(rel_id)
@@ -141,11 +190,11 @@ class ManifestParser:
         ]
 
         return {
-            "title": manifest["schema:name"],
-            "description": manifest["schema:description"],
-            "illustration": manifest["schema:image"],
+            "title": self.manifest["schema:name"],
+            "description": self.manifest["schema:description"],
+            "illustration": self.manifest["schema:image"],
             "authors": authors,
-            "category": manifest["schema:category"],
+            "category": self.manifest["schema:keywords"],
             "licenseSPDX": licenseSPDX,
             "relatedIdentifiers": related_ids,
         }

@@ -95,16 +95,17 @@ class Manifest:
         """
 
         return {
-            "@id": 'https://data.wholetale.org/api/v1/tale/' + str(self.tale['_id']),
-            "createdOn": str(self.tale['created']),
-            "schema:name": self.tale['title'],
-            "schema:description": self.tale.get('description', str()),
-            "schema:category": self.tale['category'],
-            "schema:identifier": str(self.tale['_id']),
-            "schema:version": self.tale['format'],
-            "schema:image": self.tale['illustration'],
+            "@id": f"https://data.wholetale.org/api/v1/tale/{self.tale['_id']}",
+            "@type": "wt:Tale",
+            "createdOn": str(self.tale["created"]),
+            "schema:keywords": self.tale["category"],
+            "schema:description": self.tale.get("description", ""),
+            "schema:identifier": str(self.tale["_id"]),
+            "schema:image": self.tale["illustration"],
+            "schema:name": self.tale["title"],
+            "schema:schemaVersion": self.tale["format"],
             "aggregates": list(),
-            "Datasets": list()
+            "wt:usesDataset": list(),
         }
 
     def add_tale_creator(self):
@@ -182,10 +183,10 @@ class Manifest:
         """
         return {
             "@context": [
+                "https://w3id.org/bundle/context",
                 {"schema": "http://schema.org/"},
                 {"DataCite": "http://datacite.org/schema/kernel-4"},
-                {"Datasets": {"@type": "@id"}},
-                "https://w3id.org/bundle/context"
+                {"wt": "https://vocabularies.wholetale.org/wt/1.0/wt#"},
             ]
         }
 
@@ -205,9 +206,9 @@ class Manifest:
             identifier = folder['meta']['identifier']
             return {
                 "@id": identifier,
-                "@type": "Dataset",
-                "name": folder['name'],
-                "identifier": identifier,
+                "@type": "schema:Dataset",
+                "schema:name": folder['name'],
+                "schema:identifier": identifier,
                 # "publisher": self.publishers[provider]
             }
 
@@ -257,12 +258,12 @@ class Manifest:
         """
         Handle objects that are in the dataSet, ie files that point to external sources.
         Some of these sources may be datasets from publishers. We need to save information
-        about the source so that they can added to the Datasets section.
+        about the source so that they can added to the wt:usesDataset section.
         """
         external_objects, dataset_top_identifiers = self._parse_dataSet()
 
         # Add records of all top-level dataset identifiers that were used in the Tale:
-        # "Datasets"
+        # "wt:usesDataset"
         for identifier in dataset_top_identifiers:
             # Assuming Folder model implicitly ignores "datasets" that are
             # single HTTP files which is intended behavior
@@ -389,7 +390,7 @@ class Manifest:
         for folder_id in self.datasets:
             dataset_record = self.create_dataset_record(folder_id)
             if dataset_record:
-                self.manifest['Datasets'].append(dataset_record)
+                self.manifest["wt:usesDataset"].append(dataset_record)
 
     def create_bundle(self, folder, filename):
         """

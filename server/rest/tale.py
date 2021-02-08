@@ -35,6 +35,7 @@ from ..models.image import Image as imageModel
 from ..lib import pids_to_entities, IMPORT_PROVIDERS
 from ..lib.dataone import DataONELocations  # TODO: get rid of it
 from ..lib.manifest import Manifest
+from ..lib.manifest_parser import ManifestParser
 from ..lib.exporters.bag import BagTaleExporter
 from ..lib.exporters.native import NativeTaleExporter
 
@@ -564,9 +565,9 @@ class Tale(Resource):
                     raise RestException("Provided file doesn't contain a Tale manifest")
 
                 try:
-                    manifest = json.loads(z.read(manifest_file).decode())
-                    # TODO: is there a better check?
-                    manifest['@id'].startswith('https://data.wholetale.org')
+                    manifest_obj = json.loads(z.read(manifest_file).decode())
+                    mp = ManifestParser(manifest_obj)
+                    assert mp.is_valid()
                 except Exception as e:
                     raise RestException(
                         "Couldn't read manifest.json or not a Tale: {}".format(str(e))
@@ -589,7 +590,7 @@ class Tale(Resource):
                 # ../.. etc., is taken care of by zipfile.extractall, but in the end we're still
                 # unzipping an untrusted content. What could possibly go wrong...?
                 z.extractall(path=temp_dir)
-        return temp_dir, manifest_file, manifest, environment
+        return temp_dir, manifest_file, mp.manifest, environment
 
     @access.user(scope=TokenScope.DATA_WRITE)
     @filtermodel(model=Job)

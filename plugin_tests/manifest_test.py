@@ -265,8 +265,8 @@ class ManifestTestCase(base.TestCase):
         self.assertEqual(attributes["schema:identifier"], str(self.tale["_id"]))
         self.assertEqual(attributes["schema:name"], self.tale["title"])
         self.assertEqual(attributes["schema:description"], self.tale["description"])
-        self.assertEqual(attributes["schema:category"], self.tale["category"])
-        self.assertEqual(attributes["schema:version"], self.tale["format"])
+        self.assertEqual(attributes["schema:keywords"], self.tale["category"])
+        self.assertEqual(attributes["schema:schemaVersion"], self.tale["format"])
         self.assertEqual(attributes["schema:image"], self.tale["illustration"])
 
     def _testAddTaleCreator(self):
@@ -422,27 +422,27 @@ class ManifestTestCase(base.TestCase):
         reference_datasets = [
             {
                 "@id": "doi:10.18126/M2662X",
-                "@type": "Dataset",
-                "name": "A Machine Learning Approach for  Engineering Bulk Metallic Glass Alloys",
-                "identifier": "doi:10.18126/M2662X",
+                "@type": "schema:Dataset",
+                "schema:name": "A Machine Learning Approach for  Engineering Bulk Metallic Glass Alloys",
+                "schema:identifier": "doi:10.18126/M2662X",
             },
             {
                 "@id": "doi:10.18126/M2301J",
-                "@type": "Dataset",
-                "name": "Twin-mediated Crystal Growth: an Enigma Resolved",
-                "identifier": "doi:10.18126/M2301J",
+                "@type": "schema:Dataset",
+                "schema:name": "Twin-mediated Crystal Growth: an Enigma Resolved",
+                "schema:identifier": "doi:10.18126/M2301J",
             },
             {
                 "@id": "doi:10.5065/D6862DM8",
-                "@type": "Dataset",
-                "name": "Humans and Hydrology at High Latitudes: Water Use Information",
-                "identifier": "doi:10.5065/D6862DM8",
+                "@type": "schema:Dataset",
+                "schema:name": "Humans and Hydrology at High Latitudes: Water Use Information",
+                "schema:identifier": "doi:10.5065/D6862DM8",
             },
         ]
 
         reference_datasets = sorted(reference_datasets, key=itemgetter("@id"))
         for i, dataset in enumerate(
-            sorted(manifest_doc.manifest["Datasets"], key=itemgetter("@id"))
+            sorted(manifest_doc.manifest["wt:usesDataset"], key=itemgetter("@id"))
         ):
             self.assertDictEqual(dataset, reference_datasets[i])
 
@@ -501,7 +501,7 @@ class ManifestTestCase(base.TestCase):
         from server.lib.manifest_parser import ManifestParser
         from server.lib.manifest import Manifest
         manifest = Manifest(self.tale, self.user).manifest
-        dataset = ManifestParser.get_dataset_from_manifest(manifest)
+        dataset = ManifestParser(manifest).get_dataset()
         self.assertEqual(
             [_["itemId"] for _ in dataset],
             [str(_["itemId"]) for _ in self.tale["dataSet"]]
@@ -514,7 +514,7 @@ class ManifestTestCase(base.TestCase):
                 obj.pop("schema:identifier")
             aggregates.append(obj)
         manifest["aggregates"] = aggregates
-        dataset = ManifestParser.get_dataset_from_manifest(manifest)
+        dataset = ManifestParser(manifest).get_dataset()
         self.assertEqual(
             [_["itemId"] for _ in dataset],
             [str(_["itemId"]) for _ in self.tale["dataSet"]]
