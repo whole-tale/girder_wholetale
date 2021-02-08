@@ -117,7 +117,7 @@ class Manifest:
                                         user=self.user,
                                         force=True)
         self.manifest['createdBy'] = {
-            "@id": tale_user['email'],
+            "@id": f"mailto:{tale_user['email']}",
             "@type": "schema:Person",
             "schema:givenName": tale_user.get('firstName', ''),
             "schema:familyName": tale_user.get('lastName', ''),

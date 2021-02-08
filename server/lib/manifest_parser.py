@@ -97,6 +97,8 @@ class ManifestParser:
             }
             for ds in self.manifest.pop("Datasets")
         ]
+        if not self.manifest["createdBy"]["@id"].startswith("mailto:"):
+            self.manifest["createdBy"]["@id"] = f"mailto:{self.manifest['createdBy']['@id']}"
 
     def get_external_data_ids(self):
         dataIds = [obj["schema:identifier"] for obj in self.manifest["wt:usesDataset"]]
