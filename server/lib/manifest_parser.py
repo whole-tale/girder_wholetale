@@ -123,7 +123,7 @@ class ManifestParser:
                 folder_path = folder_path[:-1]
             if "filename" in bundle:
                 try:
-                    item = Item().load(obj["schema:identifier"], force=True, exc=True)
+                    item = Item().load(obj["wt:identifier"], force=True, exc=True)
                     assert item["name"] == bundle["filename"]
                     itemId = item["_id"]
                 except (KeyError, ValidationException, AssertionError):
@@ -137,7 +137,7 @@ class ManifestParser:
                 fname = Path(bundle["folder"]).parts[-1]
                 try:
                     folder = Folder().load(
-                        obj["schema:identifier"], force=True, exc=True
+                        obj["wt:identifier"], force=True, exc=True
                     )
                     assert folder["name"] == fname
                 except (KeyError, ValidationException, AssertionError):

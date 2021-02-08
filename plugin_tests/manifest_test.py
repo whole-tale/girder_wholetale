@@ -262,7 +262,7 @@ class ManifestTestCase(base.TestCase):
         manifest_doc = Manifest(self.tale, self.user)
 
         attributes = manifest_doc.create_basic_attributes()
-        self.assertEqual(attributes["schema:identifier"], str(self.tale["_id"]))
+        self.assertEqual(attributes["wt:identifier"], str(self.tale["_id"]))
         self.assertEqual(attributes["schema:name"], self.tale["title"])
         self.assertEqual(attributes["schema:description"], self.tale["description"])
         self.assertEqual(attributes["schema:keywords"], self.tale["category"])
@@ -414,8 +414,8 @@ class ManifestTestCase(base.TestCase):
         for i, aggregate in enumerate(
             sorted(manifest_doc.manifest["aggregates"], key=itemgetter("uri"))
         ):
-            if "schema:identifier" in aggregate:
-                aggregate.pop("schema:identifier")
+            if "wt:identifier" in aggregate:
+                aggregate.pop("wt:identifier")
             self.assertDictEqual(aggregate, reference_aggregates[i])
 
         # Check the datasets

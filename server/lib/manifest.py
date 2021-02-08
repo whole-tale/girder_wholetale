@@ -100,7 +100,7 @@ class Manifest:
             "createdOn": str(self.tale["created"]),
             "schema:keywords": self.tale["category"],
             "schema:description": self.tale.get("description", ""),
-            "schema:identifier": str(self.tale["_id"]),
+            "wt:identifier": str(self.tale["_id"]),
             "schema:image": self.tale["illustration"],
             "schema:name": self.tale["title"],
             "schema:schemaVersion": self.tale["format"],
@@ -281,7 +281,7 @@ class Manifest:
                 bundle = self.create_bundle('../data/' + obj['name'], None)
             record = self.create_aggregation_record(obj['uri'], bundle, obj['dataset_identifier'])
             record['size'] = obj['size']
-            record["schema:identifier"] = obj["schema:identifier"]
+            record["wt:identifier"] = obj["wt:identifier"]
             self.manifest['aggregates'].append(record)
 
     def _expand_folder_into_items(self, folder, user, relpath=''):
@@ -341,7 +341,7 @@ class Manifest:
                     'provider': provider_name,
                     '_modelType': obj['_modelType'],
                     'relpath': relpath,
-                    "schema:identifier": str(doc["_id"]),
+                    "wt:identifier": str(doc["_id"]),
                 }
 
                 if obj['_modelType'] == 'folder':
