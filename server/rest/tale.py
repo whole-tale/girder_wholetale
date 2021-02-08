@@ -4,10 +4,8 @@ import cherrypy
 import json
 import pathlib
 import shutil
-import tempfile
 import textwrap
 from urllib.parse import urlparse
-import zipfile
 
 from girder import events
 from girder.api import access
@@ -18,9 +16,7 @@ from girder.api.rest import Resource, filtermodel, RestException,\
     setResponseHeader, setContentDisposition
 
 from girder.constants import AccessType, SortDir, TokenScope
-from girder.utility import assetstore_utilities
 from girder.utility.progress import ProgressContext
-from girder.models.assetstore import Assetstore
 from girder.models.folder import Folder
 from girder.models.token import Token
 from girder.models.setting import Setting
@@ -35,7 +31,6 @@ from ..models.image import Image as imageModel
 from ..lib import pids_to_entities, IMPORT_PROVIDERS
 from ..lib.dataone import DataONELocations  # TODO: get rid of it
 from ..lib.manifest import Manifest
-from ..lib.manifest_parser import ManifestParser
 from ..lib.exporters.bag import BagTaleExporter
 from ..lib.exporters.native import NativeTaleExporter
 
@@ -538,59 +533,6 @@ class Tale(Resource):
         )
         Job().scheduleJob(job)
         return new_tale
-
-    @staticmethod
-    def _extractZipPayload():
-        # TODO: Move assetstore type to wholetale.
-        assetstore = next((_ for _ in Assetstore().list() if _['type'] == 101), None)
-        if assetstore:
-            adapter = assetstore_utilities.getAssetstoreAdapter(assetstore)
-            tempDir = adapter.tempDir
-        else:
-            tempDir = None
-
-        with tempfile.NamedTemporaryFile(dir=tempDir) as fp:
-            for chunk in iterBody(2 * 1024 ** 3):
-                fp.write(chunk)
-            fp.seek(0)
-            if not zipfile.is_zipfile(fp):
-                raise RestException("Provided file is not a zipfile")
-
-            with zipfile.ZipFile(fp) as z:
-                manifest_file = next(
-                    (_ for _ in z.namelist() if _.endswith('manifest.json')),
-                    None
-                )
-                if not manifest_file:
-                    raise RestException("Provided file doesn't contain a Tale manifest")
-
-                try:
-                    manifest_obj = json.loads(z.read(manifest_file).decode())
-                    mp = ManifestParser(manifest_obj)
-                    assert mp.is_valid()
-                except Exception as e:
-                    raise RestException(
-                        "Couldn't read manifest.json or not a Tale: {}".format(str(e))
-                    )
-
-                env_file = next(
-                    (_ for _ in z.namelist() if _.endswith("environment.json")),
-                    None
-                )
-                try:
-                    environment = json.loads(z.read(env_file).decode())
-                except Exception as e:
-                    raise RestException(
-                        "Couldn't read environment.json or not a Tale: {}".format(str(e))
-                    )
-
-                # Extract files to tmp on workspace assetstore
-                temp_dir = tempfile.mkdtemp(dir=tempDir)
-                # In theory malicious content like: abs path for a member, or relative path with
-                # ../.. etc., is taken care of by zipfile.extractall, but in the end we're still
-                # unzipping an untrusted content. What could possibly go wrong...?
-                z.extractall(path=temp_dir)
-        return temp_dir, manifest_file, mp.manifest, environment
 
     @access.user(scope=TokenScope.DATA_WRITE)
     @filtermodel(model=Job)
