@@ -1,6 +1,7 @@
 rdflib
 celery[redis]==4.4.6
 kombu==4.6.11
+jsonpickle==1.5.2  # see #447
 python-magic
 requests
 redis==3.5.3
