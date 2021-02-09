@@ -17,6 +17,7 @@ from girder.plugins.jobs.models.job import Job
 from ..constants import InstanceStatus, TaleStatus
 from ..models.instance import Instance
 from ..models.tale import Tale
+from ..utils import notify_event
 
 
 def run(job):
@@ -35,11 +36,15 @@ def run(job):
     spawn = job["kwargs"]["spawn"]
     change_status = job["kwargs"].get("change_status", True)
     token = Token().createToken(user=user, days=0.5)
+    # Get users for notifications since job can be called after a tale is shared
+    users = [str(user['id']) for user in tale['access']['users']]
 
     progressTotal = 1 + int(spawn)
     progressCurrent = 0
 
     try:
+        notify_event(users, "wt_import_started", "tale", tale['_id'])
+
         workspace = Folder().load(tale["workspaceId"], force=True)
         has_dot_git_already = os.path.isdir(os.path.join(workspace["fsPath"], ".git"))
         if has_dot_git_already:
@@ -109,6 +114,8 @@ def run(job):
         else:
             instance = None
 
+        notify_event(users, "wt_import_completed", "tale", tale['_id'])
+
     except Exception as exc:
         dot_git = os.path.join(workspace["fsPath"], ".git")
         if not has_dot_git_already and os.path.isdir(dot_git):
@@ -125,6 +132,7 @@ def run(job):
             status=JobStatus.ERROR,
             log=str(exc),
         )
+        notify_event(users, "wt_import_failed", "tale", tale['_id'])
         raise
 
     # To get rid of ObjectId's, dates etc.

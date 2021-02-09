@@ -36,7 +36,7 @@ from ..lib import pids_to_entities, register_dataMap
 from ..lib.dataone import DataONELocations  # TODO: get rid of it
 from ..models.instance import Instance
 from ..models.tale import Tale
-from ..utils import getOrCreateRootFolder
+from ..utils import getOrCreateRootFolder, notify_event
 
 
 def sanitize_binder(root):
@@ -83,6 +83,8 @@ def run(job):
     progressCurrent = 0
 
     try:
+        notify_event([str(user["_id"])], "wt_import_started", "tale", tale['_id'])
+
         # 0. Spawn instance in the background
         if spawn:
             instance = Instance().createInstance(tale, user, token, spawn=spawn)
@@ -229,6 +231,8 @@ def run(job):
         else:
             instance = None
 
+        notify_event([str(user["_id"])], "wt_import_completed", "tale", tale['_id'])
+
     except Exception:
         tale = Tale().load(tale["_id"], user=user)  # Refresh state
         tale["status"] = TaleStatus.ERROR
@@ -243,6 +247,7 @@ def run(job):
             status=JobStatus.ERROR,
             log=log,
         )
+        notify_event([str(user["_id"])], "wt_import_failed", "tale", tale['_id'])
         raise
 
     # To get rid of ObjectId's, dates etc.
