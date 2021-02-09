@@ -23,7 +23,7 @@ from gwvolman.tasks import \
 
 from ..constants import InstanceStatus
 from ..schema.misc import containerInfoSchema
-from ..utils import init_progress
+from ..utils import init_progress, notify_event
 
 from girder.plugins.wholetale.models.tale import Tale
 
@@ -135,6 +135,9 @@ class Instance(AccessControlledModel):
         ).apply_async()
         instanceTask.get(timeout=TASK_TIMEOUT)
 
+        notify_event([str(user["_id"])], "wt_instance_deleting", "instance",
+                     instance['_id'])
+
         try:
             queue = 'celery@{}'.format(instance['containerInfo']['nodeId'])
             if queue in active_queues:
@@ -149,6 +152,9 @@ class Instance(AccessControlledModel):
 
         # TODO: handle error
         self.remove(instance)
+
+        notify_event([str(user["_id"])], "wt_instance_deleted", "instance",
+                     instance['_id'])
 
     def createInstance(self, tale, user, name=None, save=True, spawn=True):
         if not name:
@@ -219,6 +225,9 @@ class Instance(AccessControlledModel):
             )
 
             (buildTask | volumeTask | serviceTask).apply_async()
+
+            notify_event([str(tale["creatorId"])], "wt_instance_launching", "instance",
+                         instance['_id'])
         return instance
 
 
@@ -268,6 +277,7 @@ def finalizeInstance(event):
         status = int(job['status'])
         instance_id = job['args'][0]['instanceId']
         instance = Instance().load(instance_id, force=True, exc=True)
+        tale = Tale().load(instance['taleId'], force=True)
         update = True
         if (
             status == JobStatus.SUCCESS
@@ -286,7 +296,6 @@ def finalizeInstance(event):
                 return  # bail
 
             # Preserve the imageId / current digest in containerInfo
-            tale = Tale().load(instance['taleId'], force=True)
             containerInfo['imageId'] = tale['imageId']
             containerInfo['digest'] = tale['imageInfo']['digest']
 
@@ -297,11 +306,16 @@ def finalizeInstance(event):
             })
             if "sessionId" in service:
                 instance["sessionId"] = ObjectId(service["sessionId"])
+
+            notify_event([str(tale["creatorId"])], "wt_instance_running", "instance",
+                         instance['_id'])
         elif (
             status == JobStatus.ERROR
             and instance["status"] != InstanceStatus.ERROR  # noqa
         ):
             instance['status'] = InstanceStatus.ERROR
+            notify_event([str(tale["creatorId"])], "wt_instance_error", "instance",
+                         instance['_id'])
         elif (
             status in (JobStatus.QUEUED, JobStatus.RUNNING)
             and instance["status"] != InstanceStatus.LAUNCHING  # noqa
