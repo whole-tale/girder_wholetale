@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import html2markdown
+from functools import lru_cache
 from urllib.request import urlopen
 
 from girder import events, logger
@@ -138,17 +139,21 @@ def update_citation(event):
         try:
             url = (
                 "https://api.datacite.org/dois/"
-                "text/x-bibliography/{}?style=harvard-cite-them-right"
+                f"text/x-bibliography/{doi}?style=harvard-cite-them-right"
             )
-            citations.append(
-                html2markdown.convert(urlopen(url.format(doi)).read().decode())
-            )
+            citation = _get_citation(url)
+            citations.append(html2markdown.convert(citation))
         except Exception as ex:
             logger.info('Unable to get a citation for %s, getting "%s"', doi, str(ex))
 
     tale["dataSetCitation"] = citations
     tale["relatedIdentifiers"] = related_ids
     event.preventDefault().addResponse(tale)
+
+
+@lru_cache(maxsize=128, typed=True)
+def _get_citation(url):
+    return urlopen(url).read().decode()
 
 
 events.bind("tale.update_citation", "wholetale", update_citation)

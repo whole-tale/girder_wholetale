@@ -1,6 +1,7 @@
 import json
 import os
 from pathlib import Path
+from urllib.parse import quote, unquote
 
 from girder.exceptions import ValidationException
 from girder.models.file import File
@@ -9,6 +10,20 @@ from girder.models.item import Item
 
 from .license import WholeTaleLicense
 from ..models.image import Image
+
+
+_NEW_DATACITE_KEY = "dc"
+
+
+def rename_dc(data):
+    return {
+        str(k).replace("DataCite:", f"{_NEW_DATACITE_KEY}:"): (
+            rename_dc(v)
+            if isinstance(v, dict)
+            else v.replace("DataCite:", f"{_NEW_DATACITE_KEY}:")
+        )
+        for k, v in data.items()
+    }
 
 
 def fold_hierarchy(objs):
@@ -80,12 +95,17 @@ class ManifestParser:
         self.manifest["@type"] = "wt:Tale"
         self.manifest["schema:schemaVersion"] = self.manifest.pop("schema:version")
         self.manifest["schema:keywords"] = self.manifest.pop("schema:category")
+        self.manifest["wt:internalIdentifier"] = self.manifest.pop("schema:identifier")
         new_context = [
             obj
             for obj in self.manifest["@context"]
-            if not (isinstance(obj, dict) and obj.get("Datasets"))
+            if not (isinstance(obj, dict) and ("Datasets" in obj or "DataCite" in obj))
         ]
-        new_context.append({"wt": "https://vocabularies.wholetale.org/wt/1.0/wt#"})
+        new_context += [
+            {_NEW_DATACITE_KEY: "http://datacite.org/schema/kernel-4"},
+            {"wt": "https://vocabularies.wholetale.org/wt/1.0/wt#"},
+            {"@base": f"arcp://uid,{self.manifest['wt:internalIdentifier']}/data/"},
+        ]
         self.manifest["@context"] = new_context
 
         self.manifest["wt:usesDataset"] = [
@@ -98,7 +118,32 @@ class ManifestParser:
             for ds in self.manifest.pop("Datasets")
         ]
         if not self.manifest["createdBy"]["@id"].startswith("mailto:"):
-            self.manifest["createdBy"]["@id"] = f"mailto:{self.manifest['createdBy']['@id']}"
+            self.manifest["createdBy"][
+                "@id"
+            ] = f"mailto:{self.manifest['createdBy']['@id']}"
+
+        new_aggregates = []
+        for aggregate in self.manifest["aggregates"]:
+            if "bundledAs" in aggregate:
+                folder = aggregate["bundledAs"]["folder"].replace("../data", ".", 1)
+                aggregate["bundledAs"]["folder"] = quote(folder)
+                if "filename" in aggregate["bundledAs"]:
+                    aggregate["bundledAs"]["filename"] = quote(
+                        aggregate["bundledAs"]["filename"]
+                    )
+            else:
+                uri = aggregate["uri"].replace("../data", ".", 1)
+                aggregate["uri"] = quote(uri)
+            for key in ("md5", "mimeType", "size"):
+                if key in aggregate:
+                    aggregate[f"wt:{key}"] = aggregate.pop(key)
+            new_aggregates.append(aggregate)
+        self.manifest["aggregates"] = new_aggregates
+        if "DataCite:relatedIdentifiers" in self.manifest:
+            rel_ids = self.manifest.pop("DataCite:relatedIdentifiers")
+        else:
+            rel_ids = []
+        self.manifest["dc:relatedIdentifiers"] = [rename_dc(_id) for _id in rel_ids]
 
     def get_external_data_ids(self):
         dataIds = [obj["schema:identifier"] for obj in self.manifest["wt:usesDataset"]]
@@ -109,7 +154,7 @@ class ManifestParser:
         ]
         return dataIds
 
-    def get_dataset(self, data_prefix="../data/"):
+    def get_dataset(self, data_prefix="./data/"):
         """Creates a 'dataSet' using manifest's aggregates section."""
         dataSet = []
         for obj in self.manifest.get("aggregates", []):
@@ -118,27 +163,25 @@ class ManifestParser:
             except KeyError:
                 continue
 
-            folder_path = bundle["folder"].replace(data_prefix, "")
+            folder_path = unquote(bundle["folder"]).replace(data_prefix, "", 1)
             if folder_path.endswith("/"):
                 folder_path = folder_path[:-1]
             if "filename" in bundle:
                 try:
                     item = Item().load(obj["wt:identifier"], force=True, exc=True)
-                    assert item["name"] == bundle["filename"]
+                    assert item["name"] == unquote(bundle["filename"])
                     itemId = item["_id"]
                 except (KeyError, ValidationException, AssertionError):
                     file_obj = File().findOne(
                         {"linkUrl": obj["uri"]}, fields=["itemId"]
                     )
                     itemId = file_obj["itemId"]
-                path = os.path.join(folder_path, bundle["filename"])
+                path = os.path.join(folder_path, unquote(bundle["filename"]))
                 model_type = "item"
             else:
-                fname = Path(bundle["folder"]).parts[-1]
+                fname = Path(unquote(bundle["folder"])).parts[-1]
                 try:
-                    folder = Folder().load(
-                        obj["wt:identifier"], force=True, exc=True
-                    )
+                    folder = Folder().load(obj["wt:identifier"], force=True, exc=True)
                     assert folder["name"] == fname
                 except (KeyError, ValidationException, AssertionError):
                     folder = Folder().findOne(
@@ -179,12 +222,14 @@ class ManifestParser:
 
         related_ids = [
             {
-                "identifier": rel_id["DataCite:relatedIdentifier"]["@id"],
-                "relation": rel_id["DataCite:relatedIdentifier"][
-                    "DataCite:relationType"
+                "identifier": rel_id[f"{_NEW_DATACITE_KEY}:relatedIdentifier"]["@id"],
+                "relation": rel_id[f"{_NEW_DATACITE_KEY}:relatedIdentifier"][
+                    f"{_NEW_DATACITE_KEY}:relationType"
                 ].split(":")[-1],
             }
-            for rel_id in self.manifest.get("DataCite:relatedIdentifiers", [])
+            for rel_id in self.manifest.get(
+                f"{_NEW_DATACITE_KEY}:relatedIdentifiers", []
+            )
         ]
         related_ids = [
             json.loads(rel_id)

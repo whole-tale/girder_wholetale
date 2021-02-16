@@ -2,6 +2,7 @@ from datetime import datetime, timezone
 from hashlib import sha256, md5
 import json
 import os
+from urllib.parse import unquote
 from . import TaleExporter
 from gwvolman.constants import REPO2DOCKER_VERSION
 
@@ -115,20 +116,20 @@ class BagTaleExporter(TaleExporter):
         for i in range(len(self.manifest['aggregates'])):
             uri = self.manifest['aggregates'][i]['uri']
             # Don't touch any of the extra files
-            if len([key for key in extra_files.keys() if '../' + key in uri]):
+            if len([key for key in extra_files.keys() if './' + key in uri]):
                 continue
-            if uri.startswith('../'):
-                self.manifest['aggregates'][i]['uri'] = uri.replace('..', '../data')
-            if 'bundledAs' in self.manifest['aggregates'][i]:
-                folder = self.manifest['aggregates'][i]['bundledAs']['folder']
-                self.manifest['aggregates'][i]['bundledAs']['folder'] = folder.replace(
-                    '..', '../data'
-                )
+            # if uri.startswith('../'):
+            #    self.manifest['aggregates'][i]['uri'] = uri.replace('..', '../data')
+            # if 'bundledAs' in self.manifest['aggregates'][i]:
+            #    folder = self.manifest['aggregates'][i]['bundledAs']['folder']
+            #    self.manifest['aggregates'][i]['bundledAs']['folder'] = folder.replace(
+            #        '..', '../data'
+            #    )
         # Update manifest with hashes
         self.append_aggergate_checksums()
 
         # Update manifest with filesizes and mimeTypes for workspace items
-        self.append_aggregate_filesize_mimetypes('../data/workspace/')
+        self.append_aggregate_filesize_mimetypes('./workspace/')
 
         # Update manifest with filesizes and mimeTypes for extra items
         self.append_extras_filesize_mimetypes(extra_files)
@@ -138,11 +139,9 @@ class BagTaleExporter(TaleExporter):
         for bundle in self.manifest['aggregates']:
             if 'bundledAs' not in bundle:
                 continue
-            folder = bundle['bundledAs']['folder']
-            fetch_file += "{uri} {size} {folder}".format(
-                uri=bundle['uri'], size=bundle['size'], folder=folder.replace('../', '')
-            )  # fetch.txt is located in the root level, need to adjust paths
-            fetch_file += bundle['bundledAs'].get('filename', '')
+            folder = unquote(bundle['bundledAs']['folder'])
+            fetch_file += f"{bundle['uri']} {bundle['wt:size']} {folder}"
+            fetch_file += unquote(bundle['bundledAs'].get('wt:filename', ''))
             fetch_file += '\n'
 
         now = datetime.now(timezone.utc)

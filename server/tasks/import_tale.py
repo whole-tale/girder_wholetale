@@ -65,7 +65,7 @@ def run(job):
             )
 
         # 2. Construct the dataSet
-        dataSet = mp.get_dataset(data_prefix="../data/data/")
+        dataSet = mp.get_dataset()
 
         # 3. Update Tale's dataSet
         update_citations = {_["itemId"] for _ in tale["dataSet"]} ^ {

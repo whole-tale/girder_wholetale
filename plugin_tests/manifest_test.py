@@ -3,6 +3,7 @@ import json
 import os
 import pytest
 from tests import base
+from urllib.parse import quote
 from bson import ObjectId
 from girder.exceptions import AccessException, ValidationException
 from girder.utility.path import lookUpPath
@@ -226,29 +227,29 @@ class ManifestTestCase(base.TestCase):
         tale = Tale().save(tale)
         manifest = Manifest(tale, self.user)
         attrs = manifest.create_related_identifiers()
-        self.assertIn("DataCite:relatedIdentifiers", attrs)
+        self.assertIn("dc:relatedIdentifiers", attrs)
         self.assertEqual(
-            attrs["DataCite:relatedIdentifiers"],
+            attrs["dc:relatedIdentifiers"],
             [
                 {
-                    "DataCite:relatedIdentifier": {
+                    "dc:relatedIdentifier": {
                         "@id": "urn:some_urn",
-                        "DataCite:relationType": "DataCite:Cites",
-                        "DataCite:relatedIdentifierType": "DataCite:URN",
+                        "dc:relationType": "dc:Cites",
+                        "dc:relatedIdentifierType": "dc:URN",
                     }
                 },
                 {
-                    "DataCite:relatedIdentifier": {
+                    "dc:relatedIdentifier": {
                         "@id": "doi:some_doi",
-                        "DataCite:relationType": "DataCite:IsDerivedFrom",
-                        "DataCite:relatedIdentifierType": "DataCite:DOI",
+                        "dc:relationType": "dc:IsDerivedFrom",
+                        "dc:relatedIdentifierType": "dc:DOI",
                     }
                 },
                 {
-                    "DataCite:relatedIdentifier": {
+                    "dc:relatedIdentifier": {
                         "@id": "https://some.url",
-                        "DataCite:relationType": "DataCite:IsIdenticalTo",
-                        "DataCite:relatedIdentifierType": "DataCite:URL",
+                        "dc:relationType": "dc:IsIdenticalTo",
+                        "dc:relatedIdentifierType": "dc:URL",
                     }
                 },
             ],
@@ -337,7 +338,7 @@ class ManifestTestCase(base.TestCase):
         aggregates_section = manifest_doc.manifest["aggregates"]
 
         # Search for workspace file1.csv
-        expected_path = "../workspace/" + "file1.csv"
+        expected_path = "./workspace/" + "file1.csv"
         file_check = any(x for x in aggregates_section if (x["uri"] == expected_path))
         self.assertTrue(file_check)
         os.remove(os.path.join(fspath, "file1.csv"))
@@ -350,61 +351,61 @@ class ManifestTestCase(base.TestCase):
             {
                 "uri": "doi:10.5065/D6862DM8",
                 "bundledAs": {
-                    "folder": "../data/Humans and Hydrology at High Latitudes: Water Use Information/"
+                    "folder": quote("./data/Humans and Hydrology at High Latitudes: Water Use Information/")
                 },
-                "size": 28848454,
+                "wt:size": 28848454,
             },
             {
                 "uri": "https://cn.dataone.org/cn/v2/resolve/urn:uuid:01a53103-8db1-46b3-967c-b42acf69ae08",
-                "bundledAs": {"folder": "../data/", "filename": "usco2005.xls"},
+                "bundledAs": {"folder": "./data/", "filename": "usco2005.xls"},
                 "schema:isPartOf": "doi:10.5065/D6862DM8",
-                "size": 6427136,
+                "wt:size": 6427136,
             },
             {
                 "uri": "globus://82f1b5c6-6e9b-11e5-ba47-22000b92c6ec//published/publication_113/data/D_whites_darks_AJS.hdf",
                 "bundledAs": {
-                    "folder": "../data/",
+                    "folder": "./data/",
                     "filename": "D_whites_darks_AJS.hdf",
                 },
                 "schema:isPartOf": "doi:10.18126/M2301J",
-                "size": 8786120536,
+                "wt:size": 8786120536,
             },
             {
                 "uri": "globus://82f1b5c6-6e9b-11e5-ba47-22000b92c6ec//published/publication_1106/data/Dmax",
-                "bundledAs": {"folder": "../data/Dmax/"},
+                "bundledAs": {"folder": "./data/Dmax/"},
                 "schema:isPartOf": "doi:10.18126/M2662X",
-                "size": 105050561,
+                "wt:size": 105050561,
             },
             {
                 "uri": "https://www.gw-openscience.org/s/events/BBH_events_v3.json",
-                "bundledAs": {"folder": "../data/", "filename": "BBH_events_v3.json"},
-                "size": 2202,
+                "bundledAs": {"folder": "./data/", "filename": "BBH_events_v3.json"},
+                "wt:size": 2202,
             },
             {
                 "uri": "https://www.gw-openscience.org/s/events/GW170104/GW170104_4_template.hdf5",
                 "bundledAs": {
-                    "folder": "../data/GW170104/",
+                    "folder": "./data/GW170104/",
                     "filename": "GW170104_4_template.hdf5",
                 },
-                "size": 1056864,
+                "wt:size": 1056864,
             },
             {
                 "uri": "https://www.gw-openscience.org/s/events/GW170104/H-H1_LOSC_4_V1-1167559920-32.hdf5",
                 "bundledAs": {
-                    "folder": "../data/GW170104/",
+                    "folder": "./data/GW170104/",
                     "filename": "H-H1_LOSC_4_V1-1167559920-32.hdf5",
                 },
-                "size": 1033609,
+                "wt:size": 1033609,
             },
             {
                 "uri": "https://www.gw-openscience.org/s/events/GW170104/L-L1_LOSC_4_V1-1167559920-32.hdf5",
                 "bundledAs": {
-                    "folder": "../data/GW170104/",
+                    "folder": "./data/GW170104/",
                     "filename": "L-L1_LOSC_4_V1-1167559920-32.hdf5",
                 },
-                "size": 1005007,
+                "wt:size": 1005007,
             },
-            {"uri": "../LICENSE", "schema:license": "CC-BY-4.0"},
+            {"uri": "./LICENSE", "schema:license": "CC-BY-4.0"},
         ]
         from operator import itemgetter
 

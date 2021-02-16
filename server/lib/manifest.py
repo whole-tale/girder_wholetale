@@ -1,5 +1,6 @@
 import json
 import os
+from urllib.parse import quote
 
 from girder import logger
 from girder.models.folder import Folder
@@ -156,19 +157,19 @@ class Manifest:
     def create_related_identifiers(self):
         def derive_id_type(identifier):
             if identifier.lower().startswith("doi"):
-                return "DataCite:DOI"
+                return "dc:DOI"
             elif identifier.lower().startswith("http"):
-                return "DataCite:URL"
+                return "dc:URL"
             elif identifier.lower().startswith("urn"):
-                return "DataCite:URN"
+                return "dc:URN"
 
         return {
-            "DataCite:relatedIdentifiers": [
+            "dc:relatedIdentifiers": [
                 {
-                    "DataCite:relatedIdentifier": {
+                    "dc:relatedIdentifier": {
                         "@id": rel_id["identifier"],
-                        "DataCite:relationType": "DataCite:" + rel_id["relation"],
-                        "DataCite:relatedIdentifierType": derive_id_type(rel_id["identifier"]),
+                        "dc:relationType": "dc:" + rel_id["relation"],
+                        "dc:relatedIdentifierType": derive_id_type(rel_id["identifier"]),
                     }
                 }
                 for rel_id in self.tale["relatedIdentifiers"]
@@ -185,7 +186,7 @@ class Manifest:
             "@context": [
                 "https://w3id.org/bundle/context",
                 {"schema": "http://schema.org/"},
-                {"DataCite": "http://datacite.org/schema/kernel-4"},
+                {"dc": "http://datacite.org/schema/kernel-4"},
                 {"wt": "https://vocabularies.wholetale.org/wt/1.0/wt#"},
             ]
         }
@@ -253,7 +254,7 @@ class Manifest:
             for curdir, _, files in os.walk(workspace_rootpath):
                 for fname in files:
                     wfile = os.path.join(curdir, fname).replace(workspace_rootpath, "")
-                    self.manifest['aggregates'].append({'uri': '../workspace/' + wfile})
+                    self.manifest['aggregates'].append({'uri': './workspace/' + wfile})
 
         """
         Handle objects that are in the dataSet, ie files that point to external sources.
@@ -276,11 +277,11 @@ class Manifest:
         for obj in external_objects:
             # Grab identifier of a parent folder
             if obj['_modelType'] == 'item':
-                bundle = self.create_bundle(os.path.join('../data/', obj['relpath']), obj['name'])
+                bundle = self.create_bundle(obj["relpath"], obj["name"])
             else:
-                bundle = self.create_bundle('../data/' + obj['name'], None)
+                bundle = self.create_bundle(obj["name"], None)
             record = self.create_aggregation_record(obj['uri'], bundle, obj['dataset_identifier'])
-            record['size'] = obj['size']
+            record["wt:size"] = obj["size"]
             record["wt:identifier"] = obj["wt:identifier"]
             self.manifest['aggregates'].append(record)
 
@@ -399,15 +400,13 @@ class Manifest:
         :param filename:  The name of the file
         :return: A dictionary record of the bundle
         """
-
+        folder = quote(os.path.join("./data", folder))
         # Add a trailing slash to the path if there isn't one (RO spec)
-        bundle = {}
-        if folder:
-            if not folder.endswith('/'):
-                folder += '/'
-            bundle['folder'] = folder
+        if not folder.endswith('/'):
+            folder += '/'
+        bundle = dict(folder=folder)
         if filename:
-            bundle['filename'] = filename
+            bundle['filename'] = quote(filename)
         return bundle
 
     def add_license_record(self):
@@ -417,7 +416,7 @@ class Manifest:
         """
         license = self.tale.get('licenseSPDX', WholeTaleLicense.default_spdx())
         self.manifest['aggregates'].append(
-            {'uri': '../LICENSE', 'schema:license': license}
+            {'uri': './LICENSE', 'schema:license': license}
         )
 
     def dump_manifest(self, **kwargs):

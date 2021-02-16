@@ -126,7 +126,7 @@ class TaleExporter:
         :return: None
         """
         for path, chksum in self.state['md5']:
-            uri = '../' + path
+            uri = './' + path
             index = next(
                 (
                     i
@@ -136,7 +136,7 @@ class TaleExporter:
                 None,
             )
             if index is not None:
-                self.manifest['aggregates'][index]['md5'] = chksum
+                self.manifest['aggregates'][index]['wt:md5'] = chksum
 
     def append_aggregate_filesize_mimetypes(self, prepended_path):
         """
@@ -158,10 +158,10 @@ class TaleExporter:
             )
 
             if index is not None:
-                self.manifest['aggregates'][index]['mimeType'] = (
+                self.manifest['aggregates'][index]['wt:mimeType'] = (
                     magic_wrapper.from_file(fullpath) or 'application/octet-stream'
                 )
-            self.manifest['aggregates'][index]['size'] = os.path.getsize(fullpath)
+            self.manifest['aggregates'][index]['wt:size'] = os.path.getsize(fullpath)
 
     def append_extras_filesize_mimetypes(self, extra_files):
         """
@@ -171,7 +171,7 @@ class TaleExporter:
         :return: None
         """
         for path, content in extra_files.items():
-            uri = '../' + path
+            uri = './' + path
             index = next(
                 (
                     i
@@ -181,5 +181,5 @@ class TaleExporter:
                 None,
             )
             if index is not None:
-                self.manifest['aggregates'][index]['mimeType'] = 'text/plain'
-                self.manifest['aggregates'][index]['size'] = len(content)
+                self.manifest['aggregates'][index]['wt:mimeType'] = 'text/plain'
+                self.manifest['aggregates'][index]['wt:size'] = len(content)

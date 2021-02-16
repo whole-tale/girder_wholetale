@@ -24,7 +24,7 @@ class NativeTaleExporter(TaleExporter):
         self.append_aggergate_checksums()
 
         # Update manifest with filesizes and mimeTypes
-        self.append_aggregate_filesize_mimetypes('../workspace/')
+        self.append_aggregate_filesize_mimetypes('./workspace/')
 
         # Update manifest with filesizes and mimeTypes for extra items
         self.append_extras_filesize_mimetypes(extra_files)
