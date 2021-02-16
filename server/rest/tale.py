@@ -406,19 +406,20 @@ class Tale(Resource):
         .modelParam('id', model='tale', plugin='wholetale', level=AccessType.READ)
         .param('taleFormat', 'Format of the exported Tale', required=False,
                enum=['bagit', 'native'], strip=True, default='native')
+        .param('versionId', 'Specific version to export', required=False)
         .responseClass('tale')
         .produces('application/zip')
         .errorResponse('ID was invalid.', 404)
         .errorResponse('You are not authorized to export this tale.', 403)
     )
-    def exportTale(self, tale, taleFormat):
+    def exportTale(self, tale, taleFormat, versionId):
         user = self.getCurrentUser()
-        zip_name = str(tale['_id'])
+        zip_name = str(versionId or tale['_id'])
 
         if taleFormat == 'bagit':
-            exporter = BagTaleExporter(tale, user, expand_folders=True)
+            exporter = BagTaleExporter(tale, user, expand_folders=True, versionId=versionId)
         elif taleFormat == 'native':
-            exporter = NativeTaleExporter(tale, user)
+            exporter = NativeTaleExporter(tale, user, versionId=versionId)
 
         setResponseHeader('Content-Type', 'application/zip')
         setContentDisposition(zip_name + '.zip')

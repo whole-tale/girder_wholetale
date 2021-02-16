@@ -23,7 +23,7 @@ class Manifest:
     create<someProperty>
     """
 
-    def __init__(self, tale, user, expand_folders=True):
+    def __init__(self, tale, user, expand_folders=True, versionId=None):
         """
         Initialize the manifest document with base variables
         :param tale: The Tale whose data is being serialized
@@ -33,6 +33,16 @@ class Manifest:
         """
         self.tale = tale
         self.user = user
+        if versionId is not None:
+            version = Folder().load(
+                versionId, user=self.user, level=AccessType.READ, exc=True
+            )
+            version = Folder().filter(version, user)  # to get _modelType
+        else:
+            version = tale
+            version["_modelType"] = "tale"
+            version["name"] = tale["title"]
+        self.version = version
         self.expand_folders = expand_folders
 
         self.validate()
@@ -54,6 +64,7 @@ class Manifest:
         # Add any external datasets to the manifest
         self.add_dataset_records()
         self.add_license_record()
+        self.add_version_info()
 
     publishers = {
         "DataONE":
@@ -188,6 +199,7 @@ class Manifest:
                 {"schema": "http://schema.org/"},
                 {"dc": "http://datacite.org/schema/kernel-4"},
                 {"wt": "https://vocabularies.wholetale.org/wt/1.0/wt#"},
+                {"@base": f"arcp://uid,{self.version['_id']}/data/"},
             ]
         }
 
@@ -418,6 +430,26 @@ class Manifest:
         self.manifest['aggregates'].append(
             {'uri': './LICENSE', 'schema:license': license}
         )
+
+    def add_version_info(self):
+        """Adds version metadata."""
+        user = self.userModel.load(self.version["creatorId"], force=True)
+        self.manifest["dct:hasVersion"] = {
+            "@id": (
+                "https://data.wholetale.org/api/v1/"
+                f"{self.version['_modelType']}/{self.version['_id']}"
+            ),
+            "@type": "wt:TaleVersion",
+            "schema:name": self.version["name"],
+            "schema:dateModified": self.version["created"],  # FIXME: should it be updated?
+            "schema:creator": {
+                "@id": f"mailto:{user['email']}",
+                "@type": "schema:Person",
+                "schema:givenName": user["firstName"],
+                "schema:familyName": user["lastName"],
+                "schema:email": user["email"],
+            },
+        }
 
     def dump_manifest(self, **kwargs):
         return json.dumps(
