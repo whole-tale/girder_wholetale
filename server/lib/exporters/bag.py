@@ -112,19 +112,6 @@ class BagTaleExporter(TaleExporter):
             payload = self.stream_string(content)
             yield from self.dump_and_checksum(payload, path)
 
-        # In Bag there's an additional 'data' folder where everything lives
-        for i in range(len(self.manifest['aggregates'])):
-            uri = self.manifest['aggregates'][i]['uri']
-            # Don't touch any of the extra files
-            if len([key for key in extra_files.keys() if './' + key in uri]):
-                continue
-            # if uri.startswith('../'):
-            #    self.manifest['aggregates'][i]['uri'] = uri.replace('..', '../data')
-            # if 'bundledAs' in self.manifest['aggregates'][i]:
-            #    folder = self.manifest['aggregates'][i]['bundledAs']['folder']
-            #    self.manifest['aggregates'][i]['bundledAs']['folder'] = folder.replace(
-            #        '..', '../data'
-            #    )
         # Update manifest with hashes
         self.append_aggergate_checksums()
 
