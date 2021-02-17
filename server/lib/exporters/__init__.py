@@ -131,7 +131,7 @@ class TaleExporter:
         """
         aggs = self.manifest_obj.manifest["aggregates"]
         for path, chksum in self.state['md5']:
-            uri = './' + path
+            uri = "./" + path.replace("data/", "", 1)
             index = self._agg_index_by_uri(uri)
             if index is not None:
                 aggs[index]['wt:md5'] = chksum
