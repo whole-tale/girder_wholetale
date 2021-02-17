@@ -168,19 +168,19 @@ class Manifest:
     def create_related_identifiers(self):
         def derive_id_type(identifier):
             if identifier.lower().startswith("doi"):
-                return "dc:DOI"
+                return "datacite:DOI"
             elif identifier.lower().startswith("http"):
-                return "dc:URL"
+                return "datacite:URL"
             elif identifier.lower().startswith("urn"):
-                return "dc:URN"
+                return "datacite:URN"
 
         return {
-            "dc:relatedIdentifiers": [
+            "datacite:relatedIdentifiers": [
                 {
-                    "dc:relatedIdentifier": {
+                    "datacite:relatedIdentifier": {
                         "@id": rel_id["identifier"],
-                        "dc:relationType": "dc:" + rel_id["relation"],
-                        "dc:relatedIdentifierType": derive_id_type(rel_id["identifier"]),
+                        "datacite:relationType": "datacite:" + rel_id["relation"],
+                        "datacite:relatedIdentifierType": derive_id_type(rel_id["identifier"]),
                     }
                 }
                 for rel_id in self.tale["relatedIdentifiers"]
@@ -197,7 +197,7 @@ class Manifest:
             "@context": [
                 "https://w3id.org/bundle/context",
                 {"schema": "http://schema.org/"},
-                {"dc": "http://datacite.org/schema/kernel-4"},
+                {"datacite": "http://datacite.org/schema/kernel-4"},
                 {"wt": "https://vocabularies.wholetale.org/wt/1.0/wt#"},
                 {"@base": f"arcp://uid,{self.version['_id']}/data/"},
             ]

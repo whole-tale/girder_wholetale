@@ -12,7 +12,7 @@ from .license import WholeTaleLicense
 from ..models.image import Image
 
 
-_NEW_DATACITE_KEY = "dc"
+_NEW_DATACITE_KEY = "datacite"
 
 
 def rename_dc(data):
@@ -143,7 +143,9 @@ class ManifestParser:
             rel_ids = self.manifest.pop("DataCite:relatedIdentifiers")
         else:
             rel_ids = []
-        self.manifest["dc:relatedIdentifiers"] = [rename_dc(_id) for _id in rel_ids]
+        self.manifest[f"{_NEW_DATACITE_KEY}:relatedIdentifiers"] = [
+            rename_dc(_id) for _id in rel_ids
+        ]
 
     def get_external_data_ids(self):
         dataIds = [obj["schema:identifier"] for obj in self.manifest["wt:usesDataset"]]

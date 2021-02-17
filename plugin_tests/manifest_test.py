@@ -227,29 +227,29 @@ class ManifestTestCase(base.TestCase):
         tale = Tale().save(tale)
         manifest = Manifest(tale, self.user)
         attrs = manifest.create_related_identifiers()
-        self.assertIn("dc:relatedIdentifiers", attrs)
+        self.assertIn("datacite:relatedIdentifiers", attrs)
         self.assertEqual(
-            attrs["dc:relatedIdentifiers"],
+            attrs["datacite:relatedIdentifiers"],
             [
                 {
-                    "dc:relatedIdentifier": {
+                    "datacite:relatedIdentifier": {
                         "@id": "urn:some_urn",
-                        "dc:relationType": "dc:Cites",
-                        "dc:relatedIdentifierType": "dc:URN",
+                        "datacite:relationType": "datacite:Cites",
+                        "datacite:relatedIdentifierType": "datacite:URN",
                     }
                 },
                 {
-                    "dc:relatedIdentifier": {
+                    "datacite:relatedIdentifier": {
                         "@id": "doi:some_doi",
-                        "dc:relationType": "dc:IsDerivedFrom",
-                        "dc:relatedIdentifierType": "dc:DOI",
+                        "datacite:relationType": "datacite:IsDerivedFrom",
+                        "datacite:relatedIdentifierType": "datacite:DOI",
                     }
                 },
                 {
-                    "dc:relatedIdentifier": {
+                    "datacite:relatedIdentifier": {
                         "@id": "https://some.url",
-                        "dc:relationType": "dc:IsIdenticalTo",
-                        "dc:relatedIdentifierType": "dc:URL",
+                        "datacite:relationType": "datacite:IsIdenticalTo",
+                        "datacite:relatedIdentifierType": "datacite:URL",
                     }
                 },
             ],
