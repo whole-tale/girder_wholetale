@@ -197,7 +197,7 @@ class Manifest:
             "@context": [
                 "https://w3id.org/bundle/context",
                 {"schema": "http://schema.org/"},
-                {"datacite": "http://datacite.org/schema/kernel-4"},
+                {"datacite": "https://schema.datacite.org/meta/kernel-4.3/#"},
                 {"wt": "https://vocabularies.wholetale.org/wt/1.0/wt#"},
                 {"@base": f"arcp://uid,{self.version['_id']}/data/"},
             ]
