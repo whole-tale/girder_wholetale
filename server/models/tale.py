@@ -207,7 +207,7 @@ class Tale(AccessControlledModel):
 
         if save:
             tale = self.save(tale)
-            notify_event([str(creator["_id"])], "wt_tale_created", "tale", tale['_id'])
+            notify_event([creator["_id"]], "wt_tale_created", "tale", tale['_id'])
 
         return tale
 
@@ -241,7 +241,7 @@ class Tale(AccessControlledModel):
         """
         tale['updated'] = datetime.datetime.utcnow()
         ret = self.save(tale)
-        users = [str(user['id']) for user in tale['access']['users']]
+        users = [user['id'] for user in tale['access']['users']]
         notify_event(users, "wt_tale_updated", "tale", str(tale["_id"]))
         return ret
 

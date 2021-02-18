@@ -112,8 +112,8 @@ def diff_access(access1, access2):
     """Diff two access lists to identify which users
     were added or removed.
     """
-    existing = [str(user['id']) for user in access1['users']]
-    new = [str(user['id']) for user in access2['users']]
-    added = list(set(new) - set(existing))
-    removed = list(set(existing) - set(new))
+    existing = {str(user['id']) for user in access1['users']}
+    new = {str(user['id']) for user in access2['users']}
+    added = list(new - existing)
+    removed = list(existing - new)
     return (added, removed)

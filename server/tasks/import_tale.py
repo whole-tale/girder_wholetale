@@ -42,7 +42,7 @@ def run(job):
     progressCurrent = 0
 
     try:
-        notify_event([str(user["_id"])], "wt_import_started", "tale", tale['_id'])
+        notify_event([user["_id"]], "wt_import_started", "tale", tale['_id'])
 
         os.chdir(tale_dir)
         mp = ManifestParser(manifest_file)
@@ -141,7 +141,7 @@ def run(job):
             progressMessage="Tale created",
         )
 
-        notify_event([str(user["_id"])], "wt_import_completed", "tale", tale['_id'])
+        notify_event([user["_id"]], "wt_import_completed", "tale", tale['_id'])
     except Exception:
         tale = Tale().load(tale["_id"], user=user)  # Refresh state
         tale["status"] = TaleStatus.ERROR
@@ -149,5 +149,5 @@ def run(job):
         t, val, tb = sys.exc_info()
         log = "%s: %s\n%s" % (t.__name__, repr(val), traceback.extract_tb(tb))
         jobModel.updateJob(job, status=JobStatus.ERROR, log=log)
-        notify_event([str(user["_id"])], "wt_import_failed", "tale", tale['_id'])
+        notify_event([user["_id"]], "wt_import_failed", "tale", tale['_id'])
         raise
