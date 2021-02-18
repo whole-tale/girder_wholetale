@@ -95,7 +95,7 @@ class ManifestParser:
         self.manifest["@type"] = "wt:Tale"
         self.manifest["schema:schemaVersion"] = self.manifest.pop("schema:version")
         self.manifest["schema:keywords"] = self.manifest.pop("schema:category")
-        self.manifest["wt:internalIdentifier"] = self.manifest.pop("schema:identifier")
+        self.manifest["wt:identifier"] = self.manifest.pop("schema:identifier")
         new_context = [
             obj
             for obj in self.manifest["@context"]
@@ -104,7 +104,7 @@ class ManifestParser:
         new_context += [
             {_NEW_DATACITE_KEY: "http://datacite.org/schema/kernel-4"},
             {"wt": "https://vocabularies.wholetale.org/wt/1.0/wt#"},
-            {"@base": f"arcp://uid,{self.manifest['wt:internalIdentifier']}/data/"},
+            {"@base": f"arcp://uid,{self.manifest['wt:identifier']}/data/"},
         ]
         self.manifest["@context"] = new_context
 
