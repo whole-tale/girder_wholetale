@@ -177,7 +177,7 @@ class ImportTaleTestCase(base.TestCase):
             job = Job().findOne({"type": "wholetale.import_binder"})
             self.assertEqual(json.loads(job["kwargs"])["taleId"]["$oid"], tale["_id"])
 
-            for i in range(300):
+            for i in range(600):
                 if job["status"] in {JobStatus.SUCCESS, JobStatus.ERROR}:
                     break
                 time.sleep(0.1)
@@ -339,7 +339,7 @@ class ImportTaleTestCase(base.TestCase):
             self.assertEqual(
                 json.loads(job["kwargs"])["taleId"]["$oid"], tale["_id"]
             )
-            for i in range(300):
+            for i in range(600):
                 if job["status"] in {JobStatus.SUCCESS, JobStatus.ERROR}:
                     break
                 time.sleep(0.1)

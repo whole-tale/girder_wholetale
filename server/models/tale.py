@@ -25,7 +25,7 @@ from ..constants import TaleStatus
 from ..schema.misc import related_identifiers_schema
 from ..utils import getOrCreateRootFolder, init_progress
 from ..lib.license import WholeTaleLicense
-from ..lib.manifest_parser import ManifestParser as mp
+from ..lib.manifest_parser import ManifestParser
 
 from gwvolman.tasks import build_tale_image, BUILD_TALE_IMAGE_STEP_TOTAL
 
@@ -33,7 +33,7 @@ from gwvolman.tasks import build_tale_image, BUILD_TALE_IMAGE_STEP_TOTAL
 # Whenever the Tale object schema is modified (e.g. fields are added or
 # removed) increase `_currentTaleFormat` to retroactively apply those
 # changes to existing Tales.
-_currentTaleFormat = 8
+_currentTaleFormat = 9
 
 
 class Tale(AccessControlledModel):
@@ -335,9 +335,8 @@ class Tale(AccessControlledModel):
                     raise GirderException("Provided file doesn't contain a Tale manifest")
 
                 try:
-                    manifest = json.loads(z.read(manifest_file).decode())
-                    # TODO: is there a better check?
-                    manifest['@id'].startswith('https://data.wholetale.org')
+                    mp = ManifestParser(json.loads(z.read(manifest_file).decode()))
+                    assert mp.is_valid()
                 except Exception as e:
                     raise GirderException(
                         "Couldn't read manifest.json or not a Tale: {}".format(str(e))
@@ -360,7 +359,7 @@ class Tale(AccessControlledModel):
                 # ../.. etc., is taken care of by zipfile.extractall, but in the end we're still
                 # unzipping an untrusted content. What could possibly go wrong...?
                 z.extractall(path=temp_dir)
-        return temp_dir, manifest_file, manifest, environment
+        return temp_dir, manifest_file, mp.manifest, environment
 
     def createTaleFromStream(
         self, stream, user=None, publishInfo=None, relatedIdentifiers=None
@@ -369,9 +368,10 @@ class Tale(AccessControlledModel):
             stream
         )
 
+        mp = ManifestParser(manifest)
         new_tale = mp.get_tale_fields_from_environment(environment)
         image = imageModel().load(new_tale.pop("imageId"), user=user, level=AccessType.READ)
-        new_tale.update(mp.get_tale_fields_from_manifest(manifest))
+        new_tale.update(mp.get_tale_fields())
 
         if relatedIdentifiers is None:
             relatedIdentifiers = []
@@ -393,7 +393,7 @@ class Tale(AccessControlledModel):
             )
         )
 
-        # We don't call mp.get_dataset_from_manifest now, cause it might require
+        # We don't call mp.get_dataset now, cause it might require
         # a registration step. It's going to be called inside import_tale job.
 
         tale = self.createTale(
@@ -450,7 +450,8 @@ class Tale(AccessControlledModel):
         NOTE: it will be missing a lot of keywords that makes it a model,
         e.g. _id, acls etc.
         """
-        restored_tale = mp.get_tale_fields_from_manifest(manifest)
+        mp = ManifestParser(manifest)
+        restored_tale = mp.get_tale_fields()
         restored_tale.update(mp.get_tale_fields_from_environment(environment))
-        restored_tale["dataSet"] = mp.get_dataset_from_manifest(manifest)
+        restored_tale["dataSet"] = mp.get_dataset()
         return restored_tale

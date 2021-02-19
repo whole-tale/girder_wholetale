@@ -417,7 +417,12 @@ class ZenodoHarversterTestCase(base.TestCase):
             fp = io.BytesIO()
             with zipfile.ZipFile(fp, mode="w") as zf:
                 zf.writestr(
-                    "manifest.json", json.dumps({"@id": "https://data.wholetale.org"})
+                    "manifest.json", json.dumps(
+                        {
+                            "@id": "https://data.wholetale.org",
+                            "@type": "wt:Tale",
+                        }
+                    )
                 )
             fp.seek(0)
             return fp

@@ -3,6 +3,7 @@ import json
 import os
 import pytest
 from tests import base
+from urllib.parse import quote
 from bson import ObjectId
 from girder.exceptions import AccessException, ValidationException
 from girder.utility.path import lookUpPath
@@ -226,29 +227,29 @@ class ManifestTestCase(base.TestCase):
         tale = Tale().save(tale)
         manifest = Manifest(tale, self.user)
         attrs = manifest.create_related_identifiers()
-        self.assertIn("DataCite:relatedIdentifiers", attrs)
+        self.assertIn("datacite:relatedIdentifiers", attrs)
         self.assertEqual(
-            attrs["DataCite:relatedIdentifiers"],
+            attrs["datacite:relatedIdentifiers"],
             [
                 {
-                    "DataCite:relatedIdentifier": {
+                    "datacite:relatedIdentifier": {
                         "@id": "urn:some_urn",
-                        "DataCite:relationType": "DataCite:Cites",
-                        "DataCite:relatedIdentifierType": "DataCite:URN",
+                        "datacite:relationType": "datacite:Cites",
+                        "datacite:relatedIdentifierType": "datacite:URN",
                     }
                 },
                 {
-                    "DataCite:relatedIdentifier": {
+                    "datacite:relatedIdentifier": {
                         "@id": "doi:some_doi",
-                        "DataCite:relationType": "DataCite:IsDerivedFrom",
-                        "DataCite:relatedIdentifierType": "DataCite:DOI",
+                        "datacite:relationType": "datacite:IsDerivedFrom",
+                        "datacite:relatedIdentifierType": "datacite:DOI",
                     }
                 },
                 {
-                    "DataCite:relatedIdentifier": {
+                    "datacite:relatedIdentifier": {
                         "@id": "https://some.url",
-                        "DataCite:relationType": "DataCite:IsIdenticalTo",
-                        "DataCite:relatedIdentifierType": "DataCite:URL",
+                        "datacite:relationType": "datacite:IsIdenticalTo",
+                        "datacite:relatedIdentifierType": "datacite:URL",
                     }
                 },
             ],
@@ -262,11 +263,11 @@ class ManifestTestCase(base.TestCase):
         manifest_doc = Manifest(self.tale, self.user)
 
         attributes = manifest_doc.create_basic_attributes()
-        self.assertEqual(attributes["schema:identifier"], str(self.tale["_id"]))
+        self.assertEqual(attributes["wt:identifier"], str(self.tale["_id"]))
         self.assertEqual(attributes["schema:name"], self.tale["title"])
         self.assertEqual(attributes["schema:description"], self.tale["description"])
-        self.assertEqual(attributes["schema:category"], self.tale["category"])
-        self.assertEqual(attributes["schema:version"], self.tale["format"])
+        self.assertEqual(attributes["schema:keywords"], self.tale["category"])
+        self.assertEqual(attributes["schema:schemaVersion"], self.tale["format"])
         self.assertEqual(attributes["schema:image"], self.tale["illustration"])
 
     def _testAddTaleCreator(self):
@@ -337,7 +338,7 @@ class ManifestTestCase(base.TestCase):
         aggregates_section = manifest_doc.manifest["aggregates"]
 
         # Search for workspace file1.csv
-        expected_path = "../workspace/" + "file1.csv"
+        expected_path = "./workspace/" + "file1.csv"
         file_check = any(x for x in aggregates_section if (x["uri"] == expected_path))
         self.assertTrue(file_check)
         os.remove(os.path.join(fspath, "file1.csv"))
@@ -350,61 +351,61 @@ class ManifestTestCase(base.TestCase):
             {
                 "uri": "doi:10.5065/D6862DM8",
                 "bundledAs": {
-                    "folder": "../data/Humans and Hydrology at High Latitudes: Water Use Information/"
+                    "folder": quote("./data/Humans and Hydrology at High Latitudes: Water Use Information/")
                 },
-                "size": 28848454,
+                "wt:size": 28848454,
             },
             {
                 "uri": "https://cn.dataone.org/cn/v2/resolve/urn:uuid:01a53103-8db1-46b3-967c-b42acf69ae08",
-                "bundledAs": {"folder": "../data/", "filename": "usco2005.xls"},
+                "bundledAs": {"folder": "./data/", "filename": "usco2005.xls"},
                 "schema:isPartOf": "doi:10.5065/D6862DM8",
-                "size": 6427136,
+                "wt:size": 6427136,
             },
             {
                 "uri": "globus://82f1b5c6-6e9b-11e5-ba47-22000b92c6ec//published/publication_113/data/D_whites_darks_AJS.hdf",
                 "bundledAs": {
-                    "folder": "../data/",
+                    "folder": "./data/",
                     "filename": "D_whites_darks_AJS.hdf",
                 },
                 "schema:isPartOf": "doi:10.18126/M2301J",
-                "size": 8786120536,
+                "wt:size": 8786120536,
             },
             {
                 "uri": "globus://82f1b5c6-6e9b-11e5-ba47-22000b92c6ec//published/publication_1106/data/Dmax",
-                "bundledAs": {"folder": "../data/Dmax/"},
+                "bundledAs": {"folder": "./data/Dmax/"},
                 "schema:isPartOf": "doi:10.18126/M2662X",
-                "size": 105050561,
+                "wt:size": 105050561,
             },
             {
                 "uri": "https://www.gw-openscience.org/s/events/BBH_events_v3.json",
-                "bundledAs": {"folder": "../data/", "filename": "BBH_events_v3.json"},
-                "size": 2202,
+                "bundledAs": {"folder": "./data/", "filename": "BBH_events_v3.json"},
+                "wt:size": 2202,
             },
             {
                 "uri": "https://www.gw-openscience.org/s/events/GW170104/GW170104_4_template.hdf5",
                 "bundledAs": {
-                    "folder": "../data/GW170104/",
+                    "folder": "./data/GW170104/",
                     "filename": "GW170104_4_template.hdf5",
                 },
-                "size": 1056864,
+                "wt:size": 1056864,
             },
             {
                 "uri": "https://www.gw-openscience.org/s/events/GW170104/H-H1_LOSC_4_V1-1167559920-32.hdf5",
                 "bundledAs": {
-                    "folder": "../data/GW170104/",
+                    "folder": "./data/GW170104/",
                     "filename": "H-H1_LOSC_4_V1-1167559920-32.hdf5",
                 },
-                "size": 1033609,
+                "wt:size": 1033609,
             },
             {
                 "uri": "https://www.gw-openscience.org/s/events/GW170104/L-L1_LOSC_4_V1-1167559920-32.hdf5",
                 "bundledAs": {
-                    "folder": "../data/GW170104/",
+                    "folder": "./data/GW170104/",
                     "filename": "L-L1_LOSC_4_V1-1167559920-32.hdf5",
                 },
-                "size": 1005007,
+                "wt:size": 1005007,
             },
-            {"uri": "../LICENSE", "schema:license": "CC-BY-4.0"},
+            {"uri": "./LICENSE", "schema:license": "CC-BY-4.0"},
         ]
         from operator import itemgetter
 
@@ -414,35 +415,35 @@ class ManifestTestCase(base.TestCase):
         for i, aggregate in enumerate(
             sorted(manifest_doc.manifest["aggregates"], key=itemgetter("uri"))
         ):
-            if "schema:identifier" in aggregate:
-                aggregate.pop("schema:identifier")
+            if "wt:identifier" in aggregate:
+                aggregate.pop("wt:identifier")
             self.assertDictEqual(aggregate, reference_aggregates[i])
 
         # Check the datasets
         reference_datasets = [
             {
                 "@id": "doi:10.18126/M2662X",
-                "@type": "Dataset",
-                "name": "A Machine Learning Approach for  Engineering Bulk Metallic Glass Alloys",
-                "identifier": "doi:10.18126/M2662X",
+                "@type": "schema:Dataset",
+                "schema:name": "A Machine Learning Approach for  Engineering Bulk Metallic Glass Alloys",
+                "schema:identifier": "doi:10.18126/M2662X",
             },
             {
                 "@id": "doi:10.18126/M2301J",
-                "@type": "Dataset",
-                "name": "Twin-mediated Crystal Growth: an Enigma Resolved",
-                "identifier": "doi:10.18126/M2301J",
+                "@type": "schema:Dataset",
+                "schema:name": "Twin-mediated Crystal Growth: an Enigma Resolved",
+                "schema:identifier": "doi:10.18126/M2301J",
             },
             {
                 "@id": "doi:10.5065/D6862DM8",
-                "@type": "Dataset",
-                "name": "Humans and Hydrology at High Latitudes: Water Use Information",
-                "identifier": "doi:10.5065/D6862DM8",
+                "@type": "schema:Dataset",
+                "schema:name": "Humans and Hydrology at High Latitudes: Water Use Information",
+                "schema:identifier": "doi:10.5065/D6862DM8",
             },
         ]
 
         reference_datasets = sorted(reference_datasets, key=itemgetter("@id"))
         for i, dataset in enumerate(
-            sorted(manifest_doc.manifest["Datasets"], key=itemgetter("@id"))
+            sorted(manifest_doc.manifest["wt:usesDataset"], key=itemgetter("@id"))
         ):
             self.assertDictEqual(dataset, reference_datasets[i])
 
@@ -501,7 +502,7 @@ class ManifestTestCase(base.TestCase):
         from server.lib.manifest_parser import ManifestParser
         from server.lib.manifest import Manifest
         manifest = Manifest(self.tale, self.user).manifest
-        dataset = ManifestParser.get_dataset_from_manifest(manifest)
+        dataset = ManifestParser(manifest).get_dataset()
         self.assertEqual(
             [_["itemId"] for _ in dataset],
             [str(_["itemId"]) for _ in self.tale["dataSet"]]
@@ -514,7 +515,7 @@ class ManifestTestCase(base.TestCase):
                 obj.pop("schema:identifier")
             aggregates.append(obj)
         manifest["aggregates"] = aggregates
-        dataset = ManifestParser.get_dataset_from_manifest(manifest)
+        dataset = ManifestParser(manifest).get_dataset()
         self.assertEqual(
             [_["itemId"] for _ in dataset],
             [str(_["itemId"]) for _ in self.tale["dataSet"]]
