@@ -418,9 +418,9 @@ class Tale(Resource):
 
         if not versionId:
             vroot = Folder().load(tale["versionsRootId"], user=user, level=AccessType.READ)
-            last_version = Folder().childFolders(vroot,"folder", user = user,
-                                             limit = 1
-                                             ,sort = [("created", pymongo.DESCENDING)])
+            last_version = Folder().childFolders(vroot, "folder", user=user,
+                                                 limit=1,
+                                                 sort=[("created", pymongo.DESCENDING)])
             versionId = next(last_version, {"_id": None})["_id"]
 
         if taleFormat == 'bagit':
@@ -436,7 +436,8 @@ class Tale(Resource):
     @autoDescribeRoute(
         Description('Generate the Tale manifest')
         .modelParam('id', model='tale', plugin='wholetale', level=AccessType.READ)
-        .param('versionId', 'The specific Tale version that the manifest describes')
+        .param('versionId', 'The specific Tale version that the manifest describes',
+               required=False)
         .param('expandFolders', "If True, folders in Tale's dataSet are recursively "
                "expanded to items in the 'aggregates' section",
                required=False, dataType='boolean', default=True)
@@ -447,11 +448,12 @@ class Tale(Resource):
         Creates a manifest document and returns the contents.
         :param tale: The Tale whose information is being used
         :param versionId: The version of the Tale that the manifest describes
+        :param expandFolders: When set to true, the items in a dataset will have individual records
         :return: A JSON structure representing the Tale
         """
 
         user = self.getCurrentUser()
-        manifest_doc = Manifest(tale, user, versionId, expand_folders=expandFolders)
+        manifest_doc = Manifest(tale, user, expand_folders=expandFolders, version_id=versionId)
         return manifest_doc.manifest
 
     @access.user
@@ -560,8 +562,13 @@ class Tale(Resource):
             "Example: 'https://dev.nceas.ucsb.edu/knb/d1/mn', 'sandbox.zenodo.org'",
             required=True,
         )
+        .param(
+            "versionId",
+            description="The identifier of the version being published",
+            required=False,
+        )
     )
-    def publishTale(self, tale, repository):
+    def publishTale(self, tale, repository, versionId=None):
         user = self.getCurrentUser()
         publishers = {
             entry["repository"]: entry["auth_provider"]
@@ -588,11 +595,18 @@ class Tale(Resource):
 
         girder_token = Token().createToken(user=user, days=0.5)
 
+        if not versionId:
+            vroot = Folder().load(tale["versionsRootId"], user=user, level=AccessType.READ)
+            last_version = Folder().childFolders(vroot, "folder", user=user,
+                                                 limit=1,
+                                                 sort=[("created", pymongo.DESCENDING)])
+            versionId = next(last_version, {"_id": None})["_id"]
         publishTask = publish.delay(
             str(tale["_id"]),
             token,
             repository=repository,
             girder_client_token=str(girder_token["_id"]),
+            version_id=versionId
         )
         return publishTask.job
 

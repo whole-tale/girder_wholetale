@@ -68,7 +68,7 @@ class TaleExporter:
         self.user = user
         self.version = Folder().load(
             versionId, user=user, level=AccessType.READ)
-        self.manifest_obj = Manifest(tale, user, versionId, expand_folders, is_export=is_export)
+        self.manifest_obj = Manifest(tale, user, expand_folders, is_export=is_export, version_id=versionId)
         self.manifest = self.manifest_obj.manifest
         self.zip_generator = ziputil.ZipGenerator(str(self.manifest_obj.version["_id"]))
         self.tale_license = WholeTaleLicense().license_from_spdx(
@@ -86,7 +86,7 @@ class TaleExporter:
            fullpath - absolute path to a file
            relpath - path to a file relative to workspace root
         """
-        workspace_rootpath = str(Path(self.version["fsPath"])) + "/workspace/"
+        workspace_rootpath = str(self.version["fsPath"] + "/workspace/")
         for curdir, _, files in os.walk(workspace_rootpath):
             for fname in files:
                 fullpath = os.path.join(curdir, fname)

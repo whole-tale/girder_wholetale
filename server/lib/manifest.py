@@ -15,6 +15,7 @@ from .license import WholeTaleLicense
 from . import IMPORT_PROVIDERS
 from .manifest_parser import ManifestParser
 
+
 class Manifest:
     """
     Class that represents the manifest file.
@@ -24,21 +25,29 @@ class Manifest:
     create<someProperty>
     """
 
-    def __init__(self, tale, user, version_id, expand_folders=True, is_export=False):
+    def __init__(self, tale, user, expand_folders=True, is_export=False, version_id=None):
         """
         Initialize the manifest document with base variables
         :param tale: The Tale whose data is being serialized
         :param user: The user requesting the manifest document
-        :param versionId: The Girder ID of the version
         :param expand_folders: If True, when encountering a folder
             in the external data, return all child items recursively.
+        :param is_export: Boolean that signals the manifest is being written/read
+        :param versionId: The Girder ID of the version
         """
         self.tale = tale
         self.user = user
         self.is_export = is_export
-        self.version = Folder().load(
-                version_id, user=self.user, level=AccessType.READ, exc=True
-            )
+
+        if version_id:
+            version = Folder().load(
+                version_id, user=self.user, level=AccessType.READ, exc=True)
+            version["_modelType"] = "folder"
+        else:
+            version = tale
+            version["_modelType"] = "tale"
+            version["name"] = tale["title"]
+        self.version = version
         self.expand_folders = expand_folders
 
         self.validate()
@@ -249,12 +258,25 @@ class Manifest:
         """
         Creates and adds file records to the internal manifest object for an entire Tale.
         """
-        # Handle the files in the workspace
-        workspace_rootpath = str(Path(self.version["fsPath"])) + "/workspace/"
-        for curdir, _, files in os.walk(workspace_rootpath):
-            for fname in files:
-                wfile = os.path.join(curdir, fname).replace(workspace_rootpath, "")
-                self.manifest['aggregates'].append({'uri': './workspace/' + wfile})
+
+        is_version = bool(self.version["_modelType"] == "folder")
+        if is_version:
+            workspace = self.version
+        else:
+            workspace = Folder().load(self.tale["workspaceId"], user=self.user, level=AccessType.READ)
+        if workspace and "fsPath" in workspace:
+
+            workspace_rootpath = workspace["fsPath"]
+            if not workspace_rootpath.endswith("/"):
+                workspace_rootpath += "/"
+            # If it's a version, then we're currently in the root folder, add 'workspace'
+            if is_version:
+                workspace_rootpath += "workspace/"
+
+            for curdir, _, files in os.walk(workspace_rootpath):
+                for fname in files:
+                    wfile = os.path.join(curdir, fname).replace(workspace_rootpath, "")
+                    self.manifest['aggregates'].append({'uri': './workspace/' + wfile})
 
         """
         Handle objects that are in the dataSet, ie files that point to external sources.
@@ -320,7 +342,7 @@ class Manifest:
                 objects from external_objects
 
         """
-        if dataSet is None and self.version is None and self.is_export is True:
+        if dataSet is None and self.version is None and self.is_export:
             version_path = Path(self.version["fsPath"])
             with open((version_path / "manifest.json").as_posix(), "r") as fp:
                 manifest = json.load(fp)
@@ -431,7 +453,8 @@ class Manifest:
         user = self.userModel.load(self.version["creatorId"], force=True)
         self.manifest["dct:hasVersion"] = {
             "@id": (
-                f"https://data.wholetale.org/api/v1/folder/{self.version['_id']}"
+                "https://data.wholetale.org/api/v1/"
+                f"{self.version['_modelType']}/{self.version['_id']}"
             ),
             "@type": "wt:TaleVersion",
             "schema:name": self.version["name"],

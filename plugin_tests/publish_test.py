@@ -131,7 +131,7 @@ class PublishTestCase(base.TestCase):
                 path="/tale/{_id}/publish".format(**self.tale),
                 method="PUT",
                 user=self.user,
-                params={"repository": remoteMemberNode},
+                params={"repository": remoteMemberNode, "versionId": "1234"},
             )
             self.assertStatusOk(resp)
 
@@ -154,7 +154,7 @@ class PublishTestCase(base.TestCase):
                 path="/tale/{_id}/publish".format(**self.tale),
                 method="PUT",
                 user=self.user,
-                params={"repository": repository},
+                params={"repository": repository, "versionId": "1234"},
             )
             self.assertStatus(resp, 400)
             self.assertEqual(
