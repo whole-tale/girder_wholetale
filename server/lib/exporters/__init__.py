@@ -1,6 +1,8 @@
 from hashlib import sha256, md5
 import magic
 import os
+from pathlib import Path
+
 from girder.utility import hash_state, ziputil
 from girder.constants import AccessType
 from girder.models.folder import Folder
@@ -59,15 +61,14 @@ class TaleExporter:
        README.md: This file"""
     default_bagit = "BagIt-Version: 0.97\nTag-File-Character-Encoding: UTF-8\n"
 
-    def __init__(self, tale, user, algs=None, expand_folders=False, versionId=None):
+    def __init__(self, tale, user, versionId, algs=None, expand_folders=False):
         if algs is None:
             self.algs = ["md5", "sha256"]
         self.tale = tale
         self.user = user
-        self.workspace = Folder().load(
-            tale['workspaceId'], user=user, level=AccessType.READ
-        )
-        self.manifest_obj = Manifest(tale, user, expand_folders, versionId=versionId)
+        self.version = Folder().load(
+            versionId, user=user, level=AccessType.READ)
+        self.manifest_obj = Manifest(tale, user, versionId, expand_folders)
         self.manifest = self.manifest_obj.manifest
         self.zip_generator = ziputil.ZipGenerator(str(self.manifest_obj.version["_id"]))
         self.tale_license = WholeTaleLicense().license_from_spdx(
@@ -79,17 +80,13 @@ class TaleExporter:
 
     def list_workspace(self):
         """
-        List contents of the workspace directory.
+        List contents of the version's workspace directory.
 
         Returns a tuple for each file:
            fullpath - absolute path to a file
            relpath - path to a file relative to workspace root
         """
-
-        workspace_rootpath = self.workspace["fsPath"]
-        if not workspace_rootpath.endswith("/"):
-            workspace_rootpath += "/"
-
+        workspace_rootpath = str(Path(self.version["fsPath"])) + "/workspace/"
         for curdir, _, files in os.walk(workspace_rootpath):
             for fname in files:
                 fullpath = os.path.join(curdir, fname)

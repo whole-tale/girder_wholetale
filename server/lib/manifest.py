@@ -1,5 +1,6 @@
 import json
 import os
+from pathlib import Path
 from urllib.parse import quote
 
 from girder import logger
@@ -23,26 +24,20 @@ class Manifest:
     create<someProperty>
     """
 
-    def __init__(self, tale, user, expand_folders=True, versionId=None):
+    def __init__(self, tale, user, versionId, expand_folders=True):
         """
         Initialize the manifest document with base variables
         :param tale: The Tale whose data is being serialized
         :param user: The user requesting the manifest document
+        :param versionId: The Girder ID of the version
         :param expand_folders: If True, when encountering a folder
             in the external data, return all child items recursively.
         """
         self.tale = tale
         self.user = user
-        if versionId is not None:
-            version = Folder().load(
+        self.version = Folder().load(
                 versionId, user=self.user, level=AccessType.READ, exc=True
             )
-            version = Folder().filter(version, user)  # to get _modelType
-        else:
-            version = tale
-            version["_modelType"] = "tale"
-            version["name"] = tale["title"]
-        self.version = version
         self.expand_folders = expand_folders
 
         self.validate()
@@ -253,20 +248,12 @@ class Manifest:
         """
         Creates and adds file records to the internal manifest object for an entire Tale.
         """
-
         # Handle the files in the workspace
-        workspace = Folder().load(
-            self.tale["workspaceId"], user=self.user, level=AccessType.READ
-        )
-        if workspace and "fsPath" in workspace:
-            workspace_rootpath = workspace["fsPath"]
-            if not workspace_rootpath.endswith("/"):
-                workspace_rootpath += "/"
-
-            for curdir, _, files in os.walk(workspace_rootpath):
-                for fname in files:
-                    wfile = os.path.join(curdir, fname).replace(workspace_rootpath, "")
-                    self.manifest['aggregates'].append({'uri': './workspace/' + wfile})
+        workspace_rootpath = str(Path(self.version["fsPath"])) + "/workspace/"
+        for curdir, _, files in os.walk(workspace_rootpath):
+            for fname in files:
+                wfile = os.path.join(curdir, fname).replace(workspace_rootpath, "")
+                self.manifest['aggregates'].append({'uri': './workspace/' + wfile})
 
         """
         Handle objects that are in the dataSet, ie files that point to external sources.
@@ -436,8 +423,7 @@ class Manifest:
         user = self.userModel.load(self.version["creatorId"], force=True)
         self.manifest["dct:hasVersion"] = {
             "@id": (
-                "https://data.wholetale.org/api/v1/"
-                f"{self.version['_modelType']}/{self.version['_id']}"
+                f"https://data.wholetale.org/api/v1/folder/{self.version['_id']}"
             ),
             "@type": "wt:TaleVersion",
             "schema:name": self.version["name"],

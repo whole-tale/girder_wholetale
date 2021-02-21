@@ -3,6 +3,7 @@
 import cherrypy
 import json
 import pathlib
+import pymongo
 import shutil
 import textwrap
 from urllib.parse import urlparse
@@ -414,36 +415,43 @@ class Tale(Resource):
     )
     def exportTale(self, tale, taleFormat, versionId):
         user = self.getCurrentUser()
-        zip_name = str(versionId or tale['_id'])
+
+        if not versionId:
+            vroot = Folder().load(tale["versionsRootId"], user=user, level=AccessType.READ)
+            last_version = Folder().childFolders(vroot,"folder", user = user,
+                                             limit = 1
+                                             ,sort = [("created", pymongo.DESCENDING)])
+            versionId = next(last_version, {"_id": None})["_id"]
 
         if taleFormat == 'bagit':
-            exporter = BagTaleExporter(tale, user, expand_folders=True, versionId=versionId)
+            exporter = BagTaleExporter(tale, user, versionId, expand_folders=True)
         elif taleFormat == 'native':
             exporter = NativeTaleExporter(tale, user, versionId=versionId)
 
         setResponseHeader('Content-Type', 'application/zip')
-        setContentDisposition(zip_name + '.zip')
+        setContentDisposition(f"{versionId}.zip")
         return exporter.stream
 
     @access.public
     @autoDescribeRoute(
         Description('Generate the Tale manifest')
         .modelParam('id', model='tale', plugin='wholetale', level=AccessType.READ)
+        .param('versionId', 'The specific Tale version that the manifest describes')
         .param('expandFolders', "If True, folders in Tale's dataSet are recursively "
                "expanded to items in the 'aggregates' section",
                required=False, dataType='boolean', default=True)
         .errorResponse('ID was invalid.')
     )
-    def generateManifest(self, tale, expandFolders):
+    def generateManifest(self, tale, versionId, expandFolders):
         """
         Creates a manifest document and returns the contents.
         :param tale: The Tale whose information is being used
-        :param itemIds: An optional list of items to include in the manifest
+        :param versionId: The version of the Tale that the manifest describes
         :return: A JSON structure representing the Tale
         """
 
         user = self.getCurrentUser()
-        manifest_doc = Manifest(tale, user, expand_folders=expandFolders)
+        manifest_doc = Manifest(tale, user, versionId, expand_folders=expandFolders)
         return manifest_doc.manifest
 
     @access.user
