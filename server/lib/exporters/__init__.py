@@ -61,14 +61,14 @@ class TaleExporter:
        README.md: This file"""
     default_bagit = "BagIt-Version: 0.97\nTag-File-Character-Encoding: UTF-8\n"
 
-    def __init__(self, tale, user, versionId, algs=None, expand_folders=False):
+    def __init__(self, tale, user, versionId, algs=None, expand_folders=False, is_export=False):
         if algs is None:
             self.algs = ["md5", "sha256"]
         self.tale = tale
         self.user = user
         self.version = Folder().load(
             versionId, user=user, level=AccessType.READ)
-        self.manifest_obj = Manifest(tale, user, versionId, expand_folders)
+        self.manifest_obj = Manifest(tale, user, versionId, expand_folders, is_export=is_export)
         self.manifest = self.manifest_obj.manifest
         self.zip_generator = ziputil.ZipGenerator(str(self.manifest_obj.version["_id"]))
         self.tale_license = WholeTaleLicense().license_from_spdx(

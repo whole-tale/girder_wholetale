@@ -13,7 +13,7 @@ from gwvolman.constants import REPO2DOCKER_VERSION
 
 from .license import WholeTaleLicense
 from . import IMPORT_PROVIDERS
-
+from .manifest_parser import ManifestParser
 
 class Manifest:
     """
@@ -24,7 +24,7 @@ class Manifest:
     create<someProperty>
     """
 
-    def __init__(self, tale, user, versionId, expand_folders=True):
+    def __init__(self, tale, user, version_id, expand_folders=True, is_export=False):
         """
         Initialize the manifest document with base variables
         :param tale: The Tale whose data is being serialized
@@ -35,8 +35,9 @@ class Manifest:
         """
         self.tale = tale
         self.user = user
+        self.is_export = is_export
         self.version = Folder().load(
-                versionId, user=self.user, level=AccessType.READ, exc=True
+                version_id, user=self.user, level=AccessType.READ, exc=True
             )
         self.expand_folders = expand_folders
 
@@ -319,6 +320,13 @@ class Manifest:
                 objects from external_objects
 
         """
+        if dataSet is None and self.version is None and self.is_export is True:
+            version_path = Path(self.version["fsPath"])
+            with open((version_path / "manifest.json").as_posix(), "r") as fp:
+                manifest = json.load(fp)
+                parser = ManifestParser(manifest)
+                dataSet = parser.get_dataset()
+
         if dataSet is None:
             dataSet = self.tale['dataSet']
 

@@ -424,7 +424,7 @@ class Tale(Resource):
             versionId = next(last_version, {"_id": None})["_id"]
 
         if taleFormat == 'bagit':
-            exporter = BagTaleExporter(tale, user, versionId, expand_folders=True)
+            exporter = BagTaleExporter(tale, user, versionId, expand_folders=True, is_export=True)
         elif taleFormat == 'native':
             exporter = NativeTaleExporter(tale, user, versionId=versionId)
 
