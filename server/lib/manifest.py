@@ -342,7 +342,7 @@ class Manifest:
                 objects from external_objects
 
         """
-        if dataSet is None and self.version is None and self.is_export:
+        if dataSet is None and self.is_export:
             version_path = Path(self.version["fsPath"])
             with open((version_path / "manifest.json").as_posix(), "r") as fp:
                 manifest = json.load(fp)
