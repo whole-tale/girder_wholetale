@@ -17,15 +17,16 @@ def autologin(args=None):
     raise cherrypy.HTTPRedirect(oauth_providers["Globus"])  # TODO: hardcoded var
 
 
-def redirect_if_tale_exists(user, token, doi):
+def redirect_if_tale_exists(token, doi):
+
+    # Check to see if the incoming request is for a Tale that has been published
     existing_tale_id = Tale().findOne(
         query={
-            "creatorId": user["_id"],
-            "relatedIdentifiers.identifier": {"$eq": doi},
-            "relatedIdentifiers.relation": {"$in": ["IsDerivedFrom", "Cites"]},
+            "publishInfo.pid": {"$eq": doi},
         },
         fields={"_id"},
     )
+
     if existing_tale_id:
         # TODO: Make base url a plugin setting, defaulting to dashboard.<domain>
         dashboard_url = os.environ.get(

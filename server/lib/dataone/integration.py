@@ -53,7 +53,7 @@ def dataoneDataImport(self, uri, title, environment, api, apiToken, force):
     data_map = DataOneImportProvider().lookup(entity)
     doi = data_map.doi or data_map.dataId
     if not force:
-        redirect_if_tale_exists(user, self.getCurrentToken(), doi)
+        redirect_if_tale_exists(self.getCurrentToken(), doi)
 
     query = dict()
     query['uri'] = uri

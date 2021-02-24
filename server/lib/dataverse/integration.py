@@ -147,7 +147,7 @@ def dataverseExternalTools(
         title, _, doi = DataverseImportProvider._parse_dataset(urlparse(url))
 
     if not force:
-        redirect_if_tale_exists(user, self.getCurrentToken(), doi)
+        redirect_if_tale_exists(self.getCurrentToken(), doi)
 
     if fullDataset and (fileId or filePid):
         url = _dataset_full_url(site, doi)
