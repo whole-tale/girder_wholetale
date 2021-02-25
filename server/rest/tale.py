@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import cherrypy
 import json
+import os
 import pathlib
 import shutil
 import textwrap
@@ -414,15 +415,35 @@ class Tale(Resource):
     )
     def exportTale(self, tale, taleFormat, versionId):
         user = self.getCurrentUser()
-        zip_name = str(versionId or tale['_id'])
+        if not versionId:
+            version_root = Folder().load(tale["versionsRootId"], user=user, level=AccessType.READ)
+            version = next(
+                Folder().childFolders(
+                    version_root,
+                    "folder",
+                    user=user,
+                    limit=1,
+                    offset=0,
+                    sort=[("updated", SortDir.DESCENDING)],
+                )
+            )
+        else:
+            version = Folder().load(versionId, user=user, level=AccessType.READ)
+
+        workspace_path = os.path.join(version["fsPath"], "workspace")
+        with open(os.path.join(version["fsPath"], "manifest.json"), "r") as fp:
+            manifest = json.load(fp)
+        with open(os.path.join(version["fsPath"], "environment.json"), "r") as fp:
+            environment = json.load(fp)
 
         if taleFormat == 'bagit':
-            exporter = BagTaleExporter(tale, user, expand_folders=True, versionId=versionId)
+            export_func = BagTaleExporter
         elif taleFormat == 'native':
-            exporter = NativeTaleExporter(tale, user, versionId=versionId)
+            export_func = NativeTaleExporter
 
+        exporter = export_func(manifest, environment, workspace_path)
         setResponseHeader('Content-Type', 'application/zip')
-        setContentDisposition(zip_name + '.zip')
+        setContentDisposition(f"{version['_id']}.zip")
         return exporter.stream
 
     @access.public

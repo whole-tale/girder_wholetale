@@ -1,6 +1,5 @@
 from datetime import datetime, timezone
 from hashlib import sha256, md5
-import json
 import os
 from urllib.parse import unquote
 from . import TaleExporter
@@ -73,7 +72,7 @@ Access on http://localhost:{port}/{urlPath}
 class BagTaleExporter(TaleExporter):
     def stream(self):
         token = 'wholetale'
-        container_config = json.loads(self.manifest_obj.dump_environment())["config"]
+        container_config = self.environment["config"]
         rendered_command = container_config.get('command', '').format(
             base_path='', port=container_config['port'], ip='0.0.0.0', token=token
         )
@@ -82,13 +81,13 @@ class BagTaleExporter(TaleExporter):
             repo2docker=container_config.get('repo2docker_version', REPO2DOCKER_VERSION),
             user=container_config['user'],
             port=container_config['port'],
-            taleId=self.tale['_id'],
+            taleId=self.manifest["wt:identifier"],
             command=rendered_command,
             urlPath=urlPath,
         )
         top_readme = readme_tpl.format(
-            title=self.tale['title'],
-            description=self.tale['description'],
+            title=self.manifest["schema:name"],
+            description=self.manifest["schema:description"],
             port=container_config['port'],
             urlPath=urlPath,
         )
@@ -154,8 +153,8 @@ class BagTaleExporter(TaleExporter):
             (lambda: fetch_file, 'fetch.txt'),
             (lambda: dump_checksums('md5'), 'manifest-md5.txt'),
             (lambda: dump_checksums('sha256'), 'manifest-sha256.txt'),
-            (lambda: self.manifest_obj.dump_environment(indent=4), 'metadata/environment.json'),
-            (lambda: self.manifest_obj.dump_manifest(indent=4), 'metadata/manifest.json'),
+            (lambda: self.formated_dump(self.environment, indent=4), 'metadata/environment.json'),
+            (lambda: self.formated_dump(self.manifest, indent=4), 'metadata/manifest.json'),
         ):
             tagmanifest['md5'] += "{} {}\n".format(
                 md5(payload().encode()).hexdigest(), fname

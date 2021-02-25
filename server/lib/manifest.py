@@ -460,13 +460,16 @@ class Manifest:
             **kwargs
         )
 
-    def dump_environment(self, **kwargs):
+    def get_environment(self):
         image = self.imageModel.load(
             self.tale["imageId"], user=self.user, level=AccessType.READ
         )
         image["taleConfig"] = self.tale.get("config", {})
+        return self.imageModel.filter(image, self.user)
+
+    def dump_environment(self, **kwargs):
         return json.dumps(
-            self.imageModel.filter(image, self.user),
+            self.get_environment(),
             cls=JsonEncoder,
             sort_keys=True,
             allow_nan=False,
