@@ -1,6 +1,7 @@
 import bagit
 from bdbag import bdbag_api as bdb
 from bson import ObjectId
+from datetime import datetime
 import httmock
 import json
 import mock
@@ -15,7 +16,7 @@ import zipfile
 import shutil
 from tests import base
 
-from .tests_helpers import mockOtherRequest
+from .tests_helpers import mockOtherRequest, get_events
 from girder.models.item import Item
 from girder.exceptions import ValidationException
 from girder.models.folder import Folder
@@ -724,6 +725,137 @@ class TaleTestCase(base.TestCase):
 
             # tale = Tale().load(tale['_id'], force=True)
             # self.assertEqual(tale['imageInfo']['status'], ImageStatus.INVALID)
+
+    def testTaleNotifications(self):
+        since = datetime.now().isoformat()
+        with httmock.HTTMock(mockOtherRequest):
+            # Create a new tale from a user image
+            resp = self.request(
+                path='/tale', method='POST', user=self.user,
+                type='application/json',
+                body=json.dumps(
+                    {
+                        'imageId': str(self.image['_id']),
+                        'dataSet': [],
+                        'public': True
+                    })
+            )
+            self.assertStatusOk(resp)
+            tale = resp.json
+
+        # Confirm events
+        events = get_events(self, since)
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0]['data']['event'], 'wt_tale_created')
+        self.assertEqual(events[0]['data']['resource'], tale['_id'])
+
+        from girder.constants import AccessType
+        # Update the access control list for the tale by adding the admin
+        # as a second user and confirm notification
+        input_tale_access_with_admin = {
+            "users": [
+                {
+                    "login": self.user['login'],
+                    "level": AccessType.ADMIN,
+                    "id": str(self.user['_id']),
+                    "flags": [],
+                    "name": "%s %s" % (self.user['firstName'], self.user['lastName'])
+                },
+                {
+                    'login': self.admin['login'],
+                    'level': AccessType.ADMIN,
+                    'id': str(self.admin['_id']),
+                    'flags': [],
+                    'name': '%s %s' % (self.admin['firstName'], self.admin['lastName'])
+                }],
+            "groups": []}
+        since = datetime.now().isoformat()
+
+        resp = self.request(
+            path='/tale/%s/access' % tale['_id'], method='PUT',
+            user=self.user, params={'access': json.dumps(input_tale_access_with_admin)})
+        self.assertStatusOk(resp)
+
+        # Confirm notification
+        events = get_events(self, since, user=self.admin)
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0]['data']['event'], 'wt_tale_shared')
+        self.assertEqual(events[0]['data']['resource'], tale['_id'])
+
+        # Update tale, confirm notifications
+        since = datetime.now().isoformat()
+        resp = self.request(
+            path='/tale/{}'.format(str(tale['_id'])),
+            method='PUT',
+            user=self.user,
+            type='application/json',
+            body=json.dumps({
+                'imageId': str(self.image['_id']),
+                'dataSet': [],
+                'public': True,
+                'title': 'Revised title'
+            })
+        )
+        self.assertStatus(resp, 200)
+
+        # Confirm notifications
+        events = get_events(self, since, user=self.user)
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0]['data']['event'], 'wt_tale_updated')
+        self.assertEqual(events[0]['data']['resource'], tale['_id'])
+
+        events = get_events(self, since, user=self.admin)
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0]['data']['event'], 'wt_tale_updated')
+        self.assertEqual(events[0]['data']['resource'], tale['_id'])
+
+        # Remove admin and confirm notification
+        input_tale_access = {
+            "users": [
+                {
+                    "login": self.user['login'],
+                    "level": AccessType.ADMIN,
+                    "id": str(self.user['_id']),
+                    "flags": [],
+                    "name": "%s %s" % (self.user['firstName'], self.user['lastName'])
+                }],
+            "groups": []}
+        since = datetime.now().isoformat()
+
+        resp = self.request(
+            path='/tale/%s/access' % tale['_id'], method='PUT',
+            user=self.user, params={'access': json.dumps(input_tale_access)})
+        self.assertStatusOk(resp)
+
+        # Confirm notification
+        events = get_events(self, since, user=self.admin)
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0]['data']['event'], 'wt_tale_unshared')
+        self.assertEqual(events[0]['data']['resource'], tale['_id'])
+
+        # Re-add admin user to test delete notification
+        resp = self.request(
+            path='/tale/%s/access' % tale['_id'], method='PUT',
+            user=self.user, params={'access': json.dumps(input_tale_access_with_admin)})
+        self.assertStatusOk(resp)
+
+        # Delete tale, test notification
+        since = datetime.now().isoformat()
+        resp = self.request(
+            path='/tale/{_id}'.format(**tale), method='DELETE',
+            user=self.admin)
+        self.assertStatusOk(resp)
+
+        # Confirm notification
+        events = get_events(self, since, user=self.user)
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0]['data']['event'], 'wt_tale_removed')
+        self.assertEqual(events[0]['data']['resource'], tale['_id'])
+
+        events = get_events(self, since, user=self.admin)
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0]['data']['event'], 'wt_tale_removed')
+        self.assertEqual(events[0]['data']['resource'], tale['_id'])
 
     def tearDown(self):
         self.model('user').remove(self.user)

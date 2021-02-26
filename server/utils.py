@@ -65,8 +65,6 @@ def notify_event(users, event, modelType, objid):
 
     for user_id in users:
         user = User().load(user_id, force=True)
-        # Why doesn't logger work for me?
-        print("NOTIFYING %s %s" % (user_id, str(data)))
         Notification().createNotification(
             type="wt_event", data=data, user=user, expires=expires)
 
