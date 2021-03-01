@@ -57,7 +57,7 @@ def notify_event(users, event, modelType, objid):
     data = {
         'event': event,
         'modelType': modelType,
-        'resource': objid,
+        'resourceId': objid,
         'resourceName': 'WT event'
     }
 
