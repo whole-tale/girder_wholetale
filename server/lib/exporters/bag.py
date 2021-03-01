@@ -128,7 +128,7 @@ class BagTaleExporter(TaleExporter):
                 continue
             folder = unquote(bundle['bundledAs']['folder'])
             fetch_file += f"{bundle['uri']} {bundle['wt:size']} {folder}"
-            fetch_file += unquote(bundle['bundledAs'].get('wt:filename', ''))
+            fetch_file += unquote(bundle['bundledAs'].get('filename', ''))
             fetch_file += '\n'
 
         now = datetime.now(timezone.utc)
