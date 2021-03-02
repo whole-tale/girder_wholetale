@@ -135,7 +135,7 @@ class Instance(AccessControlledModel):
         ).apply_async()
         instanceTask.get(timeout=TASK_TIMEOUT)
 
-        notify_event([user["_id"]], "wt_instance_deleting", "instance",
+        notify_event([instance["creatorId"]], "wt_instance_deleting", "instance",
                      instance['_id'])
 
         try:
@@ -153,7 +153,7 @@ class Instance(AccessControlledModel):
         # TODO: handle error
         self.remove(instance)
 
-        notify_event([user["_id"]], "wt_instance_deleted", "instance",
+        notify_event([instance["creatorId"]], "wt_instance_deleted", "instance",
                      instance['_id'])
 
     def createInstance(self, tale, user, name=None, save=True, spawn=True):
@@ -226,7 +226,7 @@ class Instance(AccessControlledModel):
 
             (buildTask | volumeTask | serviceTask).apply_async()
 
-            notify_event([tale["creatorId"]], "wt_instance_launching", "instance",
+            notify_event([instance["creatorId"]], "wt_instance_launching", "instance",
                          instance['_id'])
         return instance
 
@@ -314,7 +314,7 @@ def finalizeInstance(event):
             and instance["status"] != InstanceStatus.ERROR  # noqa
         ):
             instance['status'] = InstanceStatus.ERROR
-            notify_event([tale["creatorId"]], "wt_instance_error", "instance",
+            notify_event([instance["creatorId"]], "wt_instance_error", "instance",
                          instance['_id'])
         elif (
             status in (JobStatus.QUEUED, JobStatus.RUNNING)
