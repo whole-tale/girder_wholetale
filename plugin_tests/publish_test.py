@@ -1,4 +1,3 @@
-from bson import ObjectId
 import json
 import mock
 from tests import base
@@ -8,6 +7,8 @@ from girder.models.user import User
 
 def setUpModule():
     base.enabledPlugins.append("wholetale")
+    base.enabledPlugins.append("wt_home_dir")
+    base.enabledPlugins.append("wt_versioning")
     base.startServer()
 
     global JobStatus, Tale
@@ -47,9 +48,14 @@ class PublishTestCase(base.TestCase):
             },
         )
         self.admin, self.user = [User().createUser(**user) for user in users]
+        self.image = self.model("image", "wholetale").createImage(
+            name="test my name", creator=self.admin, public=True,
+            config=dict(template='base.tpl', buildpack='SomeBuildPack',
+                        user='someUser', port=8888, urlPath='')
+        )
 
         self.tale = self.model("tale", "wholetale").createTale(
-            {"_id": ObjectId()},
+            self.image,
             data=[],
             authors=self.user["firstName"] + " " + self.user["lastName"],
             creator=self.user,
@@ -139,8 +145,8 @@ class PublishTestCase(base.TestCase):
             job_args = dl.call_args_list[-1][0]
             self.assertEqual(job_args[0], str(self.tale["_id"]))
             self.assertDictEqual(job_args[1], token)
-            job_kwargs.pop("girder_client_token")
-            self.assertDictEqual(job_kwargs, {"repository": remoteMemberNode})
+            self.assertTrue(job_args[2] is not None)
+            self.assertEqual(job_kwargs["repository"], remoteMemberNode)
 
     def testPublishZenodo(self):
         with mock.patch("gwvolman.tasks.publish.apply_async"), mock.patch(
@@ -182,8 +188,8 @@ class PublishTestCase(base.TestCase):
             job_args = dl.call_args_list[-1][0]
             self.assertEqual(job_args[0], str(self.tale["_id"]))
             self.assertDictEqual(job_args[1], token)
-            job_kwargs.pop("girder_client_token")
-            self.assertDictEqual(job_kwargs, {"repository": repository})
+            self.assertTrue(job_args[2] is not None)
+            self.assertEqual(job_kwargs["repository"], repository)
 
     def tearDown(self):
         User().remove(self.user)
