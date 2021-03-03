@@ -593,8 +593,9 @@ class TaleTestCase(base.TestCase):
             f.write(b"Hello World!")
 
         resp = self.request(
-            path=f"/tale/{tale['_id']}/export", method='GET', isJson=False, user=self.user)
-        with tempfile.NamedTemporaryFile() as fp:
+            path=f"/tale/{tale['_id']}/export", method='GET', isJson=False, user=self.user
+        )
+        with tempfile.TemporaryFile() as fp:
             for content in resp.body:
                 fp.write(content)
             fp.seek(0)
@@ -602,6 +603,12 @@ class TaleTestCase(base.TestCase):
             zip_files = {
                 Path(*Path(_).parts[1:]).as_posix() for _ in zip_archive.namelist()
             }
+            manifest_path = next(
+                (_ for _ in zip_archive.namelist() if _.endswith("manifest.json"))
+            )
+            version_id = Path(manifest_path).parts[0]
+            first_manifest = json.loads(zip_archive.read(manifest_path))
+
         # Check the the manifest.json is present
         expected_files = {
             "metadata/environment.json",
@@ -611,6 +618,32 @@ class TaleTestCase(base.TestCase):
             "workspace/test_file.txt",
         }
         self.assertEqual(expected_files, zip_files)
+
+        # First export should have created a version.
+        # Let's grab it and explicitly use the versionId for 2nd dump
+        resp = self.request(
+            path="/version", method="GET", user=self.user, params={"taleId": tale["_id"]}
+        )
+        self.assertStatusOk(resp)
+        self.assertEqual(len(resp.json), 1)
+        version = resp.json[0]
+        self.assertEqual(version_id, version["_id"])
+
+        resp = self.request(
+            path=f"/tale/{tale['_id']}/export",
+            method='GET',
+            isJson=False,
+            user=self.user,
+            params={"versionId": version["_id"]},
+        )
+        self.assertStatusOk(resp)
+        with tempfile.TemporaryFile() as fp:
+            for content in resp.body:
+                fp.write(content)
+            fp.seek(0)
+            zip_archive = zipfile.ZipFile(fp, 'r')
+            second_manifest = json.loads(zip_archive.read(manifest_path))
+        self.assertEqual(first_manifest, second_manifest)
         self.model('tale', 'wholetale').remove(tale)
 
     @mock.patch('gwvolman.tasks.build_tale_image')
