@@ -6,7 +6,7 @@ class NativeTaleExporter(TaleExporter):
         extra_files = {
             'README.md': self.default_top_readme,
             'LICENSE': self.tale_license['text'],
-            'metadata/environment.json': self.manifest_obj.dump_environment(indent=4),
+            'metadata/environment.json': self.formated_dump(self.environment, indent=4),
         }
 
         # Add files from the workspace
@@ -30,7 +30,7 @@ class NativeTaleExporter(TaleExporter):
         self.append_extras_filesize_mimetypes(extra_files)
 
         for data in self.zip_generator.addFile(
-            lambda: self.manifest_obj.dump_manifest(indent=4), 'metadata/manifest.json'
+            lambda: self.formated_dump(self.manifest, indent=4), 'metadata/manifest.json'
         ):
             yield data
 

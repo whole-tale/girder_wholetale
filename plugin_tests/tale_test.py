@@ -5,6 +5,7 @@ import httmock
 import json
 import mock
 import os
+from pathlib import Path
 import pytest
 import re
 import time
@@ -50,6 +51,7 @@ def setUpModule():
     base.enabledPlugins.append('wholetale')
     base.enabledPlugins.append('wt_home_dir')
     base.enabledPlugins.append('virtual_resources')
+    base.enabledPlugins.append('wt_versioning')
     base.startServer()
 
     global JobStatus, Tale, ImageStatus
@@ -590,24 +592,58 @@ class TaleTestCase(base.TestCase):
         with open(os.path.join(workspace["fsPath"], "test_file.txt"), "wb") as f:
             f.write(b"Hello World!")
 
-        export_path = '/tale/{}/export'.format(str(tale['_id']))
         resp = self.request(
-            path=export_path, method='GET', isJson=False, user=self.user)
-        with tempfile.NamedTemporaryFile() as fp:
+            path=f"/tale/{tale['_id']}/export", method='GET', isJson=False, user=self.user
+        )
+        with tempfile.TemporaryFile() as fp:
             for content in resp.body:
                 fp.write(content)
             fp.seek(0)
             zip_archive = zipfile.ZipFile(fp, 'r')
-            zip_files = zip_archive.namelist()
+            zip_files = {
+                Path(*Path(_).parts[1:]).as_posix() for _ in zip_archive.namelist()
+            }
+            manifest_path = next(
+                (_ for _ in zip_archive.namelist() if _.endswith("manifest.json"))
+            )
+            version_id = Path(manifest_path).parts[0]
+            first_manifest = json.loads(zip_archive.read(manifest_path))
+
         # Check the the manifest.json is present
-        expected_files = [
+        expected_files = {
+            "metadata/environment.json",
             "metadata/manifest.json",
             "README.md",
             "LICENSE",
             "workspace/test_file.txt",
-        ]
-        for content_file in expected_files:
-            self.assertTrue("{}/{}".format(tale["_id"], content_file) in zip_files)
+        }
+        self.assertEqual(expected_files, zip_files)
+
+        # First export should have created a version.
+        # Let's grab it and explicitly use the versionId for 2nd dump
+        resp = self.request(
+            path="/version", method="GET", user=self.user, params={"taleId": tale["_id"]}
+        )
+        self.assertStatusOk(resp)
+        self.assertEqual(len(resp.json), 1)
+        version = resp.json[0]
+        self.assertEqual(version_id, version["_id"])
+
+        resp = self.request(
+            path=f"/tale/{tale['_id']}/export",
+            method='GET',
+            isJson=False,
+            user=self.user,
+            params={"versionId": version["_id"]},
+        )
+        self.assertStatusOk(resp)
+        with tempfile.TemporaryFile() as fp:
+            for content in resp.body:
+                fp.write(content)
+            fp.seek(0)
+            zip_archive = zipfile.ZipFile(fp, 'r')
+            second_manifest = json.loads(zip_archive.read(manifest_path))
+        self.assertEqual(first_manifest, second_manifest)
         self.model('tale', 'wholetale').remove(tale)
 
     @mock.patch('gwvolman.tasks.build_tale_image')
@@ -654,7 +690,7 @@ class TaleTestCase(base.TestCase):
             gca().send_task.return_value = FakeAsyncResult(tale['_id'])
 
             jobModel.scheduleJob(job)
-            for i in range(20):
+            for _ in range(20):
                 job = jobModel.load(job['_id'], force=True)
                 if job['status'] == JobStatus.QUEUED:
                     break
@@ -879,7 +915,7 @@ class TaleWithWorkspaceTestCase(base.TestCase):
 
         copied_file_path = re.sub(workspace['name'], new_tale['_id'], fullPath)
         job = Job().findOne({'type': 'wholetale.copy_workspace'})
-        for i in range(10):
+        for _ in range(10):
             job = Job().load(job['_id'], force=True)
             if job['status'] == JobStatus.SUCCESS:
                 break
@@ -898,12 +934,11 @@ class TaleWithWorkspaceTestCase(base.TestCase):
 
     def testExportBag(self):
         tale = self._create_water_tale()
-        export_path = '/tale/{}/export'.format(str(tale['_id']))
         resp = self.request(
-            path=export_path, method='GET', params={'taleFormat': 'bagit'},
+            path=f"/tale/{tale['_id']}/export", method='GET', params={'taleFormat': 'bagit'},
             isJson=False, user=self.user)
         dirpath = tempfile.mkdtemp()
-        bag_file = os.path.join(dirpath, "{}.zip".format(str(tale['_id'])))
+        bag_file = os.path.join(dirpath, resp.headers["Content-Disposition"].split('"')[1])
         with open(bag_file, 'wb') as fp:
             for content in resp.body:
                 fp.write(content)
