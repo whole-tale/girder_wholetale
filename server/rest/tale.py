@@ -350,29 +350,34 @@ class Tale(Resource):
         .errorResponse('You are not authorized to create tales.', 403)
     )
     def createTale(self, tale, params):
-
         user = self.getCurrentUser()
-        if 'instanceId' in tale:
-            # check if instance exists
-            # save disk state to a new folder
-            # save config
-            # create a tale
-            raise RestException('Not implemented yet')
-        else:
-            image = self.model('image', 'wholetale').load(
-                tale['imageId'], user=user, level=AccessType.READ, exc=True)
-            default_author = ' '.join((user['firstName'], user['lastName']))
-            return self._model.createTale(
-                image, tale['dataSet'], creator=user, save=True,
-                title=tale.get('title'), description=tale.get('description'),
-                public=tale.get('public'), config=tale.get('config'),
-                icon=image.get('icon', DEFAULT_IMAGE_ICON),
-                illustration=tale.get('illustration', DEFAULT_ILLUSTRATION),
-                authors=tale.get('authors', default_author),
-                category=tale.get('category', 'science'),
-                licenseSPDX=tale.get('licenseSPDX'),
-                relatedIdentifiers=tale.get('relatedIdentifiers'),
+        image = self.model("image", "wholetale").load(
+            tale["imageId"], user=user, level=AccessType.READ, exc=True
+        )
+        default_authors = [
+            dict(
+                firstName=user["firstName"],
+                lastName=user["lastName"],
+                orcid="https://orcid.org/0000-0000-0000-0000"
             )
+        ]
+
+        kwargs = {
+            "title": tale.get("title"),
+            "description": tale.get("description") or "",
+            "config": tale.get("config") or {},
+            "public": tale.get("public") or False,
+            "icon": image.get("icon") or DEFAULT_IMAGE_ICON,
+            "illustration": tale.get("illustration") or DEFAULT_ILLUSTRATION,
+            "authors": tale.get("authors", []) or default_authors,
+            "category": tale.get("category") or "science",
+            "licenseSPDX": tale.get("licenseSPDX"),
+            "relatedIdentifiers": tale.get("relatedIdentifiers") or [],
+        }
+
+        return self._model.createTale(
+            image, tale["dataSet"], creator=user, save=True, **kwargs
+        )
 
     @access.user(scope=TokenScope.DATA_OWN)
     @autoDescribeRoute(
@@ -530,14 +535,16 @@ class Tale(Resource):
         user = self.getCurrentUser()
         image = self.model('image', 'wholetale').load(
             tale['imageId'], user=user, level=AccessType.READ, exc=True)
-        default_author = ' '.join((user['firstName'], user['lastName']))
+        default_authors = [
+            dict(firstName=user['firstName'], lastName=user['lastName'], orcid="")
+        ]
         new_tale = self._model.createTale(
             image, tale['dataSet'], creator=user, save=True,
             title=tale.get('title'), description=tale.get('description'),
             public=False, config=tale.get('config'),
             icon=image.get('icon', DEFAULT_IMAGE_ICON),
             illustration=tale.get('illustration', DEFAULT_ILLUSTRATION),
-            authors=tale.get('authors', default_author),
+            authors=tale.get('authors', default_authors),
             category=tale.get('category', 'science'),
             licenseSPDX=tale.get('licenseSPDX'),
             status=TaleStatus.PREPARING,
