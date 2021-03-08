@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import cherrypy
 import os
 import pathlib
 import sys
@@ -9,7 +10,9 @@ from webdavfs.webdavfs import WebDAVFS
 from fs.osfs import OSFS
 from fs.copy import copy_fs
 from girder import events
+from girder.api.rest import setCurrentUser
 from girder.constants import TokenScope
+from girder.models.folder import Folder
 from girder.models.user import User
 from girder.models.token import Token
 from girder.utility import config
@@ -105,9 +108,25 @@ def run(job):
             ) as webdav_handle:
                 copy_fs(OSFS(workdir), webdav_handle)
 
+        # Create a version
+        if "dct:hasVersion" in mp.manifest:
+            version_name = mp.manifest["dct:hasVersion"]["schema:name"]
+        else:
+            version_name = None
+        api_root = cherrypy.tree.apps["/api"]
+        version_resource = api_root.root.v1.version
+        setCurrentUser(user)
+        version = version_resource.create(
+            taleId=tale["_id"], name=version_name, params={}
+        )
+        version = Folder().load(version["_id"], force=True)  # above is filtered...
+        version["meta"] = {"publishInfo": tale["publishInfo"]}
+        version = Folder().updateFolder(version)
+
         # Tale is ready to be built
         tale = Tale().load(tale["_id"], user=user)  # Refresh state
         tale["status"] = TaleStatus.READY
+        tale["restoredFrom"] = version["_id"]
         tale = Tale().updateTale(tale)
 
         progressCurrent += 1

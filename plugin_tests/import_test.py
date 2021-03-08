@@ -47,6 +47,7 @@ def setUpModule():
     base.enabledPlugins.append("wholetale")
     base.enabledPlugins.append("wt_data_manager")
     base.enabledPlugins.append("virtual_resources")
+    base.enabledPlugins.append("wt_versioning")
     base.enabledPlugins.append("wt_home_dir")
     base.startServer(mock=False)
 
@@ -307,7 +308,7 @@ class ImportTaleTestCase(base.TestCase):
     @vcr.use_cassette(os.path.join(DATA_PATH, "tale_import_zip.txt"))
     def testTaleImportZip(self):
         image = self.model("image", "wholetale").createImage(
-            name="Jupyter Classic",
+            name="Jupyter Notebook",
             creator=self.user,
             public=True,
             config=dict(
@@ -320,7 +321,7 @@ class ImportTaleTestCase(base.TestCase):
         )
         with mock.patch("fs.copy.copy_fs") as mock_copy:
             with open(
-                os.path.join(DATA_PATH, "5c92fbd472a9910001fbff72.zip"), "rb"
+                os.path.join(DATA_PATH, "604126f45f6bb2c4c997e967.zip"), "rb"
             ) as fp:
                 resp = self.request(
                     path="/tale/import",

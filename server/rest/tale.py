@@ -406,6 +406,24 @@ class Tale(Resource):
         return self._model.setAccessList(
             tale, access, save=True, user=user, setPublic=public, publicFlags=publicFlags)
 
+    @staticmethod
+    def _get_version(user, tale, versionId):
+        """Return a version object for a valid versionId, or the last version otherwise."""
+        if not versionId:
+            version_root = Folder().load(tale["versionsRootId"], user=user, level=AccessType.READ)
+            return next(
+                Folder().childFolders(
+                    version_root,
+                    "folder",
+                    user=user,
+                    limit=1,
+                    offset=0,
+                    sort=[("updated", SortDir.DESCENDING)],
+                )
+            )
+        else:
+            return Folder().load(versionId, user=user, level=AccessType.READ)
+
     @access.user
     @autoDescribeRoute(
         Description('Export a tale as a zipfile')
@@ -420,21 +438,7 @@ class Tale(Resource):
     )
     def exportTale(self, tale, taleFormat, versionId):
         user = self.getCurrentUser()
-        if not versionId:
-            version_root = Folder().load(tale["versionsRootId"], user=user, level=AccessType.READ)
-            version = next(
-                Folder().childFolders(
-                    version_root,
-                    "folder",
-                    user=user,
-                    limit=1,
-                    offset=0,
-                    sort=[("updated", SortDir.DESCENDING)],
-                )
-            )
-        else:
-            version = Folder().load(versionId, user=user, level=AccessType.READ)
-
+        version = self._get_version(user, tale, versionId)
         workspace_path = os.path.join(version["fsPath"], "workspace")
         with open(os.path.join(version["fsPath"], "manifest.json"), "r") as fp:
             manifest = json.load(fp)
@@ -458,18 +462,21 @@ class Tale(Resource):
         .param('expandFolders', "If True, folders in Tale's dataSet are recursively "
                "expanded to items in the 'aggregates' section",
                required=False, dataType='boolean', default=True)
+        .param(
+            "versionId", "The specific Tale version that the manifest describes", required=False
+        )
         .errorResponse('ID was invalid.')
     )
-    def generateManifest(self, tale, expandFolders):
+    def generateManifest(self, tale, expandFolders, versionId):
         """
         Creates a manifest document and returns the contents.
         :param tale: The Tale whose information is being used
         :param itemIds: An optional list of items to include in the manifest
         :return: A JSON structure representing the Tale
         """
-
-        user = self.getCurrentUser()
-        manifest_doc = Manifest(tale, user, expand_folders=expandFolders)
+        manifest_doc = Manifest(
+            tale, self.getCurrentUser(), expand_folders=expandFolders, versionId=versionId
+        )
         return manifest_doc.manifest
 
     @access.user
@@ -580,9 +587,15 @@ class Tale(Resource):
             "Example: 'https://dev.nceas.ucsb.edu/knb/d1/mn', 'sandbox.zenodo.org'",
             required=True,
         )
+        .param(
+            "versionId",
+            description="The identifier of the version being published",
+            required=False,
+        )
     )
-    def publishTale(self, tale, repository):
+    def publishTale(self, tale, repository, versionId):
         user = self.getCurrentUser()
+        version = self._get_version(user, tale, versionId)
         publishers = {
             entry["repository"]: entry["auth_provider"]
             for entry in Setting().get(PluginSettings.PUBLISHER_REPOS)
@@ -611,6 +624,7 @@ class Tale(Resource):
         publishTask = publish.delay(
             str(tale["_id"]),
             token,
+            str(version["_id"]),
             repository=repository,
             girder_client_token=str(girder_token["_id"]),
         )
