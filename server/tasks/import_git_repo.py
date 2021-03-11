@@ -43,7 +43,7 @@ def run(job):
     progressCurrent = 0
 
     try:
-        notify_event(users, "wt_import_started", "tale", tale['_id'])
+        notify_event(users, "wt_import_started", {"taleId": tale['_id']})
 
         workspace = Folder().load(tale["workspaceId"], force=True)
         has_dot_git_already = os.path.isdir(os.path.join(workspace["fsPath"], ".git"))
@@ -114,7 +114,7 @@ def run(job):
         else:
             instance = None
 
-        notify_event(users, "wt_import_completed", "tale", tale['_id'])
+        notify_event(users, "wt_import_completed", {"taleId": tale['_id']})
 
     except Exception as exc:
         dot_git = os.path.join(workspace["fsPath"], ".git")
@@ -132,7 +132,7 @@ def run(job):
             status=JobStatus.ERROR,
             log=str(exc),
         )
-        notify_event(users, "wt_import_failed", "tale", tale['_id'])
+        notify_event(users, "wt_import_failed", {"taleId": tale['_id']})
         raise
 
     # To get rid of ObjectId's, dates etc.

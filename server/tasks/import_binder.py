@@ -83,7 +83,7 @@ def run(job):
     progressCurrent = 0
 
     try:
-        notify_event([user["_id"]], "wt_import_started", "tale", tale['_id'])
+        notify_event([user["_id"]], "wt_import_started", {"taleId": tale['_id']})
 
         # 0. Spawn instance in the background
         if spawn:
@@ -231,7 +231,7 @@ def run(job):
         else:
             instance = None
 
-        notify_event([user["_id"]], "wt_import_completed", "tale", tale['_id'])
+        notify_event([user["_id"]], "wt_import_completed", {"taleId": tale['_id']})
 
     except Exception:
         tale = Tale().load(tale["_id"], user=user)  # Refresh state
@@ -247,7 +247,7 @@ def run(job):
             status=JobStatus.ERROR,
             log=log,
         )
-        notify_event([user["_id"]], "wt_import_failed", "tale", tale['_id'])
+        notify_event([user["_id"]], "wt_import_failed", {"taleId": tale['_id']})
         raise
 
     # To get rid of ObjectId's, dates etc.

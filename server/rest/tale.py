@@ -201,7 +201,7 @@ class Tale(Resource):
         self._model.remove(tale)
 
         users = [str(user['id']) for user in tale['access']['users']]
-        notify_event(users, "wt_tale_removed", "tale", str(tale["_id"]))
+        notify_event(users, "wt_tale_removed", {"taleId": str(tale["_id"])})
 
     @access.user
     @filtermodel(model='tale', plugin='wholetale')

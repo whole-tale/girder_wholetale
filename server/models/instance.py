@@ -135,8 +135,8 @@ class Instance(AccessControlledModel):
         ).apply_async()
         instanceTask.get(timeout=TASK_TIMEOUT)
 
-        notify_event([instance["creatorId"]], "wt_instance_deleting", "instance",
-                     instance['_id'])
+        notify_event([instance['creatorId']], 'wt_instance_deleting',
+                     {'taleId': instance['taleId'], 'instanceId': instance['_id']})
 
         try:
             queue = 'celery@{}'.format(instance['containerInfo']['nodeId'])
@@ -153,8 +153,8 @@ class Instance(AccessControlledModel):
         # TODO: handle error
         self.remove(instance)
 
-        notify_event([instance["creatorId"]], "wt_instance_deleted", "instance",
-                     instance['_id'])
+        notify_event([instance["creatorId"]], "wt_instance_deleted",
+                     {'taleId': instance['taleId'], 'instanceId': instance['_id']})
 
     def createInstance(self, tale, user, name=None, save=True, spawn=True):
         if not name:
@@ -226,8 +226,8 @@ class Instance(AccessControlledModel):
 
             (buildTask | volumeTask | serviceTask).apply_async()
 
-            notify_event([instance["creatorId"]], "wt_instance_launching", "instance",
-                         instance['_id'])
+            notify_event([instance["creatorId"]], "wt_instance_launching",
+                         {'taleId': instance['taleId'], 'instanceId': instance['_id']})
         return instance
 
 
@@ -307,15 +307,15 @@ def finalizeInstance(event):
             if "sessionId" in service:
                 instance["sessionId"] = ObjectId(service["sessionId"])
 
-            notify_event([instance["creatorId"]], "wt_instance_running", "instance",
-                         instance['_id'])
+            notify_event([instance["creatorId"]], "wt_instance_running",
+                         {'taleId': instance['taleId'], 'instanceId': instance['_id']})
         elif (
             status == JobStatus.ERROR
             and instance["status"] != InstanceStatus.ERROR  # noqa
         ):
             instance['status'] = InstanceStatus.ERROR
-            notify_event([instance["creatorId"]], "wt_instance_error", "instance",
-                         instance['_id'])
+            notify_event([instance["creatorId"]], "wt_instance_error",
+                         {'taleId': instance['taleId'], 'instanceId': instance['_id']})
         elif (
             status in (JobStatus.QUEUED, JobStatus.RUNNING)
             and instance["status"] != InstanceStatus.LAUNCHING  # noqa

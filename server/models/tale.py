@@ -207,7 +207,7 @@ class Tale(AccessControlledModel):
 
         if save:
             tale = self.save(tale)
-            notify_event([creator["_id"]], "wt_tale_created", "tale", tale['_id'])
+            notify_event([creator["_id"]], "wt_tale_created", {"taleId": tale['_id']})
 
         return tale
 
@@ -242,7 +242,7 @@ class Tale(AccessControlledModel):
         tale['updated'] = datetime.datetime.utcnow()
         ret = self.save(tale)
         users = [user['id'] for user in tale['access']['users']]
-        notify_event(users, "wt_tale_updated", "tale", str(tale["_id"]))
+        notify_event(users, "wt_tale_updated", {"taleId": tale['_id']})
         return ret
 
     def setAccessList(self, doc, access, save=False, user=None, force=False,
@@ -277,8 +277,8 @@ class Tale(AccessControlledModel):
                                       force=force)
 
         added, removed = diff_access(doc['access'], access)
-        notify_event(added, "wt_tale_shared", "tale", str(doc["_id"]))
-        notify_event(removed, "wt_tale_unshared", "tale", str(doc["_id"]))
+        notify_event(added, "wt_tale_shared", {"taleId": str(doc["_id"])})
+        notify_event(removed, "wt_tale_unshared", {"taleId": str(doc["_id"])})
 
         doc = super().setAccessList(
             doc, access, user=user, save=save, force=force)

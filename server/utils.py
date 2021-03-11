@@ -46,18 +46,16 @@ def esc(value):
     return urllib.parse.quote_plus(value)
 
 
-def notify_event(users, event, modelType, objid):
+def notify_event(users, event, affectedIds):
     """
     Notify multiple users of a particular WT event
     :param users: Arrayof user IDs
     :param event: WT Event name
-    :param modelType: Girder model type (e.g., tale)
-    :param objid: Object ID of referenced object
+    :param affectedIds: Map of affected object Ids
     """
     data = {
         'event': event,
-        'modelType': modelType,
-        'resourceId': objid,
+        'affectedResourceIds': affectedIds,
         'resourceName': 'WT event'
     }
 
