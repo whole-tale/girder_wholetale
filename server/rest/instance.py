@@ -15,6 +15,8 @@ import cherrypy
 from girder.models.token import Token
 from girder.models.user import User
 from girder.plugins.oauth.rest import OAuth as OAuthResource
+from urllib.parse import urlencode
+from girder.api.rest import getApiUrl
 
 
 instanceSchema = {
@@ -90,6 +92,7 @@ class Instance(Resource):
         self.route('GET', (':id',), self.getInstance)
         self.route('DELETE', (':id',), self.deleteInstance)
         self.route('PUT', (':id',), self.updateInstance)
+        self.route('GET', ('authenticate', ), self.authenticate)
         self.route('GET', ('authorize', ), self.authorize)
 
         events.bind('jobs.job.update.after', 'wholetale', self.handleUpdateJob)
@@ -231,89 +234,52 @@ class Instance(Resource):
 
     @access.public
     @autoDescribeRoute(
-        Description('Make authorization decision for instance based on forwarded URL')
-        .param('fhost', 'Forwarded host', required=False)
-        .param('redirect', 'If true, redirect to fhost',
-               default=True, required=False, dataType='boolean')
+        Description('Initiate oauth login flow')
+        .param('redirect', 'URL to redirect to after login', required=False)
     )
-    def authorize(self, fhost, redirect):
-        """
-        Intended for use with traefik forwardauth
-
-        Does the user have access to the instance specified by the host name
-        in the 'fhost' parameter or the X-Forwarded-Host header?
-
-        Assumes the following flow:
-
-        * User accesses instance tmp-xxx.wholetale.org
-        * Traefik forwardauth calls this endpoint with "X-Forwarded-Host" set to the
-          host name and "X-Forwarded-Uri" set to "/"
-        * In the initial request, we don't know who the user is, so run them
-          through the oauth flow with this endpoint as the callback (requires)
-          changing the Globus Auth config). Set the "fhost" parameter to the
-          forwarded host name.
-        * At the end of the Globus auth flow, we'll have a user and know the
-          forwarded host. Redirect to the original forwarded host with the
-          "?token=x" query string.
-        * In the subsequent request for https://tmp-xxx.wholetale.org/?token=xxx,
-          forward autho will be called with the token in the X-Forwarded-Uri.
-          Get the token and load the user, checkif they actually have access to this
-          instance. If so, return 200. If not return 403.
-        """
-
-        # TODO: Why is this none when I call as a logged in user?
+    def authenticate(self, redirect):
+        # TODO: Probably doesn't belong on instance
         user = self.getCurrentUser()
-
-        # The X-Forwarded-Uri header means this is a forwardauth request.
-        # Check for an existing token and load the user if present.
-        furi = cherrypy.request.headers.get('X-Forwarded-Uri')
-        if furi:
-            qs = parse_qs(urlparse(furi).query)
-            if 'token' in qs:
-                token = Token().load(qs['token'][0], force=True, objectId=False)
-                user = User().load(token["userId"], force=True)
 
         # If there's no user, initiate the oauth flow with this endpoint
         # as the callback along with the fhost parameter
         if user is None:
-            fhost = cherrypy.request.headers.get('X-Forwarded-Host')
-            # With forwardauth, the base will be https://tmp-xxx...
-            # TODO: fix hardcode
-            cherrypy.request.base = "https://girder.local.wholetale.org"
-            redirect = cherrypy.request.base + cherrypy.request.app.script_name
-            redirect += cherrypy.request.path_info + "?"
-            redirect += "&fhost=" + fhost
-            redirect += "&token={girderToken}"
             oauth_providers = OAuthResource().listProviders(params={"redirect": redirect})
             raise cherrypy.HTTPRedirect(oauth_providers["Globus"])
-
-        # If the fhost parameter is set and we have a user, this is the Globus
-        # auth callback. Redirect to the original service with the token.
-        if not fhost:
-            fhost = cherrypy.request.headers.get('X-Forwarded-Host')
-        elif redirect:
-            # Redirect to the requested host to set the token
-            # Can't set a cookie on tmp-xxx.* from girder.*
-            # self.sendAuthTokenCookie(user, domain=fhost)
-            token = self.getCurrentToken()["_id"]
-            redirect = "https://" + fhost + "/?token=" + token
+        else:
             raise cherrypy.HTTPRedirect(redirect)
 
-        # At this point we have a user and the fhost from  either a querystring
-        # parameter or forwarded header. Check to see if the user has access
-        # to the instance.
+    @access.cookie
+    @access.public
+    @autoDescribeRoute(
+        Description('Determine whether user has access to instance requested via forward auth')
+    )
+    def authorize(self):
+        # This endpoint must be called frmo a Traefik forward-auth request. The X-Forwarded-Host
+        # is assumed to be the hostname for a running instance. Also assumes that the
+        # core.cookie_domain is set to .(local.)wholetale.org
+        user = self.getCurrentUser()
+
+        forwarded_host = cherrypy.request.headers.get('X-Forwarded-Host')
+        forwarded_uri = cherrypy.request.headers.get('X-Forwarded-Uri')
+        if not forwarded_host and not forwarded_uri:
+            raise RestException('Forward auth request required', code=400)
+
+        if user is None:
+            # If no user, redirect to authentication endpoint to initiate oauth flow
+            domain = forwarded_host.partition('.')[2]
+            redirect = 'https://' + forwarded_host + forwarded_uri 
+            # As a forward-auth request, the host is the origin (e.g., tmp-xxx.*)
+            # but we need to redirect to Girder.
+            raise cherrypy.HTTPRedirect('https://girder.' + domain + '/api/v1/instance/authenticate?redirect=' + redirect)
+
         instances = list(self._model.list(user=user, currentUser=user))
         access = False
-        # TODO: hardcode for testing only
-        if fhost == "whoami.local.wholetale.org":
-            access = True
         for instance in instances:
             url = urlparse(instance['url'])
-            if fhost == url.netloc:
+            if forwarded_host == url.netloc:
                 access = True
                 break
 
         if not access:
             raise RestException('Access denied for instance', code=403)
-        else:
-            return fhost
