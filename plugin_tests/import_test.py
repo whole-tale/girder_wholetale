@@ -384,10 +384,11 @@ class ImportTaleTestCase(base.TestCase):
             login=self.user["login"],
             password="token:{_id}".format(**token),
             root="/tales/{_id}".format(**tale),
+            cache_ttl=0,
         ) as destination_fs, OSFS(tmpdir) as source_fs:
             copy_fs(source_fs, destination_fs)
             sanitize_binder(destination_fs)
-            self.assertEqual(destination_fs.listdir("/"), ["i_am_a_binder"])
+            self.assertEqual(list(destination_fs.listdir("/")), ["i_am_a_binder"])
 
         shutil.rmtree(tmpdir)
         Tale().remove(tale)

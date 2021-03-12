@@ -40,7 +40,7 @@ from ..utils import getOrCreateRootFolder
 
 
 def sanitize_binder(root):
-    root_listdir = root.listdir("/")
+    root_listdir = list(root.listdir("/"))
 
     if len(root_listdir) != 1:
         return
@@ -176,6 +176,7 @@ def run(job):
                 login=user["login"],
                 password="token:{_id}".format(**token),
                 root="/tales/{_id}".format(**tale),
+                cache_ttl=0
             ) as destination_fs, DMSFS(
                 str(session["_id"]), girder_root + "/api/v1", str(token["_id"])
             ) as source_fs:
@@ -214,12 +215,13 @@ def run(job):
                 progressMessage="Waiting for a Tale container",
             )
 
-            sleep_step = 10
+            sleep_step = 1
             timeout = 15 * 60
             while instance["status"] == InstanceStatus.LAUNCHING and timeout > 0:
                 time.sleep(sleep_step)
                 instance = Instance().load(instance["_id"], user=user)
                 timeout -= sleep_step
+                sleep_step = min(sleep_step * 2, 10)
             if timeout <= 0:
                 raise RuntimeError(
                     "Failed to launch instance {}".format(instance["_id"])

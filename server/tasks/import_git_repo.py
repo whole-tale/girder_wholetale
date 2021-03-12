@@ -95,12 +95,13 @@ def run(job):
                 progressMessage="Waiting for a Tale container",
             )
 
-            sleep_step = 5
+            sleep_step = 1
             timeout = 15 * 60
             while instance["status"] == InstanceStatus.LAUNCHING and timeout > 0:
                 time.sleep(sleep_step)
                 instance = Instance().load(instance["_id"], user=user)
                 timeout -= sleep_step
+                sleep_step = min(sleep_step * 2, 10)
             if timeout <= 0:
                 raise RuntimeError(
                     "Failed to launch instance {}".format(instance["_id"])
