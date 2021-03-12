@@ -10,13 +10,7 @@ from girder.plugins.jobs.constants import JobStatus
 from girder.plugins.worker import getCeleryApp
 from ..constants import PluginSettings, InstanceStatus
 from ..models.instance import Instance as instanceModel
-from urllib.parse import urlparse, parse_qs
 import cherrypy
-from girder.models.token import Token
-from girder.models.user import User
-from girder.plugins.oauth.rest import OAuth as OAuthResource
-from urllib.parse import urlencode
-from girder.api.rest import getApiUrl
 
 
 instanceSchema = {
@@ -92,7 +86,6 @@ class Instance(Resource):
         self.route('GET', (':id',), self.getInstance)
         self.route('DELETE', (':id',), self.deleteInstance)
         self.route('PUT', (':id',), self.updateInstance)
-        self.route('GET', ('authenticate', ), self.authenticate)
         self.route('GET', ('authorize', ), self.authorize)
 
         events.bind('jobs.job.update.after', 'wholetale', self.handleUpdateJob)
@@ -232,23 +225,6 @@ class Instance(Resource):
             instance['status'] = InstanceStatus.LAUNCHING
         self._model.updateInstance(instance)
 
-    @access.public
-    @autoDescribeRoute(
-        Description('Initiate oauth login flow')
-        .param('redirect', 'URL to redirect to after login', required=False)
-    )
-    def authenticate(self, redirect):
-        # TODO: Probably doesn't belong on instance
-        user = self.getCurrentUser()
-
-        # If there's no user, initiate the oauth flow with this endpoint
-        # as the callback along with the fhost parameter
-        if user is None:
-            oauth_providers = OAuthResource().listProviders(params={"redirect": redirect})
-            raise cherrypy.HTTPRedirect(oauth_providers["Globus"])
-        else:
-            raise cherrypy.HTTPRedirect(redirect)
-
     @access.cookie
     @access.public
     @autoDescribeRoute(
@@ -264,17 +240,18 @@ class Instance(Resource):
         forwarded_uri = cherrypy.request.headers.get('X-Forwarded-Uri')
         if not forwarded_host and not forwarded_uri:
             raise RestException('Forward auth request required', code=400)
-        subdomain, domain = forwarded_host.split(".", 1)
+        subdomain, domain = forwarded_host.split('.', 1)
 
         if user is None:
             # If no user, redirect to authentication endpoint to initiate oauth flow
-            redirect = 'https://' + forwarded_host + forwarded_uri 
+            redirect = 'https://{forwarded_host}{forwarded_uri}'
             # As a forward-auth request, the host is the origin (e.g., tmp-xxx.*)
             # but we need to redirect to Girder.
-            raise cherrypy.HTTPRedirect(f"https://girder.{domain}/api/v1/instance/authenticate?redirect={redirect}")
- 
+            raise cherrypy.HTTPRedirect(
+                  f'https://girder.{domain}/api/v1/user/sign_in?redirect={redirect}')
+
         if self._model.findOne(
-            {"containerInfo.name": subdomain, "creatorId": user["_id"]]}
+            {'containerInfo.name': subdomain, 'creatorId': user['_id']}
         ):
             return
         raise RestException('Access denied for instance', code=403)
