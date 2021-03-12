@@ -747,7 +747,7 @@ class TaleTestCase(base.TestCase):
         events = get_events(self, since)
         self.assertEqual(len(events), 1)
         self.assertEqual(events[0]['data']['event'], 'wt_tale_created')
-        self.assertEqual(events[0]['data']['resourceId'], tale['_id'])
+        self.assertEqual(events[0]['data']['affectedResourceIds']['taleId'], tale['_id'])
 
         from girder.constants import AccessType
         # Update the access control list for the tale by adding the admin
@@ -780,7 +780,7 @@ class TaleTestCase(base.TestCase):
         events = get_events(self, since, user=self.admin)
         self.assertEqual(len(events), 1)
         self.assertEqual(events[0]['data']['event'], 'wt_tale_shared')
-        self.assertEqual(events[0]['data']['resourceId'], tale['_id'])
+        self.assertEqual(events[0]['data']['affectedResourceIds']['taleId'], tale['_id'])
 
         # Update tale, confirm notifications
         since = datetime.now().isoformat()
@@ -802,12 +802,12 @@ class TaleTestCase(base.TestCase):
         events = get_events(self, since, user=self.user)
         self.assertEqual(len(events), 1)
         self.assertEqual(events[0]['data']['event'], 'wt_tale_updated')
-        self.assertEqual(events[0]['data']['resourceId'], tale['_id'])
+        self.assertEqual(events[0]['data']['affectedResourceIds']['taleId'], tale['_id'])
 
         events = get_events(self, since, user=self.admin)
         self.assertEqual(len(events), 1)
         self.assertEqual(events[0]['data']['event'], 'wt_tale_updated')
-        self.assertEqual(events[0]['data']['resourceId'], tale['_id'])
+        self.assertEqual(events[0]['data']['affectedResourceIds']['taleId'], tale['_id'])
 
         # Remove admin and confirm notification
         input_tale_access = {
@@ -831,7 +831,7 @@ class TaleTestCase(base.TestCase):
         events = get_events(self, since, user=self.admin)
         self.assertEqual(len(events), 1)
         self.assertEqual(events[0]['data']['event'], 'wt_tale_unshared')
-        self.assertEqual(events[0]['data']['resourceId'], tale['_id'])
+        self.assertEqual(events[0]['data']['affectedResourceIds']['taleId'], tale['_id'])
 
         # Re-add admin user to test delete notification
         resp = self.request(
@@ -850,12 +850,12 @@ class TaleTestCase(base.TestCase):
         events = get_events(self, since, user=self.user)
         self.assertEqual(len(events), 1)
         self.assertEqual(events[0]['data']['event'], 'wt_tale_removed')
-        self.assertEqual(events[0]['data']['resourceId'], tale['_id'])
+        self.assertEqual(events[0]['data']['affectedResourceIds']['taleId'], tale['_id'])
 
         events = get_events(self, since, user=self.admin)
         self.assertEqual(len(events), 1)
         self.assertEqual(events[0]['data']['event'], 'wt_tale_removed')
-        self.assertEqual(events[0]['data']['resourceId'], tale['_id'])
+        self.assertEqual(events[0]['data']['affectedResourceIds']['taleId'], tale['_id'])
 
     def tearDown(self):
         self.model('user').remove(self.user)
