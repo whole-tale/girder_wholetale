@@ -12,5 +12,5 @@ dataone.libclient==3.4.7
 dataone.cli==3.4.7
 validators
 html2markdown
-fs.webdavfs
+fs.webdavfs>=0.4.2
 GitPython
