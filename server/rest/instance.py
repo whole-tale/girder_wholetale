@@ -264,22 +264,17 @@ class Instance(Resource):
         forwarded_uri = cherrypy.request.headers.get('X-Forwarded-Uri')
         if not forwarded_host and not forwarded_uri:
             raise RestException('Forward auth request required', code=400)
+        subdomain, domain = forwarded_host.split(".", 1)
 
         if user is None:
             # If no user, redirect to authentication endpoint to initiate oauth flow
-            domain = forwarded_host.partition('.')[2]
             redirect = 'https://' + forwarded_host + forwarded_uri 
             # As a forward-auth request, the host is the origin (e.g., tmp-xxx.*)
             # but we need to redirect to Girder.
-            raise cherrypy.HTTPRedirect('https://girder.' + domain + '/api/v1/instance/authenticate?redirect=' + redirect)
-
-        instances = list(self._model.list(user=user, currentUser=user))
-        access = False
-        for instance in instances:
-            url = urlparse(instance['url'])
-            if forwarded_host == url.netloc:
-                access = True
-                break
-
-        if not access:
-            raise RestException('Access denied for instance', code=403)
+            raise cherrypy.HTTPRedirect(f"https://girder.{domain}/api/v1/instance/authenticate?redirect={redirect}")
+ 
+        if self._model.findOne(
+            {"containerInfo.name": subdomain, "creatorId": user["_id"]]}
+        ):
+            return
+        raise RestException('Access denied for instance', code=403)
