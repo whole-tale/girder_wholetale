@@ -37,6 +37,7 @@ class FakeAsyncResult(object):
             digest='sha256:7a789bc20359dce987653',
             imageId='5678901234567890',
             nodeId='123456',
+            name='tmp-xxx',
             mountPoint='/foo/bar',
             volumeName='blah_volume',
             sessionId='5ecece693fec11b4854a874d',
@@ -273,10 +274,59 @@ class InstanceTestCase(base.TestCase):
         resp = self.request(
             path='/instance', method='POST', user=self.user,
             params={'taleId': str(self.tale_one['_id']),
-                    'name': 'tale one'}
+                    'name': 'tale one'},
+
         )
         self.assertStatusOk(resp)
         self.assertEqual(resp.json['_id'], str(instance['_id']))
+
+        # Instance authorization checks
+        # Missing forward auth headers
+        resp = self.request(
+            path="/instance/authorize",
+            method="GET",
+            isJson=False,
+            user=self.user,
+        )
+        # Assert 400 "Forward auth request required"
+        self.assertStatus(resp, 400)
+
+        # Valid user, invalid host
+        resp = self.request(
+            user=self.user,
+            path="/instance/authorize",
+            method="GET",
+            additionalHeaders=[("X-Forwarded-Host", "blah.wholetale.org"),
+                               ("X-Forwarded_Uri", "/")],
+            isJson=False,
+        )
+        # 403 "Access denied for instance"
+        self.assertStatus(resp, 403)
+
+        # Valid user, valid host
+        resp = self.request(
+            user=self.user,
+            path="/instance/authorize",
+            method="GET",
+            additionalHeaders=[("X-Forwarded-Host", "tmp-xxx.wholetale.org"),
+                               ("X-Forwarded_Uri", "/")],
+            isJson=False,
+        )
+        self.assertStatus(resp, 200)
+
+        # No user
+        resp = self.request(
+            path="/instance/authorize",
+            method="GET",
+            additionalHeaders=[("X-Forwarded-Host", "tmp-xxx.wholetale.org"),
+                               ("X-Forwarded-Uri", "/")],
+            isJson=False,
+        )
+        self.assertStatus(resp, 303)
+        # Confirm redirect to https://girder.{domain}/api/v1/user/sign_in
+        self.assertEqual(resp.headers["Location"],
+                         "https://girder.wholetale.org/api/v1/"
+                         "user/sign_in?redirect=https://tmp-xxx.wholetale.org/")
 
         # Update/restart the instance
         job = jobModel.createJob(

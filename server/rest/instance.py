@@ -244,7 +244,7 @@ class Instance(Resource):
 
         if user is None:
             # If no user, redirect to authentication endpoint to initiate oauth flow
-            redirect = 'https://{forwarded_host}{forwarded_uri}'
+            redirect = f'https://{forwarded_host}{forwarded_uri}'
             # As a forward-auth request, the host is the origin (e.g., tmp-xxx.*)
             # but we need to redirect to Girder.
             raise cherrypy.HTTPRedirect(
