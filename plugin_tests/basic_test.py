@@ -3,6 +3,7 @@
 
 import json
 from tests import base
+from six.moves import urllib
 
 
 def setUpModule():
@@ -160,3 +161,55 @@ class WholeTaleTestCase(base.TestCase):
         self.assertStatusOk(resp)
         self.assertEqual({_['mountPoint'] for _ in resp.json},
                          {'i1', 'i2', 'f3/i1', 'f3/i2'})
+
+    def testSignIn(self):
+        from girder.plugins.oauth.constants import PluginSettings
+        providerInfo = {
+            "id": "globus",
+            "name": "Globus",
+            "client_id": {
+                "key": PluginSettings.GLOBUS_CLIENT_ID,
+                "value": "globus_test_client_id",
+            },
+            "client_secret": {
+                "key": PluginSettings.GLOBUS_CLIENT_SECRET,
+                "value": "globus_test_client_secret",
+            },
+        }
+
+        params = {
+            "list": json.dumps(
+                [
+                    {
+                        "key": PluginSettings.PROVIDERS_ENABLED,
+                        "value": [providerInfo["id"]],
+                    },
+                    {
+                        "key": providerInfo["client_id"]["key"],
+                        "value": providerInfo["client_id"]["value"],
+                    },
+                    {
+                        "key": providerInfo["client_secret"]["key"],
+                        "value": providerInfo["client_secret"]["value"],
+                    },
+                ]
+            )
+        }
+        resp = self.request(
+            "/system/setting", user=self.admin, method="PUT", params=params
+        )
+        self.assertStatusOk(resp)
+
+        resp = self.request(
+            path='/user/sign_in', method='GET', isJson=False,
+            params={'redirect': 'https://blah.wholetale.org'})
+        self.assertStatus(resp, 303)
+        redirect = urllib.parse.urlparse(resp.headers["Location"])
+        self.assertEqual(redirect.netloc, 'auth.globus.org')
+
+        resp = self.request(
+            path='/user/sign_in', method='GET', user=self.user, isJson=False,
+            params={'redirect': 'https://blah.wholetale.org'})
+        self.assertStatus(resp, 303)
+        self.assertEqual(resp.headers["Location"],
+                         "https://blah.wholetale.org")
