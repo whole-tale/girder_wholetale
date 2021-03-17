@@ -10,6 +10,7 @@ from girder.plugins.jobs.constants import JobStatus
 from girder.plugins.worker import getCeleryApp
 from ..constants import PluginSettings, InstanceStatus
 from ..models.instance import Instance as instanceModel
+import cherrypy
 
 
 instanceSchema = {
@@ -85,6 +86,7 @@ class Instance(Resource):
         self.route('GET', (':id',), self.getInstance)
         self.route('DELETE', (':id',), self.deleteInstance)
         self.route('PUT', (':id',), self.updateInstance)
+        self.route('GET', ('authorize', ), self.authorize)
 
         events.bind('jobs.job.update.after', 'wholetale', self.handleUpdateJob)
 
@@ -222,3 +224,34 @@ class Instance(Resource):
         elif status in (JobStatus.QUEUED, JobStatus.RUNNING):
             instance['status'] = InstanceStatus.LAUNCHING
         self._model.updateInstance(instance)
+
+    @access.cookie
+    @access.public
+    @autoDescribeRoute(
+        Description('Determine whether user has access to instance requested via forward auth')
+    )
+    def authorize(self):
+        # This endpoint must be called frmo a Traefik forward-auth request. The X-Forwarded-Host
+        # is assumed to be the hostname for a running instance. Also assumes that the
+        # core.cookie_domain is set to .(local.)wholetale.org
+        user = self.getCurrentUser()
+
+        forwarded_host = cherrypy.request.headers.get('X-Forwarded-Host')
+        forwarded_uri = cherrypy.request.headers.get('X-Forwarded-Uri')
+        if not forwarded_host and not forwarded_uri:
+            raise RestException('Forward auth request required', code=400)
+        subdomain, domain = forwarded_host.split('.', 1)
+
+        if user is None:
+            # If no user, redirect to authentication endpoint to initiate oauth flow
+            redirect = f'https://{forwarded_host}{forwarded_uri}'
+            # As a forward-auth request, the host is the origin (e.g., tmp-xxx.*)
+            # but we need to redirect to Girder.
+            raise cherrypy.HTTPRedirect(
+                  f'https://girder.{domain}/api/v1/user/sign_in?redirect={redirect}')
+
+        if self._model.findOne(
+            {'containerInfo.name': subdomain, 'creatorId': user['_id']}
+        ):
+            return
+        raise RestException('Access denied for instance', code=403)

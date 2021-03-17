@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import base64
+import cherrypy
 import copy
 import datetime
 import jsonschema
@@ -21,6 +22,7 @@ from girder.models.notification import Notification, ProgressState
 from girder.models.user import User
 from girder.plugins.jobs.constants import JobStatus
 from girder.plugins.jobs.models.job import Job as JobModel
+from girder.plugins.oauth.rest import OAuth as OAuthResource
 from girder.plugins.worker import getCeleryApp
 from girder.utility import assetstore_utilities, setting_utilities
 from girder.utility.model_importer import ModelImporter
@@ -285,6 +287,24 @@ def setUserMetadata(self, params):
     return self.model('user').save(user)
 
 
+@access.public
+@autoDescribeRoute(
+    Description('Initiate oauth login flow')
+    .param('redirect', 'URL to redirect to after login', required=False)
+)
+@boundHandler()
+def signIn(self, redirect):
+    user = self.getCurrentUser()
+
+    # If there's no user, initiate the oauth flow with this endpoint
+    # as the callback along with the fhost parameter
+    if user is None:
+        oauth_providers = OAuthResource().listProviders(params={"redirect": redirect})
+        raise cherrypy.HTTPRedirect(oauth_providers["Globus"])
+    else:
+        raise cherrypy.HTTPRedirect(redirect)
+
+
 @access.user
 @autoDescribeRoute(
     Description('Get a set of items and folders.')
@@ -473,6 +493,8 @@ def load(info):
 
     info['apiRoot'].user.route('PUT', ('settings',), setUserMetadata)
     info['apiRoot'].user.route('GET', ('settings',), getUserMetadata)
+    info['apiRoot'].user.route('GET', ('sign_in',), signIn)
+
     ModelImporter.model('user').exposeFields(
         level=AccessType.WRITE, fields=('meta', 'myData', 'lastLogin'))
     ModelImporter.model('user').exposeFields(
