@@ -3,8 +3,10 @@ import json
 import mock
 import six
 from bson import ObjectId
+from datetime import datetime
 from tests import base
 from girder.exceptions import ValidationException
+from .tests_helpers import get_events
 
 
 JobStatus = None
@@ -195,6 +197,7 @@ class InstanceTestCase(base.TestCase):
     @mock.patch('gwvolman.tasks.shutdown_container')
     @mock.patch('gwvolman.tasks.remove_volume')
     def testInstanceFlow(self, lc, cv, uc, sc, rv):
+        since = datetime.now().isoformat()
         with mock.patch('girder_worker.task.celery.Task.apply_async', spec=True) \
                 as mock_apply_async:
             resp = self.request(
@@ -230,6 +233,9 @@ class InstanceTestCase(base.TestCase):
                     break
                 time.sleep(0.1)
             self.assertEqual(job['status'], JobStatus.QUEUED)
+            events = get_events(self, since)
+            self.assertEqual(len(events), 1)
+            self.assertEqual(events[0]['data']['event'], 'wt_instance_launching')
 
             instance = Instance().load(instance['_id'], force=True)
             self.assertEqual(instance['status'], InstanceStatus.LAUNCHING)
@@ -248,6 +254,7 @@ class InstanceTestCase(base.TestCase):
             job = jobModel.load(job['_id'], force=True)
             self.assertEqual(job['celeryTaskId'], 'fake_id')
             Job().updateJob(job, log='job running', status=JobStatus.RUNNING)
+            since = datetime.now().isoformat()
             Job().updateJob(job, log='job ran', status=JobStatus.SUCCESS)
 
             resp = self.request(
@@ -255,6 +262,11 @@ class InstanceTestCase(base.TestCase):
             )
             self.assertStatusOk(resp)
             self.assertEqual(resp.json['nodeId'], '123456')
+
+            # Confirm event
+            events = get_events(self, since)
+            self.assertEqual(len(events), 1)
+            self.assertEqual(events[0]['data']['event'], 'wt_instance_running')
 
         # Check if set up properly
         resp = self.request(
@@ -401,6 +413,7 @@ class InstanceTestCase(base.TestCase):
             self.assertEqual(instance['status'], InstanceStatus.ERROR)
 
         # Delete the instance
+        since = datetime.now().isoformat()
         with mock.patch('girder_worker.task.celery.Task.apply_async', spec=True) \
                 as mock_apply_async:
             resp = self.request(
@@ -413,6 +426,12 @@ class InstanceTestCase(base.TestCase):
             path='/instance/{_id}'.format(**instance), method='GET',
             user=self.user)
         self.assertStatus(resp, 400)
+
+        # Confirm notifications
+        events = get_events(self, since)
+        self.assertEqual(len(events), 2)
+        self.assertEqual(events[0]['data']['event'], 'wt_instance_deleting')
+        self.assertEqual(events[1]['data']['event'], 'wt_instance_deleted')
 
     def testBuildFail(self):
         from girder.plugins.jobs.models.job import Job

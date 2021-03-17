@@ -459,6 +459,7 @@ def load(info):
     events.bind('jobs.job.update.after', 'wholetale', updateNotification)
     events.bind('model.file.validate', 'wholetale', validateFileLink)
     events.bind('oauth.auth_callback.after', 'wholetale', store_other_globus_tokens)
+
     info['apiRoot'].account = Account()
     info['apiRoot'].repository = Repository()
     info['apiRoot'].license = License()

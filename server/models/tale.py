@@ -23,7 +23,7 @@ from .image import Image as imageModel
 from ..schema.misc import dataSetSchema
 from ..constants import TaleStatus
 from ..schema.misc import related_identifiers_schema
-from ..utils import getOrCreateRootFolder, init_progress
+from ..utils import getOrCreateRootFolder, init_progress, notify_event, diff_access
 from ..lib.license import WholeTaleLicense
 from ..lib.manifest_parser import ManifestParser
 
@@ -207,6 +207,7 @@ class Tale(AccessControlledModel):
 
         if save:
             tale = self.save(tale)
+            notify_event([creator["_id"]], "wt_tale_created", {"taleId": tale['_id']})
 
         return tale
 
@@ -239,7 +240,10 @@ class Tale(AccessControlledModel):
         :returns: The tale document that was edited.
         """
         tale['updated'] = datetime.datetime.utcnow()
-        return self.save(tale)
+        ret = self.save(tale)
+        users = [user['id'] for user in tale['access']['users']]
+        notify_event(users, "wt_tale_updated", {"taleId": tale['_id']})
+        return ret
 
     def setAccessList(self, doc, access, save=False, user=None, force=False,
                       setPublic=None, publicFlags=None):
@@ -271,6 +275,10 @@ class Tale(AccessControlledModel):
         if publicFlags is not None:
             doc = self.setPublicFlags(doc, publicFlags, user=user, save=False,
                                       force=force)
+
+        added, removed = diff_access(doc['access'], access)
+        notify_event(added, "wt_tale_shared", {"taleId": str(doc["_id"])})
+        notify_event(removed, "wt_tale_unshared", {"taleId": str(doc["_id"])})
 
         doc = super().setAccessList(
             doc, access, user=user, save=save, force=force)
@@ -402,12 +410,25 @@ class Tale(AccessControlledModel):
             **new_tale
         )
 
+        resource = {
+            "type": "wt_zip_import",
+            "tale_id": tale["_id"],
+            "tale_title": tale["title"]
+        }
+        notification = init_progress(
+            resource, user, "Importing Tale", "Initializing", 1
+        )
+
         job = Job().createLocalJob(
             title='Import Tale from zip', user=user,
             type='wholetale.import_tale', public=False, _async=True,
             module='girder.plugins.wholetale.tasks.import_tale',
             args=(temp_dir, manifest_file),
-            kwargs={'taleId': tale["_id"]}
+            kwargs={'taleId': tale["_id"]},
+            otherFields={
+                "taleId": tale["_id"],
+                "wt_notification_id": str(notification["_id"])
+            },
         )
         Job().scheduleJob(job)
         return tale

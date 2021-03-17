@@ -5,7 +5,9 @@ import pymongo
 import time
 import tempfile
 import shutil
+from datetime import datetime
 from tests import base
+from .tests_helpers import get_events
 
 from girder.models.folder import Folder
 from girder.models.user import User
@@ -109,6 +111,7 @@ class GitImportTestCase(base.TestCase):
             job = Job().load(job["_id"], force=True, includeLog=True)
             if job["status"] >= JobStatus.SUCCESS:
                 break
+
         return job
 
     def _import_from_git_repo(self, url):
@@ -158,6 +161,7 @@ class GitImportTestCase(base.TestCase):
         with mock.patch(
             "girder.plugins.wholetale.tasks.import_git_repo.Instance", fakeInstance
         ):
+            since = datetime.now().isoformat()
             # Custom branch
             tale, job = self._import_from_git_repo(
                 f"file://{self.git_repo_dir}@feature"
@@ -173,17 +177,32 @@ class GitImportTestCase(base.TestCase):
                     os.path.join(workspace["fsPath"], self.git_file_on_branch)
                 )
             )
+            # Confirm events
+            events = get_events(self, since)
+            self.assertEqual(len(events), 4)
+            self.assertEqual(events[0]['data']['event'], 'wt_tale_created')
+            self.assertEqual(events[1]['data']['event'], 'wt_import_started')
+            self.assertEqual(events[2]['data']['event'], 'wt_tale_updated')
+            self.assertEqual(events[3]['data']['event'], 'wt_import_completed')
             shutil.rmtree(workspace_path)
             os.mkdir(workspace_path)
             Tale().remove(tale)
 
         # Invalid url
+        since = datetime.now().isoformat()
         tale, job = self._import_from_git_repo("blah")
         workspace = Folder().load(tale["workspaceId"], force=True)
         workspace_path = workspace["fsPath"]
         self.assertEqual(job["status"], JobStatus.ERROR)
         self.assertTrue("does not appear to be a git repo" in job["log"][0])
         self.assertEqual(tale["status"], TaleStatus.ERROR)
+        # Confirm events
+        events = get_events(self, since)
+        self.assertEqual(len(events), 4)
+        self.assertEqual(events[0]['data']['event'], 'wt_tale_created')
+        self.assertEqual(events[1]['data']['event'], 'wt_import_started')
+        self.assertEqual(events[2]['data']['event'], 'wt_tale_updated')
+        self.assertEqual(events[3]['data']['event'], 'wt_import_failed')
         Tale().remove(tale)
 
     def testGitImport(self):
@@ -192,13 +211,20 @@ class GitImportTestCase(base.TestCase):
         workspace_path = workspace["fsPath"]
 
         # Invalid path
+        since = datetime.now().isoformat()
         job = self._import_git_repo(tale, "blah")
         self.assertEqual(job["status"], JobStatus.ERROR)
         self.assertTrue("does not appear to be a git repo" in job["log"][0])
         if os.path.isdir(os.path.join(workspace_path, ".git")):
             shutil.rmtree(os.path.join(workspace_path, ".git"))
+        # Confirm events
+        events = get_events(self, since)
+        self.assertEqual(len(events), 2)
+        self.assertEqual(events[0]['data']['event'], 'wt_import_started')
+        self.assertEqual(events[1]['data']['event'], 'wt_import_failed')
 
         # Default branch (master)
+        since = datetime.now().isoformat()
         job = self._import_git_repo(tale, f"file://{self.git_repo_dir}")
         self.assertEqual(job["status"], JobStatus.SUCCESS)
         self.assertTrue(
@@ -207,6 +233,12 @@ class GitImportTestCase(base.TestCase):
         self.assertFalse(
             os.path.isfile(os.path.join(workspace["fsPath"], self.git_file_on_branch))
         )
+        # Confirm events
+        events = get_events(self, since)
+        self.assertEqual(len(events), 3)
+        self.assertEqual(events[0]['data']['event'], 'wt_import_started')
+        self.assertEqual(events[1]['data']['event'], 'wt_tale_updated')
+        self.assertEqual(events[2]['data']['event'], 'wt_import_completed')
         shutil.rmtree(workspace_path)
         os.mkdir(workspace_path)
 

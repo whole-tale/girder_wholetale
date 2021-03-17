@@ -24,7 +24,7 @@ from ..lib import pids_to_entities, register_dataMap
 from ..lib.dataone import DataONELocations  # TODO: get rid of it
 from ..lib.manifest_parser import ManifestParser
 from ..models.tale import Tale
-from ..utils import getOrCreateRootFolder
+from ..utils import getOrCreateRootFolder, notify_event
 
 
 def run(job):
@@ -42,6 +42,8 @@ def run(job):
     progressCurrent = 0
 
     try:
+        notify_event([user["_id"]], "wt_import_started", {"taleId": tale['_id']})
+
         os.chdir(tale_dir)
         mp = ManifestParser(manifest_file)
 
@@ -138,6 +140,8 @@ def run(job):
             progressCurrent=progressCurrent,
             progressMessage="Tale created",
         )
+
+        notify_event([user["_id"]], "wt_import_completed", {"taleId": tale['_id']})
     except Exception:
         tale = Tale().load(tale["_id"], user=user)  # Refresh state
         tale["status"] = TaleStatus.ERROR
@@ -145,4 +149,5 @@ def run(job):
         t, val, tb = sys.exc_info()
         log = "%s: %s\n%s" % (t.__name__, repr(val), traceback.extract_tb(tb))
         jobModel.updateJob(job, status=JobStatus.ERROR, log=log)
+        notify_event([user["_id"]], "wt_import_failed", {"taleId": tale['_id']})
         raise

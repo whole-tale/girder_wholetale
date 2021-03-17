@@ -7,7 +7,6 @@ import pathlib
 import shutil
 import textwrap
 from urllib.parse import urlparse
-
 from girder import events
 from girder.api import access
 from girder.api.rest import iterBody
@@ -34,6 +33,7 @@ from ..lib.dataone import DataONELocations  # TODO: get rid of it
 from ..lib.manifest import Manifest
 from ..lib.exporters.bag import BagTaleExporter
 from ..lib.exporters.native import NativeTaleExporter
+from ..utils import notify_event
 
 from girder.plugins.worker import getCeleryApp
 
@@ -174,6 +174,7 @@ class Tale(Resource):
             event = events.trigger('tale.update_citation', eventParams)
             if len(event.responses):
                 taleObj = self._model.updateTale(event.responses[-1])
+
         return taleObj
 
     @access.user
@@ -198,6 +199,9 @@ class Tale(Resource):
             shutil.rmtree(workspace["fsPath"], ignore_errors=True)
             Folder().remove(workspace, progress=ctx)
         self._model.remove(tale)
+
+        users = [str(user['id']) for user in tale['access']['users']]
+        notify_event(users, "wt_tale_removed", {"taleId": str(tale["_id"])})
 
     @access.user
     @filtermodel(model='tale', plugin='wholetale')
