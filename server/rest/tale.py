@@ -568,8 +568,7 @@ class Tale(Resource):
             title='Copy "{title}" workspace'.format(**tale), user=user,
             type='wholetale.copy_workspace', public=False, _async=True,
             module='girder.plugins.wholetale.tasks.copy_workspace',
-            args=(tale["workspaceId"], new_tale["workspaceId"]),
-            kwargs={'user': user, 'tale': new_tale}
+            args=(tale, new_tale),
         )
         Job().scheduleJob(job)
         return new_tale

@@ -4,6 +4,7 @@ import json
 import time
 from tests import base
 from girder import config
+from girder.models.folder import Folder
 
 
 JobStatus = None
@@ -173,7 +174,16 @@ class TaskFailTestCase(base.TestCase):
             public=True,
             config={"memLimit": "2g"},
         )
-
+        new_tale = Tale().createTale(
+            self.image,
+            [],
+            creator=self.admin,
+            title="tale one (copy)",
+            public=True,
+            config={"memLimit": "2g"},
+        )
+        new_workspace = Folder().load(new_tale["workspaceId"], force=True)
+        Folder().remove(new_workspace)  # oh no!
         job = Job().createLocalJob(
             title='Copy "{title}" workspace'.format(**tale),
             user=self.user,
@@ -181,8 +191,7 @@ class TaskFailTestCase(base.TestCase):
             public=False,
             _async=True,
             module="girder.plugins.wholetale.tasks.copy_workspace",
-            args=(tale["workspaceId"], "non_existing"),
-            kwargs={"user": self.user, "tale": tale},
+            args=(tale, new_tale),
         )
         Job().scheduleJob(job)
         for i in range(300):
@@ -192,9 +201,10 @@ class TaskFailTestCase(base.TestCase):
             job = Job().load(job["_id"], force=True)
         self.assertEqual(job["status"], JobStatus.ERROR)
         Job().remove(job)
-        tale = Tale().load(tale["_id"], force=True)
-        self.assertEqual(tale["status"], TaleStatus.ERROR)
+        tale = Tale().load(new_tale["_id"], force=True)
+        self.assertEqual(new_tale["status"], TaleStatus.ERROR)
         Tale().remove(tale)
+        Tale().remove(new_tale)
 
     def tearDown(self):
         self.model("user").remove(self.user)
