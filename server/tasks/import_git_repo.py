@@ -8,7 +8,6 @@ import re
 import shutil
 import time
 from girder.models.folder import Folder
-from girder.models.token import Token
 from girder.models.user import User
 from girder.utility import JsonEncoder
 from girder.plugins.jobs.constants import JobStatus
@@ -35,7 +34,6 @@ def run(job):
     tale = Tale().load(job["kwargs"]["taleId"], user=user)
     spawn = job["kwargs"]["spawn"]
     change_status = job["kwargs"].get("change_status", True)
-    token = Token().createToken(user=user, days=0.5)
     # Get users for notifications since job can be called after a tale is shared
     users = [str(user['id']) for user in tale['access']['users']]
 
@@ -89,7 +87,7 @@ def run(job):
 
         # 4. Wait for container to show up
         if spawn:
-            instance = Instance().createInstance(tale, user, token, spawn=spawn)
+            instance = Instance().createInstance(tale, user, spawn=spawn)
             progressCurrent += 1
             jobModel.updateJob(
                 job,

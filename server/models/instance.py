@@ -156,7 +156,7 @@ class Instance(AccessControlledModel):
         notify_event([instance["creatorId"]], "wt_instance_deleted",
                      {'taleId': instance['taleId'], 'instanceId': instance['_id']})
 
-    def createInstance(self, tale, user, name=None, save=True, spawn=True):
+    def createInstance(self, tale, user, /, *, name=None, save=True, spawn=True):
         if not name:
             name = tale.get('title', '')
 

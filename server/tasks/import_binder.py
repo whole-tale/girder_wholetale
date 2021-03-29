@@ -87,7 +87,7 @@ def run(job):
 
         # 0. Spawn instance in the background
         if spawn:
-            instance = Instance().createInstance(tale, user, token, spawn=spawn)
+            instance = Instance().createInstance(tale, user, spawn=spawn)
 
         # 1. Register data using url
         progressCurrent += 1
