@@ -59,7 +59,7 @@ def notify_event(users, event, affectedIds):
         'resourceName': 'WT event'
     }
 
-    expires = datetime.datetime.utcnow() + datetime.timedelta(hours=NOTIFICATION_EXP_HOURS)
+    expires = datetime.datetime.utcnow() + datetime.timedelta(seconds=5)
 
     for user_id in users:
         user = User().load(user_id, force=True)
