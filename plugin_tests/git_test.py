@@ -151,7 +151,7 @@ class GitImportTestCase(base.TestCase):
         class fakeInstance(object):
             _id = "123456789"
 
-            def createInstance(self, tale, user, token, spawn=False):
+            def createInstance(self, tale, user, /, *, spawn=False):
                 return {"_id": self._id, "status": InstanceStatus.LAUNCHING}
 
             def load(self, instance_id, user=None):
