@@ -206,7 +206,7 @@ class ImportTaleTestCase(base.TestCase):
         self.assertEqual(events[0]['data']['event'], 'wt_tale_created')
         self.assertEqual(events[1]['data']['event'], 'wt_import_started')
         # 3 events are wt_tale_updated from import process changing tale state
-        self.assertEqual(events[5]['data']['event'], 'wt_import_completed')
+        self.assertEqual(events[4]['data']['event'], 'wt_import_completed')
 
         self.model("image", "wholetale").remove(image)
 
@@ -384,7 +384,7 @@ class ImportTaleTestCase(base.TestCase):
         self.assertEqual(events[0]['data']['event'], 'wt_tale_created')
         self.assertEqual(events[1]['data']['event'], 'wt_import_started')
         # 3 events are wt_tale_updated from import process changing tale state
-        self.assertEqual(events[6]['data']['event'], 'wt_import_completed')
+        self.assertEqual(events[5]['data']['event'], 'wt_import_completed')
 
         self.model("image", "wholetale").remove(image)
 
