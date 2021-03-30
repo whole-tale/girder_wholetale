@@ -3,16 +3,15 @@
 
 from bson import ObjectId
 import datetime
-import ssl
+import requests
 import time
-from urllib.request import urlopen
-from urllib.error import HTTPError, URLError
 
 from girder import logger
 from girder.constants import AccessType, SortDir, TokenScope
 from girder.exceptions import ValidationException
 from girder.models.model_base import AccessControlledModel
 from girder.models.token import Token
+from girder.models.user import User
 from girder.plugins.worker import getCeleryApp
 from girder.plugins.jobs.constants import JobStatus, REST_CREATE_JOB_TOKEN_SCOPE
 from gwvolman.tasks import \
@@ -231,25 +230,22 @@ class Instance(AccessControlledModel):
         return instance
 
 
-def _wait_for_server(url, timeout=30, wait_time=0.5):
+def _wait_for_server(url, token, timeout=30, wait_time=0.5):
     """Wait for a server to show up within a newly launched instance."""
     tic = time.time()
     while time.time() - tic < timeout:
         try:
-            urlopen(url, timeout=1)
-        except HTTPError as err:
+            r = requests.get(url, cookies={'girderToken': token}, timeout=1)
+            r.raise_for_status()
+        except requests.exceptions.HTTPError as err:
             logger.info(
-                'Booting server at [%s], getting HTTP status [%s]', url, err.code)
+                'Booting server at [%s], getting HTTP status [%s]', url, err.response.status_code)
             time.sleep(wait_time)
-        except URLError as err:
-            logger.info(
-                'Booting server at [%s], getting URLError due to [%s]', url, err.reason)
-            time.sleep(wait_time)
-        except ssl.SSLError:
+        except requests.exceptions.SSLError:
             logger.info(
                 'Booting server at [%s], getting SSLError', url)
             time.sleep(wait_time)
-        except ConnectionError:
+        except requests.exceptions.ConnectionError:
             logger.info(
                 'Booting server at [%s], getting ConnectionError', url)
             time.sleep(wait_time)
@@ -287,7 +283,9 @@ def finalizeInstance(event):
             valid_keys = set(containerInfoSchema['properties'].keys())
             containerInfo = {key: service.get(key, '') for key in valid_keys}
             url = service.get('url', 'https://google.com')
-            _wait_for_server(url)
+            user = User().load(instance["creatorId"], force=True)
+            token = Token().createToken(user=user, days=0.25)
+            _wait_for_server(url, token['_id'])
 
             # Since _wait_for_server can potentially take some time,
             # we need to refresh the state of the instance
