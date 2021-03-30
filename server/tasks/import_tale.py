@@ -80,10 +80,9 @@ def run(job):
         tale = Tale().updateTale(tale)
 
         if update_citations:
-            eventParams = {"tale": tale, "user": user}
-            event = events.trigger("tale.update_citation", eventParams)
-            if len(event.responses):
-                tale = Tale().updateTale(event.responses[-1])
+            events.daemon.trigger(
+                eventName="tale.update_citation", info={"tale": tale, "user": user}
+            )
 
         # 4. Copy data to the workspace using WebDAVFS (if it exists)
         progressCurrent += 1
