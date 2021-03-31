@@ -1,29 +1,31 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-import html2markdown
 from functools import lru_cache
 from urllib.request import urlopen
 
-from girder import events, logger
+import html2markdown
+from girder import logger
 from girder.constants import AccessType
 from girder.exceptions import ValidationException
-from girder.utility.model_importer import ModelImporter
+from girder.models.folder import Folder
+from girder.models.item import Item
 from girder.utility.progress import ProgressContext
+
+from ..models.tale import Tale
+from ..utils import notify_event
 from .data_map import DataMap
-from .entity import Entity
-from .resolvers import Resolvers, DOIResolver, ResolutionException
-from .import_providers import ImportProviders
-from .http_provider import HTTPImportProvider
-from .null_provider import NullImportProvider
 from .dataone.auth import DataONEVerificator
 from .dataone.provider import DataOneImportProvider
 from .dataverse.auth import DataverseVerificator
 from .dataverse.provider import DataverseImportProvider
+from .entity import Entity
 from .globus.globus_provider import GlobusImportProvider
+from .http_provider import HTTPImportProvider
+from .import_providers import ImportProviders
+from .null_provider import NullImportProvider
+from .resolvers import DOIResolver, ResolutionException, Resolvers
 from .zenodo.auth import ZenodoVerificator
 from .zenodo.provider import ZenodoImportProvider
-
 
 RESOLVERS = Resolvers()
 RESOLVERS.add(DOIResolver())
@@ -106,16 +108,23 @@ def register_dataMap(dataMaps, parent, parentType, user=None, base_url=None, pro
     return importedData
 
 
+@lru_cache(maxsize=128, typed=True)
+def _get_citation(url):
+    return urlopen(url).read().decode()
+
+
 def update_citation(event):
     tale = event.info["tale"]
     user = event.info["user"]
 
     dataset_top_identifiers = set()
     for obj in tale.get("dataSet", []):
+        if obj["_modelType"] == "folder":
+            load = Folder().load
+        else:
+            load = Item().load
         try:
-            doc = ModelImporter.model(obj["_modelType"]).load(
-                obj["itemId"], user=user, level=AccessType.READ, exc=True
-            )
+            doc = load(obj["itemId"], user=user, level=AccessType.READ, exc=True)
             provider_name = doc["meta"]["provider"]
             if provider_name.startswith("HTTP"):
                 continue
@@ -146,14 +155,10 @@ def update_citation(event):
         except Exception as ex:
             logger.info('Unable to get a citation for %s, getting "%s"', doi, str(ex))
 
-    tale["dataSetCitation"] = citations
-    tale["relatedIdentifiers"] = related_ids
-    event.preventDefault().addResponse(tale)
-
-
-@lru_cache(maxsize=128, typed=True)
-def _get_citation(url):
-    return urlopen(url).read().decode()
-
-
-events.bind("tale.update_citation", "wholetale", update_citation)
+    Tale().update({"_id": tale["_id"]}, update={"$set": {
+        "dataSetCitation": citations,
+        "relatedIdentifiers": related_ids,
+    }})
+    notify_event(
+        [_["id"] for _ in tale["access"]["users"]], "wt_tale_updated", {"taleId": tale["_id"]}
+    )

@@ -45,17 +45,53 @@ class Tale(AccessControlledModel):
             'title': 10,
             'description': 1
         })
+
+        # Fields that can be modified via PUT /tale/:id
         self.modifiableFields = {
-            'title', 'description', 'public', 'config', 'updated', 'authors',
-            'category', 'icon', 'iframe', 'illustration', 'dataSet', 'licenseSPDX',
-            'publishInfo', 'imageId', 'status', 'relatedIdentifiers',
+            "authors",
+            "category",
+            "config",
+            "description",
+            "dataSet",
+            "icon",
+            "iframe",
+            "illustration",
+            "imageId",
+            "licenseSPDX",
+            "public",
+            "publishInfo",  # This shouldn't be here
+            "relatedIdentifiers",  # This shouldn't be her
+            "title",
         }
+
         self.exposeFields(
             level=AccessType.READ,
-            fields=({'_id', 'imageId', 'creatorId', 'created',
-                     'format', 'dataSet', 'licenseSPDX',
-                     'imageInfo', 'publishInfo', 'dataSetCitation',
-                     'copyOfTale'} | self.modifiableFields))
+            fields={
+                "_id",
+                "authors",
+                "category",
+                "config",
+                "copyOfTale",
+                "created",
+                "creatorId",
+                "dataSet",
+                "dataSetCitation",
+                "description",
+                "format",
+                "icon",
+                "iframe",
+                "illustration",
+                "imageId",
+                "imageInfo",
+                "licenseSPDX",
+                "public",
+                "publishInfo",
+                "relatedIdentifiers",
+                "status",
+                "title",
+                "updated",
+            }
+        )
 
     @staticmethod
     def _validate_dataset(tale):
@@ -199,16 +235,16 @@ class Tale(AccessControlledModel):
         if creator is not None:
             self.setUserAccess(tale, user=creator, level=AccessType.ADMIN,
                                save=False)
-        if tale['dataSet']:
-            eventParams = {'tale': tale, 'user': creator}
-            event = events.trigger('tale.update_citation', eventParams)
-            if len(event.responses):
-                tale = event.responses[-1]
 
         if save:
             tale = self.save(tale)
             notify_event([creator["_id"]], "wt_tale_created", {"taleId": tale['_id']})
 
+        if tale['dataSet']:
+            events.daemon.trigger(
+                eventName="tale.update_citation",
+                info={"tale": tale, "user": creator}
+            )
         return tale
 
     def _createAuxFolder(self, tale, rootFolderName, creator=None):

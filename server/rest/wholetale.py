@@ -30,8 +30,6 @@ class wholeTale(Resource):
     )
     def regenerate_citations(self):
         user = self.getCurrentUser()
-        for tale in Tale().find({'dataSet': {'$ne': []}}):
+        for tale in Tale().find():
             eventParams = {'tale': tale, 'user': user}
-            event = events.trigger('tale.update_citation', eventParams)
-            if len(event.responses):
-                Tale().save(event.responses[-1])
+            events.trigger(eventName='tale.update_citation', info=eventParams)

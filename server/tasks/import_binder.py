@@ -196,9 +196,7 @@ def run(job):
 
             if update_citations:
                 eventParams = {"tale": tale, "user": user}
-                event = events.trigger("tale.update_citation", eventParams)
-                if len(event.responses):
-                    tale = Tale().updateTale(event.responses[-1])
+                events.daemon.trigger("tale.update_citation", eventParams)
 
         # Tale is ready to be built
         tale = Tale().load(tale["_id"], user=user)  # Refresh state

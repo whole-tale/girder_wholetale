@@ -171,10 +171,7 @@ class Tale(Resource):
                 'tale': taleObj,
                 'user': self.getCurrentUser(),
             }
-            event = events.trigger('tale.update_citation', eventParams)
-            if len(event.responses):
-                taleObj = self._model.updateTale(event.responses[-1])
-
+            events.daemon.trigger('tale.update_citation', eventParams)
         return taleObj
 
     @access.user
