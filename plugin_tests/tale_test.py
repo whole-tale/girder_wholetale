@@ -1,11 +1,12 @@
 import bagit
 from bdbag import bdbag_api as bdb
 from bson import ObjectId
+from datetime import datetime
 import httmock
-from io import BytesIO
 import json
 import mock
 import os
+from pathlib import Path
 import pytest
 import re
 import time
@@ -15,17 +16,12 @@ import zipfile
 import shutil
 from tests import base
 
-from girder.utility import assetstore_utilities
-from girder.models.assetstore import Assetstore
-from .tests_helpers import mockOtherRequest
+from .tests_helpers import mockOtherRequest, get_events
 from girder.models.item import Item
-from girder.models.upload import Upload
 from girder.exceptions import ValidationException
 from girder.models.folder import Folder
 
 
-SCRIPTDIRS_NAME = None
-DATADIRS_NAME = None
 DATA_PATH = os.path.join(
     os.path.dirname(os.environ['GIRDER_TEST_DATA_PREFIX']),
     'data_src',
@@ -55,16 +51,14 @@ class FakeAsyncResult(object):
 def setUpModule():
     base.enabledPlugins.append('wholetale')
     base.enabledPlugins.append('wt_home_dir')
+    base.enabledPlugins.append('virtual_resources')
+    base.enabledPlugins.append('wt_versioning')
     base.startServer()
 
     global JobStatus, Tale, ImageStatus
     from girder.plugins.jobs.constants import JobStatus
     from girder.plugins.wholetale.models.tale import Tale
     from girder.plugins.wholetale.constants import ImageStatus
-
-    global SCRIPTDIRS_NAME, DATADIRS_NAME
-    from girder.plugins.wholetale.constants import \
-        SCRIPTDIRS_NAME, DATADIRS_NAME
 
 
 def tearDownModule():
@@ -138,30 +132,11 @@ class TaleTestCase(base.TestCase):
         self.assertStatusOk(resp)
         tale = resp.json
 
-        # Check that workspace was created
-
-        # Check that data folder was created
-        from girder.plugins.wholetale.constants import DATADIRS_NAME
-        from girder.utility.path import getResourcePath
-        sc = {
-            '_id': tale['_id'],
-            'cname': DATADIRS_NAME,
-            'fname': DATADIRS_NAME
-        }
-        self.assertEqual(
-            getResourcePath(
-                'folder',
-                Folder().load(tale['folderId'], user=self.user),
-                user=self.admin),
-            '/collection/{cname}/{fname}/{_id}'.format(**sc)
-        )
-
         taleLicense = WholeTaleLicense.default_spdx()
         resp = self.request(
             path='/tale/{_id}'.format(**tale), method='PUT',
             type='application/json',
             user=self.user, body=json.dumps({
-                'folderId': tale['folderId'],
                 'dataSet': tale['dataSet'],
                 'imageId': tale['imageId'],
                 'title': 'new name',
@@ -350,19 +325,9 @@ class TaleTestCase(base.TestCase):
             ]
         }
         self.assertEqual(result_tale_access, expected_tale_access)
-        # Check that the access control list propagated to the image that the tale
-        # was built from
-        # resp = self.request(
-        #     path='/image/%s/access' % result_image_id, method='GET',
-        #     user=self.user)
-        # self.assertStatusOk(resp)
-        # result_image_access = resp.json
-        # expected_image_access = input_tale_access
-        # self.assertEqual(result_image_access, expected_image_access)
-
         # Check that the access control list propagated to the folder that the tale
         # is associated with
-        for key in ('folderId', 'workspaceId'):
+        for key in ('workspaceId',):
             resp = self.request(
                 path='/folder/%s/access' % tale[key], method='GET',
                 user=self.user)
@@ -422,76 +387,21 @@ class TaleTestCase(base.TestCase):
         self.assertStatusOk(resp)
         self.assertEqual(resp.json['public'], False)
 
-    def testTaleNarrative(self):
-        resp = self.request(
-            path='/resource/lookup', method='GET', user=self.user,
-            params={'path': '/user/{login}/Home'.format(**self.user)})
-        home_dir = resp.json
-        resp = self.request(
-            path='/folder', method='POST', user=self.user, params={
-                'name': 'my_narrative', 'parentId': home_dir['_id']
-            })
-        sub_home_dir = resp.json
-        my_narrative = Item().createItem('notebook.ipynb', self.user, sub_home_dir)
-
-        resp = self.request(
-            path='/tale', method='POST', user=self.user,
-            type='application/json',
-            body=json.dumps({
-                'imageId': str(self.image['_id']),
-                'dataSet': [],
-                'narrative': [str(my_narrative['_id'])]
-            })
-        )
-        self.assertStatusOk(resp)
-        tale = resp.json
-
-        path = os.path.join(
-            '/collection', SCRIPTDIRS_NAME, SCRIPTDIRS_NAME,
-            tale['_id'], 'notebook.ipynb')
-        resp = self.request(
-            path='/resource/lookup', method='GET', user=self.user,
-            params={'path': path})
-        self.assertStatusOk(resp)
-        self.assertEqual(resp.json['name'], my_narrative['name'])
-        self.assertNotEqual(resp.json['_id'], str(my_narrative['_id']))
-
-        resp = self.request(
-            path='/tale/{_id}'.format(**tale), method='DELETE',
-            user=self.admin, params={'progress': True})
-        self.assertStatusOk(resp)
-        self.assertEqual(Folder().load(tale['workspaceId'], force=True), None)
-
     def testTaleValidation(self):
         from server.lib.license import WholeTaleLicense
         resp = self.request(
-            path='/resource/lookup', method='GET', user=self.user,
-            params={'path': '/user/{login}/Home'.format(**self.user)})
-        home_dir = resp.json
-        resp = self.request(
-            path='/folder', method='POST', user=self.user, params={
-                'name': 'validate_my_narrative', 'parentId': home_dir['_id']
+            path="/folder", method="POST", user=self.user, params={
+                "name": "validate_my_narrative", "parentId": self.user["_id"],
+                "parentType": "user",
             })
         sub_home_dir = resp.json
         Item().createItem('notebook.ipynb', self.user, sub_home_dir)
-
-        resp = self.request(
-            path='/resource/lookup', method='GET', user=self.user,
-            params={'path': '/user/{login}/Data'.format(**self.user)})
-        data_dir = resp.json
-        resp = self.request(
-            path='/folder', method='POST', user=self.user, params={
-                'name': 'my_fake_data', 'parentId': data_dir['_id']
-            })
-        sub_data_dir = resp.json
-        item = Item().createItem('data.dat', self.user, sub_data_dir)
 
         # Mock old format
         tale = {
             "config": None,
             "creatorId": self.user['_id'],
             "description": "Fake Tale",
-            "folderId": data_dir['_id'],
             "imageId": "5873dcdbaec030000144d233",
             "public": True,
             "publishInfo": [],
@@ -501,14 +411,7 @@ class TaleTestCase(base.TestCase):
         tale = self.model('tale', 'wholetale').save(tale)  # get's id
         tale = self.model('tale', 'wholetale').save(tale)  # migrate to new format
 
-        # path = os.path.join(
-        #     '/collection', DATADIRS_NAME, DATADIRS_NAME, str(tale['_id']))
-        # resp = self.request(
-        #    path='/resource/lookup', method='GET', user=self.user,
-        #    params={'path': path})
-        # self.assertStatusOk(resp)
         # new_data_dir = resp.json
-        # self.assertEqual(str(tale['folderId']), str(new_data_dir['_id']))
         self.assertEqual(tale['dataSet'], [])
         self.assertEqual(tale['licenseSPDX'], WholeTaleLicense.default_spdx())
         # self.assertEqual(str(tale['dataSet'][0]['itemId']), data_dir['_id'])
@@ -524,13 +427,13 @@ class TaleTestCase(base.TestCase):
             self.model('tale', 'wholetale').save(tale)
 
         tale["dataSet"] = [
-            {"_modelType": "folder", "itemId": str(item["_id"]), "mountPath": "data.dat"}
+            {"_modelType": "folder", "itemId": str(ObjectId()), "mountPath": "data.dat"}
         ]
         with pytest.raises(ValidationException):
             self.model('tale', 'wholetale').save(tale)
 
-        tale["dataSet"][0]["_modelType"] = "item"
-        self.model('tale', 'wholetale').save(tale)
+        # tale["dataSet"][0]["_modelType"] = "item"
+        # self.model('tale', 'wholetale').save(tale)
         self.model('tale', 'wholetale').remove(tale)
 
     def testTaleUpdate(self):
@@ -558,7 +461,6 @@ class TaleTestCase(base.TestCase):
             path='/tale', method='POST', user=self.user,
             type='application/json',
             body=json.dumps({
-                'folderId': '1234',
                 'imageId': str(self.image['_id']),
                 'dataSet': [],
                 'title': 'tale tile',
@@ -607,7 +509,6 @@ class TaleTestCase(base.TestCase):
             type='application/json',
             body=json.dumps({
                 'authors': new_authors,
-                'folderId': '1234',
                 'imageId': str(image['_id']),
                 'dataSet': [],
                 'title': title,
@@ -649,7 +550,6 @@ class TaleTestCase(base.TestCase):
             type='application/json',
             body=json.dumps({
                 'authors': self.authors,
-                'folderId': '1234',
                 'imageId': str(self.image['_id']),
                 'dataSet': [],
                 'title': 'tale tile',
@@ -689,29 +589,62 @@ class TaleTestCase(base.TestCase):
         )
         self.assertStatusOk(resp)
         tale = resp.json
-        export_path = '/tale/{}/export'.format(str(tale['_id']))
+        workspace = Folder().load(tale["workspaceId"], force=True)
+        with open(os.path.join(workspace["fsPath"], "test_file.txt"), "wb") as f:
+            f.write(b"Hello World!")
+
         resp = self.request(
-            path=export_path, method='GET', isJson=False, user=self.user)
-        with tempfile.NamedTemporaryFile() as fp:
+            path=f"/tale/{tale['_id']}/export", method='GET', isJson=False, user=self.user
+        )
+        with tempfile.TemporaryFile() as fp:
             for content in resp.body:
                 fp.write(content)
             fp.seek(0)
             zip_archive = zipfile.ZipFile(fp, 'r')
-            zip_files = zip_archive.namelist()
+            zip_files = {
+                Path(*Path(_).parts[1:]).as_posix() for _ in zip_archive.namelist()
+            }
+            manifest_path = next(
+                (_ for _ in zip_archive.namelist() if _.endswith("manifest.json"))
+            )
+            version_id = Path(manifest_path).parts[0]
+            first_manifest = json.loads(zip_archive.read(manifest_path))
+
         # Check the the manifest.json is present
-        manifest_path = str(tale['_id']) + '/metadata/manifest.json'
-        is_present = manifest_path in zip_files
-        self.assertTrue(is_present)
+        expected_files = {
+            "metadata/environment.json",
+            "metadata/manifest.json",
+            "README.md",
+            "LICENSE",
+            "workspace/test_file.txt",
+        }
+        self.assertEqual(expected_files, zip_files)
 
-        # Check that the top level README is present
-        readme_path = str(tale['_id']) + '/README.md'
-        is_present = readme_path in zip_files
-        self.assertTrue(is_present)
+        # First export should have created a version.
+        # Let's grab it and explicitly use the versionId for 2nd dump
+        resp = self.request(
+            path="/version", method="GET", user=self.user, params={"taleId": tale["_id"]}
+        )
+        self.assertStatusOk(resp)
+        self.assertEqual(len(resp.json), 1)
+        version = resp.json[0]
+        self.assertEqual(version_id, version["_id"])
 
-        # Check that the LICENSE is present
-        license_path = str(tale['_id']) + '/LICENSE'
-        is_present = license_path in zip_files
-        self.assertTrue(is_present)
+        resp = self.request(
+            path=f"/tale/{tale['_id']}/export",
+            method='GET',
+            isJson=False,
+            user=self.user,
+            params={"versionId": version["_id"]},
+        )
+        self.assertStatusOk(resp)
+        with tempfile.TemporaryFile() as fp:
+            for content in resp.body:
+                fp.write(content)
+            fp.seek(0)
+            zip_archive = zipfile.ZipFile(fp, 'r')
+            second_manifest = json.loads(zip_archive.read(manifest_path))
+        self.assertEqual(first_manifest, second_manifest)
         self.model('tale', 'wholetale').remove(tale)
 
     @mock.patch('gwvolman.tasks.build_tale_image')
@@ -758,7 +691,7 @@ class TaleTestCase(base.TestCase):
             gca().send_task.return_value = FakeAsyncResult(tale['_id'])
 
             jobModel.scheduleJob(job)
-            for i in range(20):
+            for _ in range(20):
                 job = jobModel.load(job['_id'], force=True)
                 if job['status'] == JobStatus.QUEUED:
                     break
@@ -793,6 +726,137 @@ class TaleTestCase(base.TestCase):
             # tale = Tale().load(tale['_id'], force=True)
             # self.assertEqual(tale['imageInfo']['status'], ImageStatus.INVALID)
 
+    def testTaleNotifications(self):
+        since = datetime.now().isoformat()
+        with httmock.HTTMock(mockOtherRequest):
+            # Create a new tale from a user image
+            resp = self.request(
+                path='/tale', method='POST', user=self.user,
+                type='application/json',
+                body=json.dumps(
+                    {
+                        'imageId': str(self.image['_id']),
+                        'dataSet': [],
+                        'public': True
+                    })
+            )
+            self.assertStatusOk(resp)
+            tale = resp.json
+
+        # Confirm events
+        events = get_events(self, since)
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0]['data']['event'], 'wt_tale_created')
+        self.assertEqual(events[0]['data']['affectedResourceIds']['taleId'], tale['_id'])
+
+        from girder.constants import AccessType
+        # Update the access control list for the tale by adding the admin
+        # as a second user and confirm notification
+        input_tale_access_with_admin = {
+            "users": [
+                {
+                    "login": self.user['login'],
+                    "level": AccessType.ADMIN,
+                    "id": str(self.user['_id']),
+                    "flags": [],
+                    "name": "%s %s" % (self.user['firstName'], self.user['lastName'])
+                },
+                {
+                    'login': self.admin['login'],
+                    'level': AccessType.ADMIN,
+                    'id': str(self.admin['_id']),
+                    'flags': [],
+                    'name': '%s %s' % (self.admin['firstName'], self.admin['lastName'])
+                }],
+            "groups": []}
+        since = datetime.now().isoformat()
+
+        resp = self.request(
+            path='/tale/%s/access' % tale['_id'], method='PUT',
+            user=self.user, params={'access': json.dumps(input_tale_access_with_admin)})
+        self.assertStatusOk(resp)
+
+        # Confirm notification
+        events = get_events(self, since, user=self.admin)
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0]['data']['event'], 'wt_tale_shared')
+        self.assertEqual(events[0]['data']['affectedResourceIds']['taleId'], tale['_id'])
+
+        # Update tale, confirm notifications
+        since = datetime.now().isoformat()
+        resp = self.request(
+            path='/tale/{}'.format(str(tale['_id'])),
+            method='PUT',
+            user=self.user,
+            type='application/json',
+            body=json.dumps({
+                'imageId': str(self.image['_id']),
+                'dataSet': [],
+                'public': True,
+                'title': 'Revised title'
+            })
+        )
+        self.assertStatus(resp, 200)
+
+        # Confirm notifications
+        events = get_events(self, since, user=self.user)
+        # self.assertEqual(len(events), 2)
+        self.assertEqual(events[-1]['data']['event'], 'wt_tale_updated')
+        self.assertEqual(events[-1]['data']['affectedResourceIds']['taleId'], tale['_id'])
+
+        events = get_events(self, since, user=self.admin)
+        # self.assertEqual(len(events), 2)
+        self.assertEqual(events[-1]['data']['event'], 'wt_tale_updated')
+        self.assertEqual(events[-1]['data']['affectedResourceIds']['taleId'], tale['_id'])
+
+        # Remove admin and confirm notification
+        input_tale_access = {
+            "users": [
+                {
+                    "login": self.user['login'],
+                    "level": AccessType.ADMIN,
+                    "id": str(self.user['_id']),
+                    "flags": [],
+                    "name": "%s %s" % (self.user['firstName'], self.user['lastName'])
+                }],
+            "groups": []}
+        since = datetime.now().isoformat()
+
+        resp = self.request(
+            path='/tale/%s/access' % tale['_id'], method='PUT',
+            user=self.user, params={'access': json.dumps(input_tale_access)})
+        self.assertStatusOk(resp)
+
+        # Confirm notification
+        events = get_events(self, since, user=self.admin)
+        # self.assertEqual(len(events), 3)
+        self.assertEqual(events[-1]['data']['event'], 'wt_tale_unshared')
+        self.assertEqual(events[-1]['data']['affectedResourceIds']['taleId'], tale['_id'])
+
+        # Re-add admin user to test delete notification
+        resp = self.request(
+            path='/tale/%s/access' % tale['_id'], method='PUT',
+            user=self.user, params={'access': json.dumps(input_tale_access_with_admin)})
+        self.assertStatusOk(resp)
+
+        # Delete tale, test notification
+        since = datetime.now().isoformat()
+        resp = self.request(
+            path='/tale/{_id}'.format(**tale), method='DELETE',
+            user=self.admin)
+        self.assertStatusOk(resp)
+
+        # Confirm notification
+        events = get_events(self, since, user=self.user)
+        # self.assertEqual(len(events), 3)
+        self.assertEqual(events[-1]['data']['event'], 'wt_tale_removed')
+        self.assertEqual(events[-1]['data']['affectedResourceIds']['taleId'], tale['_id'])
+
+        events = get_events(self, since, user=self.admin)
+        # self.assertEqual(len(events), 5)
+        self.assertEqual(events[-1]['data']['event'], 'wt_tale_removed')
+        self.assertEqual(events[-1]['data']['affectedResourceIds']['taleId'], tale['_id'])
+
     def tearDown(self):
         self.model('user').remove(self.user)
         self.model('user').remove(self.admin)
@@ -821,8 +885,7 @@ class TaleWithWorkspaceTestCase(base.TestCase):
         self.admin, self.user = [self.model('user').createUser(**user)
                                  for user in users]
         self.image = Image().createImage(
-            {'_id': ObjectId()},
-            'test image',
+            name='test image',
             creator=self.admin,
             public=True,
             config=dict(template='base.tpl', buildpack='SomeBuildPack',
@@ -831,14 +894,6 @@ class TaleWithWorkspaceTestCase(base.TestCase):
 
         from girder.plugins.wt_home_dir import HOME_DIRS_APPS
         self.homeDirsApps = HOME_DIRS_APPS  # nopep8
-        for e in self.homeDirsApps.entries():
-            provider = e.app.providerMap['/']['provider']
-            provider.updateAssetstore()
-
-        from girder.plugins.wt_home_dir.lib.WTAssetstoreTypes import WTAssetstoreTypes
-        self.ws_assetstore = Assetstore().find(
-            {'type': WTAssetstoreTypes.WT_TALE_ASSETSTORE}).next()
-
         self.clearDAVAuthCache()
 
     def clearDAVAuthCache(self):
@@ -930,22 +985,30 @@ class TaleWithWorkspaceTestCase(base.TestCase):
             }
         ]
 
-        tale = self.model('tale', 'wholetale').createTale(
-            self.image,
-            [{
-                'itemId': item['_id'],
-                '_modelType': 'item',
-                'mountPath': item['name']
-            }], creator=self.user, title="Export Tale", public=True, authors=authors)
+        resp = self.request(
+            path='/tale', method='POST', user=self.user,
+            type='application/json',
+            body=json.dumps({
+                'imageId': str(self.image['_id']),
+                'dataSet': [
+                    {'itemId': item['_id'], '_modelType': 'item', 'mountPath': item['name']}
+                ],
+                "title": "Export Tale",
+                "public": True,
+                "authors": authors,
+            })
+        )
+        self.assertStatusOk(resp)
+        tale = resp.json
         workspace = self.model('folder').load(tale['workspaceId'], force=True)
+        nb_file = os.path.join(workspace["fsPath"], "wt_quickstart.ipynb")
         with urllib.request.urlopen(
             'https://raw.githubusercontent.com/whole-tale/wt-design-docs/'
             '3305527f7eb28d0e0364f4e54fd9e7155a2614d3'
             '/users_guide/wt_quickstart.ipynb'
         ) as url:
-            self.uploadFile(
-                name=item['name'], contents=url.read(), user=self.user,
-                parent=workspace, parentType='folder')
+            with open(nb_file, "wb") as target:
+                target.write(url.read())
         return tale
 
     def testTaleCopy(self):
@@ -959,18 +1022,13 @@ class TaleWithWorkspaceTestCase(base.TestCase):
             creator=self.admin,
             public=True
         )
-        workspace = Tale().createWorkspace(tale)
-        # Below workarounds a bug, it will be addressed elsewhere.
-        workspace = Folder().setPublic(workspace, True, save=True)
+        workspace = self.model('folder').load(tale['workspaceId'], force=True)
+        fsPath = workspace["fsPath"]
+        fullPath = os.path.join(fsPath, "file01.txt")
 
-        adapter = assetstore_utilities.getAssetstoreAdapter(self.ws_assetstore)
-        size = 101
-        data = BytesIO(b' ' * size)
-        files = []
-        files.append(Upload().uploadFromFile(
-            data, size, 'file01.txt', parentType='folder', parent=workspace,
-            assetstore=self.ws_assetstore))
-        fullPath = adapter.fullPath(files[0])
+        with open(fullPath, "wb") as f:
+            size = 101
+            f.write(b' ' * size)
 
         # Create a copy
         resp = self.request(
@@ -989,7 +1047,7 @@ class TaleWithWorkspaceTestCase(base.TestCase):
 
         copied_file_path = re.sub(workspace['name'], new_tale['_id'], fullPath)
         job = Job().findOne({'type': 'wholetale.copy_workspace'})
-        for i in range(10):
+        for _ in range(10):
             job = Job().load(job['_id'], force=True)
             if job['status'] == JobStatus.SUCCESS:
                 break
@@ -1008,12 +1066,11 @@ class TaleWithWorkspaceTestCase(base.TestCase):
 
     def testExportBag(self):
         tale = self._create_water_tale()
-        export_path = '/tale/{}/export'.format(str(tale['_id']))
         resp = self.request(
-            path=export_path, method='GET', params={'taleFormat': 'bagit'},
+            path=f"/tale/{tale['_id']}/export", method='GET', params={'taleFormat': 'bagit'},
             isJson=False, user=self.user)
         dirpath = tempfile.mkdtemp()
-        bag_file = os.path.join(dirpath, "{}.zip".format(str(tale['_id'])))
+        bag_file = os.path.join(dirpath, resp.headers["Content-Disposition"].split('"')[1])
         with open(bag_file, 'wb') as fp:
             for content in resp.body:
                 fp.write(content)
@@ -1036,10 +1093,47 @@ class TaleWithWorkspaceTestCase(base.TestCase):
         )
         self.assertStatusOk(resp)
         tale = resp.json
+        count = 0
+        while tale["dataSetCitation"]:
+            time.sleep(0.5)
+            resp = self.request(path=f"/tale/{tale['_id']}", method="GET", user=self.user)
+            self.assertStatusOk(resp)
+            tale = resp.json
+            count += 1
+            if count > 5:
+                break
         self.assertEqual(tale['dataSetCitation'], [])
 
         self.model('tale', 'wholetale').remove(tale)
         self.model('collection').remove(self.data_collection)
+
+    def test_tale_defaults(self):
+        tale = Tale().createTale(
+            self.image,
+            [],
+            creator=self.user,
+            title="Export Tale",
+            public=True,
+            authors=None,
+            description=None
+        )
+
+        self.assertTrue(tale['description'] is not None)
+        self.assertTrue(tale['description'].startswith("This Tale"))
+
+    def testTaleManifestTaleCycle(self):
+        from server.lib.manifest import Manifest
+        tale = self._create_water_tale()
+        manifest_obj = Manifest(tale, self.user)
+        manifest = json.loads(manifest_obj.dump_manifest())
+        environment = json.loads(manifest_obj.dump_environment())
+        restored_tale = Tale().restoreTale(manifest, environment)
+        for key in restored_tale.keys():
+            if key == "imageId":
+                self.assertEqual(tale[key], str(restored_tale[key]))
+            else:
+                self.assertEqual(tale[key], restored_tale[key])
+        Tale().remove(tale)
 
     def tearDown(self):
         self.model('user').remove(self.user)

@@ -1,7 +1,10 @@
+import json
 import os
+from urllib.parse import quote
 
 from girder import logger
 from girder.models.folder import Folder
+from girder.utility import JsonEncoder
 from girder.utility.model_importer import ModelImporter
 from girder.exceptions import ValidationException
 from girder.constants import AccessType
@@ -20,7 +23,7 @@ class Manifest:
     create<someProperty>
     """
 
-    def __init__(self, tale, user, expand_folders=False):
+    def __init__(self, tale, user, expand_folders=True, versionId=None):
         """
         Initialize the manifest document with base variables
         :param tale: The Tale whose data is being serialized
@@ -30,6 +33,16 @@ class Manifest:
         """
         self.tale = tale
         self.user = user
+        if versionId is not None:
+            version = Folder().load(
+                versionId, user=self.user, level=AccessType.READ, exc=True
+            )
+            version = Folder().filter(version, user)  # to get _modelType
+        else:
+            version = tale
+            version["_modelType"] = "tale"
+            version["name"] = tale["title"]
+        self.version = version
         self.expand_folders = expand_folders
 
         self.validate()
@@ -37,7 +50,7 @@ class Manifest:
         # Create a set that represents any external data packages
         self.datasets = set()
 
-        self.folderModel = ModelImporter.model('folder')
+        self.imageModel = ModelImporter.model("image", "wholetale")
         self.itemModel = ModelImporter.model('item')
         self.userModel = ModelImporter.model('user')
 
@@ -51,6 +64,7 @@ class Manifest:
         # Add any external datasets to the manifest
         self.add_dataset_records()
         self.add_license_record()
+        self.add_version_info()
 
     publishers = {
         "DataONE":
@@ -93,16 +107,17 @@ class Manifest:
         """
 
         return {
-            "@id": 'https://data.wholetale.org/api/v1/tale/' + str(self.tale['_id']),
-            "createdOn": str(self.tale['created']),
-            "schema:name": self.tale['title'],
-            "schema:description": self.tale.get('description', str()),
-            "schema:category": self.tale['category'],
-            "schema:identifier": str(self.tale['_id']),
-            "schema:version": self.tale['format'],
-            "schema:image": self.tale['illustration'],
+            "@id": f"https://data.wholetale.org/api/v1/tale/{self.tale['_id']}",
+            "@type": "wt:Tale",
+            "createdOn": str(self.tale["created"]),
+            "schema:keywords": self.tale["category"],
+            "schema:description": self.tale.get("description", ""),
+            "wt:identifier": str(self.tale["_id"]),
+            "schema:image": self.tale["illustration"],
+            "schema:name": self.tale["title"],
+            "schema:schemaVersion": self.tale["format"],
             "aggregates": list(),
-            "Datasets": list()
+            "wt:usesDataset": list(),
         }
 
     def add_tale_creator(self):
@@ -114,7 +129,7 @@ class Manifest:
                                         user=self.user,
                                         force=True)
         self.manifest['createdBy'] = {
-            "@id": tale_user['email'],
+            "@id": f"mailto:{tale_user['email']}",
             "@type": "schema:Person",
             "schema:givenName": tale_user.get('firstName', ''),
             "schema:familyName": tale_user.get('lastName', ''),
@@ -139,7 +154,9 @@ class Manifest:
         }
 
     def create_repo2docker_version(self):
-        image_info = self.tale.get("imageInfo", {"repo2docker_version": REPO2DOCKER_VERSION})
+        # TODO: We shouldn't be publishing a Tale that was never built...
+        image_info = self.tale.get("imageInfo", {})
+        image_info.setdefault("repo2docker_version", REPO2DOCKER_VERSION)
         return {
             'schema:hasPart': [{
                 '@id': 'https://github.com/whole-tale/repo2docker_wholetale',
@@ -151,19 +168,19 @@ class Manifest:
     def create_related_identifiers(self):
         def derive_id_type(identifier):
             if identifier.lower().startswith("doi"):
-                return "DataCite:DOI"
+                return "datacite:DOI"
             elif identifier.lower().startswith("http"):
-                return "DataCite:URL"
+                return "datacite:URL"
             elif identifier.lower().startswith("urn"):
-                return "DataCite:URN"
+                return "datacite:URN"
 
         return {
-            "DataCite:relatedIdentifiers": [
+            "datacite:relatedIdentifiers": [
                 {
-                    "DataCite:relatedIdentifier": {
+                    "datacite:relatedIdentifier": {
                         "@id": rel_id["identifier"],
-                        "DataCite:relationType": "DataCite:" + rel_id["relation"],
-                        "DataCite:relatedIdentifierType": derive_id_type(rel_id["identifier"]),
+                        "datacite:relationType": "datacite:" + rel_id["relation"],
+                        "datacite:relatedIdentifierType": derive_id_type(rel_id["identifier"]),
                     }
                 }
                 for rel_id in self.tale["relatedIdentifiers"]
@@ -172,7 +189,7 @@ class Manifest:
 
     def create_context(self):
         """
-        Creates the manifest namespace. When a new vocabulary is used, it shoud
+        Creates the manifest namespace. When a new vocabulary is used, it should
         get added here.
         :return: A structure defining the used vocabularies
         """
@@ -180,8 +197,9 @@ class Manifest:
             "@context": [
                 "https://w3id.org/bundle/context",
                 {"schema": "http://schema.org/"},
-                {"DataCite": "http://datacite.org/schema/kernel-4"},
-                {"Datasets": {"@type": "@id"}}
+                {"datacite": "https://schema.datacite.org/meta/kernel-4.3/#"},
+                {"wt": "https://vocabularies.wholetale.org/wt/1.0/"},
+                {"@base": f"arcp://uid,{self.version['_id']}/data/"},
             ]
         }
 
@@ -192,19 +210,18 @@ class Manifest:
         :return: Dictionary that describes a dataset
         """
         try:
-            folder = self.folderModel.load(folder_id,
-                                           user=self.user,
-                                           exc=True,
-                                           level=AccessType.READ)
+            folder = Folder().load(
+                folder_id, user=self.user, exc=True, level=AccessType.READ
+            )
             provider = folder['meta']['provider']
             if provider in {'HTTP', 'HTTPS'}:
                 return None
             identifier = folder['meta']['identifier']
             return {
                 "@id": identifier,
-                "@type": "Dataset",
-                "name": folder['name'],
-                "identifier": identifier,
+                "@type": "schema:Dataset",
+                "schema:name": folder['name'],
+                "schema:identifier": identifier,
                 # "publisher": self.publishers[provider]
             }
 
@@ -238,27 +255,28 @@ class Manifest:
         """
 
         # Handle the files in the workspace
-        folder = self.folderModel.load(self.tale['workspaceId'],
-                                       user=self.user,
-                                       level=AccessType.READ)
-        if folder:
-            workspace_folder_files = self.folderModel.fileList(folder,
-                                                               user=self.user,
-                                                               data=False)
-            for workspace_file in workspace_folder_files:
-                self.manifest['aggregates'].append(
-                    {'uri': '../workspace/' + clean_workspace_path(self.tale['_id'],
-                                                                   workspace_file[0])})
+        workspace = Folder().load(
+            self.tale["workspaceId"], user=self.user, level=AccessType.READ
+        )
+        if workspace and "fsPath" in workspace:
+            workspace_rootpath = workspace["fsPath"]
+            if not workspace_rootpath.endswith("/"):
+                workspace_rootpath += "/"
+
+            for curdir, _, files in os.walk(workspace_rootpath):
+                for fname in files:
+                    wfile = os.path.join(curdir, fname).replace(workspace_rootpath, "")
+                    self.manifest['aggregates'].append({'uri': './workspace/' + wfile})
 
         """
         Handle objects that are in the dataSet, ie files that point to external sources.
         Some of these sources may be datasets from publishers. We need to save information
-        about the source so that they can added to the Datasets section.
+        about the source so that they can added to the wt:usesDataset section.
         """
         external_objects, dataset_top_identifiers = self._parse_dataSet()
 
         # Add records of all top-level dataset identifiers that were used in the Tale:
-        # "Datasets"
+        # "wt:usesDataset"
         for identifier in dataset_top_identifiers:
             # Assuming Folder model implicitly ignores "datasets" that are
             # single HTTP files which is intended behavior
@@ -271,11 +289,12 @@ class Manifest:
         for obj in external_objects:
             # Grab identifier of a parent folder
             if obj['_modelType'] == 'item':
-                bundle = self.create_bundle(os.path.join('../data/', obj['relpath']), obj['name'])
+                bundle = self.create_bundle(obj["relpath"], obj["name"])
             else:
-                bundle = self.create_bundle('../data/' + obj['name'], None)
+                bundle = self.create_bundle(obj["name"], None)
             record = self.create_aggregation_record(obj['uri'], bundle, obj['dataset_identifier'])
-            record['size'] = obj['size']
+            record["wt:size"] = obj["size"]
+            record["wt:identifier"] = obj["wt:identifier"]
             self.manifest['aggregates'].append(record)
 
     def _expand_folder_into_items(self, folder, user, relpath=''):
@@ -334,23 +353,28 @@ class Manifest:
                     'dataset_identifier': top_identifier,
                     'provider': provider_name,
                     '_modelType': obj['_modelType'],
-                    'relpath': relpath
+                    'relpath': relpath,
+                    "wt:identifier": str(doc["_id"]),
                 }
 
                 if obj['_modelType'] == 'folder':
+                    is_root_folder = doc['meta'].get('identifier') == top_identifier
+                    try:
+                        if is_root_folder:
+                            uri = top_identifier
+                        else:
+                            uri = provider.getURI(doc, self.user)
+                    except NotImplementedError:
+                        uri = None
 
-                    if provider_name == 'HTTP' or self.expand_folders:
+                    if uri is None and self.expand_folders and not is_root_folder:
                         external_objects += self._expand_folder_into_items(doc, self.user)
                         continue
 
+                    ext_obj['uri'] = uri or "undefined"
                     ext_obj['name'] = doc['name']
-                    if doc['meta'].get('identifier') == top_identifier:
-                        ext_obj['uri'] = top_identifier
-                    else:
-                        ext_obj['uri'] = provider.getURI(doc, self.user)
-                        #  Find path to root?
                     ext_obj['size'] = 0
-                    for _, f in self.folderModel.fileList(
+                    for _, f in Folder().fileList(
                         doc, user=self.user, subpath=False, data=False
                     ):
                         ext_obj['size'] += f['size']
@@ -379,7 +403,7 @@ class Manifest:
         for folder_id in self.datasets:
             dataset_record = self.create_dataset_record(folder_id)
             if dataset_record:
-                self.manifest['Datasets'].append(dataset_record)
+                self.manifest["wt:usesDataset"].append(dataset_record)
 
     def create_bundle(self, folder, filename):
         """
@@ -388,15 +412,13 @@ class Manifest:
         :param filename:  The name of the file
         :return: A dictionary record of the bundle
         """
-
+        folder = quote(os.path.join("./data", folder))
         # Add a trailing slash to the path if there isn't one (RO spec)
-        bundle = {}
-        if folder:
-            if not folder.endswith('/'):
-                folder += '/'
-            bundle['folder'] = folder
+        if not folder.endswith('/'):
+            folder += '/'
+        bundle = dict(folder=folder)
         if filename:
-            bundle['filename'] = filename
+            bundle['filename'] = quote(filename)
         return bundle
 
     def add_license_record(self):
@@ -404,20 +426,55 @@ class Manifest:
         Adds a record for the License file. When exporting to a bag, this gets placed
         in their data/ folder.
         """
-        self.manifest['aggregates'].append({'uri': '../LICENSE',
-                                            'schema:license':
-                                                self.tale.get('licenseSPDX',
-                                                              WholeTaleLicense.default_spdx())})
+        license = self.tale.get('licenseSPDX', WholeTaleLicense.default_spdx())
+        self.manifest['aggregates'].append(
+            {'uri': './LICENSE', 'schema:license': license}
+        )
 
+    def add_version_info(self):
+        """Adds version metadata."""
+        user = self.userModel.load(self.version["creatorId"], force=True)
+        self.manifest["dct:hasVersion"] = {
+            "@id": (
+                "https://data.wholetale.org/api/v1/"
+                f"{self.version['_modelType']}/{self.version['_id']}"
+            ),
+            "@type": "wt:TaleVersion",
+            "schema:name": self.version["name"],
+            "schema:dateModified": self.version["created"],  # FIXME: should it be updated?
+            "schema:creator": {
+                "@id": f"mailto:{user['email']}",
+                "@type": "schema:Person",
+                "schema:givenName": user["firstName"],
+                "schema:familyName": user["lastName"],
+                "schema:email": user["email"],
+            },
+        }
 
-def clean_workspace_path(tale_id, path):
-    """
-    Removes the Tale ID from a path
-    :param tale_id: The Tale's ID
-    :param path: The file path
-    :return: A cleaned path
-    """
-    return path.replace(str(tale_id) + '/', '')
+    def dump_manifest(self, **kwargs):
+        return json.dumps(
+            self.manifest,
+            cls=JsonEncoder,
+            sort_keys=True,
+            allow_nan=False,
+            **kwargs
+        )
+
+    def get_environment(self):
+        image = self.imageModel.load(
+            self.tale["imageId"], user=self.user, level=AccessType.READ
+        )
+        image["taleConfig"] = self.tale.get("config", {})
+        return self.imageModel.filter(image, self.user)
+
+    def dump_environment(self, **kwargs):
+        return json.dumps(
+            self.get_environment(),
+            cls=JsonEncoder,
+            sort_keys=True,
+            allow_nan=False,
+            **kwargs
+        )
 
 
 def get_folder_identifier(folder_id, user):

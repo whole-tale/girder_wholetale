@@ -119,6 +119,9 @@ class DataverseImportProvider(ImportProvider):
             # It's an item, grab the parent which should contain all the info
             doc = Folder().load(doc['folderId'], user=user, level=AccessType.READ)
         # obj is a folder at this point use its meta
+        if not doc["meta"].get("identifier"):
+            doc = Folder().load(doc["parentId"], user=user, level=AccessType.READ)
+            return self.getDatasetUID(doc, user)
         return doc['meta']['identifier']
 
     def setting_changed(self, event):

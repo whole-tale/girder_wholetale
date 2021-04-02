@@ -9,12 +9,12 @@ from girder.constants import AccessType, SortDir, TokenScope
 from girder.exceptions import ValidationException
 from girder.models.item import Item
 from girder.models.user import User
-from ..constants import CATALOG_NAME
+from girder.plugins.jobs.models.job import Job
 
-from girder.plugins.wholetale.lib.dataone import DataONELocations
-from ..lib import register_dataMap
+from ..constants import CATALOG_NAME
+from ..lib.dataone import DataONELocations
 from ..schema.misc import dataMapListSchema
-from ..utils import getOrCreateRootFolder
+from ..utils import getOrCreateRootFolder, init_progress
 
 
 datasetModel = {
@@ -216,7 +216,6 @@ class Dataset(Resource):
                    base_url,
                    params):
         user = self.getCurrentUser()
-
         if not parentId or parentType not in ('folder', 'item'):
             parent = getOrCreateRootFolder(CATALOG_NAME)
             parentType = 'folder'
@@ -224,10 +223,21 @@ class Dataset(Resource):
             parent = self.model(parentType).load(
                 parentId, user=user, level=AccessType.WRITE, exc=True)
 
-        importedData = register_dataMap(
-            dataMap, parent, parentType, user=user, base_url=base_url
+        resource = {
+            'type': 'wt_register_data',
+            'dataMap': dataMap,
+        }
+        notification = init_progress(
+            resource, user, 'Registering Data',
+            'Initialization', 2)
+
+        job = Job().createLocalJob(
+            title='Registering Data', user=user,
+            type='wholetale.register_data', public=False, _async=False,
+            module='girder.plugins.wholetale.tasks.register_dataset',
+            args=(dataMap, parent, parentType, user),
+            kwargs={'base_url': base_url},
+            otherFields={'wt_notification_id': str(notification['_id'])},
         )
-        if importedData:
-            user_data = set(user.get('myData', []))
-            user['myData'] = list(user_data.union(set(importedData)))
-            user = User().save(user)
+        Job().scheduleJob(job)
+        return job

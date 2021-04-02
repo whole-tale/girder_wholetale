@@ -139,6 +139,14 @@ containerConfigSchema = {
     "description": "A subset of docker runtime configuration used for Tales",
     "type": "object",
     "properties": {
+        "buildpack": {
+            "type": "string",
+            "description": "Repo2docker's BuildPack to use",
+        },
+        "repo2docker_version": {
+            "type": "string",
+            "description": "Repo2docker image used for build",
+        },
         "command": {
             "type": "string",
             "description": "Command to run when the container starts",

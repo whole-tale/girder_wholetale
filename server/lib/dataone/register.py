@@ -16,7 +16,7 @@ from ..data_map import DataMap
 
 def query(q,
           base_url=DataONELocations.prod_cn,
-          fields=["identifier"],
+          fields=None,
           rows=1000,
           start=0):
     """
@@ -34,6 +34,8 @@ def query(q,
      has functionality for solr queries. If time permits or if errors occur
      in this area, it is worth looking into refactoring with it.
     """
+    if fields is None:
+        fields = ["identifier"]
     fl = ",".join(fields)
     query_url = "{}/query/solr/?q={}&fl={}&rows={}&start={}&wt=json".format(
         base_url, q, fl, rows, start)

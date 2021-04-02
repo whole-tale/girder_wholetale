@@ -38,28 +38,12 @@ taleModel = {
         "imageInfo": {
             "$ref": "#/definitions/imageInfo"
         },
-        "folderId": {
-            "type": "string",
-            "description": "ID of a folder containing copy of tale['dataSet']"
-        },
-        "narrativeId": {
-            "type": "string",
-            "description": "ID of a folder containing copy of tale['narrative']"
-        },
         "dataSet": {
             "$ref": "#/definitions/dataSet"
         },
         "workspaceId": {
             "type": "string",
             "description": "ID of a folder containing Tale's workspace"
-        },
-        "narrative": {
-            "type": "array",
-            "items": {
-                'type': 'string',
-                'description': "Girder Item id"
-            },
-            "description": "List of Girder Items containing Tale's narrative"
         },
         "format": {
             "type": "integer",
@@ -152,7 +136,6 @@ taleModel = {
         ],
         "description": "#### Markdown Editor",
         "doi": "doi:x.xx.xxx",
-        "folderId": "5c4887409759c200017b2316",
         "format": 4,
         "icon": ("https://raw.githubusercontent.com/whole-tale/jupyter-base/"
                  "master/squarelogo-greytext-orangebody-greymoons.png"),
@@ -165,8 +148,6 @@ taleModel = {
             'digest': 'sha256:9aaece098841b13cdc64ea6756767357f5c9eb1ab10f67b9e67a90960b894053',
             'fullName': 'registry.local.wholetale.org/5c3cd7faa697bf0001ce6cc0-1547494547'
         },
-        "narrative": [],
-        "narrativeId": "5c4887409759c200017b2319",
         "public": False,
         "publishInfo": [
             {

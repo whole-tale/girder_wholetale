@@ -1,8 +1,7 @@
 from datetime import datetime, timezone
 from hashlib import sha256, md5
-import json
-from girder.models.folder import Folder
-from girder.utility import JsonEncoder
+import os
+from urllib.parse import unquote
 from . import TaleExporter
 from gwvolman.constants import REPO2DOCKER_VERSION
 
@@ -73,7 +72,7 @@ Access on http://localhost:{port}/{urlPath}
 class BagTaleExporter(TaleExporter):
     def stream(self):
         token = 'wholetale'
-        container_config = self.image['config']
+        container_config = self.environment["config"]
         rendered_command = container_config.get('command', '').format(
             base_path='', port=container_config['port'], ip='0.0.0.0', token=token
         )
@@ -82,13 +81,13 @@ class BagTaleExporter(TaleExporter):
             repo2docker=container_config.get('repo2docker_version', REPO2DOCKER_VERSION),
             user=container_config['user'],
             port=container_config['port'],
-            taleId=self.tale['_id'],
+            taleId=self.manifest["wt:identifier"],
             command=rendered_command,
             urlPath=urlPath,
         )
         top_readme = readme_tpl.format(
-            title=self.tale['title'],
-            description=self.tale['description'],
+            title=self.manifest["schema:name"],
+            description=self.manifest["schema:description"],
             port=container_config['port'],
             urlPath=urlPath,
         )
@@ -98,17 +97,12 @@ class BagTaleExporter(TaleExporter):
         oxum = dict(size=0, num=0)
 
         # Add files from the workspace computing their checksum
-        for path, file_stream in Folder().fileList(
-            self.workspace, user=self.user, subpath=False
-        ):
-            yield from self.dump_and_checksum(file_stream, 'data/workspace/' + path)
-
-        # Iterate again to get file sizes this time
-        for path, fobj in Folder().fileList(
-            self.workspace, user=self.user, subpath=False, data=False
-        ):
-            oxum['num'] += 1
-            oxum['size'] += fobj['size']
+        for fullpath, relpath in self.list_workspace():
+            yield from self.dump_and_checksum(
+                self.bytes_from_file(fullpath), 'data/workspace/' + relpath
+            )
+            oxum["num"] += 1
+            oxum["size"] += os.path.getsize(fullpath)
 
         # Compute checksums for the extrafiles
         for path, content in extra_files.items():
@@ -117,24 +111,11 @@ class BagTaleExporter(TaleExporter):
             payload = self.stream_string(content)
             yield from self.dump_and_checksum(payload, path)
 
-        # In Bag there's an additional 'data' folder where everything lives
-        for i in range(len(self.manifest['aggregates'])):
-            uri = self.manifest['aggregates'][i]['uri']
-            # Don't touch any of the extra files
-            if len([key for key in extra_files.keys() if '../' + key in uri]):
-                continue
-            if uri.startswith('../'):
-                self.manifest['aggregates'][i]['uri'] = uri.replace('..', '../data')
-            if 'bundledAs' in self.manifest['aggregates'][i]:
-                folder = self.manifest['aggregates'][i]['bundledAs']['folder']
-                self.manifest['aggregates'][i]['bundledAs']['folder'] = folder.replace(
-                    '..', '../data'
-                )
         # Update manifest with hashes
         self.append_aggergate_checksums()
 
         # Update manifest with filesizes and mimeTypes for workspace items
-        self.append_aggregate_filesize_mimetypes('../data/workspace/')
+        self.append_aggregate_filesize_mimetypes('./workspace/')
 
         # Update manifest with filesizes and mimeTypes for extra items
         self.append_extras_filesize_mimetypes(extra_files)
@@ -144,11 +125,9 @@ class BagTaleExporter(TaleExporter):
         for bundle in self.manifest['aggregates']:
             if 'bundledAs' not in bundle:
                 continue
-            folder = bundle['bundledAs']['folder']
-            fetch_file += "{uri} {size} {folder}".format(
-                uri=bundle['uri'], size=bundle['size'], folder=folder.replace('../', '')
-            )  # fetch.txt is located in the root level, need to adjust paths
-            fetch_file += bundle['bundledAs'].get('filename', '')
+            folder = unquote(bundle['bundledAs']['folder'])
+            fetch_file += f"{bundle['uri']} {bundle['wt:size']} {folder}"
+            fetch_file += unquote(bundle['bundledAs'].get('filename', ''))
             fetch_file += '\n'
 
         now = datetime.now(timezone.utc)
@@ -174,17 +153,8 @@ class BagTaleExporter(TaleExporter):
             (lambda: fetch_file, 'fetch.txt'),
             (lambda: dump_checksums('md5'), 'manifest-md5.txt'),
             (lambda: dump_checksums('sha256'), 'manifest-sha256.txt'),
-            (
-                lambda: json.dumps(
-                    self.get_environment(),
-                    indent=4,
-                    cls=JsonEncoder,
-                    sort_keys=True,
-                    allow_nan=False,
-                ),
-                'metadata/environment.json',
-            ),
-            (lambda: json.dumps(self.manifest, indent=4), 'metadata/manifest.json'),
+            (lambda: self.formated_dump(self.environment, indent=4), 'metadata/environment.json'),
+            (lambda: self.formated_dump(self.manifest, indent=4), 'metadata/manifest.json'),
         ):
             tagmanifest['md5'] += "{} {}\n".format(
                 md5(payload().encode()).hexdigest(), fname

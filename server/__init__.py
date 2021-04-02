@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import base64
+import cherrypy
 import copy
 import datetime
 import jsonschema
@@ -14,18 +15,20 @@ from girder.api import access
 from girder.api.describe import Description, describeRoute, autoDescribeRoute
 from girder.api.rest import \
     boundHandler, loadmodel, RestException
-from girder.constants import AccessType, TokenScope, CoreEventHandler
+from girder.constants import AccessType, TokenScope
 from girder.exceptions import GirderException
 from girder.models.model_base import ValidationException
 from girder.models.notification import Notification, ProgressState
 from girder.models.user import User
 from girder.plugins.jobs.constants import JobStatus
 from girder.plugins.jobs.models.job import Job as JobModel
+from girder.plugins.oauth.rest import OAuth as OAuthResource
 from girder.plugins.worker import getCeleryApp
 from girder.utility import assetstore_utilities, setting_utilities
 from girder.utility.model_importer import ModelImporter
 
 from .constants import PluginSettings, SettingDefault
+from .lib import update_citation
 from .rest.account import Account
 from .rest.dataset import Dataset
 from .rest.image import Image
@@ -35,7 +38,6 @@ from .rest.harvester import listImportedData
 from .rest.tale import Tale
 from .rest.instance import Instance
 from .rest.wholetale import wholeTale
-from .rest.workspace import Workspace
 from .rest.license import License
 from .models.instance import finalizeInstance
 from .schema.misc import (
@@ -50,7 +52,7 @@ def validatePublisherRepos(doc):
     try:
         jsonschema.validate(doc['value'], repository_to_provider_schema)
     except jsonschema.ValidationError as e:
-        raise ValidationException('Invalid Repository to Auth Provider map: ' + e.message)
+        raise ValidationException('Invalid Repository to Auth Provider map: ' + str(e))
 
 
 @setting_utilities.default(PluginSettings.PUBLISHER_REPOS)
@@ -65,7 +67,7 @@ def validateExternalApikeyGroups(doc):
     try:
         jsonschema.validate(doc['value'], external_apikey_groups_schema)
     except jsonschema.ValidationError as e:
-        raise ValidationException('Invalid External Apikey Groups list: ' + e.message)
+        raise ValidationException('Invalid External Apikey Groups list: ' + str(e))
 
 
 @setting_utilities.validator(PluginSettings.EXTERNAL_AUTH_PROVIDERS)
@@ -73,7 +75,7 @@ def validateOtherSettings(doc):
     try:
         jsonschema.validate(doc['value'], external_auth_providers_schema)
     except jsonschema.ValidationError as e:
-        raise ValidationException('Invalid External Auth Providers list: ' + e.message)
+        raise ValidationException('Invalid External Auth Providers list: ' + str(e))
 
 
 @setting_utilities.default(PluginSettings.EXTERNAL_AUTH_PROVIDERS)
@@ -286,6 +288,24 @@ def setUserMetadata(self, params):
     return self.model('user').save(user)
 
 
+@access.public
+@autoDescribeRoute(
+    Description('Initiate oauth login flow')
+    .param('redirect', 'URL to redirect to after login', required=False)
+)
+@boundHandler()
+def signIn(self, redirect):
+    user = self.getCurrentUser()
+
+    # If there's no user, initiate the oauth flow with this endpoint
+    # as the callback along with the fhost parameter
+    if user is None:
+        oauth_providers = OAuthResource().listProviders(params={"redirect": redirect})
+        raise cherrypy.HTTPRedirect(oauth_providers["Globus"])
+    else:
+        raise cherrypy.HTTPRedirect(redirect)
+
+
 @access.user
 @autoDescribeRoute(
     Description('Get a set of items and folders.')
@@ -313,21 +333,6 @@ def listResources(self, resources, params):
         except ImportError:
             pass
     return result
-
-
-def addDefaultFolders(event):
-    user = event.info
-    folderModel = ModelImporter.model('folder')
-    defaultFolders = [
-        ('Home', False),
-        ('Data', False),
-        ('Workspace', False)
-    ]
-
-    for folderName, public in defaultFolders:
-        folder = folderModel.createFolder(
-            user, folderName, parentType='user', public=public, creator=user)
-        folderModel.setUserAccess(folder, user, AccessType.ADMIN, save=True)
 
 
 def validateFileLink(event):
@@ -474,17 +479,12 @@ def load(info):
     events.bind('jobs.job.update.after', 'wholetale', finalizeInstance)
     events.bind('jobs.job.update.after', 'wholetale', updateNotification)
     events.bind('model.file.validate', 'wholetale', validateFileLink)
-    events.unbind('model.user.save.created', CoreEventHandler.USER_DEFAULT_FOLDERS)
-    events.bind('model.user.save.created', 'wholetale', addDefaultFolders)
-    events.bind('model.file.save', 'wholetale', tale.updateWorkspaceModTime)
-    events.bind('model.file.save.created', 'wholetale', tale.updateWorkspaceModTime)
-    events.bind('model.file.remove', 'wholetale', tale.updateWorkspaceModTime)
     events.bind('oauth.auth_callback.after', 'wholetale', store_other_globus_tokens)
+
     info['apiRoot'].account = Account()
     info['apiRoot'].repository = Repository()
     info['apiRoot'].license = License()
     info['apiRoot'].integration = Integration()
-    info['apiRoot'].workspace = Workspace()
     info['apiRoot'].folder.route('GET', ('registered',), listImportedData)
     info['apiRoot'].folder.route('GET', (':id', 'listing'), listFolder)
     info['apiRoot'].folder.route('GET', (':id', 'dataset'), getDataSet)
@@ -494,11 +494,14 @@ def load(info):
 
     info['apiRoot'].user.route('PUT', ('settings',), setUserMetadata)
     info['apiRoot'].user.route('GET', ('settings',), getUserMetadata)
+    info['apiRoot'].user.route('GET', ('sign_in',), signIn)
+
     ModelImporter.model('user').exposeFields(
         level=AccessType.WRITE, fields=('meta', 'myData', 'lastLogin'))
     ModelImporter.model('user').exposeFields(
         level=AccessType.ADMIN, fields=('otherTokens',))
 
+    events.bind("tale.update_citation", "wholetale", update_citation)
     path_to_assets = os.path.join(
         os.path.dirname(os.path.dirname(__file__)),
         "web_client/extra/img",

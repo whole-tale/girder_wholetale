@@ -3,12 +3,12 @@ import six.moves.urllib as urllib
 
 from girder.utility.model_importer import ModelImporter
 from girder.models.notification import Notification
-
+from girder.models.user import User
 
 NOTIFICATION_EXP_HOURS = 1
 
 
-def getOrCreateRootFolder(name, description=str()):
+def getOrCreateRootFolder(name, description=""):
     collection = ModelImporter.model('collection').createCollection(
         name, public=True, reuseExisting=True)
     folder = ModelImporter.model('folder').createFolder(
@@ -46,8 +46,28 @@ def esc(value):
     return urllib.parse.quote_plus(value)
 
 
-def init_progress(resource, user, title, message, total):
+def notify_event(users, event, affectedIds):
+    """
+    Notify multiple users of a particular WT event
+    :param users: Arrayof user IDs
+    :param event: WT Event name
+    :param affectedIds: Map of affected object Ids
+    """
+    data = {
+        'event': event,
+        'affectedResourceIds': affectedIds,
+        'resourceName': 'WT event'
+    }
 
+    expires = datetime.datetime.utcnow() + datetime.timedelta(seconds=5)
+
+    for user_id in users:
+        user = User().load(user_id, force=True)
+        Notification().createNotification(
+            type="wt_event", data=data, user=user, expires=expires)
+
+
+def init_progress(resource, user, title, message, total):
     data = {
         'title': title,
         'total': total,
@@ -82,3 +102,14 @@ def deep_get(dikt, path):
         else:
             value = value[component]
     return value
+
+
+def diff_access(access1, access2):
+    """Diff two access lists to identify which users
+    were added or removed.
+    """
+    existing = {str(user['id']) for user in access1['users']}
+    new = {str(user['id']) for user in access2['users']}
+    added = list(new - existing)
+    removed = list(existing - new)
+    return (added, removed)

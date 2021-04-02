@@ -6,9 +6,14 @@ from girder import events
 
 API_VERSION = "2.1"
 CATALOG_NAME = "WholeTale Catalog"
-WORKSPACE_NAME = "WholeTale Workspaces"
-DATADIRS_NAME = "WholeTale Data Mountpoints"
-SCRIPTDIRS_NAME = "WholeTale Narrative"
+DEFAULT_IMAGE_ICON = (
+    "https://raw.githubusercontent.com/whole-tale/dashboard/master/public/"
+    "images/whole_tale_logo.png"
+)
+DEFAULT_ILLUSTRATION = (
+    "https://raw.githubusercontent.com/whole-tale/dashboard/master/public/"
+    "images/demo-graph2.jpg"
+)
 
 
 class HarvesterType:

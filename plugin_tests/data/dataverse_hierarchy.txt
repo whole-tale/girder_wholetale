@@ -2,48 +2,377 @@ interactions:
 - request:
     body: null
     headers:
-      Connection: [close]
-      Host: [dev2.dataverse.org]
-      User-Agent: [Python-urllib/3.6]
+      Connection:
+      - close
+      Host:
+      - dataverse.harvard.edu
+      User-Agent:
+      - Python-urllib/3.6
     method: GET
-    uri: https://dev2.dataverse.org/api/info/version
+    uri: https://dataverse.harvard.edu/api/datasets/:persistentId?persistentId=doi:10.7910/DVN/Q5PV4U
   response:
-    body: {string: '{"status":"OK","data":{"version":"4.14","build":"cannot-create-a-dataverse-3961134"}}'}
+    body:
+      string: "{\"status\":\"OK\",\"data\":{\"id\":3636920,\"identifier\":\"DVN/Q5PV4U\"\
+        ,\"persistentUrl\":\"https://doi.org/10.7910/DVN/Q5PV4U\",\"protocol\":\"\
+        doi\",\"authority\":\"10.7910\",\"publisher\":\"Harvard Dataverse\",\"publicationDate\"\
+        :\"2020-03-09\",\"storageIdentifier\":\"s3://10.7910/DVN/Q5PV4U\",\"latestVersion\"\
+        :{\"id\":178077,\"datasetId\":3636920,\"datasetPersistentId\":\"doi:10.7910/DVN/Q5PV4U\"\
+        ,\"storageIdentifier\":\"s3://10.7910/DVN/Q5PV4U\",\"versionNumber\":1,\"\
+        versionMinorNumber\":0,\"versionState\":\"RELEASED\",\"lastUpdateTime\":\"\
+        2020-03-09T17:04:20Z\",\"releaseTime\":\"2020-03-09T17:04:20Z\",\"createTime\"\
+        :\"2019-11-27T04:29:12Z\",\"license\":\"NONE\",\"disclaimer\":\"The <i>American\
+        \ Journal of Political Science</i> and the Odum Institute for Research in\
+        \ Social Science are not responsible for the accuracy or quality of data uploaded\
+        \ within the <i>AJPS</i> Dataverse, for the use of those data, or for interpretations\
+        \ or conclusions based on their use.\",\"fileAccessRequest\":false,\"metadataBlocks\"\
+        :{\"citation\":{\"displayName\":\"Citation Metadata\",\"fields\":[{\"typeName\"\
+        :\"title\",\"multiple\":false,\"typeClass\":\"primitive\",\"value\":\"Replication\
+        \ Data for: Misgovernance and Human Rights: The Case of Illegal Detention\
+        \ without Intent\"},{\"typeName\":\"author\",\"multiple\":true,\"typeClass\"\
+        :\"compound\",\"value\":[{\"authorName\":{\"typeName\":\"authorName\",\"multiple\"\
+        :false,\"typeClass\":\"primitive\",\"value\":\"Slough, Tara\"},\"authorAffiliation\"\
+        :{\"typeName\":\"authorAffiliation\",\"multiple\":false,\"typeClass\":\"primitive\"\
+        ,\"value\":\"Columbia University, New York University, and the University\
+        \ of California, Berkeley\"}},{\"authorName\":{\"typeName\":\"authorName\"\
+        ,\"multiple\":false,\"typeClass\":\"primitive\",\"value\":\"Fariss, Christopher\"\
+        },\"authorAffiliation\":{\"typeName\":\"authorAffiliation\",\"multiple\":false,\"\
+        typeClass\":\"primitive\",\"value\":\"University of Michigan\"}}]},{\"typeName\"\
+        :\"datasetContact\",\"multiple\":true,\"typeClass\":\"compound\",\"value\"\
+        :[{\"datasetContactName\":{\"typeName\":\"datasetContactName\",\"multiple\"\
+        :false,\"typeClass\":\"primitive\",\"value\":\"Slough, Tara\"},\"datasetContactAffiliation\"\
+        :{\"typeName\":\"datasetContactAffiliation\",\"multiple\":false,\"typeClass\"\
+        :\"primitive\",\"value\":\"Columbia University, New York University, and the\
+        \ University of California, Berkeley\"},\"datasetContactEmail\":{\"typeName\"\
+        :\"datasetContactEmail\",\"multiple\":false,\"typeClass\":\"primitive\",\"\
+        value\":\"tara.slough@nyu.edu\"}}]},{\"typeName\":\"dsDescription\",\"multiple\"\
+        :true,\"typeClass\":\"compound\",\"value\":[{\"dsDescriptionValue\":{\"typeName\"\
+        :\"dsDescriptionValue\",\"multiple\":false,\"typeClass\":\"primitive\",\"\
+        value\":\"Existing explanations of human rights abuses emphasize a strategic\
+        \ logic of repression. Yet certain classes of abuses may arise absent the\
+        \ intent to repress because of the misaligned bureaucratic incentives of state\
+        \ agents. To separate accounts of strategic repression from bureaucratic incentives,\
+        \ we study the responses of state agents working within the Haitian criminal\
+        \ justice system to a randomized free legal assistance intervention for detainees\
+        \ held in illegal pretrial detention. Legal assistance addresses moral hazard\
+        \ problems of the bureaucrats responsible for processing cases. We demonstrate\
+        \ that legal assistance accelerates case advancement and liberation, in line\
+        \ with the view that large scale human rights abuses in the justice system\
+        \ can result from poor governance and not repressive intent.\"},\"dsDescriptionDate\"\
+        :{\"typeName\":\"dsDescriptionDate\",\"multiple\":false,\"typeClass\":\"primitive\"\
+        ,\"value\":\"2019-11-26\"}}]},{\"typeName\":\"subject\",\"multiple\":true,\"\
+        typeClass\":\"controlledVocabulary\",\"value\":[\"Social Sciences\"]},{\"\
+        typeName\":\"keyword\",\"multiple\":true,\"typeClass\":\"compound\",\"value\"\
+        :[{\"keywordValue\":{\"typeName\":\"keywordValue\",\"multiple\":false,\"typeClass\"\
+        :\"primitive\",\"value\":\"Human rights\"}},{\"keywordValue\":{\"typeName\"\
+        :\"keywordValue\",\"multiple\":false,\"typeClass\":\"primitive\",\"value\"\
+        :\"Bureaucracy\"}},{\"keywordValue\":{\"typeName\":\"keywordValue\",\"multiple\"\
+        :false,\"typeClass\":\"primitive\",\"value\":\"Judicial process\"}}]},{\"\
+        typeName\":\"publication\",\"multiple\":true,\"typeClass\":\"compound\",\"\
+        value\":[{\"publicationCitation\":{\"typeName\":\"publicationCitation\",\"\
+        multiple\":false,\"typeClass\":\"primitive\",\"value\":\"Slough, Tara and\
+        \ Christopher Fariss. [date]. \\\"Misgovernance and Human Rights: The Case\
+        \ of Illegal Detention without Intent.\\\" <i>American Journal of Political\
+        \ Science</i> Forthcoming. <a href=\\\"http://ajps.org/\\\" target=\\\"_blank\\\
+        \">http://ajps.org/</a>\"}}]},{\"typeName\":\"notesText\",\"multiple\":false,\"\
+        typeClass\":\"primitive\",\"value\":\"This dataset underwent an independent\
+        \ verification process that replicated the tables and figures in the primary\
+        \ article. For the supplementary materials, verification was performed solely\
+        \ for the successful execution of code. The verification process was carried\
+        \ out by the Odum Institute for Research in Social Science at the University\
+        \ of North Carolina at Chapel Hill. \\r\\n<br></br>\\r\\nThe associated article\
+        \ has been awarded Open Materials and Open Data Badges. Learn more about the\
+        \ Open Practice Badges from the <a href=\\\"https://osf.io/tvyxz/wiki/home/\\\
+        \" target=\\\"_blank\\\">Center for Open Science</a>.<br></br>\\r\\n<img src=\\\
+        \"https://odum.unc.edu/files/2020/03/OpenData_PR-1.png\\\" alt=\\\"Open Data\
+        \ Badge\\\" height=\\\"77\\\" width=\\\"80\\\">\\r\\n<img src=\\\"https://odum.unc.edu/files/2020/03/OpenMaterials_PR-1.png\\\
+        \" alt=\\\"Open Materials Badge\\\" height=\\\"77\\\" width=\\\"80\\\">\"\
+        },{\"typeName\":\"producer\",\"multiple\":true,\"typeClass\":\"compound\"\
+        ,\"value\":[{\"producerName\":{\"typeName\":\"producerName\",\"multiple\"\
+        :false,\"typeClass\":\"primitive\",\"value\":\"Slough, Tara\"},\"producerAffiliation\"\
+        :{\"typeName\":\"producerAffiliation\",\"multiple\":false,\"typeClass\":\"\
+        primitive\",\"value\":\"Columbia University, New York University, and the\
+        \ University of California, Berkeley\"},\"producerURL\":{\"typeName\":\"producerURL\"\
+        ,\"multiple\":false,\"typeClass\":\"primitive\",\"value\":\"http://www.taraslough.com\"\
+        }}]},{\"typeName\":\"depositor\",\"multiple\":false,\"typeClass\":\"primitive\"\
+        ,\"value\":\"Slough, Tara\"},{\"typeName\":\"dateOfDeposit\",\"multiple\"\
+        :false,\"typeClass\":\"primitive\",\"value\":\"2019-11-26\"},{\"typeName\"\
+        :\"dataSources\",\"multiple\":true,\"typeClass\":\"primitive\",\"value\":[\"\
+        The DHS Program. 2012. \\\"Ha\xEFti: Enqu\xEAte Mortalit\xE9, Morbidit\xE9\
+        \ et Utilisation des Services 2012.\\\" Data available at: https://dhsprogram.com/what-we-do/survey/survey-display-368.cfm.\\\
+        r\\n<br></br>\\r\\nInstitute for Criminal Policy Research. 2017. \u201CWorld\
+        \ Prison Brief.\u201D Available at http://www. prisonstudies.org/. (Note:\
+        \ The data represent the most recent estimates reported as of June 2017.)\\\
+        r\\n<br></br>\\r\\nUnited States Department of State. 2007. \\\"Haiti: Bureau\
+        \ of Democracy, Human Rights, and Labor: 2006.\\\" https://www.dropbox.com/sh/27v5pmf6135giji/AAAwzdRD76tAuaNrx5NxVMdHa?dl=0\\\
+        r\\n<br></br>  \\r\\nUnited States Department of State. 2008. \\\"Haiti: Bureau\
+        \ of Democracy, Human Rights, and Labor: 2007.\\\" https://www.dropbox.com/sh/27v5pmf6135giji/AAAwzdRD76tAuaNrx5NxVMdHa?dl=0\\\
+        r\\n<br></br>  \\r\\nUnited States Department of State. 2009. \\\"Haiti: Bureau\
+        \ of Democracy, Human Rights, and Labor: 2008.\\\" https://www.dropbox.com/sh/27v5pmf6135giji/AAAwzdRD76tAuaNrx5NxVMdHa?dl=0\\\
+        r\\n<br></br>  \\r\\nUnited States Department of State. 2010. \\\"Haiti: Bureau\
+        \ of Democracy, Human Rights, and Labor: 2009.\\\" https://www.dropbox.com/sh/27v5pmf6135giji/AAAwzdRD76tAuaNrx5NxVMdHa?dl=0\\\
+        r\\n<br></br>  \\r\\nUnited States Department of State. 2011. \\\"Country\
+        \ Human Rights Reports: Haiti 2010.\\\"https://www.dropbox.com/sh/27v5pmf6135giji/AAAwzdRD76tAuaNrx5NxVMdHa?dl=0\\\
+        r\\n<br></br>  \\r\\nUnited States Department of State. 2012. \\\"Country\
+        \ Human Rights Reports: Haiti 2011.\\\" https://www.dropbox.com/sh/27v5pmf6135giji/AAAwzdRD76tAuaNrx5NxVMdHa?dl=0\\\
+        r\\n<br></br>  \\r\\nUnited States Department of State. 2013. \\\"Country\
+        \ Human Rights Reports: Haiti 2012.\\\" https://www.dropbox.com/sh/27v5pmf6135giji/AAAwzdRD76tAuaNrx5NxVMdHa?dl=0\\\
+        r\\n<br></br>  \\r\\nUnited States Department of State. 2014. \\\"Country\
+        \ Human Rights Reports: Haiti 2013.\\\" https://www.dropbox.com/sh/27v5pmf6135giji/AAAwzdRD76tAuaNrx5NxVMdHa?dl=0\\\
+        r\\n<br></br>  \\r\\nUnited States Department of State. 2015. \\\"Country\
+        \ Human Rights Reports: Haiti 2014.\\\" https://www.dropbox.com/sh/27v5pmf6135giji/AAAwzdRD76tAuaNrx5NxVMdHa?dl=0\\\
+        r\\n<br></br>  \\r\\nUnited States Department of State. 2016. \\\"Country\
+        \ Human Rights Reports: Haiti 2015.\\\"https://www.dropbox.com/sh/27v5pmf6135giji/AAAwzdRD76tAuaNrx5NxVMdHa?dl=0\"\
+        ]}]},\"geospatial\":{\"displayName\":\"Geospatial Metadata\",\"fields\":[{\"\
+        typeName\":\"geographicCoverage\",\"multiple\":true,\"typeClass\":\"compound\"\
+        ,\"value\":[{\"country\":{\"typeName\":\"country\",\"multiple\":false,\"typeClass\"\
+        :\"controlledVocabulary\",\"value\":\"Haiti\"}}]}]},\"journal\":{\"displayName\"\
+        :\"Journal Metadata\",\"fields\":[{\"typeName\":\"journalVolumeIssue\",\"\
+        multiple\":true,\"typeClass\":\"compound\",\"value\":[{\"journalVolume\":{\"\
+        typeName\":\"journalVolume\",\"multiple\":false,\"typeClass\":\"primitive\"\
+        ,\"value\":\"Forthcoming\"}}]}]}},\"files\":[{\"description\":\"Readme file.\"\
+        ,\"label\":\"00_SloughFariss_AJPS_README.txt\",\"restricted\":false,\"version\"\
+        :1,\"datasetVersionId\":178077,\"dataFile\":{\"id\":3724634,\"persistentId\"\
+        :\"doi:10.7910/DVN/Q5PV4U/5G6EWI\",\"pidURL\":\"https://doi.org/10.7910/DVN/Q5PV4U/5G6EWI\"\
+        ,\"filename\":\"00_SloughFariss_AJPS_README.txt\",\"contentType\":\"text/plain\"\
+        ,\"filesize\":3969,\"description\":\"Readme file.\",\"storageIdentifier\"\
+        :\"s3://dvn-cloud:1705474fd4f-2ac899c8f8da\",\"rootDataFileId\":-1,\"md5\"\
+        :\"1d7bf3fbdbb3652e9e26ce01c4c97707\",\"checksum\":{\"type\":\"MD5\",\"value\"\
+        :\"1d7bf3fbdbb3652e9e26ce01c4c97707\"},\"creationDate\":\"2020-02-17\"}},{\"\
+        label\":\"01_Codebook.pdf\",\"restricted\":false,\"version\":1,\"datasetVersionId\"\
+        :178077,\"dataFile\":{\"id\":3725043,\"persistentId\":\"doi:10.7910/DVN/Q5PV4U/IQSUTA\"\
+        ,\"pidURL\":\"https://doi.org/10.7910/DVN/Q5PV4U/IQSUTA\",\"filename\":\"\
+        01_Codebook.pdf\",\"contentType\":\"application/pdf\",\"filesize\":87397,\"\
+        storageIdentifier\":\"s3://dvn-cloud:17054c02a77-f4784a4a1a94\",\"rootDataFileId\"\
+        :-1,\"md5\":\"f25e810d60cd31a83009ca31ef416975\",\"checksum\":{\"type\":\"\
+        MD5\",\"value\":\"f25e810d60cd31a83009ca31ef416975\"},\"creationDate\":\"\
+        2020-02-17\"}},{\"description\":\"This file processes the anonymized raw data\
+        \ in the folder \\\"Source Data\\\" to create 05_cleaned_data.Rdata.\",\"\
+        label\":\"02_Data_Cleaning.R\",\"restricted\":false,\"version\":1,\"datasetVersionId\"\
+        :178077,\"dataFile\":{\"id\":3657613,\"persistentId\":\"doi:10.7910/DVN/Q5PV4U/BVPRZW\"\
+        ,\"pidURL\":\"https://doi.org/10.7910/DVN/Q5PV4U/BVPRZW\",\"filename\":\"\
+        02_Data_Cleaning.R\",\"contentType\":\"type/x-r-syntax\",\"filesize\":6930,\"\
+        description\":\"This file processes the anonymized raw data in the folder\
+        \ \\\"Source Data\\\" to create 05_cleaned_data.Rdata.\",\"storageIdentifier\"\
+        :\"s3://dvn-cloud:16f9cf5ddb4-1b9cdecaf9aa\",\"rootDataFileId\":-1,\"md5\"\
+        :\"363e1a5f8a811fb28f7e0071050a5862\",\"checksum\":{\"type\":\"MD5\",\"value\"\
+        :\"363e1a5f8a811fb28f7e0071050a5862\"},\"creationDate\":\"2020-01-12\"}},{\"\
+        description\":\"This file conducts all data analysis and creates the figures\
+        \ and tables in the manuscript and appendix.\",\"label\":\"03_Analysis_Code.R\"\
+        ,\"restricted\":false,\"version\":1,\"datasetVersionId\":178077,\"dataFile\"\
+        :{\"id\":3657617,\"persistentId\":\"doi:10.7910/DVN/Q5PV4U/NXAQNH\",\"pidURL\"\
+        :\"https://doi.org/10.7910/DVN/Q5PV4U/NXAQNH\",\"filename\":\"03_Analysis_Code.R\"\
+        ,\"contentType\":\"type/x-r-syntax\",\"filesize\":57133,\"description\":\"\
+        This file conducts all data analysis and creates the figures and tables in\
+        \ the manuscript and appendix.\",\"storageIdentifier\":\"s3://dvn-cloud:16f9cf5deef-a043f3311a2e\"\
+        ,\"rootDataFileId\":-1,\"md5\":\"d22e2975d3a39b5bf5b3b737119ac3c0\",\"checksum\"\
+        :{\"type\":\"MD5\",\"value\":\"d22e2975d3a39b5bf5b3b737119ac3c0\"},\"creationDate\"\
+        :\"2020-01-12\"}},{\"description\":\"This file creates the graphs of the theoretical\
+        \ model in the appendix that do not use data.\",\"label\":\"04_Theory_Graphs.R\"\
+        ,\"restricted\":false,\"version\":1,\"datasetVersionId\":178077,\"dataFile\"\
+        :{\"id\":3657616,\"persistentId\":\"doi:10.7910/DVN/Q5PV4U/MRWBAX\",\"pidURL\"\
+        :\"https://doi.org/10.7910/DVN/Q5PV4U/MRWBAX\",\"filename\":\"04_Theory_Graphs.R\"\
+        ,\"contentType\":\"type/x-r-syntax\",\"filesize\":5329,\"description\":\"\
+        This file creates the graphs of the theoretical model in the appendix that\
+        \ do not use data.\",\"storageIdentifier\":\"s3://dvn-cloud:16f9cf5e00b-76330fb92529\"\
+        ,\"rootDataFileId\":-1,\"md5\":\"4fb6f8750d9f5903a56a89df982fb9bc\",\"checksum\"\
+        :{\"type\":\"MD5\",\"value\":\"4fb6f8750d9f5903a56a89df982fb9bc\"},\"creationDate\"\
+        :\"2020-01-12\"}},{\"description\":\"The cleaned datasets used for analysis.\"\
+        ,\"label\":\"05_cleaned_data.Rdata\",\"restricted\":false,\"version\":1,\"\
+        datasetVersionId\":178077,\"dataFile\":{\"id\":3657615,\"persistentId\":\"\
+        doi:10.7910/DVN/Q5PV4U/WIQVAC\",\"pidURL\":\"https://doi.org/10.7910/DVN/Q5PV4U/WIQVAC\"\
+        ,\"filename\":\"05_cleaned_data.Rdata\",\"contentType\":\"application/gzip\"\
+        ,\"filesize\":102255,\"description\":\"The cleaned datasets used for analysis.\"\
+        ,\"storageIdentifier\":\"s3://dvn-cloud:16f9cf5e109-5f4f744d2fd9\",\"rootDataFileId\"\
+        :-1,\"md5\":\"d94d464637ef3e57f8bccd026d48a878\",\"checksum\":{\"type\":\"\
+        MD5\",\"value\":\"d94d464637ef3e57f8bccd026d48a878\"},\"creationDate\":\"\
+        2020-01-12\"}},{\"description\":\"Unzip this folder for the outputs of tables\
+        \ and figures.\",\"label\":\"Outputs.zip\",\"restricted\":false,\"directoryLabel\"\
+        :\"Outputs\",\"version\":1,\"datasetVersionId\":178077,\"dataFile\":{\"id\"\
+        :3724635,\"persistentId\":\"doi:10.7910/DVN/Q5PV4U/QM3EJE\",\"pidURL\":\"\
+        https://doi.org/10.7910/DVN/Q5PV4U/QM3EJE\",\"filename\":\"Outputs.zip\",\"\
+        contentType\":\"application/zip\",\"filesize\":1583729,\"description\":\"\
+        Unzip this folder for the outputs of tables and figures.\",\"storageIdentifier\"\
+        :\"s3://dvn-cloud:170547665b0-dff35e444314\",\"rootDataFileId\":-1,\"md5\"\
+        :\"17d95bd64b072c0ada552f085352ab83\",\"checksum\":{\"type\":\"MD5\",\"value\"\
+        :\"17d95bd64b072c0ada552f085352ab83\"},\"creationDate\":\"2020-02-17\"}},{\"\
+        description\":\"The anonymized raw data sourced to create 05_cleaned_data.Rdata.\"\
+        ,\"label\":\"Source Data.zip\",\"restricted\":false,\"directoryLabel\":\"\
+        Source Data\",\"version\":1,\"datasetVersionId\":178077,\"dataFile\":{\"id\"\
+        :3657619,\"persistentId\":\"doi:10.7910/DVN/Q5PV4U/OMAOMF\",\"pidURL\":\"\
+        https://doi.org/10.7910/DVN/Q5PV4U/OMAOMF\",\"filename\":\"Source Data.zip\"\
+        ,\"contentType\":\"application/zip\",\"filesize\":4479770,\"description\"\
+        :\"The anonymized raw data sourced to create 05_cleaned_data.Rdata.\",\"storageIdentifier\"\
+        :\"s3://dvn-cloud:16f9cf9d3ee-e21b770a3c60\",\"rootDataFileId\":-1,\"md5\"\
+        :\"e063f960799f111e67d9e0a21b9af462\",\"checksum\":{\"type\":\"MD5\",\"value\"\
+        :\"e063f960799f111e67d9e0a21b9af462\"},\"creationDate\":\"2020-01-12\"}}]}}}"
     headers:
-      Access-Control-Allow-Origin: ['*']
-      Connection: [close]
-      Content-Length: ['85']
-      Content-Type: [application/json]
-      Date: ['Sat, 15 Jun 2019 21:02:33 GMT']
-      Server: [Apache/2.4.6 (CentOS) OpenSSL/1.0.2k-fips]
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Headers:
+      - Content-Type, X-Dataverse-Key
+      Access-Control-Allow-Methods:
+      - PUT, GET, POST, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Cache-control:
+      - no-cache="set-cookie"
+      Connection:
+      - Close
+      Content-Type:
+      - application/json;charset=UTF-8
+      Date:
+      - Tue, 19 Jan 2021 19:45:49 GMT
+      Server:
+      - Apache
+      Set-Cookie:
+      - JSESSIONID=c2e922359b12bff368c89d1e2edf; Path=/; Secure; HttpOnly
+      - AWSELB=EB1179591E49E298C6825A3028F74991071DEE12D3CF6A1B0A2CD5F2F144400DE0E06A10F0DBD3EC37C4E69D8B958E3FBF8CF81403222DF6AABE0F6509EF79AB1D548B7265;PATH=/;MAX-AGE=28800
+      - AWSELBCORS=EB1179591E49E298C6825A3028F74991071DEE12D3CF6A1B0A2CD5F2F144400DE0E06A10F0DBD3EC37C4E69D8B958E3FBF8CF81403222DF6AABE0F6509EF79AB1D548B7265;PATH=/;MAX-AGE=28800;SECURE;SAMESITE=None
+      transfer-encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
 - request:
     body: null
     headers:
-      Connection: [close]
-      Host: [dev2.dataverse.org]
-      User-Agent: [Python-urllib/3.6]
+      Connection:
+      - close
+      Host:
+      - api.datacite.org
+      User-Agent:
+      - Python-urllib/3.6
     method: GET
-    uri: https://dev2.dataverse.org/api/datasets/:persistentId?persistentId=doi:10.5072/FK2/NYNHAM
+    uri: https://api.datacite.org/dois/text/x-bibliography/10.7910/DVN/Q5PV4U?style=harvard-cite-them-right
   response:
-    body: {string: '{"status":"OK","data":{"id":18,"identifier":"FK2/NYNHAM","persistentUrl":"https://doi.org/10.5072/FK2/NYNHAM","protocol":"doi","authority":"10.5072","publisher":"Root","publicationDate":"2019-06-11","storageIdentifier":"file://10.5072/FK2/NYNHAM","latestVersion":{"id":5,"storageIdentifier":"file://10.5072/FK2/NYNHAM","versionNumber":1,"versionMinorNumber":1,"versionState":"RELEASED","productionDate":"Production
-        Date","lastUpdateTime":"2019-06-13T20:01:46Z","releaseTime":"2019-06-13T20:01:46Z","createTime":"2019-06-13T19:59:10Z","license":"NONE","fileAccessRequest":false,"metadataBlocks":{"citation":{"displayName":"Citation
-        Metadata","fields":[{"typeName":"title","multiple":false,"typeClass":"primitive","value":"Dataverse
-        IRC Metrics"},{"typeName":"author","multiple":true,"typeClass":"compound","value":[{"authorName":{"typeName":"authorName","multiple":false,"typeClass":"primitive","value":"Durbin,
-        Philip"},"authorAffiliation":{"typeName":"authorAffiliation","multiple":false,"typeClass":"primitive","value":"Harvard
-        University"},"authorIdentifierScheme":{"typeName":"authorIdentifierScheme","multiple":false,"typeClass":"controlledVocabulary","value":"ORCID"},"authorIdentifier":{"typeName":"authorIdentifier","multiple":false,"typeClass":"primitive","value":"0000-0002-9528-9470"}}]},{"typeName":"datasetContact","multiple":true,"typeClass":"compound","value":[{"datasetContactName":{"typeName":"datasetContactName","multiple":false,"typeClass":"primitive","value":"Durbin,
-        Philip"},"datasetContactAffiliation":{"typeName":"datasetContactAffiliation","multiple":false,"typeClass":"primitive","value":"Harvard
-        University"},"datasetContactEmail":{"typeName":"datasetContactEmail","multiple":false,"typeClass":"primitive","value":"philip_durbin@harvard.edu"}}]},{"typeName":"dsDescription","multiple":true,"typeClass":"compound","value":[{"dsDescriptionValue":{"typeName":"dsDescriptionValue","multiple":false,"typeClass":"primitive","value":"See
-        <a href=\"https://github.com/pdurbin/dataverse-irc-metrics\">https://github.com/pdurbin/dataverse-irc-metrics</a>."}}]},{"typeName":"subject","multiple":true,"typeClass":"controlledVocabulary","value":["Social
-        Sciences"]},{"typeName":"depositor","multiple":false,"typeClass":"primitive","value":"Durbin,
-        Philip"},{"typeName":"dateOfDeposit","multiple":false,"typeClass":"primitive","value":"2019-06-11"}]}},"files":[{"label":"apt.txt","restricted":false,"directoryLabel":"dataverse-irc-metrics-8f0b5b505de7730ebd9d57439952542a66a6bae0","version":2,"datasetVersionId":5,"categories":["Config"],"dataFile":{"id":28,"persistentId":"","pidURL":"","filename":"apt.txt","contentType":"text/plain","filesize":5,"storageIdentifier":"16b47a77833-0d15a8c6c14f","rootDataFileId":-1,"md5":"37055243218efa7c8adb2346f2386f7a","checksum":{"type":"MD5","value":"37055243218efa7c8adb2346f2386f7a"},"creationDate":"2019-06-11"}},{"label":"index.ipynb","restricted":false,"directoryLabel":"dataverse-irc-metrics-8f0b5b505de7730ebd9d57439952542a66a6bae0","version":1,"datasetVersionId":5,"categories":["Code"],"dataFile":{"id":30,"persistentId":"","pidURL":"","filename":"index.ipynb","contentType":"application/x-ipynb+json","filesize":20183,"storageIdentifier":"16b47a778c3-ad1b9509edeb","rootDataFileId":-1,"md5":"50ca9eeaa8c53c25567b9c8789fb0a82","checksum":{"type":"MD5","value":"50ca9eeaa8c53c25567b9c8789fb0a82"},"creationDate":"2019-06-11"}},{"label":"install.R","restricted":false,"directoryLabel":"dataverse-irc-metrics-8f0b5b505de7730ebd9d57439952542a66a6bae0","version":1,"datasetVersionId":5,"categories":["Code"],"dataFile":{"id":31,"persistentId":"","pidURL":"","filename":"install.R","contentType":"type/x-r-syntax","filesize":110,"storageIdentifier":"16b47a778ce-a8a9457ad7db","rootDataFileId":-1,"md5":"f7ed6200bcf1e18c14043c92d7ee1dee","checksum":{"type":"MD5","value":"f7ed6200bcf1e18c14043c92d7ee1dee"},"creationDate":"2019-06-11"}},{"label":"irclog.tsv","restricted":false,"directoryLabel":"dataverse-irc-metrics-8f0b5b505de7730ebd9d57439952542a66a6bae0/data","version":2,"datasetVersionId":5,"categories":["Data"],"dataFile":{"id":29,"persistentId":"","pidURL":"","filename":"irclog.tsv","contentType":"text/tsv","filesize":9694487,"storageIdentifier":"16b47a7788a-303e78082102","rootDataFileId":-1,"md5":"aed0e229f872dbb66aa1e4e6550bcbbb","checksum":{"type":"MD5","value":"aed0e229f872dbb66aa1e4e6550bcbbb"},"creationDate":"2019-06-11"}},{"label":"README.md","restricted":false,"directoryLabel":"dataverse-irc-metrics-8f0b5b505de7730ebd9d57439952542a66a6bae0","version":2,"datasetVersionId":5,"categories":["Documentation"],"dataFile":{"id":27,"persistentId":"","pidURL":"","filename":"README.md","contentType":"text/markdown","filesize":430,"storageIdentifier":"16b47a7781d-d4d481ae9509","rootDataFileId":-1,"md5":"5120a762443f13fccfcd29e9fffb0b77","checksum":{"type":"MD5","value":"5120a762443f13fccfcd29e9fffb0b77"},"creationDate":"2019-06-11"}},{"label":"runtime.txt","restricted":false,"directoryLabel":"dataverse-irc-metrics-8f0b5b505de7730ebd9d57439952542a66a6bae0","version":2,"datasetVersionId":5,"categories":["Config"],"dataFile":{"id":32,"persistentId":"","pidURL":"","filename":"runtime.txt","contentType":"text/plain","filesize":13,"storageIdentifier":"16b47a778d6-9daf3c49a3f1","rootDataFileId":-1,"md5":"376951af4316f01f81578c82f243aab7","checksum":{"type":"MD5","value":"376951af4316f01f81578c82f243aab7"},"creationDate":"2019-06-11"}},{"label":"superuser_graph.ipynb","restricted":false,"directoryLabel":"dataverse-irc-metrics-8f0b5b505de7730ebd9d57439952542a66a6bae0","version":1,"datasetVersionId":5,"categories":["Code"],"dataFile":{"id":34,"persistentId":"","pidURL":"","filename":"superuser_graph.ipynb","contentType":"application/x-ipynb+json","filesize":39258,"storageIdentifier":"16b47a778f4-57c48842a04f","rootDataFileId":-1,"md5":"b56361b57210966d9947ac75105dfc74","checksum":{"type":"MD5","value":"b56361b57210966d9947ac75105dfc74"},"creationDate":"2019-06-11"}},{"label":"superuser_graph-monthly.ipynb","restricted":false,"directoryLabel":"dataverse-irc-metrics-8f0b5b505de7730ebd9d57439952542a66a6bae0","version":1,"datasetVersionId":5,"categories":["Code"],"dataFile":{"id":33,"persistentId":"","pidURL":"","filename":"superuser_graph-monthly.ipynb","contentType":"application/x-ipynb+json","filesize":36087,"storageIdentifier":"16b47a778de-5c9102662203","rootDataFileId":-1,"md5":"eeb3449182e758c50f2b0cdac84430c8","checksum":{"type":"MD5","value":"eeb3449182e758c50f2b0cdac84430c8"},"creationDate":"2019-06-11"}}]}}}'}
+    body:
+      string: "Slough, T. and Fariss, C. (2020) \u201CReplication Data for: Misgovernance\
+        \ and Human Rights: The Case of Illegal Detention without Intent.\u201D Harvard\
+        \ Dataverse. doi: 10.7910/DVN/Q5PV4U."
     headers:
-      Access-Control-Allow-Origin: ['*']
-      Connection: [close]
-      Content-Length: ['6513']
-      Content-Type: [application/json]
-      Date: ['Sat, 15 Jun 2019 21:02:34 GMT']
-      Server: [Apache/2.4.6 (CentOS) OpenSSL/1.0.2k-fips]
-      Set-Cookie: [JSESSIONID=cf2f337ad6c16aefa25b2f426137; Path=/; Secure; HttpOnly]
-    status: {code: 200, message: OK}
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Connection:
+      - close
+      Content-Type:
+      - text/x-bibliography; charset=utf-8
+      Date:
+      - Tue, 19 Jan 2021 19:45:51 GMT
+      ETag:
+      - W/"9e8eb55c2d2fd7d64091372240ebdbc4"
+      Server:
+      - nginx/1.14.0 + Phusion Passenger 6.0.7
+      Status:
+      - 200 OK
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding, Origin
+      X-Anonymous-Consumer:
+      - 'true'
+      X-Powered-By:
+      - Phusion Passenger 6.0.7
+      X-Rack-CORS:
+      - miss; no-origin
+      X-Request-Id:
+      - 35a834d9-d12b-45d6-9574-6731212c3f33
+      X-Runtime:
+      - '0.566380'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Connection:
+      - close
+      Host:
+      - api.datacite.org
+      User-Agent:
+      - Python-urllib/3.6
+    method: GET
+    uri: https://api.datacite.org/dois/text/x-bibliography/10.7910/DVN/Q5PV4U?style=harvard-cite-them-right
+  response:
+    body:
+      string: "Slough, T. and Fariss, C. (2020) \u201CReplication Data for: Misgovernance\
+        \ and Human Rights: The Case of Illegal Detention without Intent.\u201D Harvard\
+        \ Dataverse. doi: 10.7910/DVN/Q5PV4U."
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Connection:
+      - close
+      Content-Type:
+      - text/x-bibliography; charset=utf-8
+      Date:
+      - Tue, 19 Jan 2021 19:45:52 GMT
+      ETag:
+      - W/"9e8eb55c2d2fd7d64091372240ebdbc4"
+      Server:
+      - nginx/1.14.0 + Phusion Passenger 6.0.7
+      Status:
+      - 200 OK
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding, Origin
+      X-Anonymous-Consumer:
+      - 'true'
+      X-Powered-By:
+      - Phusion Passenger 6.0.7
+      X-Rack-CORS:
+      - miss; no-origin
+      X-Request-Id:
+      - d90288ad-cc73-41c9-b0aa-d4d917241b24
+      X-Runtime:
+      - '0.083928'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Connection:
+      - close
+      Host:
+      - api.datacite.org
+      User-Agent:
+      - Python-urllib/3.6
+    method: GET
+    uri: https://api.datacite.org/dois/text/x-bibliography/10.7910/DVN/Q5PV4U?style=harvard-cite-them-right
+  response:
+    body:
+      string: "Slough, T. and Fariss, C. (2020) \u201CReplication Data for: Misgovernance\
+        \ and Human Rights: The Case of Illegal Detention without Intent.\u201D Harvard\
+        \ Dataverse. doi: 10.7910/DVN/Q5PV4U."
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Connection:
+      - close
+      Content-Type:
+      - text/x-bibliography; charset=utf-8
+      Date:
+      - Tue, 19 Jan 2021 19:45:53 GMT
+      ETag:
+      - W/"9e8eb55c2d2fd7d64091372240ebdbc4"
+      Server:
+      - nginx/1.14.0 + Phusion Passenger 6.0.7
+      Status:
+      - 200 OK
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding, Origin
+      X-Anonymous-Consumer:
+      - 'true'
+      X-Powered-By:
+      - Phusion Passenger 6.0.7
+      X-Rack-CORS:
+      - miss; no-origin
+      X-Request-Id:
+      - f13cd832-ba4b-49d1-acb0-060815d7b68b
+      X-Runtime:
+      - '0.580491'
+    status:
+      code: 200
+      message: OK
 version: 1

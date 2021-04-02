@@ -15,7 +15,7 @@ add_python_test(tale
 add_python_test(import
   PLUGIN wholetale
   EXTERNAL_DATA
-  plugins/wholetale/5c92fbd472a9910001fbff72.zip
+  plugins/wholetale/604126f45f6bb2c4c997e967.zip
   plugins/wholetale/tale_import_binder.txt
   plugins/wholetale/tale_import_zip.txt
 )
@@ -60,14 +60,12 @@ add_python_test(integration
 add_python_test(repository
   PLUGIN wholetale
 )
-add_python_test(workspace
-  PLUGIN wholetale
-)
 add_python_test(dataset
   PLUGIN wholetale
   EXTERNAL_DATA
   plugins/wholetale/dataset_register.txt
 )
+add_python_test(git PLUGIN wholetale)
 add_python_test(publish PLUGIN wholetale)
 add_python_test(notification PLUGIN wholetale)
 add_python_style_test(python_static_analysis_wholetale

@@ -9,7 +9,7 @@ import zipfile
 
 from girder import events
 from girder.constants import AccessType
-from girder.exceptions import AccessException, GirderException, ValidationException
+from girder.exceptions import GirderException, ValidationException
 from girder.models.assetstore import Assetstore
 from girder.models.folder import Folder
 from girder.models.item import Item
@@ -21,10 +21,11 @@ from girder.utility import assetstore_utilities
 
 from .image import Image as imageModel
 from ..schema.misc import dataSetSchema
-from ..constants import WORKSPACE_NAME, DATADIRS_NAME, SCRIPTDIRS_NAME, TaleStatus
+from ..constants import TaleStatus
 from ..schema.misc import related_identifiers_schema
-from ..utils import getOrCreateRootFolder, init_progress
+from ..utils import getOrCreateRootFolder, init_progress, notify_event, diff_access
 from ..lib.license import WholeTaleLicense
+from ..lib.manifest_parser import ManifestParser
 
 from gwvolman.tasks import build_tale_image, BUILD_TALE_IMAGE_STEP_TOTAL
 
@@ -32,7 +33,7 @@ from gwvolman.tasks import build_tale_image, BUILD_TALE_IMAGE_STEP_TOTAL
 # Whenever the Tale object schema is modified (e.g. fields are added or
 # removed) increase `_currentTaleFormat` to retroactively apply those
 # changes to existing Tales.
-_currentTaleFormat = 8
+_currentTaleFormat = 9
 
 
 class Tale(AccessControlledModel):
@@ -44,18 +45,53 @@ class Tale(AccessControlledModel):
             'title': 10,
             'description': 1
         })
+
+        # Fields that can be modified via PUT /tale/:id
         self.modifiableFields = {
-            'title', 'description', 'public', 'config', 'updated', 'authors',
-            'category', 'icon', 'iframe', 'illustration', 'dataSet', 'licenseSPDX',
-            'workspaceModified', 'publishInfo', 'imageId', 'status', 'relatedIdentifiers',
+            "authors",
+            "category",
+            "config",
+            "description",
+            "dataSet",
+            "icon",
+            "iframe",
+            "illustration",
+            "imageId",
+            "licenseSPDX",
+            "public",
+            "publishInfo",  # This shouldn't be here
+            "relatedIdentifiers",  # This shouldn't be her
+            "title",
         }
+
         self.exposeFields(
             level=AccessType.READ,
-            fields=({'_id', 'folderId', 'imageId', 'creatorId', 'created',
-                     'format', 'dataSet', 'narrative', 'narrativeId', 'licenseSPDX',
-                     'imageInfo', 'publishInfo', 'workspaceId',
-                     'workspaceModified', 'dataSetCitation',
-                     'copyOfTale'} | self.modifiableFields))
+            fields={
+                "_id",
+                "authors",
+                "category",
+                "config",
+                "copyOfTale",
+                "created",
+                "creatorId",
+                "dataSet",
+                "dataSetCitation",
+                "description",
+                "format",
+                "icon",
+                "iframe",
+                "illustration",
+                "imageId",
+                "imageInfo",
+                "licenseSPDX",
+                "public",
+                "publishInfo",
+                "relatedIdentifiers",
+                "status",
+                "title",
+                "updated",
+            }
+        )
 
     @staticmethod
     def _validate_dataset(tale):
@@ -148,8 +184,8 @@ class Tale(AccessControlledModel):
 
     def createTale(self, image, data, creator=None, save=True, title=None,
                    description=None, public=None, config=None, authors=None,
-                   icon=None, category=None, illustration=None, narrative=None,
-                   licenseSPDX=WholeTaleLicense.default_spdx(),
+                   icon=None, category=None, illustration=None,
+                   licenseSPDX=None,
                    status=TaleStatus.READY, publishInfo=None,
                    relatedIdentifiers=None):
 
@@ -159,7 +195,11 @@ class Tale(AccessControlledModel):
             creatorId = creator.get('_id', None)
 
         if title is None:
-            title = '{} with {}'.format(image['name'], DATADIRS_NAME)
+            title = f"A tale based on {image['name']}"
+
+        if description is None:
+            description = f'This Tale, {title}, represents a computational experiment. ' \
+                          f'It contains code, data, and metadata relevant to the experiment.'
         # if illustration is None:
             # Get image from SILS
 
@@ -177,14 +217,14 @@ class Tale(AccessControlledModel):
             'icon': icon,
             'iframe': image.get('iframe', False),
             'imageId': ObjectId(image['_id']),
+            'imageInfo': {},
             'illustration': illustration,
-            'narrative': narrative or [],
             'title': title,
             'public': public,
             'publishInfo': publishInfo or [],
             'relatedIdentifiers': relatedIdentifiers or [],
             'updated': now,
-            'licenseSPDX': licenseSPDX,
+            'licenseSPDX': licenseSPDX or WholeTaleLicense.default_spdx(),
             'status': status,
         }
         if public is not None and isinstance(public, bool):
@@ -195,44 +235,17 @@ class Tale(AccessControlledModel):
         if creator is not None:
             self.setUserAccess(tale, user=creator, level=AccessType.ADMIN,
                                save=False)
-        if tale['dataSet']:
-            eventParams = {'tale': tale, 'user': creator}
-            event = events.trigger('tale.update_citation', eventParams)
-            if len(event.responses):
-                tale = event.responses[-1]
 
         if save:
             tale = self.save(tale)
-            workspace = self.createWorkspace(tale, creator=creator)
-            data_folder = self.createDataMountpoint(tale, creator=creator)
-            tale['folderId'] = data_folder['_id']
-            tale['workspaceId'] = workspace['_id']
-            narrative_folder = self.createNarrativeFolder(
-                tale, creator=creator, default=not bool(tale['narrative']))
-            for obj_id in tale['narrative']:
-                item = Item().load(obj_id, user=creator)
-                Item().copyItem(item, creator, folder=narrative_folder)
-            tale['narrativeId'] = narrative_folder['_id']
-            tale = self.save(tale)
+            notify_event([creator["_id"]], "wt_tale_created", {"taleId": tale['_id']})
 
+        if tale['dataSet']:
+            events.daemon.trigger(
+                eventName="tale.update_citation",
+                info={"tale": tale, "user": creator}
+            )
         return tale
-
-    def createNarrativeFolder(self, tale, creator=None, default=False):
-        if default:
-            rootFolder = getOrCreateRootFolder(SCRIPTDIRS_NAME)
-            auxFolder = self.model('folder').createFolder(
-                rootFolder, 'default', parentType='folder',
-                public=True, reuseExisting=True)
-        else:
-            auxFolder = self._createAuxFolder(
-                tale, SCRIPTDIRS_NAME, creator=creator)
-        return auxFolder
-
-    def createDataMountpoint(self, tale, creator=None):
-        return self._createAuxFolder(tale, DATADIRS_NAME, creator=creator)
-
-    def createWorkspace(self, tale, creator=None):
-        return self._createAuxFolder(tale, WORKSPACE_NAME, creator=creator)
 
     def _createAuxFolder(self, tale, rootFolderName, creator=None):
         if creator is None:
@@ -263,7 +276,10 @@ class Tale(AccessControlledModel):
         :returns: The tale document that was edited.
         """
         tale['updated'] = datetime.datetime.utcnow()
-        return self.save(tale)
+        ret = self.save(tale)
+        users = [user['id'] for user in tale['access']['users']]
+        notify_event(users, "wt_tale_updated", {"taleId": tale['_id']})
+        return ret
 
     def setAccessList(self, doc, access, save=False, user=None, force=False,
                       setPublic=None, publicFlags=None):
@@ -296,22 +312,17 @@ class Tale(AccessControlledModel):
             doc = self.setPublicFlags(doc, publicFlags, user=user, save=False,
                                       force=force)
 
+        added, removed = diff_access(doc['access'], access)
+        notify_event(added, "wt_tale_shared", {"taleId": str(doc["_id"])})
+        notify_event(removed, "wt_tale_unshared", {"taleId": str(doc["_id"])})
+
         doc = super().setAccessList(
             doc, access, user=user, save=save, force=force)
 
-        for id_key in ('folderId', 'workspaceId', 'narrativeId'):
-            try:
-                folder = Folder().load(doc[id_key], user=user, level=AccessType.ADMIN)
-            except AccessException:
-                _folder = Folder().load(doc[id_key], force=True)
-                if id_key != 'narrativeId' or _folder['name'] != 'default':
-                    raise
-                folder = None
-
-            if folder:
-                Folder().setAccessList(
-                    folder, access, user=user, save=save, force=force, recurse=True,
-                    setPublic=setPublic, publicFlags=publicFlags)
+        for folder in Folder().find({"meta.taleId": str(doc["_id"])}):
+            Folder().setAccessList(
+                folder, access, user=user, save=save, force=force, recurse=True,
+                setPublic=setPublic, publicFlags=publicFlags)
 
         return doc
 
@@ -368,9 +379,8 @@ class Tale(AccessControlledModel):
                     raise GirderException("Provided file doesn't contain a Tale manifest")
 
                 try:
-                    manifest = json.loads(z.read(manifest_file).decode())
-                    # TODO: is there a better check?
-                    manifest['@id'].startswith('https://data.wholetale.org')
+                    mp = ManifestParser(json.loads(z.read(manifest_file).decode()))
+                    assert mp.is_valid()
                 except Exception as e:
                     raise GirderException(
                         "Couldn't read manifest.json or not a Tale: {}".format(str(e))
@@ -393,7 +403,7 @@ class Tale(AccessControlledModel):
                 # ../.. etc., is taken care of by zipfile.extractall, but in the end we're still
                 # unzipping an untrusted content. What could possibly go wrong...?
                 z.extractall(path=temp_dir)
-        return temp_dir, manifest_file, manifest, environment
+        return temp_dir, manifest_file, mp.manifest, environment
 
     def createTaleFromStream(
         self, stream, user=None, publishInfo=None, relatedIdentifiers=None
@@ -401,70 +411,48 @@ class Tale(AccessControlledModel):
         temp_dir, manifest_file, manifest, environment = self._extractZipPayload(
             stream
         )
-        image = imageModel().findOne({"name": environment["name"]})
-        image = imageModel().filter(image, user)
-        icon = image.get(
-            "icon",
-            (
-                "https://raw.githubusercontent.com/"
-                "whole-tale/dashboard/master/public/"
-                "images/whole_tale_logo.png"
-            ),
-        )
-        licenseSPDX = next(
-            (
-                _["schema:license"]
-                for _ in manifest["aggregates"]
-                if "schema:license" in _
-            ),
-            WholeTaleLicense.default_spdx(),
-        )
-        authors = [
-            {
-                "firstName": author["schema:givenName"],
-                "lastName": author["schema:familyName"],
-                "orcid": author["@id"],
-            }
-            for author in manifest["schema:author"]
-        ]
+
+        mp = ManifestParser(manifest)
+        new_tale = mp.get_tale_fields_from_environment(environment)
+        image = imageModel().load(new_tale.pop("imageId"), user=user, level=AccessType.READ)
+        new_tale.update(mp.get_tale_fields())
 
         if relatedIdentifiers is None:
             relatedIdentifiers = []
 
-        manifest_related_ids = [
-            {
-                "identifier": rel_id["DataCite:relatedIdentifier"]["@id"],
-                "relation": rel_id["DataCite:relatedIdentifier"][
-                    "DataCite:relationType"
-                ].split(":")[-1],
-            }
-            for rel_id in manifest.get("DataCite:relatedIdentifiers", [])
-        ]
-        all_related_ids = relatedIdentifiers + manifest_related_ids
+        all_related_ids = relatedIdentifiers + new_tale["relatedIdentifiers"]
         all_related_ids = [
             json.loads(rel_id)
             for rel_id in {json.dumps(_, sort_keys=True) for _ in all_related_ids}
         ]
+        new_tale["relatedIdentifiers"] = all_related_ids
 
-        # TODO: related identifiers should be read from manifest...
+        new_tale.update(
+            dict(
+                creator=user,
+                save=True,
+                public=False,
+                status=TaleStatus.PREPARING,
+                publishInfo=publishInfo,
+            )
+        )
+
+        # We don't call mp.get_dataset now, cause it might require
+        # a registration step. It's going to be called inside import_tale job.
 
         tale = self.createTale(
             image,
             [],
-            creator=user,
-            save=True,
-            title=manifest["schema:name"],
-            description=manifest["schema:description"],
-            public=False,
-            config=environment.get("taleConfig", {}),
-            icon=icon,
-            illustration=manifest["schema:image"],
-            authors=authors,
-            category=manifest["schema:category"],
-            licenseSPDX=licenseSPDX,
-            status=TaleStatus.PREPARING,
-            publishInfo=publishInfo,
-            relatedIdentifiers=all_related_ids,
+            **new_tale
+        )
+
+        resource = {
+            "type": "wt_zip_import",
+            "tale_id": tale["_id"],
+            "tale_title": tale["title"]
+        }
+        notification = init_progress(
+            resource, user, "Importing Tale", "Initializing", 1
         )
 
         job = Job().createLocalJob(
@@ -472,7 +460,55 @@ class Tale(AccessControlledModel):
             type='wholetale.import_tale', public=False, _async=True,
             module='girder.plugins.wholetale.tasks.import_tale',
             args=(temp_dir, manifest_file),
-            kwargs={'taleId': tale["_id"]}
+            kwargs={'taleId': tale["_id"]},
+            otherFields={
+                "taleId": tale["_id"],
+                "wt_notification_id": str(notification["_id"])
+            },
         )
         Job().scheduleJob(job)
         return tale
+
+    def addGitRepo(self, tale, url, user=None, spawn=False, change_status=False, title=None):
+        resource = {
+            "type": "wt_git_import",
+            "tale_id": tale["_id"],
+            "tale_title": tale["title"]
+        }
+        notification = init_progress(
+            resource, user, "Importing from Git", "Initializing", 1
+        )
+
+        job = Job().createLocalJob(
+            title="Import a git repository as a Tale",
+            user=user,
+            type="wholetale.import_git_repo",
+            public=False,
+            _async=True,
+            module="girder.plugins.wholetale.tasks.import_git_repo",
+            args=(url,),
+            kwargs={
+                "taleId": tale["_id"],
+                "spawn": spawn,
+                "change_status": change_status
+            },
+            otherFields={
+                "taleId": tale["_id"],
+                "wt_notification_id": str(notification["_id"])
+            },
+        )
+        Job().scheduleJob(job)
+        return tale
+
+    def restoreTale(self, manifest: dict, environment: dict):
+        """
+        Restore a Tale from manifest/environment JSON.
+
+        NOTE: it will be missing a lot of keywords that makes it a model,
+        e.g. _id, acls etc.
+        """
+        mp = ManifestParser(manifest)
+        restored_tale = mp.get_tale_fields()
+        restored_tale.update(mp.get_tale_fields_from_environment(environment))
+        restored_tale["dataSet"] = mp.get_dataset()
+        return restored_tale

@@ -13,10 +13,10 @@ from fs.copy import copy_fs
 from tests import base
 from girder import config
 from girder.models.token import Token
+from datetime import datetime
+from .tests_helpers import get_events
 
 
-SCRIPTDIRS_NAME = None
-DATADIRS_NAME = None
 DATA_PATH = os.path.join(
     os.path.dirname(os.environ["GIRDER_TEST_DATA_PREFIX"]),
     "data_src",
@@ -48,6 +48,8 @@ class FakeAsyncResult(object):
 def setUpModule():
     base.enabledPlugins.append("wholetale")
     base.enabledPlugins.append("wt_data_manager")
+    base.enabledPlugins.append("virtual_resources")
+    base.enabledPlugins.append("wt_versioning")
     base.enabledPlugins.append("wt_home_dir")
     base.startServer(mock=False)
 
@@ -55,9 +57,6 @@ def setUpModule():
     from girder.plugins.jobs.constants import JobStatus
     from girder.plugins.wholetale.models.tale import Tale
     from girder.plugins.wholetale.constants import ImageStatus
-
-    global SCRIPTDIRS_NAME, DATADIRS_NAME
-    from girder.plugins.wholetale.constants import SCRIPTDIRS_NAME, DATADIRS_NAME
 
 
 def tearDownModule():
@@ -120,9 +119,6 @@ class ImportTaleTestCase(base.TestCase):
         from girder.plugins.wt_home_dir import HOME_DIRS_APPS
 
         self.homeDirsApps = HOME_DIRS_APPS  # nopep8
-        for e in self.homeDirsApps.entries():
-            provider = e.app.providerMap["/"]["provider"]
-            provider.updateAssetstore()
         self.clearDAVAuthCache()
 
     def clearDAVAuthCache(self):
@@ -151,13 +147,14 @@ class ImportTaleTestCase(base.TestCase):
         class fakeInstance(object):
             _id = "123456789"
 
-            def createInstance(self, tale, user, token, spawn=False):
+            def createInstance(self, tale, user, /, *, spawn=False):
                 return {"_id": self._id, "status": InstanceStatus.LAUNCHING}
 
             def load(self, instance_id, user=None):
                 assert instance_id == self._id
                 return {"_id": self._id, "status": InstanceStatus.RUNNING}
 
+        since = datetime.now().isoformat()
         with mock.patch(
             "girder.plugins.wholetale.models.instance.Instance", fakeInstance
         ):
@@ -184,7 +181,7 @@ class ImportTaleTestCase(base.TestCase):
             job = Job().findOne({"type": "wholetale.import_binder"})
             self.assertEqual(json.loads(job["kwargs"])["taleId"]["$oid"], tale["_id"])
 
-            for i in range(300):
+            for i in range(600):
                 if job["status"] in {JobStatus.SUCCESS, JobStatus.ERROR}:
                     break
                 time.sleep(0.1)
@@ -202,6 +199,15 @@ class ImportTaleTestCase(base.TestCase):
             ],
         )
         self.assertEqual(len(tale["dataSet"]), 1)
+
+        # Confirm notifications
+        events = get_events(self, since)
+        self.assertEqual(len(events), 6)
+        self.assertEqual(events[0]['data']['event'], 'wt_tale_created')
+        self.assertEqual(events[1]['data']['event'], 'wt_import_started')
+        # 3 events are wt_tale_updated from import process changing tale state
+        self.assertEqual(events[4]['data']['event'], 'wt_import_completed')
+
         self.model("image", "wholetale").remove(image)
 
     def testTaleImportBinder(self):
@@ -250,13 +256,14 @@ class ImportTaleTestCase(base.TestCase):
             class fakeInstance(object):
                 _id = "123456789"
 
-                def createInstance(self, tale, user, token, spawn=False):
+                def createInstance(self, tale, user, /, *, spawn=False):
                     return {"_id": self._id, "status": InstanceStatus.LAUNCHING}
 
                 def load(self, instance_id, user=None):
                     assert instance_id == self._id
                     return {"_id": self._id, "status": InstanceStatus.RUNNING}
 
+            since = datetime.now().isoformat()
             with mock.patch(
                 "girder.plugins.wholetale.models.instance.Instance", fakeInstance
             ):
@@ -283,7 +290,7 @@ class ImportTaleTestCase(base.TestCase):
                 job = Job().findOne({"type": "wholetale.import_binder"})
                 self.assertEqual(json.loads(job["kwargs"])["taleId"]["$oid"], tale["_id"])
 
-                for i in range(300):
+                for i in range(600):
                     if job["status"] in {JobStatus.SUCCESS, JobStatus.ERROR}:
                         break
                     time.sleep(0.1)
@@ -309,12 +316,21 @@ class ImportTaleTestCase(base.TestCase):
                 "superuser_graph.ipynb",
             ],
         )
+
+        # Confirm notifications
+        events = get_events(self, since)
+        self.assertEqual(len(events), 4)
+        self.assertEqual(events[0]['data']['event'], 'wt_tale_created')
+        self.assertEqual(events[1]['data']['event'], 'wt_import_started')
+        # 1 event is wt_tale_updated from import process changing tale state
+        self.assertEqual(events[3]['data']['event'], 'wt_import_completed')
+
         self.model("image", "wholetale").remove(image)
 
     @vcr.use_cassette(os.path.join(DATA_PATH, "tale_import_zip.txt"))
     def testTaleImportZip(self):
         image = self.model("image", "wholetale").createImage(
-            name="Jupyter Classic",
+            name="Jupyter Notebook",
             creator=self.user,
             public=True,
             config=dict(
@@ -325,9 +341,11 @@ class ImportTaleTestCase(base.TestCase):
                 urlPath="",
             ),
         )
+
+        since = datetime.now().isoformat()
         with mock.patch("fs.copy.copy_fs") as mock_copy:
             with open(
-                os.path.join(DATA_PATH, "5c92fbd472a9910001fbff72.zip"), "rb"
+                os.path.join(DATA_PATH, "604126f45f6bb2c4c997e967.zip"), "rb"
             ) as fp:
                 resp = self.request(
                     path="/tale/import",
@@ -346,7 +364,7 @@ class ImportTaleTestCase(base.TestCase):
             self.assertEqual(
                 json.loads(job["kwargs"])["taleId"]["$oid"], tale["_id"]
             )
-            for i in range(300):
+            for i in range(600):
                 if job["status"] in {JobStatus.SUCCESS, JobStatus.ERROR}:
                     break
                 time.sleep(0.1)
@@ -354,9 +372,20 @@ class ImportTaleTestCase(base.TestCase):
             self.assertEqual(job["status"], JobStatus.SUCCESS)
         mock_copy.assert_called_once()
         # TODO: make it more extensive...
-        self.assertTrue(
-            self.model("tale", "wholetale").findOne({"title": "Water Tale"}) is not None
+        tale = Tale().findOne({"title": "Water Tale"})
+        self.assertTrue(tale is not None)
+        self.assertEqual(
+            [(obj["_modelType"], obj["mountPath"]) for obj in tale["dataSet"]],
+            [("item", "usco2005.xls")]
         )
+
+        events = get_events(self, since)
+        self.assertEqual(len(events), 7)
+        self.assertEqual(events[0]['data']['event'], 'wt_tale_created')
+        self.assertEqual(events[1]['data']['event'], 'wt_import_started')
+        # 3 events are wt_tale_updated from import process changing tale state
+        self.assertEqual(events[5]['data']['event'], 'wt_import_completed')
+
         self.model("image", "wholetale").remove(image)
 
     def test_binder_heuristics(self):
@@ -387,10 +416,11 @@ class ImportTaleTestCase(base.TestCase):
             login=self.user["login"],
             password="token:{_id}".format(**token),
             root="/tales/{_id}".format(**tale),
+            cache_ttl=0,
         ) as destination_fs, OSFS(tmpdir) as source_fs:
             copy_fs(source_fs, destination_fs)
             sanitize_binder(destination_fs)
-            self.assertEqual(destination_fs.listdir("/"), ["i_am_a_binder"])
+            self.assertEqual(list(destination_fs.listdir("/")), ["i_am_a_binder"])
 
         shutil.rmtree(tmpdir)
         Tale().remove(tale)

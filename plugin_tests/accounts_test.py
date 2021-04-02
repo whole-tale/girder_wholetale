@@ -174,16 +174,14 @@ class ExternalAccountsTestCase(base.TestCase):
         for key, error_msg in (
             (
                 PluginSettings.EXTERNAL_AUTH_PROVIDERS,
-                "^Invalid External Auth Providers.*$",
+                "Invalid External Auth Providers",
             ),
             (
                 PluginSettings.EXTERNAL_APIKEY_GROUPS,
-                "^Invalid External Apikey Groups.*$",
+                "Invalid External Apikey Groups",
             ),
         ):
-
             self.assertEqual(Setting().get(key), SettingDefault.defaults[key])
-
             with self.assertRaisesRegex(ValidationException, error_msg):
                 Setting().set(key, "blah")
 

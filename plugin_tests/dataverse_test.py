@@ -1,7 +1,11 @@
 import json
 import os
+import time
 import vcr
 from tests import base
+
+from girder.models.folder import Folder
+from girder.models.item import Item
 
 
 DATA_PATH = os.path.join(
@@ -12,6 +16,7 @@ DATA_PATH = os.path.join(
 
 def setUpModule():
     base.enabledPlugins.append('wholetale')
+    base.enabledPlugins.append('wt_home_dir')
     base.startServer()
 
 
@@ -262,37 +267,82 @@ class DataverseHarversterTestCase(base.TestCase):
 
     @vcr.use_cassette(os.path.join(DATA_PATH, 'dataverse_hierarchy.txt'))
     def testDatasetWithHierarchy(self):
-        from girder.plugins.wholetale.constants import PluginSettings, SettingDefault
-        resp = self.request(
-            '/system/setting', user=self.admin, method='PUT',
-            params={'list': json.dumps([
-                {
-                    'key': PluginSettings.DATAVERSE_URL,
-                    'value': 'https://dev2.dataverse.org'
-                },
-            ])}
-        )
-        self.assertStatusOk(resp)
-        resp = self.request(
-            path='/repository/listFiles', method='GET', user=self.user,
-            params={'dataId': json.dumps([
-                (
-                    'https://dev2.dataverse.org/dataset.xhtml?'
-                    'persistentId=doi:10.5072/FK2/NYNHAM'
-                )
-            ])}
-        )
-        self.assertStatus(resp, 200)
-        root_folder = 'dataverse-irc-metrics-8f0b5b505de7730ebd9d57439952542a66a6bae0'
-        self.assertEqual(
-            resp.json[0]['Dataverse IRC Metrics'][root_folder]['data'],
-            {'fileList': [{'irclog.tsv': {'size': 9694487}}]}
-        )
+        from girder.plugins.jobs.models.job import Job
+        from girder.plugins.jobs.constants import JobStatus
+        from server.models.image import Image
+        from server.models.tale import Tale
+        from server.lib.manifest import Manifest
+        from server.lib.manifest_parser import ManifestParser
+        doi = "doi:10.7910/DVN/Q5PV4U"
+        dataMap = [
+            {
+                "dataId": (
+                    "https://dataverse.harvard.edu/dataset.xhtml?"
+                    "persistentId=" + doi
+                ),
+                "doi": doi,
+                "name": (
+                    "Replication Data for: Misgovernance and Human Rights: "
+                    "The Case of Illegal Detention without Intent"
+                ),
+                "repository": "Dataverse",
+                "size": 6326512,
+                "tale": False,
+            }
+        ]
 
         resp = self.request(
-            '/system/setting', user=self.admin, method='PUT',
-            params={'key': PluginSettings.DATAVERSE_URL,
-                    'value': SettingDefault.defaults[PluginSettings.DATAVERSE_URL]})
+            path="/dataset/register",
+            method="POST",
+            params={"dataMap": json.dumps(dataMap)},
+            user=self.user,
+        )
+        self.assertStatusOk(resp)
+        registration_job = resp.json
+
+        for _ in range(100):
+            job = Job().load(registration_job["_id"], force=True)
+            if job["status"] > JobStatus.RUNNING:
+                break
+            time.sleep(0.1)
+        self.assertEqual(job["status"], JobStatus.SUCCESS)
+
+        ds_root = Folder().findOne({"meta.identifier": doi})
+        ds_subfolder = Folder().findOne(
+            {"name": "Source Data", "parentId": ds_root["_id"]}
+        )
+        ds_item = Item().findOne(
+            {"name": "03_Analysis_Code.R", "folderId": ds_root["_id"]}
+        )
+
+        dataSet = [
+            {
+                "_modelType": "folder",
+                "itemId": str(ds_root["_id"]),
+                "mountPath": ds_root["name"],
+            },
+            {
+                "_modelType": "folder",
+                "itemId": str(ds_subfolder["_id"]),
+                "mountPath": ds_subfolder["name"],
+            },
+            {
+                "_modelType": "item",
+                "itemId": str(ds_item["_id"]),
+                "mountPath": ds_item["name"],
+            }
+        ]
+
+        image = Image().createImage(name="test my name", creator=self.user, public=True)
+        tale = Tale().createTale(
+            image, dataSet, creator=self.user, title="Blah", public=True
+        )
+        manifest = Manifest(tale, self.user, expand_folders=True).manifest
+        restored_dataset = ManifestParser(manifest).get_dataset()
+        self.assertEqual(restored_dataset, dataSet)
+
+        Tale().remove(tale)
+        Image().remove(image)
 
     def tearDown(self):
         self.model('user').remove(self.user)

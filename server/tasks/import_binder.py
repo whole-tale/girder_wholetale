@@ -36,11 +36,11 @@ from ..lib import pids_to_entities, register_dataMap
 from ..lib.dataone import DataONELocations  # TODO: get rid of it
 from ..models.instance import Instance
 from ..models.tale import Tale
-from ..utils import getOrCreateRootFolder
+from ..utils import getOrCreateRootFolder, notify_event
 
 
 def sanitize_binder(root):
-    root_listdir = root.listdir("/")
+    root_listdir = list(root.listdir("/"))
 
     if len(root_listdir) != 1:
         return
@@ -83,9 +83,11 @@ def run(job):
     progressCurrent = 0
 
     try:
+        notify_event([user["_id"]], "wt_import_started", {"taleId": tale['_id']})
+
         # 0. Spawn instance in the background
         if spawn:
-            instance = Instance().createInstance(tale, user, token, spawn=spawn)
+            instance = Instance().createInstance(tale, user, spawn=spawn)
 
         # 1. Register data using url
         progressCurrent += 1
@@ -176,6 +178,7 @@ def run(job):
                 login=user["login"],
                 password="token:{_id}".format(**token),
                 root="/tales/{_id}".format(**tale),
+                cache_ttl=0
             ) as destination_fs, DMSFS(
                 str(session["_id"]), girder_root + "/api/v1", str(token["_id"])
             ) as source_fs:
@@ -193,9 +196,7 @@ def run(job):
 
             if update_citations:
                 eventParams = {"tale": tale, "user": user}
-                event = events.trigger("tale.update_citation", eventParams)
-                if len(event.responses):
-                    tale = Tale().updateTale(event.responses[-1])
+                events.daemon.trigger("tale.update_citation", eventParams)
 
         # Tale is ready to be built
         tale = Tale().load(tale["_id"], user=user)  # Refresh state
@@ -214,18 +215,21 @@ def run(job):
                 progressMessage="Waiting for a Tale container",
             )
 
-            sleep_step = 10
+            sleep_step = 1
             timeout = 15 * 60
             while instance["status"] == InstanceStatus.LAUNCHING and timeout > 0:
                 time.sleep(sleep_step)
                 instance = Instance().load(instance["_id"], user=user)
                 timeout -= sleep_step
+                sleep_step = min(sleep_step * 2, 10)
             if timeout <= 0:
                 raise RuntimeError(
                     "Failed to launch instance {}".format(instance["_id"])
                 )
         else:
             instance = None
+
+        notify_event([user["_id"]], "wt_import_completed", {"taleId": tale['_id']})
 
     except Exception:
         tale = Tale().load(tale["_id"], user=user)  # Refresh state
@@ -241,6 +245,7 @@ def run(job):
             status=JobStatus.ERROR,
             log=log,
         )
+        notify_event([user["_id"]], "wt_import_failed", {"taleId": tale['_id']})
         raise
 
     # To get rid of ObjectId's, dates etc.

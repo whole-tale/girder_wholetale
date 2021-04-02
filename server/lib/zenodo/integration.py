@@ -60,7 +60,7 @@ def zenodoDataImport(self, doi, record_id, resource_server, environment, force):
         tale = provider.import_tale(url, user, force=force)
     except GirderException as exc:
         raise RestException(
-            "Failed to import Tale. Server returned: '{}'".format(exc.message)
+            f"Failed to import Tale. Server returned: '{str(exc)}'"
         )
 
     # TODO: Make base url a plugin setting, defaulting to dashboard.<domain>

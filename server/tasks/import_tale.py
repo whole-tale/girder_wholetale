@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import json
+import cherrypy
 import os
 import pathlib
 import sys
@@ -10,8 +10,9 @@ from webdavfs.webdavfs import WebDAVFS
 from fs.osfs import OSFS
 from fs.copy import copy_fs
 from girder import events
+from girder.api.rest import setCurrentUser
 from girder.constants import TokenScope
-from girder.models.file import File
+from girder.models.folder import Folder
 from girder.models.user import User
 from girder.models.token import Token
 from girder.utility import config
@@ -21,8 +22,9 @@ from girder.plugins.jobs.models.job import Job
 from ..constants import CATALOG_NAME, TaleStatus
 from ..lib import pids_to_entities, register_dataMap
 from ..lib.dataone import DataONELocations  # TODO: get rid of it
+from ..lib.manifest_parser import ManifestParser
 from ..models.tale import Tale
-from ..utils import getOrCreateRootFolder
+from ..utils import getOrCreateRootFolder, notify_event
 
 
 def run(job):
@@ -40,9 +42,10 @@ def run(job):
     progressCurrent = 0
 
     try:
+        notify_event([user["_id"]], "wt_import_started", {"taleId": tale['_id']})
+
         os.chdir(tale_dir)
-        with open(manifest_file, "r") as manifest_fp:
-            manifest = json.load(manifest_fp)
+        mp = ManifestParser(manifest_file)
 
         # 1. Register data
         progressCurrent += 1
@@ -53,12 +56,7 @@ def run(job):
             progressCurrent=progressCurrent,
             progressMessage="Registering external data",
         )
-        dataIds = [obj["identifier"] for obj in manifest["Datasets"]]
-        dataIds += [
-            obj["uri"]
-            for obj in manifest["aggregates"]
-            if obj["uri"].startswith("http")
-        ]
+        dataIds = mp.get_external_data_ids()
         if dataIds:
             dataMap = pids_to_entities(
                 dataIds, user=user, base_url=DataONELocations.prod_cn, lookup=True
@@ -72,23 +70,7 @@ def run(job):
             )
 
         # 2. Construct the dataSet
-        dataSet = []
-        for obj in manifest["aggregates"]:
-            if "bundledAs" not in obj:
-                continue
-            uri = obj["uri"]
-            fobj = File().findOne(
-                {"linkUrl": uri}
-            )  # TODO: That's expensive, use something else
-            if fobj:
-                dataSet.append(
-                    {
-                        "itemId": fobj["itemId"],
-                        "_modelType": "item",
-                        "mountPath": obj["bundledAs"]["filename"],
-                    }
-                )
-            # TODO: handle folders
+        dataSet = mp.get_dataset()
 
         # 3. Update Tale's dataSet
         update_citations = {_["itemId"] for _ in tale["dataSet"]} ^ {
@@ -98,10 +80,9 @@ def run(job):
         tale = Tale().updateTale(tale)
 
         if update_citations:
-            eventParams = {"tale": tale, "user": user}
-            event = events.trigger("tale.update_citation", eventParams)
-            if len(event.responses):
-                tale = Tale().updateTale(event.responses[-1])
+            events.daemon.trigger(
+                eventName="tale.update_citation", info={"tale": tale, "user": user}
+            )
 
         # 4. Copy data to the workspace using WebDAVFS (if it exists)
         progressCurrent += 1
@@ -128,9 +109,25 @@ def run(job):
             ) as webdav_handle:
                 copy_fs(OSFS(workdir), webdav_handle)
 
+        # Create a version
+        if "dct:hasVersion" in mp.manifest:
+            version_name = mp.manifest["dct:hasVersion"]["schema:name"]
+        else:
+            version_name = None
+        api_root = cherrypy.tree.apps["/api"]
+        version_resource = api_root.root.v1.version
+        setCurrentUser(user)
+        version = version_resource.create(
+            taleId=tale["_id"], name=version_name, params={}
+        )
+        version = Folder().load(version["_id"], force=True)  # above is filtered...
+        version["meta"] = {"publishInfo": tale["publishInfo"]}
+        version = Folder().updateFolder(version)
+
         # Tale is ready to be built
         tale = Tale().load(tale["_id"], user=user)  # Refresh state
         tale["status"] = TaleStatus.READY
+        tale["restoredFrom"] = version["_id"]
         tale = Tale().updateTale(tale)
 
         progressCurrent += 1
@@ -142,6 +139,8 @@ def run(job):
             progressCurrent=progressCurrent,
             progressMessage="Tale created",
         )
+
+        notify_event([user["_id"]], "wt_import_completed", {"taleId": tale['_id']})
     except Exception:
         tale = Tale().load(tale["_id"], user=user)  # Refresh state
         tale["status"] = TaleStatus.ERROR
@@ -149,4 +148,5 @@ def run(job):
         t, val, tb = sys.exc_info()
         log = "%s: %s\n%s" % (t.__name__, repr(val), traceback.extract_tb(tb))
         jobModel.updateJob(job, status=JobStatus.ERROR, log=log)
+        notify_event([user["_id"]], "wt_import_failed", {"taleId": tale['_id']})
         raise

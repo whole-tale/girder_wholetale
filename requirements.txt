@@ -1,13 +1,16 @@
 rdflib
 celery[redis]==4.4.6
 kombu==4.6.11
+jsonpickle==1.5.2  # see #447
+python-magic
 requests
 redis==3.5.3
-git+https://github.com/whole-tale/girderfs@v0.9.1#egg=girderfs
-git+https://github.com/whole-tale/gwvolman@v0.9.1#egg=gwvolman
+git+https://github.com/whole-tale/girderfs@v1.0rc1#egg=girderfs
+git+https://github.com/whole-tale/gwvolman@v1.0rc1#egg=gwvolman
 dataone.common==3.4.7
 dataone.libclient==3.4.7
 dataone.cli==3.4.7
 validators
 html2markdown
-fs.webdavfs
+fs.webdavfs>=0.4.2
+GitPython
