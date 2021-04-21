@@ -1,26 +1,23 @@
 import requests
 from girder.exceptions import RestException
+from ..verificator import Verificator
 
 
-class ZenodoVerificator:
-    def __init__(self, resource_server, key):
-        self.key = key
-        self.resource_server = resource_server
-        self.create_deposition_url = (
-            "https://" + resource_server + "/api/deposit/depositions"
-        )
-        self.delete_deposition_url = self.create_deposition_url + "/{}"
+class ZenodoVerificator(Verificator):
+    @property
+    def headers(self):
+        if self.key:
+            return {"Authorization": f"Bearer {self.key}"}
 
     def verify(self):
-        headers = {
-            "Authorization": "Bearer {}".format(self.key),
-            "Content-Type": "application/json",
-        }
+        headers = self.headers.copy()
+        headers["Content-Type"] = "application/json"
+        deposition_url = f"https://{self.resource_server}/api/deposit/depositions"
         try:
-            r = requests.post(self.create_deposition_url, data="{}", headers=headers)
+            r = requests.post(deposition_url, data="{}", headers=headers)
             r.raise_for_status()
             r = requests.delete(
-                self.delete_deposition_url.format(r.json()["id"]), headers=headers
+                deposition_url + f"/{r.json()['id']}", headers=headers
             )
             r.raise_for_status()
         except requests.exceptions.HTTPError:
