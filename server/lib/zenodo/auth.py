@@ -8,6 +8,7 @@ class ZenodoVerificator(Verificator):
     def headers(self):
         if self.key:
             return {"Authorization": f"Bearer {self.key}"}
+        return {}
 
     def verify(self):
         headers = self.headers.copy()

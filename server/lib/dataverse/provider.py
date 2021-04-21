@@ -11,6 +11,7 @@ from girder.constants import AccessType
 from girder.models.folder import Folder
 from girder.models.setting import Setting
 
+from .auth import DataverseVerificator
 from ..import_providers import ImportProvider
 from ..data_map import DataMap
 from ..file_map import FileMap
@@ -24,8 +25,8 @@ _CNTDISP_REGEX = re.compile(r'filename="(.*)"')
 _CNTDISPS_REGEX = re.compile(r"^attachment; filename\*=.*''(.*)$")
 
 
-def _query_dataverse(search_url):
-    req = requests.get(search_url)
+def _query_dataverse(search_url, headers=None):
+    req = requests.get(search_url, headers=headers)
     data = req.json()["data"]
     if data['count_in_response'] != 1:
         raise ValueError
@@ -49,11 +50,11 @@ def _query_dataverse(search_url):
     return title, files, doi
 
 
-def _get_attrs_via_head(obj, url):
+def _get_attrs_via_head(obj, url, headers=None):
     # start by regular HEAD, trick is it's gonna fail with 403
     # if the file is sitting on S3
     # see https://github.com/IQSS/dataverse/issues/5322
-    req = requests.head(url, allow_redirects=True)
+    req = requests.head(url, allow_redirects=True, headers=headers)
     if req.ok:
         size = int(req.headers.get("Content-Length", obj["size"]))
     else:
@@ -80,8 +81,8 @@ def _get_attrs_via_head(obj, url):
                 break
 
 
-def _get_attrs_via_get(obj, url):
-    req = requests.get(url, allow_redirects=True, stream=True)
+def _get_attrs_via_get(obj, url, headers=None):
+    req = requests.get(url, allow_redirects=True, stream=True, headers=headers)
     md5sum = hashlib.md5()
     size = 0
     for chunk in req.iter_content(chunk_size=4096):
@@ -162,7 +163,7 @@ class DataverseImportProvider(ImportProvider):
         self._regex = None
 
     @staticmethod
-    def _get_meta_from_dataset(url):
+    def _get_meta_from_dataset(url, headers=None):
         """Get metadata for Dataverse dataset.
 
         Handles: {siteURL}/dataset.xhtml?persistentId={persistentId}
@@ -174,16 +175,16 @@ class DataverseImportProvider(ImportProvider):
             )
         else:
             dataset_url = urlunparse(url)
-        req = requests.get(dataset_url)
+        req = requests.get(dataset_url, headers=headers)
         return req.json()
 
-    def _parse_dataset(self, url):
+    def _parse_dataset(self, url, headers=None):
         """Extract title, file, doi from Dataverse resource.
 
         Handles: {siteURL}/dataset.xhtml?persistentId={persistentId}
         Handles: {siteURL}/api/datasets/{:id}
         """
-        data = self._get_meta_from_dataset(url)
+        data = self._get_meta_from_dataset(url, headers=headers)
         meta = data['data']['latestVersion']['metadataBlocks']['citation']['fields']
         title = next(_['value'] for _ in meta if _['typeName'] == 'title')
         doi = '{protocol}:{authority}/{identifier}'.format(**data['data'])
@@ -217,7 +218,7 @@ class DataverseImportProvider(ImportProvider):
         return hierarchy
 
     @staticmethod
-    def _parse_file_url(url):
+    def _parse_file_url(url, headers=None):
         """Extract title, file, doi from Dataverse resource.
 
         Handles:
@@ -237,11 +238,11 @@ class DataverseImportProvider(ImportProvider):
         search_url = urlunparse(
             url._replace(path='/api/search', query='q=filePersistentId:' + file_persistent_id)
         )
-        title, files, _ = _query_dataverse(search_url)
+        title, files, _ = _query_dataverse(search_url, headers=headers)
         return title, files, doi
 
     @staticmethod
-    def _parse_access_url(url):
+    def _parse_access_url(url, headers=None):
         """Extract title, file, doi from Dataverse resource.
 
         Handles: {siteURL}/api/access/datafile/{fileId}
@@ -250,10 +251,10 @@ class DataverseImportProvider(ImportProvider):
         search_url = urlunparse(
             url._replace(path='/api/search', query='q=entityId:' + fileId)
         )
-        return _query_dataverse(search_url)
+        return _query_dataverse(search_url, headers=headers)
 
     @staticmethod
-    def _sanitize_files(url, files):
+    def _sanitize_files(url, files, headers=None):
         """Sanitize files metadata since results from search queries are inaccurate.
 
         File size is wrong: https://github.com/IQSS/dataverse/issues/5321
@@ -267,8 +268,9 @@ class DataverseImportProvider(ImportProvider):
             )
             if query == 'format=original':
                 _get_attrs_via_head(obj, access_url)
+                _get_attrs_via_head(obj, access_url, headers=headers)
             else:
-                _get_attrs_via_get(obj, access_url)
+                _get_attrs_via_get(obj, access_url, headers=headers)
             obj["url"] = access_url
             return obj
 
@@ -285,8 +287,10 @@ class DataverseImportProvider(ImportProvider):
                 )
                 yield obj
 
-    def parse_pid(self, pid: str, sanitize: bool = False):
+    def parse_pid(self, pid: str, sanitize: bool = False, user: object = None):
         url = urlparse(pid)
+        headers = DataverseVerificator(url=pid, user=user).headers
+
         if url.path.endswith('file.xhtml') or \
                 url.path.startswith('/api/access/datafile/:persistentId'):
             parse_method = self._parse_file_url
@@ -294,14 +298,14 @@ class DataverseImportProvider(ImportProvider):
             parse_method = self._parse_access_url
         else:
             parse_method = self._parse_dataset
-        title, files, doi = parse_method(url)
+        title, files, doi = parse_method(url, headers=headers)
 
         if sanitize:
-            files = list(self._sanitize_files(url, files))
+            files = list(self._sanitize_files(url, files, headers=headers))
         return title, files, doi
 
     def lookup(self, entity: Entity) -> DataMap:
-        title, files, doi = self.parse_pid(entity.getValue())
+        title, files, doi = self.parse_pid(entity.getValue(), user=entity.user)
         size = sum(_['filesize'] for _ in files)
         return DataMap(entity.getValue(), size, doi=doi, name=title,
                        repository=self.getName())
@@ -342,17 +346,18 @@ class DataverseImportProvider(ImportProvider):
                 yield from _recurse_hierarchy(hierarchy[folder])
                 yield ImportItem(ImportItem.END_FOLDER)
 
-        title, files, doi = self.parse_pid(pid, sanitize=True)
+        title, files, doi = self.parse_pid(pid, sanitize=True, user=user)
         hierarchy = self._files_to_hierarchy(files)
         yield ImportItem(ImportItem.FOLDER, name=title, identifier=doi)
         yield from _recurse_hierarchy(hierarchy)
         yield ImportItem(ImportItem.END_FOLDER)
 
-    def proto_tale_from_datamap(self, dataMap: DataMap, asTale: bool) -> object:
-        proto_tale = super().proto_tale_from_datamap(dataMap, asTale)  # get the defaults
+    def proto_tale_from_datamap(self, dataMap: DataMap, user: object, asTale: bool) -> object:
+        proto_tale = super().proto_tale_from_datamap(dataMap, user, asTale)  # get the defaults
         if not asTale:
             return proto_tale  # We only bring extra metadata for datasets imported as Tales
-        data = self._get_meta_from_dataset(urlparse(dataMap["dataId"]))
+        headers = DataverseVerificator(url=dataMap["dataId"], user=user).headers
+        data = self._get_meta_from_dataset(urlparse(dataMap["dataId"]), headers=headers)
         meta = data["data"]["latestVersion"]["metadataBlocks"]["citation"]["fields"]
 
         for field in meta:

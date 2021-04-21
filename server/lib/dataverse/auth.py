@@ -8,6 +8,7 @@ class DataverseVerificator(Verificator):
     def headers(self):
         if self.key:
             return {"X-Dataverse-key": "{}".format(self.key)}
+        return {}
 
     def verify(self):
         try:
