@@ -4,7 +4,7 @@ from bson import ObjectId
 from girder.api import access
 from girder.api.docs import addModel
 from girder.api.describe import Description, autoDescribeRoute
-from girder.api.rest import Resource
+from girder.api.rest import Resource, filtermodel
 from girder.constants import AccessType, SortDir, TokenScope
 from girder.exceptions import ValidationException
 from girder.models.item import Item
@@ -182,6 +182,7 @@ class Dataset(Resource):
         user = User().save(user)
 
     @access.user(scope=TokenScope.DATA_WRITE)
+    @filtermodel(model=Job)
     @autoDescribeRoute(
         Description('Create a folder containing references to an external data')
         .notes('This does not upload or copy the existing data, it just creates '
