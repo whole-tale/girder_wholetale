@@ -517,6 +517,7 @@ class Tale(Resource):
             if status == JobStatus.SUCCESS:
                 result = getCeleryApp().AsyncResult(job['celeryTaskId']).get()
                 tale['imageInfo']['digest'] = result['image_digest']
+                tale["imageInfo"]["imageId"] = tale["imageId"]
                 tale['imageInfo']['repo2docker_version'] = result['repo2docker_version']
                 tale['imageInfo']['last_build'] = result['last_build']
                 tale['imageInfo']['status'] = ImageStatus.AVAILABLE
