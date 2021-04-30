@@ -584,7 +584,7 @@ class TaleTestCase(base.TestCase):
                 'config': {},
                 'public': False,
                 'publishInfo': [],
-                'licenseSPDX': WholeTaleLicense.default_spdx()
+                'licenseSPDX': 'CC0-1.0'
             })
         )
         self.assertStatusOk(resp)
@@ -609,6 +609,10 @@ class TaleTestCase(base.TestCase):
             )
             version_id = Path(manifest_path).parts[0]
             first_manifest = json.loads(zip_archive.read(manifest_path))
+            license_path = next(
+                (_ for _ in zip_archive.namelist() if _.endswith("LICENSE"))
+            )
+            license_text = zip_archive.read(license_path)
 
         # Check the the manifest.json is present
         expected_files = {
@@ -619,6 +623,9 @@ class TaleTestCase(base.TestCase):
             "workspace/test_file.txt",
         }
         self.assertEqual(expected_files, zip_files)
+
+        # Check that we have proper license
+        self.assertIn(b"Commons Universal 1.0 Public Domain", license_text)
 
         # First export should have created a version.
         # Let's grab it and explicitly use the versionId for 2nd dump
