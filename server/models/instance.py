@@ -203,6 +203,7 @@ class Instance(AccessControlledModel):
                     'instance_id': str(instance['_id']),
                 },
                 girder_client_token=str(token['_id']),
+                girder_user=user,
                 immutable=True
             )
             volumeTask = create_volume.signature(
@@ -212,6 +213,7 @@ class Instance(AccessControlledModel):
                     'instance_id': str(instance['_id']),
                 },
                 girder_client_token=str(token['_id']),
+                girder_user=user,
                 immutable=True
             )
             serviceTask = launch_container.signature(
@@ -220,6 +222,7 @@ class Instance(AccessControlledModel):
                     'instance_id': str(instance['_id']),
                 },
                 girder_client_token=str(token['_id']),
+                girder_user=user,
                 queue='manager'
             )
 
