@@ -151,6 +151,7 @@ class Tale(Resource):
             taleObj["config"] = {}  # Has to be reset, after image change
             if "config" in tale:
                 tale.pop("config")
+            tale["icon"] = image["icon"]  # Has to be consistent...
 
         for keyword in self._model.modifiableFields:
             try:
