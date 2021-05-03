@@ -143,10 +143,13 @@ taleModel = {
         "illustration": ("https://raw.githubusercontent.com/whole-tale/dashboard/"
                          "master/public/images/demo-graph2.jpg"),
         "imageId": "5c4886279759c200017b22a3",
-        'imageInfo': {
-            'jobId': '5873dcdbaec03000014x123',
-            'digest': 'sha256:9aaece098841b13cdc64ea6756767357f5c9eb1ab10f67b9e67a90960b894053',
-            'fullName': 'registry.local.wholetale.org/5c3cd7faa697bf0001ce6cc0-1547494547'
+        "imageInfo": {
+            "digest": "registry.local.wholetale.org/608/1619806964@sha256:a",
+            "imageId": "5c4886279759c200017b22a3",
+            "jobId": "608c4d99e909e4f4e2c6973a",
+            "last_build": 1619806964,
+            "repo2docker_version": "wholetale/repo2docker_wholetale:v1.0rc1",
+            "status": 3
         },
         "public": False,
         "publishInfo": [

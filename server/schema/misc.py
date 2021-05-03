@@ -221,10 +221,12 @@ imageInfoSchema = {
     "description": "Attributes describing a Tale image",
     "type": "object",
     "properties": {
-        "created": {"type": "string", "format": "date-time"},
-        "jobId": {"type": "string"},
         "digest": {"type": "string"},
-        "fullName": {"type": "string"},
+        "imageId": {"type": "string"},
+        "jobId": {"type": "string"},
+        "last_build": {"type": "integer"},
+        "repo2docker_version": {"type": "string"},
+        "status": {"type": "integer", "enum": [0, 1, 2, 3]},
     },
 }
 
