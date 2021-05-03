@@ -678,8 +678,26 @@ class ExternalAccountsTestCase(base.TestCase):
             method="POST",
             path="/account/dataoneprod/key",
             params={
-                "resource_server": "sandbox.zenodo.org",
+                "resource_server": "cn.dataone.org",
                 "key": "dataone_token",
+                "key_type": "dataone",
+            },
+            user=self.user,
+        )
+        self.assertStatus(resp, 400)
+        self.assertEqual(resp.json["message"], "Invalid JWT Token: 'dataone_token'")
+
+        example_jwt = (
+           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6Ikpv"
+           "aG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+        )
+
+        resp = self.request(
+            method="POST",
+            path="/account/dataoneprod/key",
+            params={
+                "resource_server": "cn.dataone.org",
+                "key": example_jwt,
                 "key_type": "dataone",
             },
             user=self.user,
@@ -692,7 +710,7 @@ class ExternalAccountsTestCase(base.TestCase):
         self.assertEqual(
             user_token,
             {
-                "access_token": "dataone_token",
+                "access_token": example_jwt,
                 "provider": "dataoneprod",
                 "resource_server": "cn.dataone.org",
                 "token_type": "dataone",
