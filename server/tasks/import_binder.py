@@ -38,6 +38,8 @@ from ..models.instance import Instance
 from ..models.tale import Tale
 from ..utils import getOrCreateRootFolder, notify_event
 
+IMPORT_BINDER_STEP_TOTAL = 2
+
 
 def sanitize_binder(root):
     root_listdir = list(root.listdir("/"))
@@ -79,7 +81,7 @@ def run(job):
     asTale = job["kwargs"]["asTale"]
     token = Token().createToken(user=user, days=0.5)
 
-    progressTotal = 3 + int(spawn)
+    progressTotal = IMPORT_BINDER_STEP_TOTAL + int(spawn)
     progressCurrent = 0
 
     try:
@@ -90,7 +92,6 @@ def run(job):
             instance = Instance().createInstance(tale, user, spawn=spawn)
 
         # 1. Register data using url
-        progressCurrent += 1
         jobModel.updateJob(
             job,
             status=JobStatus.RUNNING,
@@ -188,6 +189,16 @@ def run(job):
             Session().deleteSession(user, session)
         else:
             # 3. Update Tale's dataSet
+            progressCurrent += 1
+            jobModel.updateJob(
+                job,
+                status=JobStatus.RUNNING,
+                log="Updating datasets",
+                progressTotal=progressTotal,
+                progressCurrent=progressCurrent,
+                progressMessage="Updating datasets",
+            )
+
             update_citations = {_["itemId"] for _ in tale["dataSet"]} ^ {
                 _["itemId"] for _ in data_set
             }
