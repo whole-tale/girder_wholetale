@@ -25,6 +25,7 @@ from girder_client import GirderClient
 from girder.constants import AccessType
 from girder.models.folder import Folder
 from girder.models.item import Item
+from girder.models.notification import Notification
 from girder.models.token import Token
 from girder.models.user import User
 from girder.utility import config, JsonEncoder
@@ -37,8 +38,6 @@ from ..lib.dataone import DataONELocations  # TODO: get rid of it
 from ..models.instance import Instance
 from ..models.tale import Tale
 from ..utils import getOrCreateRootFolder, notify_event
-
-IMPORT_BINDER_STEP_TOTAL = 2
 
 
 def sanitize_binder(root):
@@ -80,8 +79,9 @@ def run(job):
     spawn = job["kwargs"]["spawn"]
     asTale = job["kwargs"]["asTale"]
     token = Token().createToken(user=user, days=0.5)
+    wt_notification = Notification().load(job["wt_notification_id"])
 
-    progressTotal = IMPORT_BINDER_STEP_TOTAL + int(spawn)
+    progressTotal = wt_notification["data"]["total"]
     progressCurrent = 0
 
     try:

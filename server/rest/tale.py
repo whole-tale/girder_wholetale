@@ -34,7 +34,6 @@ from ..lib.manifest import Manifest
 from ..lib.exporters.bag import BagTaleExporter
 from ..lib.exporters.native import NativeTaleExporter
 from ..utils import notify_event, init_progress
-from ..tasks.import_binder import IMPORT_BINDER_STEP_TOTAL
 
 from girder.plugins.worker import getCeleryApp
 
@@ -325,7 +324,7 @@ class Tale(Resource):
                     "tale_id": tale["_id"],
                     "tale_title": tale["title"]
                 }
-                total = IMPORT_BINDER_STEP_TOTAL + int(spawn)
+                total = 2 + int(spawn)
                 notification = init_progress(
                     resource, user, "Importing Tale", "Initializing", total
                 )
