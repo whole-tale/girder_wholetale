@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import datetime
 from girder import events
 from girder.api import access
 from girder.api.describe import Description, autoDescribeRoute
@@ -250,8 +251,14 @@ class Instance(Resource):
             raise cherrypy.HTTPRedirect(
                   f'https://girder.{domain}/api/v1/user/sign_in?redirect={redirect}')
 
-        if self._model.findOne(
-            {'containerInfo.name': subdomain, 'creatorId': user['_id']}
-        ):
-            return
-        raise RestException('Access denied for instance', code=403)
+        instance = self._model.findOne(
+            {"containerInfo.name": subdomain, "creatorId": user["_id"]}
+        )
+        if instance is None:
+            raise RestException('Access denied for instance', code=403)
+
+        # Authorize can be called quite a lot. Therefore we only update db
+        # once every 5 min.
+        now = datetime.datetime.utcnow()
+        if instance["lastActivity"] + datetime.timedelta(minutes=5) < now:
+            self._model.update({"_id": instance["_id"]}, {"$set": {"lastActivity": now}})
