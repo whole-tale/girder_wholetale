@@ -25,6 +25,7 @@ from girder_client import GirderClient
 from girder.constants import AccessType
 from girder.models.folder import Folder
 from girder.models.item import Item
+from girder.models.notification import Notification
 from girder.models.token import Token
 from girder.models.user import User
 from girder.utility import config, JsonEncoder
@@ -78,8 +79,9 @@ def run(job):
     spawn = job["kwargs"]["spawn"]
     asTale = job["kwargs"]["asTale"]
     token = Token().createToken(user=user, days=0.5)
+    wt_notification = Notification().load(job["wt_notification_id"])
 
-    progressTotal = 3 + int(spawn)
+    progressTotal = wt_notification["data"]["total"]
     progressCurrent = 0
 
     try:
@@ -90,7 +92,6 @@ def run(job):
             instance = Instance().createInstance(tale, user, spawn=spawn)
 
         # 1. Register data using url
-        progressCurrent += 1
         jobModel.updateJob(
             job,
             status=JobStatus.RUNNING,
@@ -188,6 +189,16 @@ def run(job):
             Session().deleteSession(user, session)
         else:
             # 3. Update Tale's dataSet
+            progressCurrent += 1
+            jobModel.updateJob(
+                job,
+                status=JobStatus.RUNNING,
+                log="Updating datasets",
+                progressTotal=progressTotal,
+                progressCurrent=progressCurrent,
+                progressMessage="Updating datasets",
+            )
+
             update_citations = {_["itemId"] for _ in tale["dataSet"]} ^ {
                 _["itemId"] for _ in data_set
             }

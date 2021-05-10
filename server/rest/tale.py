@@ -33,7 +33,7 @@ from ..lib.dataone import DataONELocations  # TODO: get rid of it
 from ..lib.manifest import Manifest
 from ..lib.exporters.bag import BagTaleExporter
 from ..lib.exporters.native import NativeTaleExporter
-from ..utils import notify_event
+from ..utils import notify_event, init_progress
 
 from girder.plugins.worker import getCeleryApp
 
@@ -319,6 +319,16 @@ class Tale(Resource):
             )
 
             if not git:
+                resource = {
+                    "type": "wt_import_binder",
+                    "tale_id": tale["_id"],
+                    "tale_title": tale["title"]
+                }
+                total = 2 + int(spawn)
+                notification = init_progress(
+                    resource, user, "Importing Tale", "Initializing", total
+                )
+
                 job = Job().createLocalJob(
                     title="Import Tale from external dataset",
                     user=user,
@@ -328,7 +338,10 @@ class Tale(Resource):
                     module="girder.plugins.wholetale.tasks.import_binder",
                     args=(lookupKwargs,),
                     kwargs={"taleId": tale["_id"], "spawn": spawn, "asTale": asTale},
-                    otherFields={"taleId": tale["_id"]},
+                    otherFields={
+                        "taleId": tale["_id"],
+                        "wt_notification_id": str(notification["_id"])
+                    }
                 )
                 Job().scheduleJob(job)
             else:
