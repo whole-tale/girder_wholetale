@@ -278,6 +278,8 @@ def finalizeInstance(event):
         instance = Instance().load(instance_id, force=True, exc=True)
         tale = Tale().load(instance['taleId'], force=True)
         update = True
+        event_name = None
+
         if (
             status == JobStatus.SUCCESS
             and instance["status"] == InstanceStatus.LAUNCHING  # noqa
@@ -308,13 +310,17 @@ def finalizeInstance(event):
             if "sessionId" in service:
                 instance["sessionId"] = ObjectId(service["sessionId"])
 
-            event = "wt_instance_running"
+            event_name = "wt_instance_running"
         elif (
             status == JobStatus.ERROR
             and instance["status"] != InstanceStatus.ERROR  # noqa
         ):
             instance['status'] = InstanceStatus.ERROR
-            event = "wt_instance_error"
+        elif (
+            status == JobStatus.ERROR
+            and instance["status"] == InstanceStatus.ERROR  # noqa
+        ):
+            event_name = "wt_instance_error"
         elif (
             status in (JobStatus.QUEUED, JobStatus.RUNNING)
             and instance["status"] != InstanceStatus.LAUNCHING  # noqa
@@ -328,5 +334,6 @@ def finalizeInstance(event):
             msg += " for job(id={_id}, status={status})".format(**job)
             logger.debug(msg)
             Instance().updateInstance(instance)
-            notify_event([instance["creatorId"]], event,
-                         {'taleId': instance['taleId'], 'instanceId': instance['_id']})
+            if event_name:
+                notify_event([instance["creatorId"]], event_name,
+                             {'taleId': instance['taleId'], 'instanceId': instance['_id']})
