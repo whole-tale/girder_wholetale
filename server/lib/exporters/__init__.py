@@ -73,7 +73,7 @@ class TaleExporter:
             (
                 agg["schema:license"]
                 for agg in manifest["aggregates"]
-                if "schema:license" in manifest["aggregates"]
+                if "schema:license" in agg
             ),
             WholeTaleLicense.default_spdx()
         )
