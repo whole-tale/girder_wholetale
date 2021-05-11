@@ -23,6 +23,7 @@ TRANSFER_URL_PREFIX_REGEX = re.compile('^https://app.globus.org/file-manager')
 class GlobusImportProvider(ImportProvider):
     def __init__(self):
         super().__init__('Globus')
+        self.index_id = "1a57bbe5-5272-477f-9d31-343b8258b7a5"
         self.clients = Clients()
 
     def create_regex(self):
@@ -30,10 +31,10 @@ class GlobusImportProvider(ImportProvider):
 
     def lookup(self, entity: Entity) -> DataMap:
         endpoint, path, doi, title = self._extractMeta(entity.getValue())
-        self.clients.getUserTransferClient(entity.getUser())
         # Don't compute size here. The recursive traversal of typical directory structures
         # in a datase takes ages and we want the lookup method to quickly identify whether
         # a repository has a dataset or not.
+        # tc = self.clients.getUserTransferClient(entity.getUser())
         # size = self._computeSize(tc, endpoint, path, entity.getUser())
         size = -1
         return DataMap(entity.getValue(), size, doi=doi, name=title, repository=self.getName())
@@ -50,20 +51,22 @@ class GlobusImportProvider(ImportProvider):
             "q": '"{}"'.format(globus_id),
             "advanced": False,
         }
-
         req = requests.post(
-            "https://search.api.globus.org/v1/index/mdf/search", json=data, headers=headers
+            f"https://search.api.globus.org/v1/index/{self.index_id}/search",
+            json=data,
+            headers=headers
         )
         req.raise_for_status()
         globus_meta = req.json()
         if globus_meta['count'] != 1:
             raise Exception("Found %i results for '%s'" % (globus_meta['count'], globus_id))
-
-        globus_uri = deep_get(globus_meta, "gmeta.0.content.0.data.endpoint_path")
+        meta_prefix = "gmeta.0.entries.0.content"
+        globus_uri = deep_get(globus_meta, f"{meta_prefix}.data.endpoint_path")
         globus_url = urlparse(globus_uri)
-
-        doi = deep_get(globus_meta, "gmeta.0.content.0.dc.identifier.identifier")
-        title = deep_get(globus_meta, "gmeta.0.content.0.dc.titles.0.title")
+        identifier = deep_get(globus_meta, f"{meta_prefix}.dc.identifier.identifier")
+        identifier_type = deep_get(globus_meta, f"{meta_prefix}.dc.identifier.identifierType")
+        doi = f"{identifier_type.lower()}:{identifier}"
+        title = deep_get(globus_meta, f"{meta_prefix}.dc.titles.0.title")
         return globus_url.netloc, globus_url.path, doi, title
 
     def _computeSize(self, tc, endpoint, path, user):
