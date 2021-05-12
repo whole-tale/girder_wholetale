@@ -81,8 +81,8 @@ class SettingDefault:
                 "url": "",
                 "type": "apikey",
                 "docs_href": (
-                    "https://{siteUrl}/portal/token?action=start&"
-                    "target=https%3A//{siteUrl}/portal/token"
+                    "https://{siteUrl}/portal/oauth?action=start&"
+                    "target=https%3A%2F%2F{siteUrl}%2Fportal%2Ftoken"
                 ),
                 "targets": [],
             },
