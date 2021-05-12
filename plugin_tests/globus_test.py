@@ -57,7 +57,10 @@ class GlobusProviderTestCase(base.TestCase):
 
     def testLookup(self):
         resolved_lookup = {
-            "dataId": "https://petreldata.net/mdf/detail/pub_30_shahani_twinmediated_v1.2/",
+            "dataId": (
+                "https://petreldata.alcf.anl.gov/mdf/detail/"
+                "pub_30_shahani_twinmediated_v1.2/"
+            ),
             "doi": "doi:10.18126/M2301J",
             "name": "Twin-mediated Crystal Growth: an Enigma Resolved",
             "repository": "Globus",
@@ -73,7 +76,10 @@ class GlobusProviderTestCase(base.TestCase):
                 "dataId": json.dumps(
                     [
                         "doi:10.18126/M2301J",
-                        "https://petreldata.net/mdf/detail/pub_30_shahani_twinmediated_v1.2/",
+                        (
+                            "https://petreldata.alcf.anl.gov/mdf/detail/"
+                            "pub_30_shahani_twinmediated_v1.2/"
+                        ),
                     ]
                 )
             },
