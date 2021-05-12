@@ -154,7 +154,7 @@ class ImportTaleTestCase(base.TestCase):
                 assert instance_id == self._id
                 return {"_id": self._id, "status": InstanceStatus.RUNNING}
 
-        since = datetime.now().isoformat()
+        since = datetime.utcnow().isoformat()
         with mock.patch(
             "girder.plugins.wholetale.models.instance.Instance", fakeInstance
         ):
@@ -189,6 +189,14 @@ class ImportTaleTestCase(base.TestCase):
             self.assertEqual(job["status"], JobStatus.SUCCESS)
 
         tale = Tale().load(tale["_id"], force=True)
+        count = 0
+        while not tale["dataSetCitation"]:
+            time.sleep(0.5)
+            tale = Tale().load(tale["_id"], force=True)
+            count += 1
+            if count > 10:
+                break
+
         self.assertEqual(
             tale["dataSetCitation"],
             [
@@ -263,7 +271,7 @@ class ImportTaleTestCase(base.TestCase):
                     assert instance_id == self._id
                     return {"_id": self._id, "status": InstanceStatus.RUNNING}
 
-            since = datetime.now().isoformat()
+            since = datetime.utcnow().isoformat()
             with mock.patch(
                 "girder.plugins.wholetale.models.instance.Instance", fakeInstance
             ):
@@ -342,7 +350,7 @@ class ImportTaleTestCase(base.TestCase):
             ),
         )
 
-        since = datetime.now().isoformat()
+        since = datetime.utcnow().isoformat()
         with mock.patch("fs.copy.copy_fs") as mock_copy:
             with open(
                 os.path.join(DATA_PATH, "604126f45f6bb2c4c997e967.zip"), "rb"

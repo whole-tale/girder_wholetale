@@ -161,7 +161,7 @@ class GitImportTestCase(base.TestCase):
         with mock.patch(
             "girder.plugins.wholetale.tasks.import_git_repo.Instance", fakeInstance
         ):
-            since = datetime.now().isoformat()
+            since = datetime.utcnow().isoformat()
             # Custom branch
             tale, job = self._import_from_git_repo(
                 f"file://{self.git_repo_dir}@feature"
@@ -189,7 +189,7 @@ class GitImportTestCase(base.TestCase):
             Tale().remove(tale)
 
         # Invalid url
-        since = datetime.now().isoformat()
+        since = datetime.utcnow().isoformat()
         tale, job = self._import_from_git_repo("blah")
         workspace = Folder().load(tale["workspaceId"], force=True)
         workspace_path = workspace["fsPath"]
@@ -211,7 +211,7 @@ class GitImportTestCase(base.TestCase):
         workspace_path = workspace["fsPath"]
 
         # Invalid path
-        since = datetime.now().isoformat()
+        since = datetime.utcnow().isoformat()
         job = self._import_git_repo(tale, "blah")
         self.assertEqual(job["status"], JobStatus.ERROR)
         self.assertTrue("does not appear to be a git repo" in job["log"][0])
@@ -224,7 +224,7 @@ class GitImportTestCase(base.TestCase):
         self.assertEqual(events[1]['data']['event'], 'wt_import_failed')
 
         # Default branch (master)
-        since = datetime.now().isoformat()
+        since = datetime.utcnow().isoformat()
         job = self._import_git_repo(tale, f"file://{self.git_repo_dir}")
         self.assertEqual(job["status"], JobStatus.SUCCESS)
         self.assertTrue(
