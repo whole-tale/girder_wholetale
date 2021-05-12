@@ -198,7 +198,7 @@ class InstanceTestCase(base.TestCase):
     @mock.patch('gwvolman.tasks.shutdown_container')
     @mock.patch('gwvolman.tasks.remove_volume')
     def testInstanceFlow(self, lc, cv, uc, sc, rv):
-        since = datetime.now().isoformat()
+        since = datetime.utcnow().isoformat()
         with mock.patch('girder_worker.task.celery.Task.apply_async', spec=True) \
                 as mock_apply_async:
             resp = self.request(
@@ -255,7 +255,7 @@ class InstanceTestCase(base.TestCase):
             job = jobModel.load(job['_id'], force=True)
             self.assertEqual(job['celeryTaskId'], 'fake_id')
             Job().updateJob(job, log='job running', status=JobStatus.RUNNING)
-            since = datetime.now().isoformat()
+            since = datetime.utcnow().isoformat()
             Job().updateJob(job, log='job ran', status=JobStatus.SUCCESS)
 
             resp = self.request(
@@ -463,7 +463,7 @@ class InstanceTestCase(base.TestCase):
             self.assertEqual(instance['status'], InstanceStatus.ERROR)
 
         # Delete the instance
-        since = datetime.now().isoformat()
+        since = datetime.utcnow().isoformat()
         with mock.patch('girder_worker.task.celery.Task.apply_async', spec=True) \
                 as mock_apply_async:
             resp = self.request(

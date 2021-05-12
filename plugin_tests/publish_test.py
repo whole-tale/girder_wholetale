@@ -120,15 +120,15 @@ class PublishTestCase(base.TestCase):
             )
             self.assertStatus(resp, 400)
             self.assertEqual(
-                resp.json["message"], "Missing a token for publisher (dataonestage2)."
+                resp.json["message"], "Missing a token for publisher (dataone)."
             )
 
             # "Authenticate" with DataONE
             token = {
                 "access_token": "dataone_token",
-                "provider": "dataonestage2",
+                "provider": "dataone",
                 "resource_server": "cn-stage-2.dataone.org",
-                "token_type": "dataone",
+                "token_type": "apikey",
             }
             self.user["otherTokens"] = [token]
             self.user = User().save(self.user)
