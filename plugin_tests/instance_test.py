@@ -254,6 +254,7 @@ class InstanceTestCase(base.TestCase):
             # Make sure we got and saved the celery task id
             job = jobModel.load(job['_id'], force=True)
             self.assertEqual(job['celeryTaskId'], 'fake_id')
+
             Job().updateJob(job, log='job running', status=JobStatus.RUNNING)
             since = datetime.utcnow().isoformat()
             Job().updateJob(job, log='job ran', status=JobStatus.SUCCESS)
@@ -514,6 +515,42 @@ class InstanceTestCase(base.TestCase):
         instance = Instance().load(instance['_id'], force=True)
         self.assertEqual(instance['status'], InstanceStatus.ERROR)
         Instance().remove(instance)
+
+    def testLaunchFail(self):
+        from girder.plugins.jobs.models.job import Job
+        resp = self.request(
+            path='/instance', method='POST', user=self.user,
+            params={'taleId': str(self.tale_one['_id']),
+                    'name': 'tale that will fail', 'spawn': False}
+        )
+        self.assertStatusOk(resp)
+        instance = resp.json
+
+        job = Job().createJob(
+            title='Spawn Instance',
+            type='celery',
+            handler='worker_handler',
+            user=self.user,
+            public=False,
+            args=[{'instanceId': instance['_id']}],
+            kwargs={},
+            otherFields={
+                'wt_notification_id': 'nonexisting',
+                'instance_id': instance['_id']
+            }
+        )
+
+        job = Job().save(job)
+        self.assertEqual(job['status'], JobStatus.INACTIVE)
+        Job().updateJob(job, log='job queued', status=JobStatus.QUEUED)
+        Job().updateJob(job, log='job running', status=JobStatus.RUNNING)
+        since = datetime.now().isoformat()
+        Job().updateJob(job, log='job failed', status=JobStatus.ERROR)
+        instance = Instance().load(instance['_id'], force=True)
+        self.assertEqual(instance['status'], InstanceStatus.ERROR)
+        events = get_events(self, since)
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0]['data']['event'], 'wt_instance_error')
 
     def tearDown(self):
         self.model('folder').remove(self.userPrivateFolder)

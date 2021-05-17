@@ -218,10 +218,10 @@ class ImportTaleTestCase(base.TestCase):
             },
             event_types(events, {"taleId": str(tale["_id"])})
         )
-
         self.model("image", "wholetale").remove(image)
 
     def testTaleImportBinder(self):
+        since = datetime.now().isoformat()
         def before_record_cb(request):
             if request.host == "localhost":
                 return None
@@ -329,6 +329,7 @@ class ImportTaleTestCase(base.TestCase):
         )
 
         # Confirm notifications
+        time.sleep(0.1)
         events = get_events(self, since)
         self.assertEqual(
             {
