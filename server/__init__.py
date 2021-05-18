@@ -39,7 +39,7 @@ from .rest.tale import Tale
 from .rest.instance import Instance
 from .rest.wholetale import wholeTale
 from .rest.license import License
-from .models.instance import finalizeInstance
+from .models.instance import finalizeInstance, cullIdleInstances
 from .schema.misc import (
     external_auth_providers_schema,
     external_apikey_groups_schema,
@@ -480,6 +480,7 @@ def load(info):
     events.bind('jobs.job.update.after', 'wholetale', updateNotification)
     events.bind('model.file.validate', 'wholetale', validateFileLink)
     events.bind('oauth.auth_callback.after', 'wholetale', store_other_globus_tokens)
+    events.bind('heartbeat', 'wholetale', cullIdleInstances)
 
     info['apiRoot'].account = Account()
     info['apiRoot'].repository = Repository()

@@ -25,9 +25,11 @@ from ..schema.misc import containerInfoSchema
 from ..utils import init_progress, notify_event
 
 from girder.plugins.wholetale.models.tale import Tale
+from girder.plugins.wholetale.models.image import Image
 
 TASK_TIMEOUT = 15.0
 BUILD_TIMEOUT = 360.0
+DEFAULT_IDLE_TIMEOUT = 1440.0
 
 
 class Instance(AccessControlledModel):
@@ -334,6 +336,31 @@ def finalizeInstance(event):
             msg += " for job(id={_id}, status={status})".format(**job)
             logger.debug(msg)
             Instance().updateInstance(instance)
+
             if event_name:
                 notify_event([instance["creatorId"]], event_name,
                              {'taleId': instance['taleId'], 'instanceId': instance['_id']})
+
+
+def cullIdleInstances(event):
+    """
+    Stop idle instances that have exceeded the configured timeout
+    """
+
+    logger.info("Culling idle instances")
+
+    images = Image().find()
+    for image in images:
+        idleTimeout = image.get('idleTimeout', DEFAULT_IDLE_TIMEOUT)
+
+        cullbefore = datetime.datetime.utcnow() - datetime.timedelta(minutes=idleTimeout)
+
+        instances = Instance().find({
+            'lastActivity': {'$lt': cullbefore},
+            'containerInfo.imageId': image['_id']
+        })
+
+        for instance in instances:
+            logger.info('Stopping instance {}: idle timeout exceeded.'.format(instance['_id']))
+            user = User().load(instance['creatorId'], force=True)
+            Instance().deleteInstance(instance, user)
