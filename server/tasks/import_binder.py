@@ -203,16 +203,14 @@ def run(job):
                 _["itemId"] for _ in data_set
             }
             tale["dataSet"] = data_set
-            tale = Tale().updateTale(tale)
+            Tale().update({"_id": tale["_id"]}, update={"$set": {"dataSet": tale["dataSet"]}})
 
             if update_citations:
                 eventParams = {"tale": tale, "user": user}
                 events.daemon.trigger("tale.update_citation", eventParams)
 
         # Tale is ready to be built
-        tale = Tale().load(tale["_id"], user=user)  # Refresh state
-        tale["status"] = TaleStatus.READY
-        tale = Tale().updateTale(tale)
+        Tale().update({"_id": tale["_id"]}, update={"$set": {"status": TaleStatus.READY}})
 
         # 4. Wait for container to show up
         if spawn:
@@ -243,9 +241,7 @@ def run(job):
         notify_event([user["_id"]], "wt_import_completed", {"taleId": tale['_id']})
 
     except Exception:
-        tale = Tale().load(tale["_id"], user=user)  # Refresh state
-        tale["status"] = TaleStatus.ERROR
-        tale = Tale().updateTale(tale)
+        Tale().update({"_id": tale["_id"]}, update={"$set": {"status": TaleStatus.ERROR}})
         t, val, tb = sys.exc_info()
         log = "%s: %s\n%s" % (t.__name__, repr(val), traceback.extract_tb(tb))
         jobModel.updateJob(
@@ -256,7 +252,7 @@ def run(job):
             status=JobStatus.ERROR,
             log=log,
         )
-        notify_event([user["_id"]], "wt_import_failed", {"taleId": tale['_id']})
+        notify_event([user["_id"]], "wt_import_failed", {"taleId": tale["_id"]})
         raise
 
     # To get rid of ObjectId's, dates etc.

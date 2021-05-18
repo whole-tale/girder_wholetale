@@ -221,7 +221,7 @@ class ImportTaleTestCase(base.TestCase):
         self.model("image", "wholetale").remove(image)
 
     def testTaleImportBinder(self):
-        since = datetime.now().isoformat()
+        since = datetime.utcnow().isoformat()
         def before_record_cb(request):
             if request.host == "localhost":
                 return None
@@ -274,7 +274,6 @@ class ImportTaleTestCase(base.TestCase):
                     assert instance_id == self._id
                     return {"_id": self._id, "status": InstanceStatus.RUNNING}
 
-            since = datetime.utcnow().isoformat()
             with mock.patch(
                 "girder.plugins.wholetale.models.instance.Instance", fakeInstance
             ):
@@ -329,13 +328,12 @@ class ImportTaleTestCase(base.TestCase):
         )
 
         # Confirm notifications
-        time.sleep(0.1)
+        time.sleep(1)
         events = get_events(self, since)
         self.assertEqual(
             {
                 "wt_tale_created",
                 "wt_import_started",
-                "wt_tale_updated",
                 "wt_import_completed"
             },
             event_types(events, {"taleId": str(tale["_id"])})
