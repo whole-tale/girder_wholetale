@@ -179,11 +179,10 @@ class GitImportTestCase(base.TestCase):
             )
             # Confirm events
             events = get_events(self, since)
-            self.assertEqual(len(events), 4)
+            self.assertEqual(len(events), 3)
             self.assertEqual(events[0]['data']['event'], 'wt_tale_created')
             self.assertEqual(events[1]['data']['event'], 'wt_import_started')
-            self.assertEqual(events[2]['data']['event'], 'wt_tale_updated')
-            self.assertEqual(events[3]['data']['event'], 'wt_import_completed')
+            self.assertEqual(events[2]['data']['event'], 'wt_import_completed')
             shutil.rmtree(workspace_path)
             os.mkdir(workspace_path)
             Tale().remove(tale)
@@ -198,11 +197,10 @@ class GitImportTestCase(base.TestCase):
         self.assertEqual(tale["status"], TaleStatus.ERROR)
         # Confirm events
         events = get_events(self, since)
-        self.assertEqual(len(events), 4)
+        self.assertEqual(len(events), 3)
         self.assertEqual(events[0]['data']['event'], 'wt_tale_created')
         self.assertEqual(events[1]['data']['event'], 'wt_import_started')
-        self.assertEqual(events[2]['data']['event'], 'wt_tale_updated')
-        self.assertEqual(events[3]['data']['event'], 'wt_import_failed')
+        self.assertEqual(events[2]['data']['event'], 'wt_import_failed')
         Tale().remove(tale)
 
     def testGitImport(self):
@@ -235,10 +233,9 @@ class GitImportTestCase(base.TestCase):
         )
         # Confirm events
         events = get_events(self, since)
-        self.assertEqual(len(events), 3)
+        self.assertEqual(len(events), 2)
         self.assertEqual(events[0]['data']['event'], 'wt_import_started')
-        self.assertEqual(events[1]['data']['event'], 'wt_tale_updated')
-        self.assertEqual(events[2]['data']['event'], 'wt_import_completed')
+        self.assertEqual(events[1]['data']['event'], 'wt_import_completed')
         shutil.rmtree(workspace_path)
         os.mkdir(workspace_path)
 

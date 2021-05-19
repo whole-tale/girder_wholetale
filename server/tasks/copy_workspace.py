@@ -35,12 +35,10 @@ def run(job):
             dirs_exist_ok=True,
         )
         events.trigger("wholetale.tale.copied", (old_tale, new_tale))
-        new_tale["status"] = TaleStatus.READY
-        Tale().updateTale(new_tale)
+        Tale().update({"_id": new_tale["_id"]}, update={"$set": {"status": TaleStatus.READY}})
         jobModel.updateJob(job, status=JobStatus.SUCCESS, log="Copying finished")
     except Exception:
-        new_tale["status"] = TaleStatus.ERROR
-        Tale().updateTale(new_tale)
+        Tale().update({"_id": new_tale["_id"]}, update={"$set": {"status": TaleStatus.ERROR}})
         t, val, tb = sys.exc_info()
         log = "%s: %s\n%s" % (t.__name__, repr(val), traceback.extract_tb(tb))
         jobModel.updateJob(job, status=JobStatus.ERROR, log=log)
