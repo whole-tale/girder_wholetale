@@ -394,10 +394,10 @@ class Tale(Resource):
             image, tale["dataSet"], creator=user, save=True, **kwargs
         )
 
-    @access.user(scope=TokenScope.DATA_OWN)
+    @access.user(scope=TokenScope.DATA_WRITE)
     @autoDescribeRoute(
         Description('Get the access control list for a tale')
-        .modelParam('id', model='tale', plugin='wholetale', level=AccessType.ADMIN)
+        .modelParam('id', model='tale', plugin='wholetale', level=AccessType.WRITE)
         .errorResponse('ID was invalid.')
         .errorResponse('Admin access was denied for the tale.', 403)
     )
