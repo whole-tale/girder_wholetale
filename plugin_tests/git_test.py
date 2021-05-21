@@ -161,7 +161,7 @@ class GitImportTestCase(base.TestCase):
         with mock.patch(
             "girder.plugins.wholetale.tasks.import_git_repo.Instance", fakeInstance
         ):
-            since = datetime.now().isoformat()
+            since = datetime.utcnow().isoformat()
             # Custom branch
             tale, job = self._import_from_git_repo(
                 f"file://{self.git_repo_dir}@feature"
@@ -179,17 +179,16 @@ class GitImportTestCase(base.TestCase):
             )
             # Confirm events
             events = get_events(self, since)
-            self.assertEqual(len(events), 4)
+            self.assertEqual(len(events), 3)
             self.assertEqual(events[0]['data']['event'], 'wt_tale_created')
             self.assertEqual(events[1]['data']['event'], 'wt_import_started')
-            self.assertEqual(events[2]['data']['event'], 'wt_tale_updated')
-            self.assertEqual(events[3]['data']['event'], 'wt_import_completed')
+            self.assertEqual(events[2]['data']['event'], 'wt_import_completed')
             shutil.rmtree(workspace_path)
             os.mkdir(workspace_path)
             Tale().remove(tale)
 
         # Invalid url
-        since = datetime.now().isoformat()
+        since = datetime.utcnow().isoformat()
         tale, job = self._import_from_git_repo("blah")
         workspace = Folder().load(tale["workspaceId"], force=True)
         workspace_path = workspace["fsPath"]
@@ -198,11 +197,10 @@ class GitImportTestCase(base.TestCase):
         self.assertEqual(tale["status"], TaleStatus.ERROR)
         # Confirm events
         events = get_events(self, since)
-        self.assertEqual(len(events), 4)
+        self.assertEqual(len(events), 3)
         self.assertEqual(events[0]['data']['event'], 'wt_tale_created')
         self.assertEqual(events[1]['data']['event'], 'wt_import_started')
-        self.assertEqual(events[2]['data']['event'], 'wt_tale_updated')
-        self.assertEqual(events[3]['data']['event'], 'wt_import_failed')
+        self.assertEqual(events[2]['data']['event'], 'wt_import_failed')
         Tale().remove(tale)
 
     def testGitImport(self):
@@ -211,7 +209,7 @@ class GitImportTestCase(base.TestCase):
         workspace_path = workspace["fsPath"]
 
         # Invalid path
-        since = datetime.now().isoformat()
+        since = datetime.utcnow().isoformat()
         job = self._import_git_repo(tale, "blah")
         self.assertEqual(job["status"], JobStatus.ERROR)
         self.assertTrue("does not appear to be a git repo" in job["log"][0])
@@ -224,7 +222,7 @@ class GitImportTestCase(base.TestCase):
         self.assertEqual(events[1]['data']['event'], 'wt_import_failed')
 
         # Default branch (master)
-        since = datetime.now().isoformat()
+        since = datetime.utcnow().isoformat()
         job = self._import_git_repo(tale, f"file://{self.git_repo_dir}")
         self.assertEqual(job["status"], JobStatus.SUCCESS)
         self.assertTrue(
@@ -235,10 +233,9 @@ class GitImportTestCase(base.TestCase):
         )
         # Confirm events
         events = get_events(self, since)
-        self.assertEqual(len(events), 3)
+        self.assertEqual(len(events), 2)
         self.assertEqual(events[0]['data']['event'], 'wt_import_started')
-        self.assertEqual(events[1]['data']['event'], 'wt_tale_updated')
-        self.assertEqual(events[2]['data']['event'], 'wt_import_completed')
+        self.assertEqual(events[1]['data']['event'], 'wt_import_completed')
         shutil.rmtree(workspace_path)
         os.mkdir(workspace_path)
 

@@ -201,7 +201,7 @@ class TaskFailTestCase(base.TestCase):
             job = Job().load(job["_id"], force=True)
         self.assertEqual(job["status"], JobStatus.ERROR)
         Job().remove(job)
-        tale = Tale().load(new_tale["_id"], force=True)
+        new_tale = Tale().load(new_tale["_id"], force=True)
         self.assertEqual(new_tale["status"], TaleStatus.ERROR)
         Tale().remove(tale)
         Tale().remove(new_tale)

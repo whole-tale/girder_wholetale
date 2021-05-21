@@ -81,7 +81,7 @@ class RepositoryTestCase(base.TestCase):
         # Pretend we have authorized with DataONE
         self.user["otherTokens"] = [
             {
-                "provider": "dataonestage2",
+                "provider": "dataone",
                 "access_token": "dataone_token",
                 "resource_server": "cn-stage-2.test.dataone.org",
                 "token_type": "dataone",

@@ -27,7 +27,7 @@ class GlobusImportProvider(ImportProvider):
         self.clients = Clients()
 
     def create_regex(self):
-        return re.compile(r'^https://petreldata.net/mdf/detail.*')
+        return re.compile(r'^https://.*petrel.*/mdf/detail.*')
 
     def lookup(self, entity: Entity) -> DataMap:
         endpoint, path, doi, title = self._extractMeta(entity.getValue())

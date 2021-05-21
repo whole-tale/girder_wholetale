@@ -7,6 +7,7 @@ from datetime import datetime
 from tests import base
 from girder.exceptions import ValidationException
 from .tests_helpers import get_events
+from girder.utility import config
 
 
 JobStatus = None
@@ -15,6 +16,8 @@ InstanceStatus = None
 
 
 def setUpModule():
+    cfg = config.getConfig()
+    cfg['server']['heartbeat'] = 10
     base.enabledPlugins.append('wholetale')
     base.startServer()
     global JobStatus, CustomJobStatus, Instance, \
@@ -84,8 +87,7 @@ class InstanceTestCase(base.TestCase):
                                  for user in users]
 
         self.image = self.model('image', 'wholetale').createImage(
-            name="image my name", creator=self.user,
-            public=True)
+            name="image my name", creator=self.user, idleTimeout=.25, public=True)
 
         self.userPrivateFolder = self.model('folder').createFolder(
             self.user, 'PrivateFolder', parentType='user', public=False,
@@ -198,7 +200,7 @@ class InstanceTestCase(base.TestCase):
     @mock.patch('gwvolman.tasks.shutdown_container')
     @mock.patch('gwvolman.tasks.remove_volume')
     def testInstanceFlow(self, lc, cv, uc, sc, rv):
-        since = datetime.now().isoformat()
+        since = datetime.utcnow().isoformat()
         with mock.patch('girder_worker.task.celery.Task.apply_async', spec=True) \
                 as mock_apply_async:
             resp = self.request(
@@ -254,8 +256,9 @@ class InstanceTestCase(base.TestCase):
             # Make sure we got and saved the celery task id
             job = jobModel.load(job['_id'], force=True)
             self.assertEqual(job['celeryTaskId'], 'fake_id')
+
             Job().updateJob(job, log='job running', status=JobStatus.RUNNING)
-            since = datetime.now().isoformat()
+            since = datetime.utcnow().isoformat()
             Job().updateJob(job, log='job ran', status=JobStatus.SUCCESS)
 
             resp = self.request(
@@ -463,7 +466,7 @@ class InstanceTestCase(base.TestCase):
             self.assertEqual(instance['status'], InstanceStatus.ERROR)
 
         # Delete the instance
-        since = datetime.now().isoformat()
+        since = datetime.utcnow().isoformat()
         with mock.patch('girder_worker.task.celery.Task.apply_async', spec=True) \
                 as mock_apply_async:
             resp = self.request(
@@ -514,6 +517,63 @@ class InstanceTestCase(base.TestCase):
         instance = Instance().load(instance['_id'], force=True)
         self.assertEqual(instance['status'], InstanceStatus.ERROR)
         Instance().remove(instance)
+
+    def testLaunchFail(self):
+        from girder.plugins.jobs.models.job import Job
+        resp = self.request(
+            path='/instance', method='POST', user=self.user,
+            params={'taleId': str(self.tale_one['_id']),
+                    'name': 'tale that will fail', 'spawn': False}
+        )
+        self.assertStatusOk(resp)
+        instance = resp.json
+
+        job = Job().createJob(
+            title='Spawn Instance',
+            type='celery',
+            handler='worker_handler',
+            user=self.user,
+            public=False,
+            args=[{'instanceId': instance['_id']}],
+            kwargs={},
+            otherFields={
+                'wt_notification_id': 'nonexisting',
+                'instance_id': instance['_id']
+            }
+        )
+
+        job = Job().save(job)
+        self.assertEqual(job['status'], JobStatus.INACTIVE)
+        Job().updateJob(job, log='job queued', status=JobStatus.QUEUED)
+        Job().updateJob(job, log='job running', status=JobStatus.RUNNING)
+        since = datetime.now().isoformat()
+        Job().updateJob(job, log='job failed', status=JobStatus.ERROR)
+        instance = Instance().load(instance['_id'], force=True)
+        self.assertEqual(instance['status'], InstanceStatus.ERROR)
+        events = get_events(self, since)
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0]['data']['event'], 'wt_instance_error')
+
+    def testIdleInstance(self):
+        instance = self.model('instance', 'wholetale').createInstance(
+            self.tale_one, self.user, name="idle instance", spawn=False)
+
+        instance['containerInfo'] = {
+            'imageId': self.image['_id'],
+        }
+        self.model('instance', 'wholetale').updateInstance(instance)
+
+        cfg = config.getConfig()
+        self.assertEqual(cfg['server']['heartbeat'], 10)
+
+        # Wait for idle instance to be culled
+        with mock.patch(
+                "girder.plugins.wholetale.models.instance.Instance.deleteInstance"
+                ) as mock_delete:
+            time.sleep(25)
+        mock_delete.assert_called_once()
+
+        self.model('instance', 'wholetale').remove(instance)
 
     def tearDown(self):
         self.model('folder').remove(self.userPrivateFolder)

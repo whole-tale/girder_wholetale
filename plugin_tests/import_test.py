@@ -14,8 +14,7 @@ from tests import base
 from girder import config
 from girder.models.token import Token
 from datetime import datetime
-from .tests_helpers import get_events
-
+from .tests_helpers import get_events, event_types
 
 DATA_PATH = os.path.join(
     os.path.dirname(os.environ["GIRDER_TEST_DATA_PREFIX"]),
@@ -154,7 +153,7 @@ class ImportTaleTestCase(base.TestCase):
                 assert instance_id == self._id
                 return {"_id": self._id, "status": InstanceStatus.RUNNING}
 
-        since = datetime.now().isoformat()
+        since = datetime.utcnow().isoformat()
         with mock.patch(
             "girder.plugins.wholetale.models.instance.Instance", fakeInstance
         ):
@@ -189,6 +188,14 @@ class ImportTaleTestCase(base.TestCase):
             self.assertEqual(job["status"], JobStatus.SUCCESS)
 
         tale = Tale().load(tale["_id"], force=True)
+        count = 0
+        while not tale["dataSetCitation"]:
+            time.sleep(0.5)
+            tale = Tale().load(tale["_id"], force=True)
+            count += 1
+            if count > 10:
+                break
+
         self.assertEqual(
             tale["dataSetCitation"],
             [
@@ -202,15 +209,19 @@ class ImportTaleTestCase(base.TestCase):
 
         # Confirm notifications
         events = get_events(self, since)
-        self.assertEqual(len(events), 6)
-        self.assertEqual(events[0]['data']['event'], 'wt_tale_created')
-        self.assertEqual(events[1]['data']['event'], 'wt_import_started')
-        # 3 events are wt_tale_updated from import process changing tale state
-        self.assertEqual(events[4]['data']['event'], 'wt_import_completed')
-
+        self.assertEqual(
+            {
+                "wt_tale_created",
+                "wt_import_started",
+                "wt_tale_updated",
+                "wt_import_completed"
+            },
+            event_types(events, {"taleId": str(tale["_id"])})
+        )
         self.model("image", "wholetale").remove(image)
 
     def testTaleImportBinder(self):
+        since = datetime.utcnow().isoformat()
         def before_record_cb(request):
             if request.host == "localhost":
                 return None
@@ -263,7 +274,6 @@ class ImportTaleTestCase(base.TestCase):
                     assert instance_id == self._id
                     return {"_id": self._id, "status": InstanceStatus.RUNNING}
 
-            since = datetime.now().isoformat()
             with mock.patch(
                 "girder.plugins.wholetale.models.instance.Instance", fakeInstance
             ):
@@ -318,13 +328,16 @@ class ImportTaleTestCase(base.TestCase):
         )
 
         # Confirm notifications
+        time.sleep(1)
         events = get_events(self, since)
-        self.assertEqual(len(events), 4)
-        self.assertEqual(events[0]['data']['event'], 'wt_tale_created')
-        self.assertEqual(events[1]['data']['event'], 'wt_import_started')
-        # 1 event is wt_tale_updated from import process changing tale state
-        self.assertEqual(events[3]['data']['event'], 'wt_import_completed')
-
+        self.assertEqual(
+            {
+                "wt_tale_created",
+                "wt_import_started",
+                "wt_import_completed"
+            },
+            event_types(events, {"taleId": str(tale["_id"])})
+        )
         self.model("image", "wholetale").remove(image)
 
     @vcr.use_cassette(os.path.join(DATA_PATH, "tale_import_zip.txt"))
@@ -342,7 +355,7 @@ class ImportTaleTestCase(base.TestCase):
             ),
         )
 
-        since = datetime.now().isoformat()
+        since = datetime.utcnow().isoformat()
         with mock.patch("fs.copy.copy_fs") as mock_copy:
             with open(
                 os.path.join(DATA_PATH, "604126f45f6bb2c4c997e967.zip"), "rb"
@@ -380,12 +393,15 @@ class ImportTaleTestCase(base.TestCase):
         )
 
         events = get_events(self, since)
-        self.assertEqual(len(events), 7)
-        self.assertEqual(events[0]['data']['event'], 'wt_tale_created')
-        self.assertEqual(events[1]['data']['event'], 'wt_import_started')
-        # 3 events are wt_tale_updated from import process changing tale state
-        self.assertEqual(events[5]['data']['event'], 'wt_import_completed')
-
+        self.assertEqual(
+            {
+                "wt_tale_created",
+                "wt_import_started",
+                "wt_tale_updated",
+                "wt_import_completed"
+            },
+            event_types(events, {"taleId": str(tale["_id"])})
+        )
         self.model("image", "wholetale").remove(image)
 
     def test_binder_heuristics(self):

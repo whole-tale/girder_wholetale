@@ -16,3 +16,11 @@ def get_events(test, since, user=None):
     test.assertStatusOk(resp)
 
     return [event for event in resp.json if event['type'] == 'wt_event']
+
+
+def event_types(events, affected_resources):
+    return {
+        event["data"]["event"]
+        for event in events
+        if affected_resources == event["data"]["affectedResourceIds"]
+    }

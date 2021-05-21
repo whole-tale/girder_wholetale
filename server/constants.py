@@ -58,7 +58,7 @@ class SettingDefault:
                 "tags": ["data", "publish"],
                 "url": "",
                 "type": "apikey",
-                "docs_href": "https://zenodo.org/account/settings/applications/tokens/new/",
+                "docs_href": "https://{siteUrl}/account/settings/applications/tokens/new/",
                 "targets": [],
             },
             {
@@ -69,18 +69,22 @@ class SettingDefault:
                 "url": "",
                 "type": "apikey",
                 "docs_href": (
-                    "https://dataverse.harvard.edu/dataverseuser.xhtml?selectTab=apiTokenTab"
+                    "https://{siteUrl}/dataverseuser.xhtml?selectTab=apiTokenTab"
                 ),
                 "targets": [],
             },
             {
-                "name": "dataonestage2",
+                "name": "dataone",
                 "logo": "",
-                "fullName": "DataONE Sandbox",
+                "fullName": "DataONE",
                 "tags": ["publish"],
                 "url": "",
-                "type": "dataone",
-                "state": "unauthorized",
+                "type": "apikey",
+                "docs_href": (
+                    "https://{siteUrl}/portal/oauth?action=start&"
+                    "target=https%3A%2F%2F{siteUrl}%2Fportal%2Ftoken"
+                ),
+                "targets": [],
             },
         ],
         PluginSettings.EXTERNAL_APIKEY_GROUPS: [
@@ -93,6 +97,13 @@ class SettingDefault:
                     "demo.dataverse.org",
                 ],
             },
+            {
+                "name": "dataone",
+                "targets": [
+                    "cn-stage-2.test.dataone.org",
+                    "cn.dataone.org",
+                ]
+            },
         ],
         PluginSettings.ZENODO_EXTRA_HOSTS: [],
         PluginSettings.PUBLISHER_REPOS: [
@@ -103,7 +114,7 @@ class SettingDefault:
             },
             {
                 "repository": "https://dev.nceas.ucsb.edu/knb/d1/mn",
-                "auth_provider": "dataonestage2",
+                "auth_provider": "dataone",
                 "name": "DataONE Dev",
             },
         ],

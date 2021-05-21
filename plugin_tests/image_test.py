@@ -230,6 +230,54 @@ class ImageTestCase(base.TestCase):
         for image in images:
             Image().remove(image)
 
+    def testCreateUpdateImage(self):
+        from girder.plugins.wholetale.models.image import Image
+
+        # Create the image
+        params = {
+            'name': 'test user image',
+            'iframe': True,
+            'public': True,
+            'description': 'description',
+            'icon': 'icon',
+            'idleTimeout': 1
+        }
+
+        resp = self.request(
+            path='/image', method='POST', user=self.user, params=params
+        )
+        self.assertStatusOk(resp)
+        image = resp.json
+
+        for param in params:
+            self.assertEqual(params[param], image[param])
+
+        # Update the image
+        new_params = {
+            'name': 'new test user image',
+            'iframe': False,
+            'public': False,
+            'description': 'new description',
+            'icon': 'new icon',
+            'idleTimeout': 2
+        }
+
+        resp = self.request(
+            path='/image/{}'.format(str(image['_id'])),
+            method='PUT',
+            user=self.user,
+            params=new_params
+        )
+        self.assertStatusOk(resp)
+        new_image = resp.json
+
+        print(new_image)
+
+        for param in new_params:
+            self.assertEqual(new_params[param], new_image[param])
+
+        Image().remove(image)
+
     def tearDown(self):
         self.model('user').remove(self.user)
         self.model('user').remove(self.admin)

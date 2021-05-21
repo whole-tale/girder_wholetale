@@ -25,9 +25,11 @@ from ..schema.misc import containerInfoSchema
 from ..utils import init_progress, notify_event
 
 from girder.plugins.wholetale.models.tale import Tale
+from girder.plugins.wholetale.models.image import Image
 
 TASK_TIMEOUT = 15.0
 BUILD_TIMEOUT = 360.0
+DEFAULT_IDLE_TIMEOUT = 1440.0
 
 
 class Instance(AccessControlledModel):
@@ -278,6 +280,8 @@ def finalizeInstance(event):
         instance = Instance().load(instance_id, force=True, exc=True)
         tale = Tale().load(instance['taleId'], force=True)
         update = True
+        event_name = None
+
         if (
             status == JobStatus.SUCCESS
             and instance["status"] == InstanceStatus.LAUNCHING  # noqa
@@ -308,15 +312,17 @@ def finalizeInstance(event):
             if "sessionId" in service:
                 instance["sessionId"] = ObjectId(service["sessionId"])
 
-            notify_event([instance["creatorId"]], "wt_instance_running",
-                         {'taleId': instance['taleId'], 'instanceId': instance['_id']})
+            event_name = "wt_instance_running"
         elif (
             status == JobStatus.ERROR
             and instance["status"] != InstanceStatus.ERROR  # noqa
         ):
             instance['status'] = InstanceStatus.ERROR
-            notify_event([instance["creatorId"]], "wt_instance_error",
-                         {'taleId': instance['taleId'], 'instanceId': instance['_id']})
+        elif (
+            status == JobStatus.ERROR
+            and instance["status"] == InstanceStatus.ERROR  # noqa
+        ):
+            event_name = "wt_instance_error"
         elif (
             status in (JobStatus.QUEUED, JobStatus.RUNNING)
             and instance["status"] != InstanceStatus.LAUNCHING  # noqa
@@ -330,3 +336,31 @@ def finalizeInstance(event):
             msg += " for job(id={_id}, status={status})".format(**job)
             logger.debug(msg)
             Instance().updateInstance(instance)
+
+            if event_name:
+                notify_event([instance["creatorId"]], event_name,
+                             {'taleId': instance['taleId'], 'instanceId': instance['_id']})
+
+
+def cullIdleInstances(event):
+    """
+    Stop idle instances that have exceeded the configured timeout
+    """
+
+    logger.info("Culling idle instances")
+
+    images = Image().find()
+    for image in images:
+        idleTimeout = image.get('idleTimeout', DEFAULT_IDLE_TIMEOUT)
+
+        cullbefore = datetime.datetime.utcnow() - datetime.timedelta(minutes=idleTimeout)
+
+        instances = Instance().find({
+            'lastActivity': {'$lt': cullbefore},
+            'containerInfo.imageId': image['_id']
+        })
+
+        for instance in instances:
+            logger.info('Stopping instance {}: idle timeout exceeded.'.format(instance['_id']))
+            user = User().load(instance['creatorId'], force=True)
+            Instance().deleteInstance(instance, user)

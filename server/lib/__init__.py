@@ -44,6 +44,7 @@ IMPORT_PROVIDERS.addProvider(NullImportProvider())
 Verificators = {
     "zenodo": ZenodoVerificator,
     "dataverse": DataverseVerificator,
+    "dataone": DataONEVerificator,
     "dataoneprod": DataONEVerificator,
     "dataonedev": DataONEVerificator,
     "dataonestage": DataONEVerificator,

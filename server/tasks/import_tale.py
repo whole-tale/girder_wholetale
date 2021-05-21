@@ -77,7 +77,7 @@ def run(job):
             _["itemId"] for _ in dataSet
         }
         tale["dataSet"] = dataSet
-        tale = Tale().updateTale(tale)
+        Tale().update({"_id": tale["_id"]}, update={"$set": {"dataSet": tale["dataSet"]}})
 
         if update_citations:
             events.daemon.trigger(
@@ -125,10 +125,10 @@ def run(job):
         version = Folder().updateFolder(version)
 
         # Tale is ready to be built
-        tale = Tale().load(tale["_id"], user=user)  # Refresh state
-        tale["status"] = TaleStatus.READY
-        tale["restoredFrom"] = version["_id"]
-        tale = Tale().updateTale(tale)
+        Tale().update(
+            {"_id": tale["_id"]},
+            update={"$set": {"status": TaleStatus.READY, "restoredFrom": version["_id"]}},
+        )
 
         progressCurrent += 1
         jobModel.updateJob(
@@ -142,9 +142,7 @@ def run(job):
 
         notify_event([user["_id"]], "wt_import_completed", {"taleId": tale['_id']})
     except Exception:
-        tale = Tale().load(tale["_id"], user=user)  # Refresh state
-        tale["status"] = TaleStatus.ERROR
-        tale = Tale().updateTale(tale)
+        Tale().update({"_id": tale["_id"]}, update={"$set": {"status": TaleStatus.ERROR}})
         t, val, tb = sys.exc_info()
         log = "%s: %s\n%s" % (t.__name__, repr(val), traceback.extract_tb(tb))
         jobModel.updateJob(job, status=JobStatus.ERROR, log=log)

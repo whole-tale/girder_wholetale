@@ -81,9 +81,7 @@ def run(job):
             raise RuntimeError("Failed to import from git:\n {}".format(str(exc)))
 
         # Tale is ready to be built
-        tale = Tale().load(tale["_id"], user=user)  # Refresh state
-        tale["status"] = TaleStatus.READY
-        tale = Tale().updateTale(tale)
+        Tale().update({"_id": tale["_id"]}, update={"$set": {"status": TaleStatus.READY}})
 
         # 4. Wait for container to show up
         if spawn:
@@ -119,9 +117,7 @@ def run(job):
         if not has_dot_git_already and os.path.isdir(dot_git):
             shutil.rmtree(dot_git, ignore_errors=True)
         if change_status:
-            tale = Tale().load(tale["_id"], user=user)  # Refresh state
-            tale["status"] = TaleStatus.ERROR
-            tale = Tale().updateTale(tale)
+            Tale().update({"_id": tale["_id"]}, update={"$set": {"status": TaleStatus.ERROR}})
         jobModel.updateJob(
             job,
             progressTotal=progressTotal,
