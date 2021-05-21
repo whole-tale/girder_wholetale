@@ -7,6 +7,7 @@ from datetime import datetime
 from tests import base
 from girder.exceptions import ValidationException
 from .tests_helpers import get_events
+from girder.utility import config
 
 
 JobStatus = None
@@ -15,6 +16,8 @@ InstanceStatus = None
 
 
 def setUpModule():
+    cfg = config.getConfig()
+    cfg['server']['heartbeat'] = 10
     base.enabledPlugins.append('wholetale')
     base.startServer()
     global JobStatus, CustomJobStatus, Instance, \
@@ -84,8 +87,7 @@ class InstanceTestCase(base.TestCase):
                                  for user in users]
 
         self.image = self.model('image', 'wholetale').createImage(
-            name="image my name", creator=self.user,
-            public=True)
+            name="image my name", creator=self.user, idleTimeout=.25, public=True)
 
         self.userPrivateFolder = self.model('folder').createFolder(
             self.user, 'PrivateFolder', parentType='user', public=False,
@@ -551,6 +553,27 @@ class InstanceTestCase(base.TestCase):
         events = get_events(self, since)
         self.assertEqual(len(events), 1)
         self.assertEqual(events[0]['data']['event'], 'wt_instance_error')
+
+    def testIdleInstance(self):
+        instance = self.model('instance', 'wholetale').createInstance(
+            self.tale_one, self.user, name="idle instance", spawn=False)
+
+        instance['containerInfo'] = {
+            'imageId': self.image['_id'],
+        }
+        self.model('instance', 'wholetale').updateInstance(instance)
+
+        cfg = config.getConfig()
+        self.assertEqual(cfg['server']['heartbeat'], 10)
+
+        # Wait for idle instance to be culled
+        with mock.patch(
+                "girder.plugins.wholetale.models.instance.Instance.deleteInstance"
+                ) as mock_delete:
+            time.sleep(25)
+        mock_delete.assert_called_once()
+
+        self.model('instance', 'wholetale').remove(instance)
 
     def tearDown(self):
         self.model('folder').remove(self.userPrivateFolder)

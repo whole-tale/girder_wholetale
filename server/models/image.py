@@ -27,7 +27,7 @@ class Image(AccessControlledModel):
             level=AccessType.READ,
             fields={'_id', 'config', 'created', 'creatorId', 'description',
                     'icon', 'iframe', 'name', 'updated', 'name', 'parentId',
-                    'public', 'tags'}
+                    'public', 'tags', 'idleTimeout'}
         )
 
     def validate(self, image):
@@ -39,7 +39,7 @@ class Image(AccessControlledModel):
 
     def createImage(self, name=None, tags=None,
                     creator=None, save=True, parent=None, description=None,
-                    public=None, config=None, icon=None, iframe=None):
+                    public=None, config=None, icon=None, iframe=None, idleTimeout=None):
 
         # TODO: check for existing image based on name
 
@@ -70,6 +70,8 @@ class Image(AccessControlledModel):
             'tags': tags,
             'updated': now,
         }
+        if idleTimeout:
+            image['idleTimeout'] = idleTimeout
 
         if public is not None and isinstance(public, bool):
             self.setPublic(image, public, save=False)

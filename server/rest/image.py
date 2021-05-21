@@ -161,6 +161,8 @@ class Image(Resource):
                required=False)
         .param('iframe', 'If "true", tales using this image can be embedded in an iframe',
                ' Defaults to False.', dataType='boolean', default=False, required=False)
+        .param('idleTimeout', 'How long an instance of this image can be idle before being culled',
+               dataType='integer', required=False)
         .jsonParam('tags', 'A human readable labels for the image.',
                    required=False, schema=tagsSchema)
         .responseClass('image')
@@ -168,7 +170,8 @@ class Image(Resource):
         .errorResponse('Read/write access was denied for the image.', 403)
         .errorResponse('Tag already exists.', 409)
     )
-    def updateImage(self, image, name, description, public, icon, iframe, tags, params):
+    def updateImage(self, image, name, description, public, icon, iframe, idleTimeout, tags,
+                    params):
         if name is not None:
             image['name'] = name
         if description is not None:
@@ -179,6 +182,8 @@ class Image(Resource):
             image['icon'] = icon
         if iframe is not None:
             image['iframe'] = iframe
+        if idleTimeout is not None:
+            image['idleTimeout'] = idleTimeout
         # TODO: tags magic
         self.model('image', 'wholetale').setPublic(image, public)
         return self.model('image', 'wholetale').updateImage(image)
@@ -207,6 +212,8 @@ class Image(Resource):
                required=False)
         .param('iframe', 'If "true", tales using this image can be embedded in an iframe',
                ' Defaults to False.', dataType='boolean', default=False, required=False)
+        .param('idleTimeout', 'How long an instance of this image can be idle before being culled',
+               dataType='integer', required=False)
         .jsonParam('tags', 'A human readable labels for the image.',
                    required=False, schema=tagsSchema)
         .jsonParam('config', 'Default image runtime configuration',
@@ -215,12 +222,12 @@ class Image(Resource):
         .errorResponse('Query parameter was invalid')
     )
     def createImage(self, name, description, public, icon,
-                    iframe, tags, config, params):
+                    iframe, idleTimeout, tags, config, params):
         user = self.getCurrentUser()
         return self.model('image', 'wholetale').createImage(
             name=name, tags=tags, creator=user,
             save=True, parent=None, description=description, public=public,
-            config=config, icon=icon, iframe=iframe)
+            config=config, icon=icon, iframe=iframe, idleTimeout=idleTimeout)
 
     @access.user(scope=TokenScope.DATA_OWN)
     @autoDescribeRoute(
