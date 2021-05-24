@@ -68,6 +68,8 @@ def notify_event(users, event, affectedIds):
 
 
 def init_progress(resource, user, title, message, total):
+    resource["jobCurrent"] = 0
+    resource["jobId"] = None
     data = {
         'title': title,
         'total': total,
