@@ -355,13 +355,9 @@ class Tale(AccessControlledModel):
 
     @staticmethod
     def _extractZipPayload(stream):
-        # TODO: Move assetstore type to wholetale.
-        assetstore = next((_ for _ in Assetstore().list() if _['type'] == 101), None)
-        if assetstore:
-            adapter = assetstore_utilities.getAssetstoreAdapter(assetstore)
-            tempDir = adapter.tempDir
-        else:
-            tempDir = None
+        assetstore = Assetstore().getCurrent()
+        adapter = assetstore_utilities.getAssetstoreAdapter(assetstore)
+        tempDir = adapter.tempDir
 
         with tempfile.NamedTemporaryFile(dir=tempDir) as fp:
             for chunk in stream(2 * 1024 ** 3):
