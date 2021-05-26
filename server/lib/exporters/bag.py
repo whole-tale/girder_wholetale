@@ -125,7 +125,10 @@ class BagTaleExporter(TaleExporter):
         for bundle in self.manifest['aggregates']:
             if 'bundledAs' not in bundle:
                 continue
-            folder = unquote(bundle['bundledAs']['folder'])
+            # 'folder' is relative to root of a Tale, we need to adjust it
+            # to make it relative to the root of the bag. It always startswith
+            # "./"
+            folder = f"data{unquote(bundle['bundledAs']['folder'])[1:]}"
             fetch_file += f"{bundle['uri']} {bundle['wt:size']} {folder}"
             fetch_file += unquote(bundle['bundledAs'].get('filename', ''))
             fetch_file += '\n'

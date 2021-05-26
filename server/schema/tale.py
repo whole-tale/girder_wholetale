@@ -31,6 +31,11 @@ taleModel = {
             "type": ["string", "null"],
             "description": "The description of the Tale (Markdown)"
         },
+        "status": {
+            "type": "integer",
+            "enum": [0, 1, 2],
+            "description": "Status of the tale import (Preparing, Ready, Error)"
+        },
         "imageId": {
             "type": "string",
             "description": "ID of a WT Image used by the Tale"

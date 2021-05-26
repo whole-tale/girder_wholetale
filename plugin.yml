@@ -1,6 +1,6 @@
 name: WholeTale
 description: WholeTale plugin for Girder
-version: 1.0rc3
+version: 1.0rc4
 dependencies:
     - jobs
     - worker

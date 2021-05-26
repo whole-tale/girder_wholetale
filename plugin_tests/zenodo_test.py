@@ -3,10 +3,13 @@ import io
 import json
 import mock
 import os
+import tempfile
 import vcr
 import zipfile
 from tests import base
 from urllib.parse import urlparse, parse_qs
+from girder.exceptions import GirderException
+from girder.models.assetstore import Assetstore
 from girder.models.folder import Folder
 from girder.models.setting import Setting
 from girder.models.user import User
@@ -23,9 +26,16 @@ DATA_PATH = os.path.join(
 def setUpModule():
     base.enabledPlugins.append("wholetale")
     base.startServer()
+    try:
+        assetstore = Assetstore().getCurrent()
+    except GirderException:
+        assetstore = Assetstore().createFilesystemAssetstore("test", tempfile.mkdtemp())
+        assetstore["current"] = True
+        Assetstore().save(assetstore)
 
 
 def tearDownModule():
+    Assetstore().remove(Assetstore().getCurrent())
     base.stopServer()
 
 
@@ -417,12 +427,13 @@ class ZenodoHarversterTestCase(base.TestCase):
             fp = io.BytesIO()
             with zipfile.ZipFile(fp, mode="w") as zf:
                 zf.writestr(
-                    "manifest.json", json.dumps(
+                    "manifest.json",
+                    json.dumps(
                         {
                             "@id": "https://data.wholetale.org",
                             "@type": "wt:Tale",
                         }
-                    )
+                    ),
                 )
             fp.seek(0)
             return fp

@@ -1,3 +1,4 @@
+import os
 import datetime
 import six.moves.urllib as urllib
 
@@ -5,7 +6,9 @@ from girder.utility.model_importer import ModelImporter
 from girder.models.notification import Notification
 from girder.models.user import User
 
+
 NOTIFICATION_EXP_HOURS = 1
+WT_EVENT_EXP_SECONDS = int(os.environ.get("GIRDER_WT_EVENT_EXP_SECONDS", 5))
 
 
 def getOrCreateRootFolder(name, description=""):
@@ -59,7 +62,7 @@ def notify_event(users, event, affectedIds):
         'resourceName': 'WT event'
     }
 
-    expires = datetime.datetime.utcnow() + datetime.timedelta(seconds=5)
+    expires = datetime.datetime.utcnow() + datetime.timedelta(seconds=WT_EVENT_EXP_SECONDS)
 
     for user_id in users:
         user = User().load(user_id, force=True)
@@ -68,6 +71,8 @@ def notify_event(users, event, affectedIds):
 
 
 def init_progress(resource, user, title, message, total):
+    resource["jobCurrent"] = 0
+    resource["jobId"] = None
     data = {
         'title': title,
         'total': total,
