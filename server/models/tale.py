@@ -452,7 +452,7 @@ class Tale(AccessControlledModel):
             "tale_title": tale["title"]
         }
         notification = init_progress(
-            resource, user, "Importing Tale", "Initializing", 1
+            resource, user, "Importing Tale", "Initializing", 3
         )
 
         job = Job().createLocalJob(

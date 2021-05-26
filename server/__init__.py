@@ -361,46 +361,53 @@ def updateNotification(event):
     Update the Whole Tale task notification for a job, if present.
     """
 
-    job = event.info['job']
-    if job['progress'] and 'wt_notification_id' in job:
-        state = JobStatus.toNotificationStatus(job['status'])
+    job = event.info["job"]
+    params = event.info["params"]
+    if "wt_notification_id" in job:
         notification = Notification().load(job['wt_notification_id'])
-
-        state_changed = notification['data']['state'] != state
-        message_changed = notification['data']['message'] != job['progress']['message']
-
-        # Ignore duplicate events based on state and message content
-        if not state_changed and not message_changed:
-            return
-
-        # For multi-job tasks, ignore success for intermediate events
-        is_last = notification['data']['total'] == (notification['data']['current'])
-        if state == ProgressState.SUCCESS and not is_last:
-            return
+        resource = notification["data"]["resource"]
 
         # Add job IDs to the resource
         if 'jobs' not in notification['data']['resource']:
-            notification['data']['resource']['jobs'] = []
+            resource['jobs'] = []
 
         if job['_id'] not in notification['data']['resource']['jobs']:
-            notification['data']['resource']['jobs'].append(job['_id'])
+            resource['jobs'].append(job['_id'])
 
-        # If the state hasn't changed, increment. Otherwise keep previous current value.
-        # Note, if expires parameter is not provided, updateProgress resets to 1 hour
-        if not state_changed:
-            Notification().updateProgress(
-                notification, state=state,
-                expires=notification['expires'],
-                message=job['progress']['message'],
-                increment=1,
-                total=notification['data']['total'])
+        if job["_id"] != resource['jobs'][-1]:
+            return  # ignore previous jobs' out of order notifications
+
+        # reset current job counter for a new job
+        if resource["jobId"] != resource["jobs"][-1]:
+            resource["jobCurrent"] = 0
+            resource["jobId"] = resource["jobs"][-1]
+
+        if not params["progressCurrent"]:
+            increment = 0
         else:
-            Notification().updateProgress(
-                notification, state=state,
-                expires=notification['expires'],
-                message=job['progress']['message'],
-                current=notification['data']['current'],
-                total=notification['data']['total'])
+            try:
+                increment = params["progressCurrent"] - job["progress"]["current"]
+            except (KeyError, TypeError):
+                increment = params["progressCurrent"] - resource["jobCurrent"]
+
+        resource["jobCurrent"] += increment
+
+        # For multi-job tasks, ignore success for intermediate events
+        would_be_last = \
+            int(notification['data']['total']) == int(notification['data']['current']) + increment
+        job_status = params["status"] or job["status"]
+        state = JobStatus.toNotificationStatus(int(job_status))
+        if state == ProgressState.SUCCESS and not would_be_last:
+            state = ProgressState.ACTIVE
+
+        # Note, if expires parameter is not provided, updateProgress resets to 1 hour
+        Notification().updateProgress(
+            notification, state=state,
+            expires=notification["expires"],
+            message=params["progressMessage"] or notification["data"]["message"],
+            increment=int(increment),
+            total=notification["data"]["total"]
+        )
 
 
 @access.user
@@ -477,7 +484,7 @@ def load(info):
     info['apiRoot'].image = Image()
     events.bind('jobs.job.update.after', 'wholetale', tale.updateBuildStatus)
     events.bind('jobs.job.update.after', 'wholetale', finalizeInstance)
-    events.bind('jobs.job.update.after', 'wholetale', updateNotification)
+    events.bind('jobs.job.update', 'wholetale', updateNotification)
     events.bind('model.file.validate', 'wholetale', validateFileLink)
     events.bind('oauth.auth_callback.after', 'wholetale', store_other_globus_tokens)
     events.bind('heartbeat', 'wholetale', cullIdleInstances)
@@ -509,7 +516,6 @@ def load(info):
     )
     for ext_provider in SettingDefault.defaults[PluginSettings.EXTERNAL_AUTH_PROVIDERS]:
         logo_path = os.path.join(path_to_assets, ext_provider["name"] + '_logo.jpg')
-        print(logo_path)
         if os.path.isfile(logo_path):
             with open(logo_path, "rb") as image_file:
                 ext_provider["logo"] = base64.b64encode(image_file.read()).decode()

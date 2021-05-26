@@ -29,6 +29,7 @@ jobs:
             - VIRTUALENV_EXECUTABLE: "/girder/venv/bin/virtualenv"
             - PYTHON_EXECUTABLE: "/girder/venv/bin/python3"
             - TEST_GROUP: "python"
+            - GIRDER_WT_EVENT_EXP_SECONDS: 60
           command: |
             mkdir /girder/build
             ctest -VV -S /girder/plugins/wholetale/cmake/circle_continuous.cmake

@@ -68,6 +68,7 @@ class InstanceTestCase(base.TestCase):
         global PluginSettings, instanceCapErrMsg
         from girder.plugins.wholetale.constants import PluginSettings
         from girder.plugins.wholetale.rest.instance import instanceCapErrMsg
+        from girder.plugins.wholetale.utils import init_progress
         self.model('setting').set(
             PluginSettings.INSTANCE_CAP, '2')
         users = ({
@@ -120,6 +121,7 @@ class InstanceTestCase(base.TestCase):
             title='tale two', public=True, config={'memLimit': '1g'})
         self.tale_two["imageInfo"] = fake_imageInfo
         self.model('tale', 'wholetale').save(self.tale_two)
+        self.notification = init_progress({}, self.user, "Fake", ".", 5)
 
     def testInstanceFromImage(self):
         return  # FIXME
@@ -505,7 +507,7 @@ class InstanceTestCase(base.TestCase):
             args=[str(self.tale_one['_id']), False],
             kwargs={},
             otherFields={
-                'wt_notification_id': 'nonexisting',
+                'wt_notification_id': str(self.notification["_id"]),
                 'instance_id': instance['_id']
             }
         )
@@ -537,7 +539,7 @@ class InstanceTestCase(base.TestCase):
             args=[{'instanceId': instance['_id']}],
             kwargs={},
             otherFields={
-                'wt_notification_id': 'nonexisting',
+                'wt_notification_id': str(self.notification["_id"]),
                 'instance_id': instance['_id']
             }
         )
