@@ -286,32 +286,35 @@ def finalizeInstance(event):
             status == JobStatus.SUCCESS
             and instance["status"] == InstanceStatus.LAUNCHING  # noqa
         ):
+            # Get a url to the container
             service = getCeleryApp().AsyncResult(job['celeryTaskId']).get()
+            url = service.get("url", "https://google.com")
+
+            # Generate the containerInfo
             valid_keys = set(containerInfoSchema['properties'].keys())
             containerInfo = {key: service.get(key, '') for key in valid_keys}
-            url = service.get('url', 'https://google.com')
+            # Preserve the imageId / current digest in containerInfo
+            containerInfo["imageId"] = tale["imageId"]
+            containerInfo["digest"] = tale["imageInfo"]["digest"]
+
+            # Set the url and the containerInfo since they're used in /authorize
+            new_fields = {"url": url, "containerInfo": containerInfo}
+            if "sessionId" in service:
+                new_fields["sessionId"] = ObjectId(service["sessionId"])
+            Instance().update({"_id": instance["_id"]}, {"$set": new_fields})
+
             user = User().load(instance["creatorId"], force=True)
             token = Token().createToken(user=user, days=0.25)
             _wait_for_server(url, token['_id'])
 
             # Since _wait_for_server can potentially take some time,
             # we need to refresh the state of the instance
+            # TODO: Why? What can modify instance status at this point?
             instance = Instance().load(instance_id, force=True, exc=True)
             if instance["status"] != InstanceStatus.LAUNCHING:
                 return  # bail
 
-            # Preserve the imageId / current digest in containerInfo
-            containerInfo['imageId'] = tale['imageId']
-            containerInfo['digest'] = tale['imageInfo']['digest']
-
-            instance.update({
-                'url': url,
-                'status': InstanceStatus.RUNNING,
-                'containerInfo': containerInfo,
-            })
-            if "sessionId" in service:
-                instance["sessionId"] = ObjectId(service["sessionId"])
-
+            instance["status"] = InstanceStatus.RUNNING
             event_name = "wt_instance_running"
         elif (
             status == JobStatus.ERROR
