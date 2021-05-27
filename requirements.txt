@@ -5,8 +5,8 @@ jsonpickle==1.5.2  # see #447
 python-magic
 requests
 redis==3.5.3
-git+https://github.com/whole-tale/girderfs@v1.0rc4#egg=girderfs
-git+https://github.com/whole-tale/gwvolman@v1.0rc4#egg=gwvolman
+git+https://github.com/whole-tale/girderfs@v1.0#egg=girderfs
+git+https://github.com/whole-tale/gwvolman@v1.0#egg=gwvolman
 dataone.common==3.4.7
 dataone.libclient==3.4.7
 dataone.cli==3.4.7
