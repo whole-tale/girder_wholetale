@@ -1,0 +1,724 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+    method: HEAD
+    uri: https://doi.org/10.18739/A2ND53
+  response:
+    body:
+      string: ''
+    headers:
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 6636b8f2490a2a4e-ORD
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '195'
+      Content-Type:
+      - text/html;charset=utf-8
+      Date:
+      - Tue, 22 Jun 2021 16:06:11 GMT
+      Expect-CT:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Expires:
+      - Tue, 22 Jun 2021 16:41:47 GMT
+      Location:
+      - https://arcticdata.io/catalog/#view/doi:10.18739/A2ND53
+      NEL:
+      - '{"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v2?s=YZXn5hYWu8TP4O8Whtal69Tk9oxwAXhWkdEK2pP7bW50yLtYN7vFy%2FofKREf7iscPB1lTHB75LQLT3PEM8Q1XSJQ93rV9DbxmxedioFmc1HqgP0MsrpbEk4sgVHteodj"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Vary:
+      - Accept
+      alt-svc:
+      - h3-27=":443"; ma=86400, h3-28=":443"; ma=86400, h3-29=":443"; ma=86400, h3=":443";
+        ma=86400
+      cf-request-id:
+      - 0ad611eb6d00002a4e11ba7000000001
+    status:
+      code: 302
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+    method: HEAD
+    uri: https://arcticdata.io/catalog/
+  response:
+    body:
+      string: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Authorization, Content-Type, Origin, Cache-Control
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Connection:
+      - Keep-Alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '2682'
+      Content-Type:
+      - text/html
+      Date:
+      - Tue, 22 Jun 2021 16:06:11 GMT
+      ETag:
+      - '"2882-5bfdfb8df4446-gzip"'
+      Keep-Alive:
+      - timeout=5, max=100
+      Last-Modified:
+      - Tue, 13 Apr 2021 19:34:43 GMT
+      Server:
+      - Apache/2.4.29 (Ubuntu)
+      Vary:
+      - Accept-Encoding
+      X-Frame-Options:
+      - SAMEORIGIN
+      - sameorigin
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://iqss.github.io/dataverse-installations/data/data.json
+  response:
+    body:
+      string: !!binary |
+        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
+        WdKqQZx63vbmSkRBdfD3f/7p//4fLS5fxk6bAAA=
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '0'
+      Cache-Control:
+      - max-age=600
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '9833'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Tue, 22 Jun 2021 16:06:12 GMT
+      ETag:
+      - W/"608809fd-9b4e"
+      Last-Modified:
+      - Tue, 27 Apr 2021 12:56:29 GMT
+      Server:
+      - GitHub.com
+      Vary:
+      - Accept-Encoding
+      Via:
+      - 1.1 varnish
+      X-Cache:
+      - HIT
+      X-Cache-Hits:
+      - '1'
+      X-Fastly-Request-ID:
+      - 5a6411ffd6ce681b7740da5b2ac6971db40d9fbd
+      X-GitHub-Request-Id:
+      - A0C6:1177:3B4614:5659F3:60D1FDB1
+      X-Served-By:
+      - cache-chi21126-CHI
+      X-Timer:
+      - S1624377972.043842,VS0,VE24
+      expires:
+      - Tue, 22 Jun 2021 15:21:45 GMT
+      permissions-policy:
+      - interest-cohort=()
+      x-origin-cache:
+      - HIT
+      x-proxy-cache:
+      - MISS
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=identifier:%22doi%3A10.18739%2FA2ND53%22&fl=identifier,formatType,formatId,resourceMap&rows=1000&start=0&wt=json
+  response:
+    body:
+      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"identifier:\"doi:10.18739/A2ND53\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2ND53","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.18739/A2ND53"]}]}}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Authorization, Content-Type, Location, Content-Length, x-annotator-auth-token,
+        Cache-Control
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE
+      Access-Control-Allow-Origin:
+      - ''
+      Access-Control-Expose-Headers:
+      - Content-Length, Content-Type, Location
+      Connection:
+      - Keep-Alive
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Tue, 22 Jun 2021 16:06:12 GMT
+      Keep-Alive:
+      - timeout=5, max=100
+      Server:
+      - Apache/2.4.48 (Ubuntu)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=identifier:%22doi%3A10.18739%2FA2ND53%22&fl=identifier,formatType,formatId,resourceMap&rows=1000&start=0&wt=json
+  response:
+    body:
+      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"identifier:\"doi:10.18739/A2ND53\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2ND53","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.18739/A2ND53"]}]}}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Authorization, Content-Type, Location, Content-Length, x-annotator-auth-token,
+        Cache-Control
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE
+      Access-Control-Allow-Origin:
+      - ''
+      Access-Control-Expose-Headers:
+      - Content-Length, Content-Type, Location
+      Connection:
+      - Keep-Alive
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Tue, 22 Jun 2021 16:06:12 GMT
+      Keep-Alive:
+      - timeout=5, max=100
+      Server:
+      - Apache/2.4.48 (Ubuntu)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2ND53%22&fl=identifier,formatType,title,size,formatId,fileName,documents&rows=1000&start=0&wt=json
+  response:
+    body:
+      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2ND53\"","fl":"identifier,formatType,title,size,formatId,fileName,documents","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":3,"start":0,"docs":[{"identifier":"doi:10.18739/A2ND53","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":16006,"title":"Thaw
+        depth in the ITEX plots at Barrow and Atqasuk, Alaska","documents":["doi:10.18739/A2ND53","urn:uuid:dc29f3cf-022a-4a33-9eed-8dc9ba6e0218","urn:uuid:428fcb96-03a9-42b3-81d1-2944ac686e55"]},{"identifier":"urn:uuid:dc29f3cf-022a-4a33-9eed-8dc9ba6e0218","fileName":"2015_Barrow_Atqasuk_ITEX_Thaw_v1.csv","formatId":"text/csv","formatType":"DATA","size":7770},{"identifier":"urn:uuid:428fcb96-03a9-42b3-81d1-2944ac686e55","fileName":"1995-20XX_Barrow_Atqasuk_ITEX_Thaw_metadata-Copy.txt","formatId":"text/plain","formatType":"DATA","size":3971}]}}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Authorization, Content-Type, Location, Content-Length, x-annotator-auth-token,
+        Cache-Control
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE
+      Access-Control-Allow-Origin:
+      - ''
+      Access-Control-Expose-Headers:
+      - Content-Length, Content-Type, Location
+      Connection:
+      - Keep-Alive
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Tue, 22 Jun 2021 16:06:13 GMT
+      Keep-Alive:
+      - timeout=5, max=100
+      Server:
+      - Apache/2.4.48 (Ubuntu)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=identifier:%22http%3A%2F%2Fuse.yt%2Fupload%2F944d8537%22&fl=identifier,formatType,formatId,resourceMap&rows=1000&start=0&wt=json
+  response:
+    body:
+      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"identifier:\"http://use.yt/upload/944d8537\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":0,"start":0,"docs":[]}}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Authorization, Content-Type, Location, Content-Length, x-annotator-auth-token,
+        Cache-Control
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE
+      Access-Control-Allow-Origin:
+      - ''
+      Access-Control-Expose-Headers:
+      - Content-Length, Content-Type, Location
+      Connection:
+      - Keep-Alive
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Tue, 22 Jun 2021 16:06:13 GMT
+      Keep-Alive:
+      - timeout=5, max=100
+      Server:
+      - Apache/2.4.48 (Ubuntu)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+    method: HEAD
+    uri: http://use.yt/upload/944d8537
+  response:
+    body:
+      string: ''
+    headers:
+      Connection:
+      - keep-alive
+      Content-Disposition:
+      - attachment; filename=nginx.tmpl
+      Content-Length:
+      - '8792'
+      Content-Type:
+      - application/octet-stream
+      Date:
+      - Tue, 22 Jun 2021 16:06:14 GMT
+      Etag:
+      - '"da39a3ee5e6b4b0d3255bfef95601890afd80709"'
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Clacks-Overhead:
+      - GNU Terry Pratchett
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - identity
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+    method: HEAD
+    uri: http://use.yt/upload/944d8537
+  response:
+    body:
+      string: ''
+    headers:
+      Connection:
+      - keep-alive
+      Content-Disposition:
+      - attachment; filename=nginx.tmpl
+      Content-Length:
+      - '8792'
+      Content-Type:
+      - application/octet-stream
+      Date:
+      - Tue, 22 Jun 2021 16:06:14 GMT
+      Etag:
+      - '"da39a3ee5e6b4b0d3255bfef95601890afd80709"'
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Clacks-Overhead:
+      - GNU Terry Pratchett
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2ND53%22&fl=identifier,formatType,title,size,formatId,fileName,documents&rows=1000&start=0&wt=json
+  response:
+    body:
+      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2ND53\"","fl":"identifier,formatType,title,size,formatId,fileName,documents","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":3,"start":0,"docs":[{"identifier":"doi:10.18739/A2ND53","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":16006,"title":"Thaw
+        depth in the ITEX plots at Barrow and Atqasuk, Alaska","documents":["doi:10.18739/A2ND53","urn:uuid:dc29f3cf-022a-4a33-9eed-8dc9ba6e0218","urn:uuid:428fcb96-03a9-42b3-81d1-2944ac686e55"]},{"identifier":"urn:uuid:dc29f3cf-022a-4a33-9eed-8dc9ba6e0218","fileName":"2015_Barrow_Atqasuk_ITEX_Thaw_v1.csv","formatId":"text/csv","formatType":"DATA","size":7770},{"identifier":"urn:uuid:428fcb96-03a9-42b3-81d1-2944ac686e55","fileName":"1995-20XX_Barrow_Atqasuk_ITEX_Thaw_metadata-Copy.txt","formatId":"text/plain","formatType":"DATA","size":3971}]}}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Authorization, Content-Type, Location, Content-Length, x-annotator-auth-token,
+        Cache-Control
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE
+      Access-Control-Allow-Origin:
+      - ''
+      Access-Control-Expose-Headers:
+      - Content-Length, Content-Type, Location
+      Connection:
+      - Keep-Alive
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Tue, 22 Jun 2021 16:06:14 GMT
+      Keep-Alive:
+      - timeout=5, max=100
+      Server:
+      - Apache/2.4.48 (Ubuntu)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - identity
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+    method: HEAD
+    uri: http://use.yt/upload/944d8537
+  response:
+    body:
+      string: ''
+    headers:
+      Connection:
+      - keep-alive
+      Content-Disposition:
+      - attachment; filename=nginx.tmpl
+      Content-Length:
+      - '8792'
+      Content-Type:
+      - application/octet-stream
+      Date:
+      - Tue, 22 Jun 2021 16:06:15 GMT
+      Etag:
+      - '"da39a3ee5e6b4b0d3255bfef95601890afd80709"'
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Clacks-Overhead:
+      - GNU Terry Pratchett
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+version: 1

@@ -2,149 +2,111 @@ interactions:
 - request:
     body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.19.1]
-    method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=identifier:%22https%3A%2F%2Fdemo.dataverse.org%2Fapi%2Faccess%2Fdatafile%2F300662%22&fl=identifier,formatType,formatId,resourceMap&rows=1000&start=0&wt=json
-  response:
-    body: {string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"identifier:\"https://demo.dataverse.org/api/access/datafile/300662\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":0,"start":0,"docs":[]}}
-
-'}
-    headers:
-      Access-Control-Allow-Credentials: ['true']
-      Access-Control-Allow-Headers: ['Authorization, Content-Type, Location, Content-Length,
-          x-annotator-auth-token']
-      Access-Control-Allow-Methods: ['POST, GET, OPTIONS, PUT, DELETE']
-      Access-Control-Allow-Origin: ['']
-      Access-Control-Expose-Headers: ['Content-Length, Content-Type, Location']
-      Connection: [Keep-Alive]
-      Content-Type: [application/json; charset=UTF-8]
-      Date: ['Fri, 23 Nov 2018 17:15:12 GMT']
-      Keep-Alive: ['timeout=5, max=100']
-      Server: [Apache/2.4.7 (Ubuntu)]
-      Transfer-Encoding: [chunked]
-    status: {code: 200, message: OK}
-- request:
-    body: null
-    headers:
-      Connection: [close]
-      Host: [demo.dataverse.org]
-      User-Agent: [Python-urllib/3.6]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
     method: GET
     uri: https://demo.dataverse.org/api/info/version
   response:
-    body: {string: '{"status":"OK","data":{"version":"4.9.4","build":"1058-57b3b7e"}}'}
+    body:
+      string: '{"status":"OK","data":{"version":"5.5","build":"477-5fc0150"}}'
     headers:
-      Access-Control-Allow-Origin: ['*']
-      Connection: [close]
-      Content-Length: ['65']
-      Content-Type: [application/json]
-      Date: ['Fri, 23 Nov 2018 17:15:13 GMT']
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, X-Dataverse-Key
+      Access-Control-Allow-Methods:
+      - PUT, GET, POST, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - close
+      Content-Length:
+      - '62'
+      Content-Type:
+      - application/json;charset=UTF-8
+      Date:
+      - Tue, 22 Jun 2021 15:18:12 GMT
+    status:
+      code: 200
+      message: OK
 - request:
     body: null
     headers:
-      Connection: [close]
-      Host: [demo.dataverse.org]
-      User-Agent: [Python-urllib/3.6]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
     method: GET
-    uri: https://demo.dataverse.org/api/search?q=entityId:300662
+    uri: https://demo.dataverse.org/api/search?q=entityId:1849559
   response:
-    body: {string: '{"status":"OK","data":{"q":"entityId:300662","total_count":1,"start":0,"spelling_alternatives":{},"items":[{"name":"citation.tab","type":"file","url":"https://demo.dataverse.org/api/access/datafile/300662","file_id":"300662","published_at":"2018-11-15T18:03:39Z","file_type":"Tab-Delimited","file_content_type":"text/tab-separated-values","size_in_bytes":36843,"md5":"de6b320f891115ce23d7a4b28727ebdb","checksum":{"type":"MD5","value":"de6b320f891115ce23d7a4b28727ebdb"},"unf":"UNF:6:TKPMHywLQ/mUjLTNYTskAQ==","dataset_citation":"Gautier,
-        Julian, 2018, \"Variable-level metadata always accessible\", https://doi.org/10.5072/FK2/N7YHEY,
-        Demo Dataverse, V2, UNF:6:TKPMHywLQ/mUjLTNYTskAQ== [fileUNF]"}],"count_in_response":1}}'}
+    body:
+      string: '{"status":"OK","data":{"q":"entityId:1849559","total_count":1,"start":0,"spelling_alternatives":{},"items":[{"name":"images.jpg","type":"file","url":"https://demo.dataverse.org/api/access/datafile/1849559","file_id":"1849559","published_at":"2021-05-10T15:27:01Z","file_type":"JPEG
+        Image","file_content_type":"image/jpeg","size_in_bytes":4750,"md5":"539aed1a281c58fa736e21b9d77fda70","checksum":{"type":"MD5","value":"539aed1a281c58fa736e21b9d77fda70"},"file_persistent_id":"doi:10.70122/FK2/H60OIK/NIZROI","dataset_name":"test
+        file access by version","dataset_id":"1849558","dataset_persistent_id":"doi:10.70122/FK2/H60OIK","dataset_citation":"Admin,
+        Dataverse, 2021, \"test file access by version\", https://doi.org/10.70122/FK2/H60OIK,
+        Demo Dataverse, V1"}],"count_in_response":1}}'
     headers:
-      Access-Control-Allow-Origin: ['*']
-      Connection: [close]
-      Content-Length: ['723']
-      Content-Type: [application/json]
-      Date: ['Fri, 23 Nov 2018 17:15:13 GMT']
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, X-Dataverse-Key
+      Access-Control-Allow-Methods:
+      - PUT, GET, POST, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - close
+      Content-Length:
+      - '784'
+      Content-Type:
+      - application/json;charset=UTF-8
+      Date:
+      - Tue, 22 Jun 2021 15:18:13 GMT
+    status:
+      code: 200
+      message: OK
 - request:
     body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.19.1]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=identifier:%22https%3A%2F%2Fdemo.dataverse.org%2Fapi%2Faccess%2Fdatafile%2F300662%22&fl=identifier,formatType,formatId,resourceMap&rows=1000&start=0&wt=json
+    uri: https://demo.dataverse.org/api/search?q=entityId:1849559
   response:
-    body: {string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"identifier:\"https://demo.dataverse.org/api/access/datafile/300662\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":0,"start":0,"docs":[]}}
-
-'}
+    body:
+      string: '{"status":"OK","data":{"q":"entityId:1849559","total_count":1,"start":0,"spelling_alternatives":{},"items":[{"name":"images.jpg","type":"file","url":"https://demo.dataverse.org/api/access/datafile/1849559","file_id":"1849559","published_at":"2021-05-10T15:27:01Z","file_type":"JPEG
+        Image","file_content_type":"image/jpeg","size_in_bytes":4750,"md5":"539aed1a281c58fa736e21b9d77fda70","checksum":{"type":"MD5","value":"539aed1a281c58fa736e21b9d77fda70"},"file_persistent_id":"doi:10.70122/FK2/H60OIK/NIZROI","dataset_name":"test
+        file access by version","dataset_id":"1849558","dataset_persistent_id":"doi:10.70122/FK2/H60OIK","dataset_citation":"Admin,
+        Dataverse, 2021, \"test file access by version\", https://doi.org/10.70122/FK2/H60OIK,
+        Demo Dataverse, V1"}],"count_in_response":1}}'
     headers:
-      Access-Control-Allow-Credentials: ['true']
-      Access-Control-Allow-Headers: ['Authorization, Content-Type, Location, Content-Length,
-          x-annotator-auth-token']
-      Access-Control-Allow-Methods: ['POST, GET, OPTIONS, PUT, DELETE']
-      Access-Control-Allow-Origin: ['']
-      Access-Control-Expose-Headers: ['Content-Length, Content-Type, Location']
-      Connection: [Keep-Alive]
-      Content-Type: [application/json; charset=UTF-8]
-      Date: ['Fri, 23 Nov 2018 17:15:13 GMT']
-      Keep-Alive: ['timeout=5, max=100']
-      Server: [Apache/2.4.7 (Ubuntu)]
-      Transfer-Encoding: [chunked]
-    status: {code: 200, message: OK}
-- request:
-    body: null
-    headers:
-      Connection: [close]
-      Host: [demo.dataverse.org]
-      User-Agent: [Python-urllib/3.6]
-    method: GET
-    uri: https://demo.dataverse.org/api/search?q=entityId:300662
-  response:
-    body: {string: '{"status":"OK","data":{"q":"entityId:300662","total_count":1,"start":0,"spelling_alternatives":{},"items":[{"name":"citation.tab","type":"file","url":"https://demo.dataverse.org/api/access/datafile/300662","file_id":"300662","published_at":"2018-11-15T18:03:39Z","file_type":"Tab-Delimited","file_content_type":"text/tab-separated-values","size_in_bytes":36843,"md5":"de6b320f891115ce23d7a4b28727ebdb","checksum":{"type":"MD5","value":"de6b320f891115ce23d7a4b28727ebdb"},"unf":"UNF:6:TKPMHywLQ/mUjLTNYTskAQ==","dataset_citation":"Gautier,
-        Julian, 2018, \"Variable-level metadata always accessible\", https://doi.org/10.5072/FK2/N7YHEY,
-        Demo Dataverse, V2, UNF:6:TKPMHywLQ/mUjLTNYTskAQ== [fileUNF]"}],"count_in_response":1}}'}
-    headers:
-      Access-Control-Allow-Origin: ['*']
-      Connection: [close]
-      Content-Length: ['723']
-      Content-Type: [application/json]
-      Date: ['Fri, 23 Nov 2018 17:15:14 GMT']
-    status: {code: 200, message: OK}
-- request:
-    body: null
-    headers:
-      Connection: [close]
-      Host: [demo.dataverse.org]
-      User-Agent: [Python-urllib/3.6]
-    method: HEAD
-    uri: https://demo.dataverse.org/api/access/datafile/300662?format=original
-  response:
-    body: {string: ''}
-    headers:
-      Access-Control-Allow-Origin: ['*']
-      Connection: [close]
-      Content-Length: ['26465']
-      Content-Type: [application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;
-          name="citation.xlsx"]
-      Content-disposition: [attachment; filename="citation.xlsx"]
-      Date: ['Fri, 23 Nov 2018 17:15:14 GMT']
-      Set-Cookie: [JSESSIONID=191825fa1098e1cdd88c950d43cd; Path=/; Secure; HttpOnly]
-    status: {code: 200, message: OK}
-- request:
-    body: null
-    headers:
-      Connection: [close]
-      Host: [demo.dataverse.org]
-      User-Agent: [Python-urllib/3.6]
-    method: HEAD
-    uri: https://demo.dataverse.org/api/access/datafile/300662
-  response:
-    body: {string: ''}
-    headers:
-      Access-Control-Allow-Origin: ['*']
-      Connection: [close]
-      Content-Length: ['36920']
-      Content-Type: [text/tab-separated-values; name="citation.tab"]
-      Content-disposition: [attachment; filename="citation.tab"]
-      Date: ['Fri, 23 Nov 2018 17:15:14 GMT']
-      Set-Cookie: [JSESSIONID=191835a87513fc1725fddf3cbec4; Path=/; Secure; HttpOnly]
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, X-Dataverse-Key
+      Access-Control-Allow-Methods:
+      - PUT, GET, POST, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - close
+      Content-Length:
+      - '784'
+      Content-Type:
+      - application/json;charset=UTF-8
+      Date:
+      - Tue, 22 Jun 2021 15:18:13 GMT
+    status:
+      code: 200
+      message: OK
 version: 1

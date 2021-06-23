@@ -1,8 +1,7 @@
 import re
 from .entity import Entity
 from typing import Optional
-import contextlib
-from urllib.request import HTTPRedirectHandler, build_opener, Request
+import requests
 
 """Regex that matches:
 
@@ -24,17 +23,6 @@ _DOI_RESOLVERS_RE = re.compile(
     r'^(|https?://(dx.doi.org|doi.org|hdl.handle.net)/)(doi:)?(10.\d{4,9}/[-._;()/:A-Z0-9]+)$',
     re.IGNORECASE
 )
-
-
-class RedirectHandler(HTTPRedirectHandler):
-    last_url = None
-
-    def redirect_request(self, req, fp, code, msg, hdrs, newurl):
-        self.last_url = newurl
-        r = HTTPRedirectHandler.redirect_request(
-            self, req, fp, code, msg, hdrs, newurl)
-        r.get_method = lambda: 'HEAD'
-        return r
 
 
 class Resolver:
@@ -72,19 +60,6 @@ class ResolutionException(Exception):
 class DOIResolver(Resolver):
 
     @staticmethod
-    def follow_redirects(link):
-        """Follow redirects recursively."""
-        redirect_handler = RedirectHandler()
-        opener = build_opener(redirect_handler)
-        req = Request(link)
-        req.get_method = lambda: 'HEAD'
-        try:
-            with contextlib.closing(opener.open(req, timeout=5)) as site:
-                return site.url
-        except Exception:
-            return redirect_handler.last_url if redirect_handler.last_url else link
-
-    @staticmethod
     def extractDOI(url: str):
         doi_match = _DOI_RESOLVERS_RE.match(url)
         if doi_match:
@@ -103,7 +78,7 @@ class DOIResolver(Resolver):
         # Expect a redirect. Basically, don't do anything fancy because I don't know
         # if I can correctly resolve a DOI using the structured record
         url = 'https://doi.org/%s' % doi
-        resolved_url = self.follow_redirects(url)
+        resolved_url = requests.head(url, allow_redirects=True).url
         if url == resolved_url:
             raise ResolutionException('Could not resolve DOI %s' % (doi,))
 

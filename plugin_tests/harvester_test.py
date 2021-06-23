@@ -15,82 +15,39 @@ DATA_PATH = os.path.join(
     'data_src', 'plugins', 'wholetale'
 )
 
-D1_QUERY_URL = (
-    'https://cn.dataone.org/cn/v2/query/solr/'
-    '?q=identifier:%22urn%3Auuid%3Ac878ae53-06cf-40c9-a830-7f6f564133f9%22&'
-    'fl=identifier,formatType,formatId,resourceMap&rows=1000&start=0&wt=json'
-)
-
-D1_QUERY = {
-    'response': {
-        'docs': [{
-            'formatId': 'eml://ecoinformatics.org/eml-2.1.1',
-            'formatType': 'METADATA',
-            'identifier': 'urn:uuid:c878ae53-06cf-40c9-a830-7f6f564133f9',
-            'resourceMap': [
-                'resource_map_urn:uuid:c878ae53-06cf-40c9-a830-7f6f564133f9'
-            ]}],
-        'numFound': 1,
-        'start': 0
-    },
-    'responseHeader':
-        {'QTime': 30,
-         'params': {
-             'fl': 'identifier,formatType,formatId,resourceMap',
-             'q': 'identifier:"urn:uuid:c878ae53-06cf-40c9-a830-7f6f564133f9"',
-             'rows': '1000',
-             'start': '0',
-             'wt': 'json'},
-         'status': 0}
-}
-
-D1_MAP_URL = (
-    'https://cn.dataone.org/cn/v2/query/solr/'
-    '?q=resourceMap:%22resource_map_urn%3A'
-    'uuid%3Ac878ae53-06cf-40c9-a830-7f6f564133f9%22&'
-    'fl=identifier,formatType,title,size,formatId,'
-    'fileName,documents&rows=1000&start=0&wt=json'
-)
-
 D1_MAP = {
     'response': {
         'docs': [{
             'documents': [
                 'urn:uuid:c878ae53-06cf-40c9-a830-7f6f564133f9',
                 'urn:uuid:dc29f3cf-022a-4a33-9eed-8dc9ba6e0218',
-                'urn:uuid:428fcb96-03a9-42b3-81d1-2944ac686e55',
-                'urn:uuid:bd7754a7-d4db-4217-8bf0-4c5d3691c0bc'],
+                'urn:uuid:428fcb96-03a9-42b3-81d1-2944ac686e55'],
             'formatId': 'eml://ecoinformatics.org/eml-2.1.1',
             'formatType': 'METADATA',
             'identifier': 'urn:uuid:c878ae53-06cf-40c9-a830-7f6f564133f9',
             'size': 21702,
             'title': 'Thaw depth in the ITEX plots at Barrow and Atqasuk, Alaska',
         }, {
-            'fileName': '2015 Barrow Atqasuk ITEX Thaw v1.csv',
+
+            'fileName': '2015_Barrow_Atqasuk_ITEX_Thaw_v1.csv',
             'formatId': 'text/csv',
             'formatType': 'DATA',
             'identifier': 'urn:uuid:dc29f3cf-022a-4a33-9eed-8dc9ba6e0218',
             'size': 7770
         }, {
-            'fileName': '1995-20XX Barrow Atqasuk ITEX Thaw metadata - Copy.txt',
+            'fileName': '1995-20XX_Barrow_Atqasuk_ITEX_Thaw_metadata-Copy.txt',
             'formatId': 'text/plain',
             'formatType': 'DATA',
             'identifier': 'urn:uuid:428fcb96-03a9-42b3-81d1-2944ac686e55',
             'size': 3971
-        }, {
-            'fileName': '2016 Barrow Atqasuk ITEX Thaw v1.csv',
-            'formatId': 'text/csv',
-            'formatType': 'DATA',
-            'identifier': 'urn:uuid:bd7754a7-d4db-4217-8bf0-4c5d3691c0bc',
-            'size': 7439
         }],
-        'numFound': 4,
+        'numFound': 3,
         'start': 0},
     'responseHeader': {
         'QTime': 4,
         'params': {
             'fl': 'identifier,formatType,title,size,formatId,fileName,documents',
-            'q': 'resourceMap:"resource_map_urn:uuid:c878ae53-06cf-40c9-a830-7f6f564133f9"',
+            'q': 'resourceMap:"resource_map_doi:10.18739/A2ND53"',
             'rows': '1000',
             'start': '0',
             'wt': 'json'},
@@ -146,10 +103,6 @@ def tearDownModule():
 
 class DataONEHarversterTestCase(base.TestCase):
 
-    @httmock.all_requests
-    def mockOtherRequest(self, url, request):
-        raise Exception('Unexpected url %s' % str(request.url))
-
     def setUp(self):
         users = ({
             'email': 'root@dev.null',
@@ -169,6 +122,7 @@ class DataONEHarversterTestCase(base.TestCase):
         self.patcher = mock.patch('rdflib.parser.urlopen', fake_urlopen)
         self.patcher.start()
 
+    @vcr.use_cassette(os.path.join(DATA_PATH, 'dataone_lookup.txt'))
     def testLookup(self):
         from girder.plugins.wholetale.lib.import_item import ImportItem
         # TODO: mock this if it's necessary
@@ -181,46 +135,22 @@ class DataONEHarversterTestCase(base.TestCase):
         #     'message': 'No object was found in the index for blah.'
         # })
 
-        @httmock.urlmatch(scheme='https', netloc='^cn.dataone.org$',
-                          path='^/cn/v2/query/solr/$', method='GET')
-        def mockSearchDataONE(url, request):
-            if '944d8537' in request.url:
-                raise RestException(
-                    'No object was found in the index for %s.' % request.url)
-            if url.query.startswith('q=identifier'):
-                return json.dumps(D1_QUERY)
-            elif url.query.startswith('q=resourceMap'):
-                return json.dumps(D1_MAP)
-            raise Exception('Unexpected query in url %s' % str(request.url))
-
-        @httmock.urlmatch(scheme='http', netloc='^use.yt$',
-                          path='^/upload/944d8537$', method='HEAD')
-        def mockCurldrop(url, request):
-            headers = {
-                'Content-Type': 'application/octet-stream',
-                'Content-Length': '8792',
-                'Content-Disposition': 'attachment; filename=nginx.tmpl'
-            }
-            return httmock.response(200, {}, headers, None, 5, request)
-
-        with httmock.HTTMock(mockSearchDataONE, mockCurldrop,
-                             self.mockOtherRequest):
-            resp = self.request(
-                path='/repository/lookup', method='GET',
-                params={'dataId':
-                        json.dumps(['doi:10.18739/A2ND53',
-                                    'http://use.yt/upload/944d8537'])})
-            self.assertStatus(resp, 200)
-            dataMap = resp.json
+        resp = self.request(
+            path='/repository/lookup', method='GET',
+            params={'dataId':
+                    json.dumps(['doi:10.18739/A2ND53',
+                                'http://use.yt/upload/944d8537'])})
+        self.assertStatus(resp, 200)
+        dataMap = resp.json
 
         self.assertEqual(
             dataMap, [
                 {
-                    'dataId': 'resource_map_urn:uuid:c878ae53-06cf-40c9-a830-7f6f564133f9',
-                    'doi': 'urn:uuid:c878ae53-06cf-40c9-a830-7f6f564133f9',
+                    'dataId': 'resource_map_doi:10.18739/A2ND53',
+                    'doi': 'doi:10.18739/A2ND53',
                     'name': 'Thaw depth in the ITEX plots at Barrow and Atqasuk, Alaska',
                     'repository': 'DataONE',
-                    'size': 40882,
+                    'size': 27747,
                     'tale': False,
                 }, {
                     'dataId': 'http://use.yt/upload/944d8537',
@@ -232,18 +162,16 @@ class DataONEHarversterTestCase(base.TestCase):
                 }]
         )
 
-        with httmock.HTTMock(mockSearchDataONE, mockCurldrop,
-                             self.mockOtherRequest):
-            resp = self.request(
-                path='/dataset/register', method='POST',
-                params={'dataMap': json.dumps(dataMap),
-                        'copyToHome': True})
-            self.assertStatus(resp, 401)
+        resp = self.request(
+            path='/dataset/register', method='POST',
+            params={'dataMap': json.dumps(dataMap),
+                    'copyToHome': True})
+        self.assertStatus(resp, 401)
 
-            resp = self.request(
-                path='/dataset/register', method='POST',
-                params={'dataMap': json.dumps(dataMap)}, user=self.user)
-            self.assertStatusOk(resp)
+        resp = self.request(
+            path='/dataset/register', method='POST',
+            params={'dataMap': json.dumps(dataMap)}, user=self.user)
+        self.assertStatusOk(resp)
 
         # Grab user data
         resp = self.request(

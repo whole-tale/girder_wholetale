@@ -1,5 +1,6 @@
 import json
 import os
+import responses
 import time
 import vcr
 from tests import base
@@ -44,7 +45,54 @@ class DataverseHarversterTestCase(base.TestCase):
                                  for user in users]
 
     @vcr.use_cassette(os.path.join(DATA_PATH, 'dataverse_lookup.txt'))
+    @responses.activate
     def testLookup(self):
+        responses.add_passthru("https://dataverse.harvard.edu/api/access")
+        responses.add_passthru("https://dataverse.harvard.edu/api/datasets")
+        responses.add_passthru("https://dataverse.harvard.edu/dataset.xhtml")
+        responses.add_passthru("https://dataverse.harvard.edu/file.xhtml")
+        responses.add_passthru("https://dvn-cloud.s3.amazonaws.com/")
+        responses.add_passthru("https://dataverse.harvard.edu/api/search?q=filePersistentId")
+        responses.add_passthru("https://dataverse.harvard.edu/citation")
+        responses.add_passthru("https://doi.org")
+        responses.add(
+            responses.GET,
+            "https://dataverse.harvard.edu/api/search?q=entityId:3040230",
+            json={
+                "status": "OK",
+                "data": {
+                    "q": "entityId:3040230",
+                    "total_count": 1,
+                    "start": 0,
+                    "spelling_alternatives": {},
+                    "items": [
+                        {
+                            "name": "2017-07-31.tab",
+                            "type": "file",
+                            "url": "https://dataverse.harvard.edu/api/access/datafile/3040230",
+                            "file_id": "3040230",
+                            "published_at": "2017-07-31T22:27:23Z",
+                            "file_type": "Tab-Delimited",
+                            "file_content_type": "text/tab-separated-values",
+                            "size_in_bytes": 12025,
+                            "md5": "e7dd2f725941b978d45fed3f33ff640c",
+                            "checksum": {
+                                "type": "MD5",
+                                "value": "e7dd2f725941b978d45fed3f33ff640c",
+                            },
+                            "unf": "UNF:6:6wGE3C5ragT8A0qkpGaEaQ==",
+                            "dataset_citation": (
+                                "Durbin, Philip, 2017, \"Open Source at Harvard\", "
+                                "https://doi.org/10.7910/DVN/TJCLKP, Harvard Dataverse, "
+                                " V2, UNF:6:6wGE3C5ragT8A0qkpGaEaQ== [fileUNF]"
+                            ),
+                        }
+                    ],
+                    "count_in_response": 1,
+                },
+            }
+        )
+
         resp = self.request(
             path='/repository/lookup', method='GET', user=self.user,
             params={'dataId': json.dumps([
@@ -166,17 +214,17 @@ class DataverseHarversterTestCase(base.TestCase):
         resp = self.request(
             path='/repository/lookup', method='GET', user=self.user,
             params={'dataId': json.dumps([
-                'https://demo.dataverse.org/api/access/datafile/300662'
+                "https://demo.dataverse.org/api/access/datafile/1849559"
             ])}
         )
         self.assertStatus(resp, 200)
         self.assertEqual(resp.json, [
             {
-                "dataId": "https://demo.dataverse.org/api/access/datafile/300662",
-                "doi": "doi:10.5072/FK2/N7YHEY",
-                "name": "Variable-level metadata always accessible",
+                "dataId": "https://demo.dataverse.org/api/access/datafile/1849559",
+                "doi": "doi:10.70122/FK2/H60OIK",
+                "name": "test file access by version",
                 "repository": "Dataverse",
-                "size": 36843,
+                "size": 4750,
                 "tale": False,
             }
         ])
@@ -184,16 +232,15 @@ class DataverseHarversterTestCase(base.TestCase):
         resp = self.request(
             path='/repository/listFiles', method='GET', user=self.user,
             params={'dataId': json.dumps([
-                'https://demo.dataverse.org/api/access/datafile/300662'
+                'https://demo.dataverse.org/api/access/datafile/1849559'
             ])}
         )
         self.assertStatus(resp, 200)
         self.assertEqual(resp.json, [
             {
-                "Variable-level metadata always accessible": {
+                "test file access by version": {
                     "fileList": [
-                        {"citation.tab": {"size": 36920}},
-                        {"citation.xlsx": {"size": 26465}}
+                        {"images.jpg": {"size": 4750}},
                     ]
                 }
             }
