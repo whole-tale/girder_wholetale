@@ -4,7 +4,6 @@ import cherrypy
 import json
 import os
 import pathlib
-import shutil
 import textwrap
 from urllib.parse import urlparse
 from girder import events
@@ -16,7 +15,6 @@ from girder.api.rest import Resource, filtermodel, RestException,\
     setResponseHeader, setContentDisposition
 
 from girder.constants import AccessType, SortDir, TokenScope
-from girder.utility.progress import ProgressContext
 from girder.models.folder import Folder
 from girder.models.token import Token
 from girder.models.setting import Setting
@@ -179,25 +177,11 @@ class Tale(Resource):
     @autoDescribeRoute(
         Description('Delete an existing tale.')
         .modelParam('id', model='tale', plugin='wholetale', level=AccessType.ADMIN)
-        .param('progress', 'Whether to record progress on this task.',
-               required=False, dataType='boolean', default=False)
         .errorResponse('ID was invalid.')
         .errorResponse('Admin access was denied for the tale.', 403)
     )
-    def deleteTale(self, tale, progress):
-        user = self.getCurrentUser()
-        workspace = Folder().load(
-            tale['workspaceId'], user=user, level=AccessType.ADMIN)
-        with ProgressContext(
-                progress, user=user,
-                title='Deleting workspace of {title}'.format(**tale),
-                message='Calculating folder size...') as ctx:
-            if progress:
-                ctx.update(total=Folder().subtreeCount(workspace))
-            shutil.rmtree(workspace["fsPath"], ignore_errors=True)
-            Folder().remove(workspace, progress=ctx)
+    def deleteTale(self, tale):
         self._model.remove(tale)
-
         users = [str(user['id']) for user in tale['access']['users']]
         notify_event(users, "wt_tale_removed", {"taleId": str(tale["_id"])})
 
