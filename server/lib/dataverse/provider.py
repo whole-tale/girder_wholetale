@@ -2,9 +2,8 @@ import json
 import re
 import os
 import pathlib
-from urllib.parse import urlparse, urlunparse, parse_qs
-from urllib.request import urlopen, Request
-from urllib.error import HTTPError
+import requests
+from urllib.parse import urlparse, urlunparse, parse_qs, unquote
 
 from girder import events, logger
 from girder.constants import AccessType
@@ -21,11 +20,12 @@ from ... import constants
 _DOI_REGEX = re.compile(r'(10.\d{4,9}/[-._;()/:A-Z0-9]+)', re.IGNORECASE)
 _QUOTES_REGEX = re.compile(r'"(.*)"')
 _CNTDISP_REGEX = re.compile(r'filename="(.*)"')
+_CNTDISPS_REGEX = re.compile(r"^attachment; filename\*=.*''(.*)$")
 
 
 def _query_dataverse(search_url):
-    resp = urlopen(search_url).read()
-    data = json.loads(resp.decode('utf-8'))['data']
+    req = requests.get(search_url)
+    data = req.json()["data"]
     if data['count_in_response'] != 1:
         raise ValueError
     item = data['items'][0]
@@ -48,25 +48,36 @@ def _query_dataverse(search_url):
 
 
 def _get_attrs_via_head(obj, url):
-    name = obj['filename']
-    size = obj['filesize']
-    try:
-        req = Request(url)
-        req.get_method = lambda: 'HEAD'
-        resp = urlopen(req)
-    except HTTPError as err:
-        logger.debug(str(err))
-        return name, size
+    name = obj["filename"]
+    size = obj["filesize"]
 
-    content_disposition = resp.getheader('Content-Disposition')
+    # start by regular HEAD, trick is it's gonna fail with 403
+    # if the file is sitting on S3
+    # see https://github.com/IQSS/dataverse/issues/5322
+    req = requests.head(url, allow_redirects=True)
+    if req.ok:
+        size = int(req.headers.get("Content-Length", size))
+    else:
+        # Now the magic, since S3 accepts range request, we cheat the system
+        # by requesting only 100 bytes to get the headers we want.
+        # Isn't it beautiful?!
+        req = requests.get(url, headers={"Range": "bytes=0-100"})
+
+        if not req.ok or "Content-Range" not in req.headers:
+            # oh well, I tried...
+            return name, size
+        size = int(req.headers["Content-Range"].split("/")[-1])
+
+    # This is common to both HEAD and GET from above.
+    content_disposition = req.headers.get("Content-Disposition")
     if content_disposition:
-        fname = _CNTDISP_REGEX.search(content_disposition)
-        if fname:
-            name = fname.groups()[0]
-
-    content_length = resp.getheader('Content-Length')
-    if content_length:
-        size = int(content_length)
+        for regex in (
+            _CNTDISP_REGEX.search(content_disposition),
+            _CNTDISPS_REGEX.match(content_disposition)
+        ):
+            if regex:
+                name = unquote(regex.groups()[0])
+                break
 
     return name, size
 
@@ -91,9 +102,8 @@ class DataverseImportProvider(ImportProvider):
                 urlparse(url)._replace(path='/api/info/version')
             )
         try:
-            resp = urlopen(url, timeout=1)
-            resp_body = resp.read()
-            data = json.loads(resp_body.decode('utf-8'))
+            req = requests.get(url)
+            data = req.json()
         except Exception:
             logger.warning(
                 "[dataverse] failed to fetch installations, using a local copy."
@@ -145,8 +155,8 @@ class DataverseImportProvider(ImportProvider):
             )
         else:
             dataset_url = urlunparse(url)
-        resp = urlopen(dataset_url).read()
-        data = json.loads(resp.decode('utf-8'))
+        req = requests.get(dataset_url)
+        data = req.json()
         meta = data['data']['latestVersion']['metadataBlocks']['citation']['fields']
         title = next(_['value'] for _ in meta if _['typeName'] == 'title')
         doi = '{protocol}:{authority}/{identifier}'.format(**data['data'])

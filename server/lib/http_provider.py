@@ -8,7 +8,6 @@ from girder.utility.model_importer import ModelImporter
 from girder.models.folder import Folder
 
 from .import_providers import ImportProvider
-from .resolvers import DOIResolver
 from .entity import Entity
 from .data_map import DataMap
 from .file_map import FileMap
@@ -22,7 +21,7 @@ class HTTPImportProvider(ImportProvider):
         return re.compile(r'^http(s)?://.*')
 
     def lookup(self, entity: Entity) -> DataMap:
-        pid = DOIResolver.follow_redirects(entity.getValue())
+        pid = requests.head(entity.getValue(), allow_redirects=True).url
         url = urlparse(pid)
         if url.scheme not in ('http', 'https'):
             # This should be redundant. This should only be called if matches()

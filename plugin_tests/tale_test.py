@@ -432,10 +432,6 @@ class TaleTestCase(base.TestCase):
         with pytest.raises(ValidationException):
             self.model('tale', 'wholetale').save(tale)
 
-        # tale["dataSet"][0]["_modelType"] = "item"
-        # self.model('tale', 'wholetale').save(tale)
-        self.model('tale', 'wholetale').remove(tale)
-
     def testTaleUpdate(self):
         from server.lib.license import WholeTaleLicense
         # Test that Tale updating works
