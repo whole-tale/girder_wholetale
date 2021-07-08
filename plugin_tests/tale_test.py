@@ -1050,7 +1050,7 @@ class TaleWithWorkspaceTestCase(base.TestCase):
 
         copied_file_path = re.sub(workspace['name'], new_tale['_id'], fullPath)
         job = Job().findOne({'type': 'wholetale.copy_workspace'})
-        for _ in range(10):
+        for _ in range(100):
             job = Job().load(job['_id'], force=True)
             if job['status'] == JobStatus.SUCCESS:
                 break
