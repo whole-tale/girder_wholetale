@@ -180,7 +180,7 @@ class ImportTaleTestCase(base.TestCase):
             job = Job().findOne({"type": "wholetale.import_binder"})
             self.assertEqual(json.loads(job["kwargs"])["taleId"]["$oid"], tale["_id"])
 
-            for i in range(600):
+            for _ in range(600):
                 if job["status"] in {JobStatus.SUCCESS, JobStatus.ERROR}:
                     break
                 time.sleep(0.1)
@@ -222,6 +222,7 @@ class ImportTaleTestCase(base.TestCase):
 
     def testTaleImportBinder(self):
         since = datetime.utcnow().isoformat()
+
         def before_record_cb(request):
             if request.host == "localhost":
                 return None
@@ -243,26 +244,8 @@ class ImportTaleTestCase(base.TestCase):
             )
 
             from girder.plugins.wholetale.constants import (
-                PluginSettings,
                 InstanceStatus,
             )
-
-            resp = self.request(
-                "/system/setting",
-                user=self.admin,
-                method="PUT",
-                params={
-                    "list": json.dumps(
-                        [
-                            {
-                                "key": PluginSettings.DATAVERSE_URL,
-                                "value": "https://dev2.dataverse.org",
-                            }
-                        ]
-                    )
-                },
-            )
-            self.assertStatusOk(resp)
 
             class fakeInstance(object):
                 _id = "123456789"
@@ -283,8 +266,8 @@ class ImportTaleTestCase(base.TestCase):
                     user=self.user,
                     params={
                         "url": (
-                            "https://dev2.dataverse.org/dataset.xhtml?"
-                            "persistentId=doi:10.5072/FK2/NYNHAM"
+                            "https://dataverse.harvard.edu/dataset.xhtml?"
+                            "persistentId=doi:10.7910/DVN/HOLVXA"
                         ),
                         "spawn": True,
                         "imageId": self.image["_id"],
@@ -300,7 +283,7 @@ class ImportTaleTestCase(base.TestCase):
                 job = Job().findOne({"type": "wholetale.import_binder"})
                 self.assertEqual(json.loads(job["kwargs"])["taleId"]["$oid"], tale["_id"])
 
-                for i in range(600):
+                for _ in range(600):
                     if job["status"] in {JobStatus.SUCCESS, JobStatus.ERROR}:
                         break
                     time.sleep(0.1)
@@ -317,13 +300,9 @@ class ImportTaleTestCase(base.TestCase):
         self.assertEqual(
             sorted([_["name"] for _ in resp.json]),
             [
-                "README.md",
-                "apt.txt",
-                "index.ipynb",
-                "install.R",
-                "runtime.txt",
-                "superuser_graph-monthly.ipynb",
-                "superuser_graph.ipynb",
+                "requirements.txt",
+                "rnr-report-wordcloud.ipynb",
+                "rnr.txt",
             ],
         )
 
@@ -377,7 +356,7 @@ class ImportTaleTestCase(base.TestCase):
             self.assertEqual(
                 json.loads(job["kwargs"])["taleId"]["$oid"], tale["_id"]
             )
-            for i in range(600):
+            for _ in range(600):
                 if job["status"] in {JobStatus.SUCCESS, JobStatus.ERROR}:
                     break
                 time.sleep(0.1)
