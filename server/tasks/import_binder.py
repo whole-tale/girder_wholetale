@@ -20,7 +20,7 @@ from fs.permissions import Permissions
 from fs.tarfs import ReadTarFS
 from fs.zipfs import ReadZipFS
 from girder import events
-from girderfs.core import WtDmsGirderFS
+from girderfs.dms import WtDmsGirderFS
 from girder_client import GirderClient
 from girder.constants import AccessType
 from girder.models.folder import Folder
