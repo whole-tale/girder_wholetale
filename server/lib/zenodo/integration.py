@@ -69,7 +69,7 @@ def zenodoDataImport(self, doi, record_id, resource_server, environment, force):
     except ZenodoNotATaleError as exc:
         query = {"uri": url, "asTale": True, "name": exc.record["metadata"]["title"]}
         location = urlunparse(
-            urlparse(dashboard_url)._replace(path="/browse", query=urlencode(query))
+            urlparse(dashboard_url)._replace(path="/mine", query=urlencode(query))
         )
     except Exception as exc:
         raise RestException(
