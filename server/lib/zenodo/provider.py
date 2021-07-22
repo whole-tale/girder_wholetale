@@ -15,6 +15,7 @@ from ..import_item import ImportItem
 from ..entity import Entity
 from ... import constants
 from ...models.tale import Tale
+from . import ZenodoNotATaleError
 
 
 class ZenodoImportProvider(ImportProvider):
@@ -87,9 +88,7 @@ class ZenodoImportProvider(ImportProvider):
             return Tale().load(existing_tale_id["_id"], user=user)
 
         if not self._is_tale(record):
-            raise ValueError(
-                "{} doesn't look like a Tale.".format(record["links"]["record_html"])
-            )
+            raise ZenodoNotATaleError(record)
 
         file_ref = record["files"][0]
         if file_ref["type"] != "zip":

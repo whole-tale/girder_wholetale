@@ -2,13 +2,13 @@
 # -*- coding: utf-8 -*-
 import cherrypy
 import os
-from urllib.parse import urlparse, urlunparse
+from urllib.parse import urlparse, urlunparse, urlencode
 
 from girder.api import access
 from girder.api.describe import Description, autoDescribeRoute
 from girder.api.rest import boundHandler, RestException
-from girder.exceptions import GirderException
 
+from . import ZenodoNotATaleError
 from .. import IMPORT_PROVIDERS
 from ..integration_utils import autologin
 
@@ -54,21 +54,26 @@ def zenodoDataImport(self, doi, record_id, resource_server, environment, force):
         }
         autologin(args=args)
 
+    # TODO: Make base url a plugin setting, defaulting to dashboard.<domain>
+    dashboard_url = os.environ.get("DASHBOARD_URL", "https://dashboard.wholetale.org")
     url = "https://{}/record/{}".format(resource_server, record_id)
     provider = IMPORT_PROVIDERS.providerMap["Zenodo"]
     try:
         tale = provider.import_tale(url, user, force=force)
-    except GirderException as exc:
+        location = urlunparse(
+            urlparse(dashboard_url)._replace(
+                path="/run/{}".format(tale["_id"]),
+                query="token={}".format(self.getCurrentToken()["_id"]),
+            )
+        )
+    except ZenodoNotATaleError as exc:
+        query = {"uri": url, "asTale": True, "name": exc.record["metadata"]["title"]}
+        location = urlunparse(
+            urlparse(dashboard_url)._replace(path="/mine", query=urlencode(query))
+        )
+    except Exception as exc:
         raise RestException(
             f"Failed to import Tale. Server returned: '{str(exc)}'"
         )
 
-    # TODO: Make base url a plugin setting, defaulting to dashboard.<domain>
-    dashboard_url = os.environ.get("DASHBOARD_URL", "https://dashboard.wholetale.org")
-    location = urlunparse(
-        urlparse(dashboard_url)._replace(
-            path="/run/{}".format(tale["_id"]),
-            query="token={}".format(self.getCurrentToken()["_id"]),
-        )
-    )
     raise cherrypy.HTTPRedirect(location)
