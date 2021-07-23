@@ -2,387 +2,261 @@ interactions:
 - request:
     body: null
     headers:
-      Connection: [close]
-      Host: [services.dataverse.harvard.edu]
-      User-Agent: [Python-urllib/3.6]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.20.1
     method: GET
-    uri: https://services.dataverse.harvard.edu/miniverse/map/installations-json
+    uri: https://iqss.github.io/dataverse-installations/data/data.json
   response:
-    body: {string: '{"installations": [{"id": 1740, "name": "Abacus", "full_name":
-        "Abacus (British Columbia Research Libraries'' Data Services) Dataverse",
-        "is_active": true, "description": "Open for researchers associated with British
-        Columbia universities to deposit data.", "lat": 49.259982, "lng": -123.250212,
-        "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/abacus-46x46.jpg",
-        "url": "https://dvn.library.ubc.ca/dvn/", "slug": "abacus", "version": "3.6"},
-        {"id": 1794, "name": "ACSS Dataverse", "full_name": "Arab Council for the
-        Social Sciences", "is_active": true, "description": "The ACSS Dataverse is
-        an initiative of the Arab Council for the Social Sciences, in collaboration
-        with the Odum Institute for Research in Social Science at the University of
-        North Carolina at Chapel Hill. The ACSS Dataverse contains social science
-        datasets produced in Arab countries, with the goal of making data available
-        for research in the region and preserving data for future generations of researchers.
-        There is no charge for access to datasets in the ACSS Dataverse, although
-        users are requested to register in order to download data. The ACSS Dataverse
-        encourages social scientists who study the Arab region to participate in this
-        initiative by depositing data.", "lat": 33.899798, "lng": 35.485184, "logo":
-        "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/accs-46x46.png", "url":
-        "https://dataverse.theacss.org", "slug": "acss-dataverse", "version": "4.11"},
-        {"id": 1771, "name": "ADA Dataverse", "full_name": "Australian Data Archive",
-        "is_active": true, "description": "The Australian Data Archive provides a
-        national service for collecting, preserving, publishing and accessing digital
-        research data.", "lat": -35.343784, "lng": 149.082977, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/ada-46x46.jpg",
-        "url": "https://dataverse.ada.edu.au/", "slug": "ada-dataverse", "version":
-        "4.6.1"}, {"id": 1773, "name": "AUSSDA Dataverse", "full_name": "Austrian
-        Social Science Data Archive", "is_active": true, "description": "AUSSDA -
-        The Austrian Social Science Data Archive makes social science data accessible,
-        creating opportunities for research and data reuse, benefitting science and
-        society. AUSSDA serves as the Austrian representative in the Consortium of
-        European Social Science Data Archives (CESSDA ERIC).", "lat": 48.210033, "lng":
-        16.363449, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/aussda-46x46.png",
-        "url": "https://data.aussda.at/", "slug": "aussda-dataverse", "version": "4.6.2"},
-        {"id": 1778, "name": "Botswana Harvard Data", "full_name": "Botswana Harvard
-        AIDS Institute Partnership", "is_active": true, "description": "The Botswana
-        Harvard AIDS Institute Partneship is a world-renowned educational institution
-        of excellence in research and education pertinent to HIV/AIDS and other emerging
-        public health challenges. Established in 1996, the Botswana Harvard AIDS Institute
-        Partnership (BHP) is a collaborative research and training initiative between
-        Botswana\u2019s Ministry of Health and Wellness and the Harvard T.H. Chan
-        School of Public Health AIDS Initiative. The BHP Dataverse is a data repository
-        for all the research done at BHP. Raw data, anonymised data and final analysis
-        data for every research. This repository will achieve and also easy data sharing
-        within the organisation and outside.", "lat": -24.653257, "lng": 25.906792,
-        "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/botswana-46x46.png",
-        "url": "https://dataverse.bhp.org.bw/", "slug": "botswana-harvard-data", "version":
-        "4.9.4"}, {"id": 1759, "name": "Catalogues (CDSP)", "full_name": "Catalogues
-        (CDSP)", "is_active": true, "description": "Open for researchers and organizations
-        associated with\r\nFrench universities to deposit data. Hosted by the Center
-        for\r\nSocio-Political Data (Sciences Po and CNRS).", "lat": 48.854027, "lng":
-        2.328351, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/catalogues-46x46.png",
-        "url": "https://catalogues.cdsp.sciences-po.fr/", "slug": "catalogues-cdsp",
-        "version": "4.6.1"}, {"id": 1763, "name": "CIFOR", "full_name": "Center for
-        International Forestry Research (CIFOR) Dataverse", "is_active": true, "description":
-        "Center for International Forestry Research (CIFOR) Dataverse", "lat": -6.594293,
-        "lng": 106.806000, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/CIFOR-46x46.png",
-        "url": "https://data.cifor.org", "slug": "cifor", "version": "4.6"}, {"id":
-        1741, "name": "CIMMYT Research Data", "full_name": "International Maize and
-        Wheat Improvement Center", "is_active": true, "description": "Free, open access
-        repository of research data and software produced and developed by CIMMYT
-        scientists.", "lat": 19.531535, "lng": -98.846064, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/cimmyt-46x46.jpg",
-        "url": "http://data.cimmyt.org/", "slug": "cimmyt-research-data", "version":
-        "3.0"}, {"id": 1764, "name": "CIRAD", "full_name": "CIRAD Dataverse", "is_active":
-        true, "description": "Organisme fran\u00e7ais de recherche agronomique et
-        de coop\u00e9ration internationale pour le d\u00e9veloppement durable des
-        r\u00e9gions tropicales et m\u00e9diterran\u00e9ennes, les activit\u00e9s
-        du CIRAD rel\u00e8vent des sciences du vivant, des sciences sociales et des
-        sciences de l\u2019ing\u00e9nieur appliqu\u00e9es \u00e0 l\u2019agriculture,
-        \u00e0 l\u2019alimentation, \u00e0 l\u2019environnement et \u00e0 la gestion
-        des territoires.\r\n\r\nFrench agricultural research and international cooperation
-        organization working for the sustainable development of tropical and Mediterranean
-        regions, CIRAD''s activities concern the life sciences, social sciences and
-        engineering sciences, applied to agriculture, the environment and territorial
-        management.", "lat": 43.650089, "lng": 3.869122, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/cirad-46x46.jpg",
-        "url": "https://dataverse.cirad.fr/", "slug": "cirad", "version": "4.5"},
-        {"id": 1774, "name": "Dalhousie University Dataverse", "full_name": "Dalhousie
-        University", "is_active": true, "description": "Share, publish and get credit
-        for your data. Find and cite research data from across all research fields.",
-        "lat": 44.637484, "lng": -63.591220, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/dalhousie-46x46.png",
-        "url": "https://dataverse.library.dal.ca", "slug": "dalhousie-university-dataverse",
-        "version": "4.7"}, {"id": 1795, "name": "DaRUS", "full_name": "University
-        of Stuttgart", "is_active": true, "description": "DaRUS, the data repository
-        of the University of Stuttgart, offers a secure location for research data
-        and codes of members or partners of the University of Stuttgart. DaRUS is
-        used not only for publishing finished data, but also for managing and exchanging
-        data at all stages of the lifecycle.", "lat": 48.781647, "lng": 9.172552,
-        "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/darus-46x46.png",
-        "url": "https://darus.uni-stuttgart.de/", "slug": "darus", "version": "4.15.1"},
-        {"id": 1777, "name": "Data Inra", "full_name": "National Institute of Agricultural
-        Research (INRA)", "is_active": true, "description": "INRA is Europe\u2019s
-        top agricultural research institute and the world\u2019s number two centre
-        for the agricultural sciences. Data Inra is offered by INRA as part of its
-        mission to open the results of its research.\r\n\r\nData Inra will share research
-        data in relation with food, nutrition, agriculture and environment. It includes
-        experimental, simulation and observation data, omic data, survey and text
-        data.\r\n\r\nOnly data produced by or in collaboration with INRA will be hosted
-        in the repository, but anyone can access the metadata and the open data.",
-        "lat": 48.801407, "lng": 2.130122, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/inra-46x46-2.jpg",
-        "url": "https://data.inra.fr/", "slug": "data-inra", "version": "4.5.1"},
-        {"id": 1796, "name": "DataRepositoriUM", "full_name": "University of Minho",
-        "is_active": true, "description": "Institutional Data Repository of the University
-        of Minho. Share, publish and manage research data from UMinho research units.",
-        "lat": 41.561246, "lng": -8.396280, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/DataRepositoriUM-46x46.png",
-        "url": "https://datarepositorium.sdum.uminho.pt", "slug": "datarepositorium",
-        "version": "4.17"}, {"id": 1743, "name": "DataSpace@HKUST", "full_name": "DataSpace@HKUST",
-        "is_active": true, "description": "", "lat": 22.336281, "lng": 114.266721,
-        "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/dataspace-46x46.jpg",
-        "url": "https://dataspace.ust.hk/", "slug": "dataspacehkust", "version": "4.2"},
-        {"id": 1792, "name": "Data Suds", "full_name": "French Research Institute
-        for Development", "is_active": true, "description": "Hosted by IRD, a french
-        public research institution, who defends an original model of equitable scientific
-        partnership with the countries of the South and an interdisciplinary and citizen
-        science, committed to the achievement of the Sustainable Development Goals.",
-        "lat": 43.309873, "lng": 5.368818, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/ird-46x46.png",
-        "url": "https://dataverse.ird.fr", "slug": "data-suds", "version": "4.14"},
-        {"id": 1762, "name": "Dataverse e-cienciaDatos", "full_name": "Dataverse e-cienciaDatos",
-        "is_active": true, "description": "Repositorio de Datos del Consorcio Madro\u00f1o.",
-        "lat": 40.416775, "lng": -3.749200, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/consorciomadrono-46x46.gif",
-        "url": "https://edatos.consorciomadrono.es/", "slug": "dataverse-e-cienciadatos",
-        "version": "4.8.4"}, {"id": 1742, "name": "DataverseNL", "full_name": "DataverseNL",
-        "is_active": true, "description": "Open for researchers and organizations
-        associated with Dutch universities to deposit data.", "lat": 52.080830, "lng":
-        4.345672, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/logosdataverseNL-46x46.png",
-        "url": "https://dataverse.nl/", "slug": "dataversenl", "version": "4.6.1"},
-        {"id": 1767, "name": "DataverseNO", "full_name": "Dataverse Network Norway",
-        "is_active": true, "description": "Research data archive open for Norwegian
-        research institutions. Operated by UiT The Arctic University of Norway.",
-        "lat": 69.649208, "lng": 18.955324, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/dataverseNO-46x46.png",
-        "url": "https://dataverse.no/", "slug": "dataverseno", "version": "4.9.4"},
-        {"id": 1768, "name": "DR-NTU (Data)", "full_name": "Nanyang Technological
-        University", "is_active": true, "description": "The institutional open access
-        research data repository for Nanyang Technological University (NTU). NTU researchers
-        are encouraged to use DR-NTU (Data) to deposit, publish and archive their
-        final research data in order to make their research data discoverable, accessible
-        and reusable.", "lat": 1.348668, "lng": 103.683104, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/NTULogo_2.gif",
-        "url": "https://researchdata.ntu.edu.sg", "slug": "dr-ntu-data", "version":
-        "4.7.1"}, {"id": 1744, "name": "Fudan University", "full_name": "Fudan University
-        Dataverse", "is_active": true, "description": "Open for Fudan University affiliated
-        researchers to deposit data.", "lat": 31.298531, "lng": 121.501446, "logo":
-        "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/fudan-46x46.png", "url":
-        "https://dvn.fudan.edu.cn/home/", "slug": "fudan-university", "version": "4.x"},
-        {"id": 1791, "name": "G\u00f6ttingen Research Online", "full_name": "G\u00f6ttingen
-        eResearch Alliance", "is_active": true, "description": "G\u00f6ttingen Research
-        Online is an institutional repository for the publication of research data
-        at the G\u00f6ttingen Campus. It is managed by the G\u00f6ttingen eResearch
-        Alliance, a joint group of the G\u00f6ttingen State and University Library
-        and Gesellschaft f\u00fcr wissenschaftliche Datenverarbeitung mbH G\u00f6ttingen.",
-        "lat": 51.533713, "lng": 9.932198, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/gottingen-46x46_ZryDdtE.jpg",
-        "url": "https://data.gro.uni-goettingen.de/", "slug": "gottingen-research-online",
-        "version": "4.14"}, {"id": 1745, "name": "Harvard Dataverse", "full_name":
-        "Harvard University", "is_active": true, "description": "Share, archive, and
-        get credit for your data. Find and cite data across all research fields.",
-        "lat": 42.375646, "lng": -71.113212, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/harvard-46x46.png",
-        "url": "https://dataverse.harvard.edu", "slug": "harvard-dataverse", "version":
-        "4.12"}, {"id": 1746, "name": "HeiDATA", "full_name": "Heidelberg University",
-        "is_active": true, "description": "Open for Heidelberg University affiliated
-        researchers to deposit data.", "lat": 49.398750, "lng": 8.672434, "logo":
-        "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/heidelberg-46x46.jpg",
-        "url": "https://heidata.uni-heidelberg.de/", "slug": "heidata", "version":
-        "4.8.2"}, {"id": 1747, "name": "IBICT", "full_name": "IBICT (Brazil)", "is_active":
-        true, "description": "The network Cariniana, cariniana.ibict.br,  is funded
-        entirely by the Brazilian government and in particular by MCTI (Minist\u00e9rio
-        da Ci\u00eancia, Tecnologia e Inova\u00e7\u00e3o). It is a project for long-term
-        preservation of scientific publications in Brazil.", "lat": -15.805842, "lng":
-        -47.881369, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/ibict-46x46.jpg",
-        "url": "https://repositoriopesquisas.ibict.br/", "slug": "ibict", "version":
-        "4.5.1"}, {"id": 1757, "name": "ICRISAT", "full_name": "ICRISAT", "is_active":
-        true, "description": "International Crops Research Institute for the Semi-Arid
-        Tropics.  Free open data repository of ICRISAT research data including Social
-        science, Phenotypic, Genotypic, Spatial and Soil & Weather data which are
-        linked with open publications.", "lat": 17.385000, "lng": 78.486700, "logo":
-        "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/icrisat-46x46.png", "url":
-        "http://dataverse.icrisat.org/", "slug": "icrisat", "version": "4.8.1"}, {"id":
-        1784, "name": "ICWSM", "full_name": "International AAAI Conference on Web
-        and Social Media", "is_active": true, "description": "Datasets from the International
-        AAAI Conference on Web and Social Media (ICWSM).", "lat": 37.432057, "lng":
-        -122.175297, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/icwsm-46x46.jpg",
-        "url": "https://dataverse.mpi-sws.org/dataverse/icwsm", "slug": "icwsm", "version":
-        "4.8.5"}, {"id": 1782, "name": "Ifsttar Dataverse", "full_name": "French Institute
-        of Science and Technology for Transport, Development and Networks", "is_active":
-        true, "description": "Ifsttar Dataverse is an institutional repository for
-        research data of the French Institute of Science and Technology for Transport,
-        Development and Networks. It catalogues research data in the field of transports,
-        spatial planning and civil engineering.", "lat": 48.852800, "lng": 2.602700,
-        "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/ifsttar-46x46.jpg",
-        "url": "https://research-data.ifsttar.fr/dataverse/data", "slug": "ifsttar-dataverse",
-        "version": "4.10.1"}, {"id": 1748, "name": "IISH Dataverse", "full_name":
-        "International Institute of Social History", "is_active": true, "description":
-        "The IISH Dataverse contains micro-, meso-, and macro-level datasets on social
-        and economic history.", "lat": 52.369021, "lng": 4.939226, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/internationalInstituteOfSocialHistory-46x46.jpg",
-        "url": "https://datasets.iisg.amsterdam", "slug": "iish-dataverse", "version":
-        "4.15.1"}, {"id": 1783, "name": "International Potato Center", "full_name":
-        "International Potato Center", "is_active": true, "description": "Centro Internacional
-        De La Papa (International Potato Center) is a member of the CGIAR Consortium,
-        an international organization made up of 15 centers engaged in research for
-        a food secure future.", "lat": -12.077791, "lng": -76.946888, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/cip-46x46.png",
-        "url": "https://data.cipotato.org/dataverse.xhtml", "slug": "international-potato-center",
-        "version": "4.8.1"}, {"id": 1749, "name": "Johns Hopkins University", "full_name":
-        "Johns Hopkins", "is_active": true, "description": "Johns Hopkins University
-        Data Archive", "lat": 39.329055, "lng": -76.620335, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/johns-46x46.jpg",
-        "url": "https://archive.data.jhu.edu/", "slug": "johns-hopkins-university",
-        "version": "4.6"}, {"id": 1750, "name": "Libra Data", "full_name": "Libra
-        Data (University of Virginia)", "is_active": true, "description": "Libra Data
-        is a place for UVA researchers to share data publicly, and is part of the
-        Libra Scholarly Repository suite of services which includes works of UVA scholarship
-        such as articles, books, theses, and data.", "lat": 38.034578, "lng": -78.507394,
-        "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/libra-46x46.jpg",
-        "url": "https://dataverse.lib.virginia.edu/", "slug": "libra-data", "version":
-        "4.7.1"}, {"id": 1776, "name": "LIPI Dataverse", "full_name": "Lembaga Ilmu
-        Pengetahuan Indonesia (LIPI) Dataverse", "is_active": true, "description":
-        "The Repositori Ilmiah Nasional (RIN) is a means to share, preserve, cite,
-        explore, and analyze research data. RIN increases data availability and allows
-        others to reproduce research more easily. Researchers, data authors, publishers,
-        data distributors, and affiliate institutions all receive academic credit
-        and web visibility. Researchers, agencies, and funders have full control over
-        research data.", "lat": -6.228771, "lng": 106.818082, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/LIPI-46x46.png",
-        "url": "https://data.lipi.go.id", "slug": "lipi-dataverse", "version": "4.6.2"},
-        {"id": 1756, "name": "Maine Dataverse Network", "full_name": "Maine Dataverse
-        Network", "is_active": true, "description": "A service brought to you by the
-        ACG@UMaine. The way Supercomputing should be!", "lat": 44.901349, "lng": -68.671815,
-        "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/uOfMaine-46x46.jpg",
-        "url": "http://dataverse.acg.maine.edu/dvn/", "slug": "maine-dataverse-network",
-        "version": "3.5.1"}, {"id": 1787, "name": "MELDATA", "full_name": "International
-        Center for Agriculture Research in the Dry Areas", "is_active": true, "description":
-        "The Dataverse portal of the International Center for Agricultural Research
-        in Dry Ares.", "lat": 33.888630, "lng": 35.495480, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/meldata-46x46.png",
-        "url": "http://data.mel.cgiar.org", "slug": "meldata", "version": "4.8.5"},
-        {"id": 1786, "name": "NIE Data Repository", "full_name": "National Institute
-        of Education", "is_active": true, "description": "NIE Data Repository is the
-        institutional open access research data repository for National Institute
-        of Education, Singapore. NIE researchers are encouraged to use NIE Data Repository
-        to deposit, publish and archive their final research data in order to make
-        their research data discoverable, accessible and reusable.", "lat": 1.349115,
-        "lng": 103.678829, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/nie-46x46.png",
-        "url": "https://researchdata.nie.edu.sg", "slug": "nie-data-repository", "version":
-        "4.10.1"}, {"id": 1800, "name": "Open Data @ UCLouvain", "full_name": "Universit\u00e9
-        catholique de Louvain", "is_active": true, "description": "", "lat": 50.669868,
-        "lng": 4.615608, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/UCLouvain-46x46.png",
-        "url": "https://dataverse.uclouvain.be", "slug": "open-data-uclouvain", "version":
-        "4.14"}, {"id": 1752, "name": "Peking University", "full_name": "Peking University",
-        "is_active": true, "description": "Peking University Open Research Data Platform",
-        "lat": 39.993923, "lng": 116.306539, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/peking-46x46.jpg",
-        "url": "http://opendata.pku.edu.cn/", "slug": "peking-university", "version":
-        "4.0"}, {"id": 1793, "name": "Pontificia Universidad Cat\u00f3lica del Per\u00fa",
-        "full_name": "Pontificia Universidad Cat\u00f3lica del Per\u00fa", "is_active":
-        true, "description": "El Instituto de Opini\u00f3n P\u00fablica de la Pontificia
-        Universidad Cat\u00f3lica del Per\u00fa (IOP) se cre\u00f3 a finales del 2005
-        con la finalidad de generar un mayor conocimiento acerca de los fen\u00f3menos
-        que interesan, preocupan y afectan a la sociedad peruana. Teniendo como eje
-        metodol\u00f3gico el estudio de la opini\u00f3n p\u00fablica, el IOP investiga
-        las creencias, actitudes y sentimientos que configuran las din\u00e1micas
-        sociales en el Per\u00fa.", "lat": -12.068924, "lng": -77.079338, "logo":
-        "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/pucp-46x46.png", "url":
-        "http://datos.pucp.edu.pe", "slug": "pontificia-universidad-catolica-del-peru",
-        "version": "4.13"}, {"id": 1781, "name": "QDR Main Collection", "full_name":
-        "Qualitative Data Repository", "is_active": true, "description": "QDR curates,
-        stores, preserves, publishes, and enables the download of digital data generated
-        through qualitative and multi-method research in the social sciences. The
-        repository develops and disseminates guidance for managing, sharing, citing,
-        and reusing qualitative data, and contributes to the generation of common
-        standards for doing so. QDR\u2019s overarching goals are to make sharing qualitative
-        data customary in the social sciences, to broaden access to social science
-        data, and to strengthen qualitative and multi-method research.", "lat": 43.038013,
-        "lng": -76.135566, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/qdr-46x46_kCBOWwk.png",
-        "url": "https://data.qdr.syr.edu", "slug": "qdr-main-collection", "version":
-        "4.10.1"}, {"id": 1798, "name": "Reposit\u00f3rio de Dados de Pesquisa", "full_name":
-        "Federal University of S\u00e3o Paulo", "is_active": true, "description":
-        "Reposit\u00f3rio de dados de pesquisa Unifesp.", "lat": -23.537630, "lng":
-        -46.788869, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/Unifesp-marca-46x46.png",
-        "url": "https://repositoriodedados.unifesp.br/", "slug": "repositorio-de-dados-de-pesquisa",
-        "version": "4.6"}, {"id": 1780, "name": "Reposit\u00f3rio de Dados de Pesquisa
-        da UFABC", "full_name": "Universidade Federal do ABC (UFABC)", "is_active":
-        true, "description": "", "lat": -23.643807, "lng": -46.528304, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/ufabc-46x46_pWiXhTC.png",
-        "url": "http://dataverse.ufabc.edu.br", "slug": "repositorio-de-dados-de-pesquisa-da-ufabc",
-        "version": "4.8.5"}, {"id": 1785, "name": "Reposit\u00f3rio de Dados de Pesquisa
-        do ILEEL", "full_name": "Institute of Linguistics and Literature (Federal
-        University of Uberl\u00e2ndia)", "is_active": true, "description": "Research
-        data repository of Institute of Linguistics and Literature / Federal University
-        of Uberlandia", "lat": -18.908702, "lng": -48.291944, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/ileel-46x46_JPxxGBm.png",
-        "url": "http://dataverse.ileel.ufu.br", "slug": "repositorio-de-dados-de-pesquisa-do-ileel",
-        "version": "4.11"}, {"id": 1789, "name": "Repositorio de Datos de Investigaci\u00f3n
-        Universidad del Rosario", "full_name": "Universidad del Rosario", "is_active":
-        true, "description": "Explore research data from Universidad del Rosario affiliated
-        researchers.", "lat": 4.600598, "lng": -74.073352, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/ur-46x46_ohTqcfg.png",
-        "url": "http://research-data.urosario.edu.co/", "slug": "repositorio-de-datos-de-investigacion-universidad-del-rosario",
-        "version": "4.9.4"}, {"id": 1799, "name": "Reposit\u00f3rios Piloto da Rede
-        Nacional de Ensino e Pesquisa", "full_name": "Rede Nacional de Ensino e Pesquisa",
-        "is_active": true, "description": "O dadosabertos.rnp.br  \u00e9 o reposit\u00f3rio
-        instituicional da RNP, e faz parte do conjunto de servi\u00e7os da RNP para
-        possibilitar acesso a dados instituicionais para pesquisadores.\r\n\r\nDataabertos.rnp.br
-        is RNP''s institutional repository, and is part of RNP''s suite of services
-        to allow access to institutional data for researchers.", "lat": -22.957167,
-        "lng": -43.176211, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/rnp-46x46.jpg",
-        "url": "http://dadosabertos.rnp.br/", "slug": "repositorios-piloto-da-rede-nacional-de-ensino-e-pesquisa",
-        "version": "4.18.1"}, {"id": 1758, "name": "Scholars Portal", "full_name":
-        "Scholars Portal Dataverse", "is_active": true, "description": "Open for researchers
-        and organizations associated with Ontario universities to deposit data.",
-        "lat": 43.653200, "lng": -79.383200, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/scholarsportal-46x46.jpg",
-        "url": "https://dataverse.scholarsportal.info/", "slug": "scholars-portal",
-        "version": "4.10.1"}, {"id": 1797, "name": "SODAtaverse", "full_name": "State
-        Archives of Belgium", "is_active": false, "description": "", "lat": 50.842521,
-        "lng": 4.356647, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/SODAtaverse-46x46.png",
-        "url": "https://dataverse.arch.be", "slug": "sodataverse", "version": "4.11"},
-        {"id": 1761, "name": "Texas Data Repository Dataverse", "full_name": "Texas
-        Data Repository Dataverse", "is_active": true, "description": "A statewide
-        archive of research data from Texas Digital Library (TDL) member institutions.",
-        "lat": 30.307182, "lng": -97.755996, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/tdl-46x46.png",
-        "url": "https://dataverse.tdl.org/", "slug": "texas-data-repository-dataverse",
-        "version": "4.7.1"}, {"id": 1755, "name": "UAL Dataverse", "full_name": "University
-        of Alberta Libraries Dataverse", "is_active": true, "description": "Open for
-        University of Alberta affiliated researchers to deposit data.", "lat": 53.494321,
-        "lng": -113.549027, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/uOfAlberta-46x46.jpg",
-        "url": "https://dataverse.library.ualberta.ca/dvn/", "slug": "ual-dataverse",
-        "version": "4.5.1"}, {"id": 1788, "name": "UCLA Dataverse", "full_name": "UCLA
-        Data Science Center", "is_active": true, "description": "", "lat": 34.068900,
-        "lng": -118.445200, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/ucla-46x46.png",
-        "url": "https://dataverse.ucla.edu", "slug": "ucla-dataverse", "version":
-        "4.13"}, {"id": 1772, "name": "UNB Libraries Dataverse", "full_name": "University
-        of New Brunswick Libraries", "is_active": true, "description": "", "lat":
-        45.964993, "lng": -66.646332, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/unbDataverse-46x46.png",
-        "url": "https://dataverse.lib.unb.ca/", "slug": "unb-libraries-dataverse",
-        "version": "4.8.2"}, {"id": 1751, "name": "UNC Dataverse", "full_name": "Odum
-        Institute for Research in Social Science", "is_active": true, "description":
-        "Open for all researchers worldwide from all disciplines to deposit data.
-        The Odum Institute also offers multiple data curation service levels. For
-        more information, go to http://www.irss.unc.edu/odum/contentPrimary.jsp?nodeid=5.",
-        "lat": 35.905022, "lng": -79.050851, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/unc-46x46.png",
-        "url": "https://dataverse.unc.edu/", "slug": "unc-dataverse", "version": "4.7.1"},
-        {"id": 1790, "name": "Universit\u00e0 degli Studi di Milano", "full_name":
-        "University of Milan", "is_active": true, "description": "The University of
-        Milan is home to important research teams operating in the university''s extremely
-        rich variety of scientific-disciplinary sectors. Besides taking part in the
-        most relevant national and international research programs, the University
-        is also very active in the field of technology transfer and developing applications
-        for scientific research results. dataverse.unimi.it is the repository for
-        research data offered to all researchers in disciplines from health sciences
-        to laws, from economics to hard sciences, from humanities to mathematics.",
-        "lat": 45.460100, "lng": 9.194600, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/milan-46x46.png",
-        "url": "https://dataverse.unimi.it/", "slug": "universita-degli-studi-di-milano",
-        "version": null}, {"id": 1765, "name": "University of Manitoba Dataverse",
-        "full_name": "University of Manitoba Dataverse", "is_active": true, "description":
-        "", "lat": 49.895077, "lng": -97.138451, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/manitoba-46x46.jpg",
-        "url": "https://dataverse.lib.umanitoba.ca/", "slug": "university-of-manitoba-dataverse",
-        "version": "4.8.4"}, {"id": 1775, "name": "UWI", "full_name": "The University
-        of the West Indies", "is_active": true, "description": "The University of
-        the West Indies Research Datasets Repository.", "lat": 18.006372, "lng": -76.747148,
-        "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/uwi-46x46.png",
-        "url": "http://dataverse.sta.uwi.edu/", "slug": "uwi", "version": "4.8.4"},
-        {"id": 1779, "name": "VTTI", "full_name": "Virginia Tech Transportation Institute",
-        "is_active": true, "description": "Transportation data repository maintained
-        by the Virginia Tech Transportation Institute.", "lat": 37.190102, "lng":
-        -80.396776, "logo": "https://dvn-h-prod.hz.lib.harvard.edu/media/logos/vtti-46x46_Q6PC6r7.png",
-        "url": "https://dataverse.vtti.vt.edu/", "slug": "vtti", "version": "4.9.4"}]}'}
+    body:
+      string: !!binary |
+        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
+        WdKqQZx63vbmSkRBdfD3f/7p//4fLS5fxk6bAAA=
     headers:
-      Cache-Control: [max-age=7200]
-      Connection: [Close]
-      Content-Type: [application/json]
-      Date: ['Mon, 10 Feb 2020 18:54:21 GMT']
-      Expires: ['Mon, 10 Feb 2020 19:53:47 GMT']
-      Last-Modified: ['Mon, 10 Feb 2020 17:53:47 GMT']
-      Server: [Apache/2.4.6 (Red Hat Enterprise Linux) OpenSSL/1.0.2k-fips mod_wsgi/3.4
-          Python/2.7.5]
-      X-Frame-Options: [SAMEORIGIN]
-      transfer-encoding: [chunked]
-    status: {code: 200, message: OK}
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '72'
+      Cache-Control:
+      - max-age=600
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '9833'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Thu, 08 Jul 2021 15:55:13 GMT
+      ETag:
+      - W/"608809fd-9b4e"
+      Last-Modified:
+      - Tue, 27 Apr 2021 12:56:29 GMT
+      Server:
+      - GitHub.com
+      Vary:
+      - Accept-Encoding
+      Via:
+      - 1.1 varnish
+      X-Cache:
+      - HIT
+      X-Cache-Hits:
+      - '1'
+      X-Fastly-Request-ID:
+      - 3ac18edef7a657e2df120a08c2cf5facb614baf6
+      X-GitHub-Request-Id:
+      - 1A58:2374:1676D7:B4AFD1:60E70A1C
+      X-Served-By:
+      - cache-pwk4969-PWK
+      X-Timer:
+      - S1625759714.678146,VS0,VE1
+      expires:
+      - Thu, 08 Jul 2021 14:32:20 GMT
+      permissions-policy:
+      - interest-cohort=()
+      x-origin-cache:
+      - HIT
+      x-proxy-cache:
+      - MISS
+    status:
+      code: 200
+      message: OK
 - request:
     body: null
     headers:
-      Connection: [close]
-      Host: [dataverse.harvard.edu]
-      User-Agent: [Python-urllib/3.6]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.20.1
     method: GET
     uri: https://dataverse.harvard.edu/api/datasets/:persistentId?persistentId=doi:10.7910/DVN/3MJ7IR
   response:
-    body: {string: '{"status":"OK","data":{"id":3323443,"identifier":"DVN/3MJ7IR","persistentUrl":"https://doi.org/10.7910/DVN/3MJ7IR","protocol":"doi","authority":"10.7910","publisher":"Harvard
-        Dataverse","publicationDate":"2018-12-07","storageIdentifier":"s3://10.7910/DVN/3MJ7IR","latestVersion":{"id":175798,"datasetId":3323443,"datasetPersistentId":"doi:10.7910/DVN/3MJ7IR","storageIdentifier":"s3://10.7910/DVN/3MJ7IR","versionNumber":1,"versionMinorNumber":1,"versionState":"RELEASED","UNF":"UNF:6:m14gXeiGZwgzeoGJoFms4Q==","lastUpdateTime":"2019-10-10T21:27:53Z","releaseTime":"2019-10-10T21:27:53Z","createTime":"2019-10-10T21:26:44Z","license":"CC0","termsOfUse":"CC0
+    body:
+      string: '{"status":"OK","data":{"id":3323443,"identifier":"DVN/3MJ7IR","persistentUrl":"https://doi.org/10.7910/DVN/3MJ7IR","protocol":"doi","authority":"10.7910","publisher":"Harvard
+        Dataverse","publicationDate":"2018-12-07","storageIdentifier":"s3://10.7910/DVN/3MJ7IR","latestVersion":{"id":176686,"datasetId":3323443,"datasetPersistentId":"doi:10.7910/DVN/3MJ7IR","storageIdentifier":"s3://10.7910/DVN/3MJ7IR","versionNumber":1,"versionMinorNumber":2,"versionState":"RELEASED","UNF":"UNF:6:m14gXeiGZwgzeoGJoFms4Q==","lastUpdateTime":"2020-06-30T16:26:50Z","releaseTime":"2020-06-30T16:26:50Z","createTime":"2019-10-24T18:23:53Z","license":"CC0","termsOfUse":"CC0
         Waiver","fileAccessRequest":false,"metadataBlocks":{"citation":{"displayName":"Citation
         Metadata","fields":[{"typeName":"title","multiple":false,"typeClass":"primitive","value":"Replication
         Data for: \"Agricultural Fires and Health at Birth\""},{"typeName":"author","multiple":true,"typeClass":"compound","value":[{"authorName":{"typeName":"authorName","multiple":false,"typeClass":"primitive","value":"Rangel,
@@ -391,69 +265,88 @@ interactions:
         Tom"},"authorAffiliation":{"typeName":"authorAffiliation","multiple":false,"typeClass":"primitive","value":"University
         of Texas at Austin"}}]},{"typeName":"datasetContact","multiple":true,"typeClass":"compound","value":[{"datasetContactName":{"typeName":"datasetContactName","multiple":false,"typeClass":"primitive","value":"Marcos
         A. rangel"},"datasetContactAffiliation":{"typeName":"datasetContactAffiliation","multiple":false,"typeClass":"primitive","value":"Duke
-        University"},"datasetContactEmail":{"typeName":"datasetContactEmail","multiple":false,"typeClass":"primitive","value":"marcos.rangel@duke.edu"}}]},{"typeName":"dsDescription","multiple":true,"typeClass":"compound","value":[{"dsDescriptionValue":{"typeName":"dsDescriptionValue","multiple":false,"typeClass":"primitive","value":"Replication
-        Data for: \"Agricultural Fires and Health at Birth\""}}]},{"typeName":"subject","multiple":true,"typeClass":"controlledVocabulary","value":["Social
-        Sciences"]},{"typeName":"publication","multiple":true,"typeClass":"compound","value":[{"publicationCitation":{"typeName":"publicationCitation","multiple":false,"typeClass":"primitive","value":"Review
-        of Economics and Statistics, Volume 101, Issue 4 (October 2019), pp. 616-630."},"publicationIDType":{"typeName":"publicationIDType","multiple":false,"typeClass":"controlledVocabulary","value":"doi"},"publicationIDNumber":{"typeName":"publicationIDNumber","multiple":false,"typeClass":"primitive","value":"10.1162/rest_a_00806"},"publicationURL":{"typeName":"publicationURL","multiple":false,"typeClass":"primitive","value":"https://doi.org/10.1162/rest_a_00806"}}]},{"typeName":"depositor","multiple":false,"typeClass":"primitive","value":"Rangel,
+        University"},"datasetContactEmail":{"typeName":"datasetContactEmail","multiple":false,"typeClass":"primitive","value":"marcos.rangel@duke.edu"}}]},{"typeName":"dsDescription","multiple":true,"typeClass":"compound","value":[{"dsDescriptionValue":{"typeName":"dsDescriptionValue","multiple":false,"typeClass":"primitive","value":"Rangel,
+        Marcos A., and Vogl, Tom S., (2019) \"Agricultural Fires and Health at Birth.\"
+        Review of Economics and Statistics 101:4, 616-630."}}]},{"typeName":"subject","multiple":true,"typeClass":"controlledVocabulary","value":["Social
+        Sciences"]},{"typeName":"publication","multiple":true,"typeClass":"compound","value":[{"publicationIDType":{"typeName":"publicationIDType","multiple":false,"typeClass":"controlledVocabulary","value":"doi"},"publicationIDNumber":{"typeName":"publicationIDNumber","multiple":false,"typeClass":"primitive","value":"10.1162/rest_a_00806"},"publicationURL":{"typeName":"publicationURL","multiple":false,"typeClass":"primitive","value":"https://doi.org/10.1162/rest_a_00806"}}]},{"typeName":"depositor","multiple":false,"typeClass":"primitive","value":"Rangel,
         Marcos A."},{"typeName":"dateOfDeposit","multiple":false,"typeClass":"primitive","value":"2018-12-04"}]},"journal":{"displayName":"Journal
-        Metadata","fields":[]}},"files":[{"description":"STATA data","label":"calendarmonth_fires_SPstate.tab","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323458,"persistentId":"doi:10.7910/DVN/3MJ7IR/HXD9ID","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/HXD9ID","filename":"calendarmonth_fires_SPstate.tab","contentType":"text/tab-separated-values","filesize":349,"description":"STATA
+        Metadata","fields":[]}},"files":[{"description":"STATA data","label":"calendarmonth_fires_SPstate.tab","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323458,"persistentId":"doi:10.7910/DVN/3MJ7IR/HXD9ID","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/HXD9ID","filename":"calendarmonth_fires_SPstate.tab","contentType":"text/tab-separated-values","filesize":349,"description":"STATA
         data","storageIdentifier":"s3://dvn-cloud:1677a26a950-495a76918f65","originalFileFormat":"application/x-stata-13","originalFormatLabel":"Stata
-        13 Binary","originalFileSize":1506,"UNF":"UNF:6:btjqFbZKc4YU4gmU/T/tgA==","rootDataFileId":-1,"md5":"88fb4e0d8de04a6da50d713b2567bd4a","checksum":{"type":"MD5","value":"88fb4e0d8de04a6da50d713b2567bd4a"},"creationDate":"2018-12-04"}},{"description":"TAR
-        of STATA data","label":"fires_birthoutcomes.tar.gz","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323455,"persistentId":"doi:10.7910/DVN/3MJ7IR/VIPIFX","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/VIPIFX","filename":"fires_birthoutcomes.tar.gz","contentType":"application/gzip","filesize":27291610,"description":"TAR
+        13 Binary","originalFileSize":1506,"originalFileName":"calendarmonth_fires_SPstate.dta","UNF":"UNF:6:btjqFbZKc4YU4gmU/T/tgA==","rootDataFileId":-1,"md5":"88fb4e0d8de04a6da50d713b2567bd4a","checksum":{"type":"MD5","value":"88fb4e0d8de04a6da50d713b2567bd4a"},"creationDate":"2018-12-04"}},{"description":"TAR
+        of STATA data","label":"fires_birthoutcomes.tar.gz","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323455,"persistentId":"doi:10.7910/DVN/3MJ7IR/VIPIFX","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/VIPIFX","filename":"fires_birthoutcomes.tar.gz","contentType":"application/gzip","filesize":27291610,"description":"TAR
         of STATA data","storageIdentifier":"s3://dvn-cloud:1677a26a4f0-82cc40eec979","rootDataFileId":-1,"md5":"6574dacbc02001a44efd30ab7dd8d2b5","checksum":{"type":"MD5","value":"6574dacbc02001a44efd30ab7dd8d2b5"},"creationDate":"2018-12-04"}},{"description":"TAR
-        of STATA data","label":"fires_birthoutcomes_wfetaldeath.tar.gz","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323447,"persistentId":"doi:10.7910/DVN/3MJ7IR/DSQZF8","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/DSQZF8","filename":"fires_birthoutcomes_wfetaldeath.tar.gz","contentType":"application/gzip","filesize":4406895,"description":"TAR
+        of STATA data","label":"fires_birthoutcomes_wfetaldeath.tar.gz","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323447,"persistentId":"doi:10.7910/DVN/3MJ7IR/DSQZF8","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/DSQZF8","filename":"fires_birthoutcomes_wfetaldeath.tar.gz","contentType":"application/gzip","filesize":4406895,"description":"TAR
         of STATA data","storageIdentifier":"s3://dvn-cloud:1677a26a808-beb617ec6269","rootDataFileId":-1,"md5":"4843f67d4ca1a9544dde41a86836f13c","checksum":{"type":"MD5","value":"4843f67d4ca1a9544dde41a86836f13c"},"creationDate":"2018-12-04"}},{"description":"STATA
-        data","label":"fires_jobsflows_monthly.tab","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323445,"persistentId":"doi:10.7910/DVN/3MJ7IR/AHYYJM","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/AHYYJM","filename":"fires_jobsflows_monthly.tab","contentType":"text/tab-separated-values","filesize":3266623,"description":"STATA
+        data","label":"fires_jobsflows_monthly.tab","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323445,"persistentId":"doi:10.7910/DVN/3MJ7IR/AHYYJM","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/AHYYJM","filename":"fires_jobsflows_monthly.tab","contentType":"text/tab-separated-values","filesize":3266623,"description":"STATA
         data","storageIdentifier":"s3://dvn-cloud:1677a26ab18-706b0e83783a","originalFileFormat":"application/x-stata-13","originalFormatLabel":"Stata
-        13 Binary","originalFileSize":1118174,"UNF":"UNF:6:mAY+VVnj39jABDQvh/TB+A==","rootDataFileId":-1,"md5":"a69721c1c4977b2551acb6a684b0535c","checksum":{"type":"MD5","value":"a69721c1c4977b2551acb6a684b0535c"},"creationDate":"2018-12-04"}},{"description":"TAR
-        of STATA data","label":"fires_pollution.tar.gz","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323453,"persistentId":"doi:10.7910/DVN/3MJ7IR/JX4YGA","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/JX4YGA","filename":"fires_pollution.tar.gz","contentType":"application/gzip","filesize":1883291,"description":"TAR
+        13 Binary","originalFileSize":1118174,"originalFileName":"fires_jobsflows_monthly.dta","UNF":"UNF:6:mAY+VVnj39jABDQvh/TB+A==","rootDataFileId":-1,"md5":"a69721c1c4977b2551acb6a684b0535c","checksum":{"type":"MD5","value":"a69721c1c4977b2551acb6a684b0535c"},"creationDate":"2018-12-04"}},{"description":"TAR
+        of STATA data","label":"fires_pollution.tar.gz","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323453,"persistentId":"doi:10.7910/DVN/3MJ7IR/JX4YGA","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/JX4YGA","filename":"fires_pollution.tar.gz","contentType":"application/gzip","filesize":1883291,"description":"TAR
         of STATA data","storageIdentifier":"s3://dvn-cloud:1677a269a88-cc30723c470c","rootDataFileId":-1,"md5":"e3532a798871e81830904f4ddcc95011","checksum":{"type":"MD5","value":"e3532a798871e81830904f4ddcc95011"},"creationDate":"2018-12-04"}},{"description":"STATA
-        data","label":"fires_sugarproduction_yearly.tab","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323457,"persistentId":"doi:10.7910/DVN/3MJ7IR/4THBAA","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/4THBAA","filename":"fires_sugarproduction_yearly.tab","contentType":"text/tab-separated-values","filesize":297510,"description":"STATA
+        data","label":"fires_sugarproduction_yearly.tab","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323457,"persistentId":"doi:10.7910/DVN/3MJ7IR/4THBAA","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/4THBAA","filename":"fires_sugarproduction_yearly.tab","contentType":"text/tab-separated-values","filesize":297510,"description":"STATA
         data","storageIdentifier":"s3://dvn-cloud:1677a26ac7a-9f0f91bfc259","originalFileFormat":"application/x-stata-13","originalFormatLabel":"Stata
-        13 Binary","originalFileSize":145901,"UNF":"UNF:6:c58B4yiPjtrg5/bFF8douA==","rootDataFileId":-1,"md5":"d064ce33f0099d31dfe6791cc95a88c2","checksum":{"type":"MD5","value":"d064ce33f0099d31dfe6791cc95a88c2"},"creationDate":"2018-12-04"}},{"description":"Read-me
-        file for data, figures and tables","label":"READ_ME-RESTAT.pdf","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323444,"persistentId":"doi:10.7910/DVN/3MJ7IR/W20FPS","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/W20FPS","filename":"READ_ME-RESTAT.pdf","contentType":"application/pdf","filesize":74043,"description":"Read-me
+        13 Binary","originalFileSize":145901,"originalFileName":"fires_sugarproduction_yearly.dta","UNF":"UNF:6:c58B4yiPjtrg5/bFF8douA==","rootDataFileId":-1,"md5":"d064ce33f0099d31dfe6791cc95a88c2","checksum":{"type":"MD5","value":"d064ce33f0099d31dfe6791cc95a88c2"},"creationDate":"2018-12-04"}},{"description":"Read-me
+        file for data, figures and tables","label":"READ_ME-RESTAT.pdf","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323444,"persistentId":"doi:10.7910/DVN/3MJ7IR/W20FPS","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/W20FPS","filename":"READ_ME-RESTAT.pdf","contentType":"application/pdf","filesize":74043,"description":"Read-me
         file for data, figures and tables","storageIdentifier":"s3://dvn-cloud:1677a1f9f1e-92a2ccdd1035","rootDataFileId":-1,"md5":"2113ccf828d37cf3560beb0f52357224","checksum":{"type":"MD5","value":"2113ccf828d37cf3560beb0f52357224"},"creationDate":"2018-12-04"}},{"description":"STATA
-        data","label":"rolling_fires_SPstate.tab","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323448,"persistentId":"doi:10.7910/DVN/3MJ7IR/WSFJOM","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/WSFJOM","filename":"rolling_fires_SPstate.tab","contentType":"text/tab-separated-values","filesize":178865,"description":"STATA
+        data","label":"rolling_fires_SPstate.tab","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323448,"persistentId":"doi:10.7910/DVN/3MJ7IR/WSFJOM","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/WSFJOM","filename":"rolling_fires_SPstate.tab","contentType":"text/tab-separated-values","filesize":178865,"description":"STATA
         data","storageIdentifier":"s3://dvn-cloud:1677a264aa9-a0c712268f3f","originalFileFormat":"application/x-stata-13","originalFormatLabel":"Stata
-        13 Binary","originalFileSize":81866,"UNF":"UNF:6:ZdbmbODkPYG3DODjqu3ixw==","rootDataFileId":-1,"md5":"482f6d3cd917a81f0c410f03396fd3c8","checksum":{"type":"MD5","value":"482f6d3cd917a81f0c410f03396fd3c8"},"creationDate":"2018-12-04"}},{"description":"STATA
-        program","label":"T_Figure1.do","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323451,"persistentId":"doi:10.7910/DVN/3MJ7IR/PSKL0F","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/PSKL0F","filename":"T_Figure1.do","contentType":"application/x-stata-syntax","filesize":2294,"description":"STATA
+        13 Binary","originalFileSize":81866,"originalFileName":"rolling_fires_SPstate.dta","UNF":"UNF:6:ZdbmbODkPYG3DODjqu3ixw==","rootDataFileId":-1,"md5":"482f6d3cd917a81f0c410f03396fd3c8","checksum":{"type":"MD5","value":"482f6d3cd917a81f0c410f03396fd3c8"},"creationDate":"2018-12-04"}},{"description":"STATA
+        program","label":"T_Figure1.do","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323451,"persistentId":"doi:10.7910/DVN/3MJ7IR/PSKL0F","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/PSKL0F","filename":"T_Figure1.do","contentType":"application/x-stata-syntax","filesize":2294,"description":"STATA
         program","storageIdentifier":"s3://dvn-cloud:1677a283938-a9f88298c2f8","rootDataFileId":-1,"md5":"9e91f8f12332ff3ff6cc9c2c085fd888","checksum":{"type":"MD5","value":"9e91f8f12332ff3ff6cc9c2c085fd888"},"creationDate":"2018-12-04"}},{"description":"STATA
-        program","label":"T_Table1.do","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323456,"persistentId":"doi:10.7910/DVN/3MJ7IR/0XLMWE","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/0XLMWE","filename":"T_Table1.do","contentType":"application/x-stata-syntax","filesize":2531,"description":"STATA
+        program","label":"T_Table1.do","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323456,"persistentId":"doi:10.7910/DVN/3MJ7IR/0XLMWE","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/0XLMWE","filename":"T_Table1.do","contentType":"application/x-stata-syntax","filesize":2531,"description":"STATA
         program","storageIdentifier":"s3://dvn-cloud:1677a2840fa-5214de66e137","rootDataFileId":-1,"md5":"1eb56db15f89a0a72787da1449ac2b06","checksum":{"type":"MD5","value":"1eb56db15f89a0a72787da1449ac2b06"},"creationDate":"2018-12-04"}},{"description":"STATA
-        program","label":"T_Table2.do","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323446,"persistentId":"doi:10.7910/DVN/3MJ7IR/0QARF9","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/0QARF9","filename":"T_Table2.do","contentType":"application/x-stata-syntax","filesize":9202,"description":"STATA
+        program","label":"T_Table2.do","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323446,"persistentId":"doi:10.7910/DVN/3MJ7IR/0QARF9","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/0QARF9","filename":"T_Table2.do","contentType":"application/x-stata-syntax","filesize":9202,"description":"STATA
         program","storageIdentifier":"s3://dvn-cloud:1677a283f80-7da6087d4444","rootDataFileId":-1,"md5":"2b1ace4eade509460946af8512d37672","checksum":{"type":"MD5","value":"2b1ace4eade509460946af8512d37672"},"creationDate":"2018-12-04"}},{"description":"STATA
-        program","label":"T_Table3.do","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323450,"persistentId":"doi:10.7910/DVN/3MJ7IR/4TIC3O","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/4TIC3O","filename":"T_Table3.do","contentType":"application/x-stata-syntax","filesize":10453,"description":"STATA
+        program","label":"T_Table3.do","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323450,"persistentId":"doi:10.7910/DVN/3MJ7IR/4TIC3O","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/4TIC3O","filename":"T_Table3.do","contentType":"application/x-stata-syntax","filesize":10453,"description":"STATA
         program","storageIdentifier":"s3://dvn-cloud:1677a283dab-eb3b6b28c159","rootDataFileId":-1,"md5":"5872a9c34235d38c710cdcfc14698898","checksum":{"type":"MD5","value":"5872a9c34235d38c710cdcfc14698898"},"creationDate":"2018-12-04"}},{"description":"STATA
-        program","label":"T_Table4.do","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323452,"persistentId":"doi:10.7910/DVN/3MJ7IR/UBBVHC","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/UBBVHC","filename":"T_Table4.do","contentType":"application/x-stata-syntax","filesize":11083,"description":"STATA
+        program","label":"T_Table4.do","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323452,"persistentId":"doi:10.7910/DVN/3MJ7IR/UBBVHC","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/UBBVHC","filename":"T_Table4.do","contentType":"application/x-stata-syntax","filesize":11083,"description":"STATA
         program","storageIdentifier":"s3://dvn-cloud:1677a283a9e-33fc070dd959","rootDataFileId":-1,"md5":"910fe4649ab246c63f778ebfa81fbb4d","checksum":{"type":"MD5","value":"910fe4649ab246c63f778ebfa81fbb4d"},"creationDate":"2018-12-04"}},{"description":"STATA
-        program","label":"T_Table5.do","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323449,"persistentId":"doi:10.7910/DVN/3MJ7IR/DNDDB2","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/DNDDB2","filename":"T_Table5.do","contentType":"application/x-stata-syntax","filesize":25845,"description":"STATA
+        program","label":"T_Table5.do","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323449,"persistentId":"doi:10.7910/DVN/3MJ7IR/DNDDB2","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/DNDDB2","filename":"T_Table5.do","contentType":"application/x-stata-syntax","filesize":25845,"description":"STATA
         program","storageIdentifier":"s3://dvn-cloud:1677a283c1f-99c647f44f77","rootDataFileId":-1,"md5":"744a03386a62d36efd33f02bd9e45622","checksum":{"type":"MD5","value":"744a03386a62d36efd33f02bd9e45622"},"creationDate":"2018-12-04"}},{"description":"STATA
-        ado","label":"wild_areg.ado","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323454,"persistentId":"doi:10.7910/DVN/3MJ7IR/BETO9L","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/BETO9L","filename":"wild_areg.ado","contentType":"application/x-stata-ado","filesize":5026,"description":"STATA
-        ado","storageIdentifier":"s3://dvn-cloud:1677a2993d3-18d968b1a03a","rootDataFileId":-1,"md5":"9460079d25dad04c0546ff88fa002a90","checksum":{"type":"MD5","value":"9460079d25dad04c0546ff88fa002a90"},"creationDate":"2018-12-04"}}]}}}'}
+        ado","label":"wild_areg.ado","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323454,"persistentId":"doi:10.7910/DVN/3MJ7IR/BETO9L","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/BETO9L","filename":"wild_areg.ado","contentType":"application/x-stata-ado","filesize":5026,"description":"STATA
+        ado","storageIdentifier":"s3://dvn-cloud:1677a2993d3-18d968b1a03a","rootDataFileId":-1,"md5":"9460079d25dad04c0546ff88fa002a90","checksum":{"type":"MD5","value":"9460079d25dad04c0546ff88fa002a90"},"creationDate":"2018-12-04"}}]}}}'
     headers:
-      Access-Control-Allow-Headers: ['Content-Type, X-Dataverse-Key']
-      Access-Control-Allow-Methods: ['PUT, GET, POST, DELETE, OPTIONS']
-      Access-Control-Allow-Origin: ['*']
-      Cache-control: [no-cache="set-cookie"]
-      Connection: [Close]
-      Content-Length: ['12630']
-      Content-Type: [application/json]
-      Date: ['Mon, 10 Feb 2020 18:54:21 GMT']
-      Server: [Apache]
-      Set-Cookie: [JSESSIONID=073d324bfcc40fca566ff19017c7; Path=/; Secure; HttpOnly,
-        AWSELB=EB1179591E49E298C6825A3028F74991071DEE12D3FE010BDBAE7AE7E438B31BFA0246B9F2DBD3EC37C4E69D8B958E3FBF8CF814030B5CB9749AB70FE33A8BB5BB36A149CB;PATH=/;MAX-AGE=28800]
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, X-Dataverse-Key
+      Access-Control-Allow-Methods:
+      - PUT, GET, POST, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json;charset=UTF-8
+      Date:
+      - Thu, 08 Jul 2021 15:55:15 GMT
+      Server:
+      - Apache
+      Set-Cookie:
+      - AWSALB=uWd3wICjbcc5WlfGTvyIwYTENtxsezws+om1vjnnayfDuO4p1m4GBT1yKdQAUPGL2VLXERcGhdLuNrw4FoUWU2MjP3tbcYJxy+O/v7xSsjZI6rmq6RvaU6E1aBow;
+        Expires=Thu, 15 Jul 2021 15:55:13 GMT; Path=/
+      - AWSALBCORS=uWd3wICjbcc5WlfGTvyIwYTENtxsezws+om1vjnnayfDuO4p1m4GBT1yKdQAUPGL2VLXERcGhdLuNrw4FoUWU2MjP3tbcYJxy+O/v7xSsjZI6rmq6RvaU6E1aBow;
+        Expires=Thu, 15 Jul 2021 15:55:13 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=6d48e21b791cc54e8ad4ab9d4c77; Path=/; Secure; HttpOnly
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
 - request:
     body: null
     headers:
-      Connection: [close]
-      Host: [dataverse.harvard.edu]
-      User-Agent: [Python-urllib/3.6]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.20.1
     method: GET
     uri: https://dataverse.harvard.edu/api/datasets/:persistentId?persistentId=doi:10.7910/DVN/3MJ7IR
   response:
-    body: {string: '{"status":"OK","data":{"id":3323443,"identifier":"DVN/3MJ7IR","persistentUrl":"https://doi.org/10.7910/DVN/3MJ7IR","protocol":"doi","authority":"10.7910","publisher":"Harvard
-        Dataverse","publicationDate":"2018-12-07","storageIdentifier":"s3://10.7910/DVN/3MJ7IR","latestVersion":{"id":175798,"datasetId":3323443,"datasetPersistentId":"doi:10.7910/DVN/3MJ7IR","storageIdentifier":"s3://10.7910/DVN/3MJ7IR","versionNumber":1,"versionMinorNumber":1,"versionState":"RELEASED","UNF":"UNF:6:m14gXeiGZwgzeoGJoFms4Q==","lastUpdateTime":"2019-10-10T21:27:53Z","releaseTime":"2019-10-10T21:27:53Z","createTime":"2019-10-10T21:26:44Z","license":"CC0","termsOfUse":"CC0
+    body:
+      string: '{"status":"OK","data":{"id":3323443,"identifier":"DVN/3MJ7IR","persistentUrl":"https://doi.org/10.7910/DVN/3MJ7IR","protocol":"doi","authority":"10.7910","publisher":"Harvard
+        Dataverse","publicationDate":"2018-12-07","storageIdentifier":"s3://10.7910/DVN/3MJ7IR","latestVersion":{"id":176686,"datasetId":3323443,"datasetPersistentId":"doi:10.7910/DVN/3MJ7IR","storageIdentifier":"s3://10.7910/DVN/3MJ7IR","versionNumber":1,"versionMinorNumber":2,"versionState":"RELEASED","UNF":"UNF:6:m14gXeiGZwgzeoGJoFms4Q==","lastUpdateTime":"2020-06-30T16:26:50Z","releaseTime":"2020-06-30T16:26:50Z","createTime":"2019-10-24T18:23:53Z","license":"CC0","termsOfUse":"CC0
         Waiver","fileAccessRequest":false,"metadataBlocks":{"citation":{"displayName":"Citation
         Metadata","fields":[{"typeName":"title","multiple":false,"typeClass":"primitive","value":"Replication
         Data for: \"Agricultural Fires and Health at Birth\""},{"typeName":"author","multiple":true,"typeClass":"compound","value":[{"authorName":{"typeName":"authorName","multiple":false,"typeClass":"primitive","value":"Rangel,
@@ -462,69 +355,88 @@ interactions:
         Tom"},"authorAffiliation":{"typeName":"authorAffiliation","multiple":false,"typeClass":"primitive","value":"University
         of Texas at Austin"}}]},{"typeName":"datasetContact","multiple":true,"typeClass":"compound","value":[{"datasetContactName":{"typeName":"datasetContactName","multiple":false,"typeClass":"primitive","value":"Marcos
         A. rangel"},"datasetContactAffiliation":{"typeName":"datasetContactAffiliation","multiple":false,"typeClass":"primitive","value":"Duke
-        University"},"datasetContactEmail":{"typeName":"datasetContactEmail","multiple":false,"typeClass":"primitive","value":"marcos.rangel@duke.edu"}}]},{"typeName":"dsDescription","multiple":true,"typeClass":"compound","value":[{"dsDescriptionValue":{"typeName":"dsDescriptionValue","multiple":false,"typeClass":"primitive","value":"Replication
-        Data for: \"Agricultural Fires and Health at Birth\""}}]},{"typeName":"subject","multiple":true,"typeClass":"controlledVocabulary","value":["Social
-        Sciences"]},{"typeName":"publication","multiple":true,"typeClass":"compound","value":[{"publicationCitation":{"typeName":"publicationCitation","multiple":false,"typeClass":"primitive","value":"Review
-        of Economics and Statistics, Volume 101, Issue 4 (October 2019), pp. 616-630."},"publicationIDType":{"typeName":"publicationIDType","multiple":false,"typeClass":"controlledVocabulary","value":"doi"},"publicationIDNumber":{"typeName":"publicationIDNumber","multiple":false,"typeClass":"primitive","value":"10.1162/rest_a_00806"},"publicationURL":{"typeName":"publicationURL","multiple":false,"typeClass":"primitive","value":"https://doi.org/10.1162/rest_a_00806"}}]},{"typeName":"depositor","multiple":false,"typeClass":"primitive","value":"Rangel,
+        University"},"datasetContactEmail":{"typeName":"datasetContactEmail","multiple":false,"typeClass":"primitive","value":"marcos.rangel@duke.edu"}}]},{"typeName":"dsDescription","multiple":true,"typeClass":"compound","value":[{"dsDescriptionValue":{"typeName":"dsDescriptionValue","multiple":false,"typeClass":"primitive","value":"Rangel,
+        Marcos A., and Vogl, Tom S., (2019) \"Agricultural Fires and Health at Birth.\"
+        Review of Economics and Statistics 101:4, 616-630."}}]},{"typeName":"subject","multiple":true,"typeClass":"controlledVocabulary","value":["Social
+        Sciences"]},{"typeName":"publication","multiple":true,"typeClass":"compound","value":[{"publicationIDType":{"typeName":"publicationIDType","multiple":false,"typeClass":"controlledVocabulary","value":"doi"},"publicationIDNumber":{"typeName":"publicationIDNumber","multiple":false,"typeClass":"primitive","value":"10.1162/rest_a_00806"},"publicationURL":{"typeName":"publicationURL","multiple":false,"typeClass":"primitive","value":"https://doi.org/10.1162/rest_a_00806"}}]},{"typeName":"depositor","multiple":false,"typeClass":"primitive","value":"Rangel,
         Marcos A."},{"typeName":"dateOfDeposit","multiple":false,"typeClass":"primitive","value":"2018-12-04"}]},"journal":{"displayName":"Journal
-        Metadata","fields":[]}},"files":[{"description":"STATA data","label":"calendarmonth_fires_SPstate.tab","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323458,"persistentId":"doi:10.7910/DVN/3MJ7IR/HXD9ID","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/HXD9ID","filename":"calendarmonth_fires_SPstate.tab","contentType":"text/tab-separated-values","filesize":349,"description":"STATA
+        Metadata","fields":[]}},"files":[{"description":"STATA data","label":"calendarmonth_fires_SPstate.tab","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323458,"persistentId":"doi:10.7910/DVN/3MJ7IR/HXD9ID","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/HXD9ID","filename":"calendarmonth_fires_SPstate.tab","contentType":"text/tab-separated-values","filesize":349,"description":"STATA
         data","storageIdentifier":"s3://dvn-cloud:1677a26a950-495a76918f65","originalFileFormat":"application/x-stata-13","originalFormatLabel":"Stata
-        13 Binary","originalFileSize":1506,"UNF":"UNF:6:btjqFbZKc4YU4gmU/T/tgA==","rootDataFileId":-1,"md5":"88fb4e0d8de04a6da50d713b2567bd4a","checksum":{"type":"MD5","value":"88fb4e0d8de04a6da50d713b2567bd4a"},"creationDate":"2018-12-04"}},{"description":"TAR
-        of STATA data","label":"fires_birthoutcomes.tar.gz","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323455,"persistentId":"doi:10.7910/DVN/3MJ7IR/VIPIFX","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/VIPIFX","filename":"fires_birthoutcomes.tar.gz","contentType":"application/gzip","filesize":27291610,"description":"TAR
+        13 Binary","originalFileSize":1506,"originalFileName":"calendarmonth_fires_SPstate.dta","UNF":"UNF:6:btjqFbZKc4YU4gmU/T/tgA==","rootDataFileId":-1,"md5":"88fb4e0d8de04a6da50d713b2567bd4a","checksum":{"type":"MD5","value":"88fb4e0d8de04a6da50d713b2567bd4a"},"creationDate":"2018-12-04"}},{"description":"TAR
+        of STATA data","label":"fires_birthoutcomes.tar.gz","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323455,"persistentId":"doi:10.7910/DVN/3MJ7IR/VIPIFX","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/VIPIFX","filename":"fires_birthoutcomes.tar.gz","contentType":"application/gzip","filesize":27291610,"description":"TAR
         of STATA data","storageIdentifier":"s3://dvn-cloud:1677a26a4f0-82cc40eec979","rootDataFileId":-1,"md5":"6574dacbc02001a44efd30ab7dd8d2b5","checksum":{"type":"MD5","value":"6574dacbc02001a44efd30ab7dd8d2b5"},"creationDate":"2018-12-04"}},{"description":"TAR
-        of STATA data","label":"fires_birthoutcomes_wfetaldeath.tar.gz","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323447,"persistentId":"doi:10.7910/DVN/3MJ7IR/DSQZF8","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/DSQZF8","filename":"fires_birthoutcomes_wfetaldeath.tar.gz","contentType":"application/gzip","filesize":4406895,"description":"TAR
+        of STATA data","label":"fires_birthoutcomes_wfetaldeath.tar.gz","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323447,"persistentId":"doi:10.7910/DVN/3MJ7IR/DSQZF8","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/DSQZF8","filename":"fires_birthoutcomes_wfetaldeath.tar.gz","contentType":"application/gzip","filesize":4406895,"description":"TAR
         of STATA data","storageIdentifier":"s3://dvn-cloud:1677a26a808-beb617ec6269","rootDataFileId":-1,"md5":"4843f67d4ca1a9544dde41a86836f13c","checksum":{"type":"MD5","value":"4843f67d4ca1a9544dde41a86836f13c"},"creationDate":"2018-12-04"}},{"description":"STATA
-        data","label":"fires_jobsflows_monthly.tab","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323445,"persistentId":"doi:10.7910/DVN/3MJ7IR/AHYYJM","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/AHYYJM","filename":"fires_jobsflows_monthly.tab","contentType":"text/tab-separated-values","filesize":3266623,"description":"STATA
+        data","label":"fires_jobsflows_monthly.tab","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323445,"persistentId":"doi:10.7910/DVN/3MJ7IR/AHYYJM","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/AHYYJM","filename":"fires_jobsflows_monthly.tab","contentType":"text/tab-separated-values","filesize":3266623,"description":"STATA
         data","storageIdentifier":"s3://dvn-cloud:1677a26ab18-706b0e83783a","originalFileFormat":"application/x-stata-13","originalFormatLabel":"Stata
-        13 Binary","originalFileSize":1118174,"UNF":"UNF:6:mAY+VVnj39jABDQvh/TB+A==","rootDataFileId":-1,"md5":"a69721c1c4977b2551acb6a684b0535c","checksum":{"type":"MD5","value":"a69721c1c4977b2551acb6a684b0535c"},"creationDate":"2018-12-04"}},{"description":"TAR
-        of STATA data","label":"fires_pollution.tar.gz","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323453,"persistentId":"doi:10.7910/DVN/3MJ7IR/JX4YGA","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/JX4YGA","filename":"fires_pollution.tar.gz","contentType":"application/gzip","filesize":1883291,"description":"TAR
+        13 Binary","originalFileSize":1118174,"originalFileName":"fires_jobsflows_monthly.dta","UNF":"UNF:6:mAY+VVnj39jABDQvh/TB+A==","rootDataFileId":-1,"md5":"a69721c1c4977b2551acb6a684b0535c","checksum":{"type":"MD5","value":"a69721c1c4977b2551acb6a684b0535c"},"creationDate":"2018-12-04"}},{"description":"TAR
+        of STATA data","label":"fires_pollution.tar.gz","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323453,"persistentId":"doi:10.7910/DVN/3MJ7IR/JX4YGA","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/JX4YGA","filename":"fires_pollution.tar.gz","contentType":"application/gzip","filesize":1883291,"description":"TAR
         of STATA data","storageIdentifier":"s3://dvn-cloud:1677a269a88-cc30723c470c","rootDataFileId":-1,"md5":"e3532a798871e81830904f4ddcc95011","checksum":{"type":"MD5","value":"e3532a798871e81830904f4ddcc95011"},"creationDate":"2018-12-04"}},{"description":"STATA
-        data","label":"fires_sugarproduction_yearly.tab","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323457,"persistentId":"doi:10.7910/DVN/3MJ7IR/4THBAA","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/4THBAA","filename":"fires_sugarproduction_yearly.tab","contentType":"text/tab-separated-values","filesize":297510,"description":"STATA
+        data","label":"fires_sugarproduction_yearly.tab","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323457,"persistentId":"doi:10.7910/DVN/3MJ7IR/4THBAA","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/4THBAA","filename":"fires_sugarproduction_yearly.tab","contentType":"text/tab-separated-values","filesize":297510,"description":"STATA
         data","storageIdentifier":"s3://dvn-cloud:1677a26ac7a-9f0f91bfc259","originalFileFormat":"application/x-stata-13","originalFormatLabel":"Stata
-        13 Binary","originalFileSize":145901,"UNF":"UNF:6:c58B4yiPjtrg5/bFF8douA==","rootDataFileId":-1,"md5":"d064ce33f0099d31dfe6791cc95a88c2","checksum":{"type":"MD5","value":"d064ce33f0099d31dfe6791cc95a88c2"},"creationDate":"2018-12-04"}},{"description":"Read-me
-        file for data, figures and tables","label":"READ_ME-RESTAT.pdf","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323444,"persistentId":"doi:10.7910/DVN/3MJ7IR/W20FPS","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/W20FPS","filename":"READ_ME-RESTAT.pdf","contentType":"application/pdf","filesize":74043,"description":"Read-me
+        13 Binary","originalFileSize":145901,"originalFileName":"fires_sugarproduction_yearly.dta","UNF":"UNF:6:c58B4yiPjtrg5/bFF8douA==","rootDataFileId":-1,"md5":"d064ce33f0099d31dfe6791cc95a88c2","checksum":{"type":"MD5","value":"d064ce33f0099d31dfe6791cc95a88c2"},"creationDate":"2018-12-04"}},{"description":"Read-me
+        file for data, figures and tables","label":"READ_ME-RESTAT.pdf","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323444,"persistentId":"doi:10.7910/DVN/3MJ7IR/W20FPS","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/W20FPS","filename":"READ_ME-RESTAT.pdf","contentType":"application/pdf","filesize":74043,"description":"Read-me
         file for data, figures and tables","storageIdentifier":"s3://dvn-cloud:1677a1f9f1e-92a2ccdd1035","rootDataFileId":-1,"md5":"2113ccf828d37cf3560beb0f52357224","checksum":{"type":"MD5","value":"2113ccf828d37cf3560beb0f52357224"},"creationDate":"2018-12-04"}},{"description":"STATA
-        data","label":"rolling_fires_SPstate.tab","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323448,"persistentId":"doi:10.7910/DVN/3MJ7IR/WSFJOM","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/WSFJOM","filename":"rolling_fires_SPstate.tab","contentType":"text/tab-separated-values","filesize":178865,"description":"STATA
+        data","label":"rolling_fires_SPstate.tab","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323448,"persistentId":"doi:10.7910/DVN/3MJ7IR/WSFJOM","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/WSFJOM","filename":"rolling_fires_SPstate.tab","contentType":"text/tab-separated-values","filesize":178865,"description":"STATA
         data","storageIdentifier":"s3://dvn-cloud:1677a264aa9-a0c712268f3f","originalFileFormat":"application/x-stata-13","originalFormatLabel":"Stata
-        13 Binary","originalFileSize":81866,"UNF":"UNF:6:ZdbmbODkPYG3DODjqu3ixw==","rootDataFileId":-1,"md5":"482f6d3cd917a81f0c410f03396fd3c8","checksum":{"type":"MD5","value":"482f6d3cd917a81f0c410f03396fd3c8"},"creationDate":"2018-12-04"}},{"description":"STATA
-        program","label":"T_Figure1.do","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323451,"persistentId":"doi:10.7910/DVN/3MJ7IR/PSKL0F","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/PSKL0F","filename":"T_Figure1.do","contentType":"application/x-stata-syntax","filesize":2294,"description":"STATA
+        13 Binary","originalFileSize":81866,"originalFileName":"rolling_fires_SPstate.dta","UNF":"UNF:6:ZdbmbODkPYG3DODjqu3ixw==","rootDataFileId":-1,"md5":"482f6d3cd917a81f0c410f03396fd3c8","checksum":{"type":"MD5","value":"482f6d3cd917a81f0c410f03396fd3c8"},"creationDate":"2018-12-04"}},{"description":"STATA
+        program","label":"T_Figure1.do","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323451,"persistentId":"doi:10.7910/DVN/3MJ7IR/PSKL0F","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/PSKL0F","filename":"T_Figure1.do","contentType":"application/x-stata-syntax","filesize":2294,"description":"STATA
         program","storageIdentifier":"s3://dvn-cloud:1677a283938-a9f88298c2f8","rootDataFileId":-1,"md5":"9e91f8f12332ff3ff6cc9c2c085fd888","checksum":{"type":"MD5","value":"9e91f8f12332ff3ff6cc9c2c085fd888"},"creationDate":"2018-12-04"}},{"description":"STATA
-        program","label":"T_Table1.do","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323456,"persistentId":"doi:10.7910/DVN/3MJ7IR/0XLMWE","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/0XLMWE","filename":"T_Table1.do","contentType":"application/x-stata-syntax","filesize":2531,"description":"STATA
+        program","label":"T_Table1.do","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323456,"persistentId":"doi:10.7910/DVN/3MJ7IR/0XLMWE","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/0XLMWE","filename":"T_Table1.do","contentType":"application/x-stata-syntax","filesize":2531,"description":"STATA
         program","storageIdentifier":"s3://dvn-cloud:1677a2840fa-5214de66e137","rootDataFileId":-1,"md5":"1eb56db15f89a0a72787da1449ac2b06","checksum":{"type":"MD5","value":"1eb56db15f89a0a72787da1449ac2b06"},"creationDate":"2018-12-04"}},{"description":"STATA
-        program","label":"T_Table2.do","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323446,"persistentId":"doi:10.7910/DVN/3MJ7IR/0QARF9","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/0QARF9","filename":"T_Table2.do","contentType":"application/x-stata-syntax","filesize":9202,"description":"STATA
+        program","label":"T_Table2.do","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323446,"persistentId":"doi:10.7910/DVN/3MJ7IR/0QARF9","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/0QARF9","filename":"T_Table2.do","contentType":"application/x-stata-syntax","filesize":9202,"description":"STATA
         program","storageIdentifier":"s3://dvn-cloud:1677a283f80-7da6087d4444","rootDataFileId":-1,"md5":"2b1ace4eade509460946af8512d37672","checksum":{"type":"MD5","value":"2b1ace4eade509460946af8512d37672"},"creationDate":"2018-12-04"}},{"description":"STATA
-        program","label":"T_Table3.do","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323450,"persistentId":"doi:10.7910/DVN/3MJ7IR/4TIC3O","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/4TIC3O","filename":"T_Table3.do","contentType":"application/x-stata-syntax","filesize":10453,"description":"STATA
+        program","label":"T_Table3.do","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323450,"persistentId":"doi:10.7910/DVN/3MJ7IR/4TIC3O","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/4TIC3O","filename":"T_Table3.do","contentType":"application/x-stata-syntax","filesize":10453,"description":"STATA
         program","storageIdentifier":"s3://dvn-cloud:1677a283dab-eb3b6b28c159","rootDataFileId":-1,"md5":"5872a9c34235d38c710cdcfc14698898","checksum":{"type":"MD5","value":"5872a9c34235d38c710cdcfc14698898"},"creationDate":"2018-12-04"}},{"description":"STATA
-        program","label":"T_Table4.do","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323452,"persistentId":"doi:10.7910/DVN/3MJ7IR/UBBVHC","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/UBBVHC","filename":"T_Table4.do","contentType":"application/x-stata-syntax","filesize":11083,"description":"STATA
+        program","label":"T_Table4.do","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323452,"persistentId":"doi:10.7910/DVN/3MJ7IR/UBBVHC","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/UBBVHC","filename":"T_Table4.do","contentType":"application/x-stata-syntax","filesize":11083,"description":"STATA
         program","storageIdentifier":"s3://dvn-cloud:1677a283a9e-33fc070dd959","rootDataFileId":-1,"md5":"910fe4649ab246c63f778ebfa81fbb4d","checksum":{"type":"MD5","value":"910fe4649ab246c63f778ebfa81fbb4d"},"creationDate":"2018-12-04"}},{"description":"STATA
-        program","label":"T_Table5.do","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323449,"persistentId":"doi:10.7910/DVN/3MJ7IR/DNDDB2","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/DNDDB2","filename":"T_Table5.do","contentType":"application/x-stata-syntax","filesize":25845,"description":"STATA
+        program","label":"T_Table5.do","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323449,"persistentId":"doi:10.7910/DVN/3MJ7IR/DNDDB2","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/DNDDB2","filename":"T_Table5.do","contentType":"application/x-stata-syntax","filesize":25845,"description":"STATA
         program","storageIdentifier":"s3://dvn-cloud:1677a283c1f-99c647f44f77","rootDataFileId":-1,"md5":"744a03386a62d36efd33f02bd9e45622","checksum":{"type":"MD5","value":"744a03386a62d36efd33f02bd9e45622"},"creationDate":"2018-12-04"}},{"description":"STATA
-        ado","label":"wild_areg.ado","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323454,"persistentId":"doi:10.7910/DVN/3MJ7IR/BETO9L","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/BETO9L","filename":"wild_areg.ado","contentType":"application/x-stata-ado","filesize":5026,"description":"STATA
-        ado","storageIdentifier":"s3://dvn-cloud:1677a2993d3-18d968b1a03a","rootDataFileId":-1,"md5":"9460079d25dad04c0546ff88fa002a90","checksum":{"type":"MD5","value":"9460079d25dad04c0546ff88fa002a90"},"creationDate":"2018-12-04"}}]}}}'}
+        ado","label":"wild_areg.ado","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323454,"persistentId":"doi:10.7910/DVN/3MJ7IR/BETO9L","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/BETO9L","filename":"wild_areg.ado","contentType":"application/x-stata-ado","filesize":5026,"description":"STATA
+        ado","storageIdentifier":"s3://dvn-cloud:1677a2993d3-18d968b1a03a","rootDataFileId":-1,"md5":"9460079d25dad04c0546ff88fa002a90","checksum":{"type":"MD5","value":"9460079d25dad04c0546ff88fa002a90"},"creationDate":"2018-12-04"}}]}}}'
     headers:
-      Access-Control-Allow-Headers: ['Content-Type, X-Dataverse-Key']
-      Access-Control-Allow-Methods: ['PUT, GET, POST, DELETE, OPTIONS']
-      Access-Control-Allow-Origin: ['*']
-      Cache-control: [no-cache="set-cookie"]
-      Connection: [Close]
-      Content-Type: [application/json]
-      Date: ['Mon, 10 Feb 2020 18:54:22 GMT']
-      Server: [Apache]
-      Set-Cookie: [JSESSIONID=073d66874cc815c47790ef18f69b; Path=/; Secure; HttpOnly,
-        AWSELB=EB1179591E49E298C6825A3028F74991071DEE12D3FE010BDBAE7AE7E438B31BFA0246B9F2DBD3EC37C4E69D8B958E3FBF8CF814030B5CB9749AB70FE33A8BB5BB36A149CB;PATH=/;MAX-AGE=28800]
-      transfer-encoding: [chunked]
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, X-Dataverse-Key
+      Access-Control-Allow-Methods:
+      - PUT, GET, POST, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json;charset=UTF-8
+      Date:
+      - Thu, 08 Jul 2021 15:55:17 GMT
+      Server:
+      - Apache
+      Set-Cookie:
+      - AWSALB=yUCYvMLQaqvVXmRbrekuw+KIgiC7FUiBQJtNuhq0jS6J3c/u0WDiDOzhnnZMbtubMthPGs871fGE3FnMkkqTTkC3tRUnvvfFMXgzU0aa64CSO8/22AG1V4OB4/P+;
+        Expires=Thu, 15 Jul 2021 15:55:15 GMT; Path=/
+      - AWSALBCORS=yUCYvMLQaqvVXmRbrekuw+KIgiC7FUiBQJtNuhq0jS6J3c/u0WDiDOzhnnZMbtubMthPGs871fGE3FnMkkqTTkC3tRUnvvfFMXgzU0aa64CSO8/22AG1V4OB4/P+;
+        Expires=Thu, 15 Jul 2021 15:55:15 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=6d49598d3b3f2de166daae0a287b; Path=/; Secure; HttpOnly
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
 - request:
     body: null
     headers:
-      Connection: [close]
-      Host: [dataverse.harvard.edu]
-      User-Agent: [Python-urllib/3.6]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.20.1
     method: GET
     uri: https://dataverse.harvard.edu/api/datasets/:persistentId?persistentId=doi:10.7910/DVN/3MJ7IR
   response:
-    body: {string: '{"status":"OK","data":{"id":3323443,"identifier":"DVN/3MJ7IR","persistentUrl":"https://doi.org/10.7910/DVN/3MJ7IR","protocol":"doi","authority":"10.7910","publisher":"Harvard
-        Dataverse","publicationDate":"2018-12-07","storageIdentifier":"s3://10.7910/DVN/3MJ7IR","latestVersion":{"id":175798,"datasetId":3323443,"datasetPersistentId":"doi:10.7910/DVN/3MJ7IR","storageIdentifier":"s3://10.7910/DVN/3MJ7IR","versionNumber":1,"versionMinorNumber":1,"versionState":"RELEASED","UNF":"UNF:6:m14gXeiGZwgzeoGJoFms4Q==","lastUpdateTime":"2019-10-10T21:27:53Z","releaseTime":"2019-10-10T21:27:53Z","createTime":"2019-10-10T21:26:44Z","license":"CC0","termsOfUse":"CC0
+    body:
+      string: '{"status":"OK","data":{"id":3323443,"identifier":"DVN/3MJ7IR","persistentUrl":"https://doi.org/10.7910/DVN/3MJ7IR","protocol":"doi","authority":"10.7910","publisher":"Harvard
+        Dataverse","publicationDate":"2018-12-07","storageIdentifier":"s3://10.7910/DVN/3MJ7IR","latestVersion":{"id":176686,"datasetId":3323443,"datasetPersistentId":"doi:10.7910/DVN/3MJ7IR","storageIdentifier":"s3://10.7910/DVN/3MJ7IR","versionNumber":1,"versionMinorNumber":2,"versionState":"RELEASED","UNF":"UNF:6:m14gXeiGZwgzeoGJoFms4Q==","lastUpdateTime":"2020-06-30T16:26:50Z","releaseTime":"2020-06-30T16:26:50Z","createTime":"2019-10-24T18:23:53Z","license":"CC0","termsOfUse":"CC0
         Waiver","fileAccessRequest":false,"metadataBlocks":{"citation":{"displayName":"Citation
         Metadata","fields":[{"typeName":"title","multiple":false,"typeClass":"primitive","value":"Replication
         Data for: \"Agricultural Fires and Health at Birth\""},{"typeName":"author","multiple":true,"typeClass":"compound","value":[{"authorName":{"typeName":"authorName","multiple":false,"typeClass":"primitive","value":"Rangel,
@@ -533,302 +445,1042 @@ interactions:
         Tom"},"authorAffiliation":{"typeName":"authorAffiliation","multiple":false,"typeClass":"primitive","value":"University
         of Texas at Austin"}}]},{"typeName":"datasetContact","multiple":true,"typeClass":"compound","value":[{"datasetContactName":{"typeName":"datasetContactName","multiple":false,"typeClass":"primitive","value":"Marcos
         A. rangel"},"datasetContactAffiliation":{"typeName":"datasetContactAffiliation","multiple":false,"typeClass":"primitive","value":"Duke
-        University"},"datasetContactEmail":{"typeName":"datasetContactEmail","multiple":false,"typeClass":"primitive","value":"marcos.rangel@duke.edu"}}]},{"typeName":"dsDescription","multiple":true,"typeClass":"compound","value":[{"dsDescriptionValue":{"typeName":"dsDescriptionValue","multiple":false,"typeClass":"primitive","value":"Replication
-        Data for: \"Agricultural Fires and Health at Birth\""}}]},{"typeName":"subject","multiple":true,"typeClass":"controlledVocabulary","value":["Social
-        Sciences"]},{"typeName":"publication","multiple":true,"typeClass":"compound","value":[{"publicationCitation":{"typeName":"publicationCitation","multiple":false,"typeClass":"primitive","value":"Review
-        of Economics and Statistics, Volume 101, Issue 4 (October 2019), pp. 616-630."},"publicationIDType":{"typeName":"publicationIDType","multiple":false,"typeClass":"controlledVocabulary","value":"doi"},"publicationIDNumber":{"typeName":"publicationIDNumber","multiple":false,"typeClass":"primitive","value":"10.1162/rest_a_00806"},"publicationURL":{"typeName":"publicationURL","multiple":false,"typeClass":"primitive","value":"https://doi.org/10.1162/rest_a_00806"}}]},{"typeName":"depositor","multiple":false,"typeClass":"primitive","value":"Rangel,
+        University"},"datasetContactEmail":{"typeName":"datasetContactEmail","multiple":false,"typeClass":"primitive","value":"marcos.rangel@duke.edu"}}]},{"typeName":"dsDescription","multiple":true,"typeClass":"compound","value":[{"dsDescriptionValue":{"typeName":"dsDescriptionValue","multiple":false,"typeClass":"primitive","value":"Rangel,
+        Marcos A., and Vogl, Tom S., (2019) \"Agricultural Fires and Health at Birth.\"
+        Review of Economics and Statistics 101:4, 616-630."}}]},{"typeName":"subject","multiple":true,"typeClass":"controlledVocabulary","value":["Social
+        Sciences"]},{"typeName":"publication","multiple":true,"typeClass":"compound","value":[{"publicationIDType":{"typeName":"publicationIDType","multiple":false,"typeClass":"controlledVocabulary","value":"doi"},"publicationIDNumber":{"typeName":"publicationIDNumber","multiple":false,"typeClass":"primitive","value":"10.1162/rest_a_00806"},"publicationURL":{"typeName":"publicationURL","multiple":false,"typeClass":"primitive","value":"https://doi.org/10.1162/rest_a_00806"}}]},{"typeName":"depositor","multiple":false,"typeClass":"primitive","value":"Rangel,
         Marcos A."},{"typeName":"dateOfDeposit","multiple":false,"typeClass":"primitive","value":"2018-12-04"}]},"journal":{"displayName":"Journal
-        Metadata","fields":[]}},"files":[{"description":"STATA data","label":"calendarmonth_fires_SPstate.tab","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323458,"persistentId":"doi:10.7910/DVN/3MJ7IR/HXD9ID","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/HXD9ID","filename":"calendarmonth_fires_SPstate.tab","contentType":"text/tab-separated-values","filesize":349,"description":"STATA
+        Metadata","fields":[]}},"files":[{"description":"STATA data","label":"calendarmonth_fires_SPstate.tab","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323458,"persistentId":"doi:10.7910/DVN/3MJ7IR/HXD9ID","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/HXD9ID","filename":"calendarmonth_fires_SPstate.tab","contentType":"text/tab-separated-values","filesize":349,"description":"STATA
         data","storageIdentifier":"s3://dvn-cloud:1677a26a950-495a76918f65","originalFileFormat":"application/x-stata-13","originalFormatLabel":"Stata
-        13 Binary","originalFileSize":1506,"UNF":"UNF:6:btjqFbZKc4YU4gmU/T/tgA==","rootDataFileId":-1,"md5":"88fb4e0d8de04a6da50d713b2567bd4a","checksum":{"type":"MD5","value":"88fb4e0d8de04a6da50d713b2567bd4a"},"creationDate":"2018-12-04"}},{"description":"TAR
-        of STATA data","label":"fires_birthoutcomes.tar.gz","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323455,"persistentId":"doi:10.7910/DVN/3MJ7IR/VIPIFX","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/VIPIFX","filename":"fires_birthoutcomes.tar.gz","contentType":"application/gzip","filesize":27291610,"description":"TAR
+        13 Binary","originalFileSize":1506,"originalFileName":"calendarmonth_fires_SPstate.dta","UNF":"UNF:6:btjqFbZKc4YU4gmU/T/tgA==","rootDataFileId":-1,"md5":"88fb4e0d8de04a6da50d713b2567bd4a","checksum":{"type":"MD5","value":"88fb4e0d8de04a6da50d713b2567bd4a"},"creationDate":"2018-12-04"}},{"description":"TAR
+        of STATA data","label":"fires_birthoutcomes.tar.gz","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323455,"persistentId":"doi:10.7910/DVN/3MJ7IR/VIPIFX","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/VIPIFX","filename":"fires_birthoutcomes.tar.gz","contentType":"application/gzip","filesize":27291610,"description":"TAR
         of STATA data","storageIdentifier":"s3://dvn-cloud:1677a26a4f0-82cc40eec979","rootDataFileId":-1,"md5":"6574dacbc02001a44efd30ab7dd8d2b5","checksum":{"type":"MD5","value":"6574dacbc02001a44efd30ab7dd8d2b5"},"creationDate":"2018-12-04"}},{"description":"TAR
-        of STATA data","label":"fires_birthoutcomes_wfetaldeath.tar.gz","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323447,"persistentId":"doi:10.7910/DVN/3MJ7IR/DSQZF8","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/DSQZF8","filename":"fires_birthoutcomes_wfetaldeath.tar.gz","contentType":"application/gzip","filesize":4406895,"description":"TAR
+        of STATA data","label":"fires_birthoutcomes_wfetaldeath.tar.gz","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323447,"persistentId":"doi:10.7910/DVN/3MJ7IR/DSQZF8","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/DSQZF8","filename":"fires_birthoutcomes_wfetaldeath.tar.gz","contentType":"application/gzip","filesize":4406895,"description":"TAR
         of STATA data","storageIdentifier":"s3://dvn-cloud:1677a26a808-beb617ec6269","rootDataFileId":-1,"md5":"4843f67d4ca1a9544dde41a86836f13c","checksum":{"type":"MD5","value":"4843f67d4ca1a9544dde41a86836f13c"},"creationDate":"2018-12-04"}},{"description":"STATA
-        data","label":"fires_jobsflows_monthly.tab","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323445,"persistentId":"doi:10.7910/DVN/3MJ7IR/AHYYJM","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/AHYYJM","filename":"fires_jobsflows_monthly.tab","contentType":"text/tab-separated-values","filesize":3266623,"description":"STATA
+        data","label":"fires_jobsflows_monthly.tab","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323445,"persistentId":"doi:10.7910/DVN/3MJ7IR/AHYYJM","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/AHYYJM","filename":"fires_jobsflows_monthly.tab","contentType":"text/tab-separated-values","filesize":3266623,"description":"STATA
         data","storageIdentifier":"s3://dvn-cloud:1677a26ab18-706b0e83783a","originalFileFormat":"application/x-stata-13","originalFormatLabel":"Stata
-        13 Binary","originalFileSize":1118174,"UNF":"UNF:6:mAY+VVnj39jABDQvh/TB+A==","rootDataFileId":-1,"md5":"a69721c1c4977b2551acb6a684b0535c","checksum":{"type":"MD5","value":"a69721c1c4977b2551acb6a684b0535c"},"creationDate":"2018-12-04"}},{"description":"TAR
-        of STATA data","label":"fires_pollution.tar.gz","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323453,"persistentId":"doi:10.7910/DVN/3MJ7IR/JX4YGA","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/JX4YGA","filename":"fires_pollution.tar.gz","contentType":"application/gzip","filesize":1883291,"description":"TAR
+        13 Binary","originalFileSize":1118174,"originalFileName":"fires_jobsflows_monthly.dta","UNF":"UNF:6:mAY+VVnj39jABDQvh/TB+A==","rootDataFileId":-1,"md5":"a69721c1c4977b2551acb6a684b0535c","checksum":{"type":"MD5","value":"a69721c1c4977b2551acb6a684b0535c"},"creationDate":"2018-12-04"}},{"description":"TAR
+        of STATA data","label":"fires_pollution.tar.gz","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323453,"persistentId":"doi:10.7910/DVN/3MJ7IR/JX4YGA","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/JX4YGA","filename":"fires_pollution.tar.gz","contentType":"application/gzip","filesize":1883291,"description":"TAR
         of STATA data","storageIdentifier":"s3://dvn-cloud:1677a269a88-cc30723c470c","rootDataFileId":-1,"md5":"e3532a798871e81830904f4ddcc95011","checksum":{"type":"MD5","value":"e3532a798871e81830904f4ddcc95011"},"creationDate":"2018-12-04"}},{"description":"STATA
-        data","label":"fires_sugarproduction_yearly.tab","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323457,"persistentId":"doi:10.7910/DVN/3MJ7IR/4THBAA","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/4THBAA","filename":"fires_sugarproduction_yearly.tab","contentType":"text/tab-separated-values","filesize":297510,"description":"STATA
+        data","label":"fires_sugarproduction_yearly.tab","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323457,"persistentId":"doi:10.7910/DVN/3MJ7IR/4THBAA","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/4THBAA","filename":"fires_sugarproduction_yearly.tab","contentType":"text/tab-separated-values","filesize":297510,"description":"STATA
         data","storageIdentifier":"s3://dvn-cloud:1677a26ac7a-9f0f91bfc259","originalFileFormat":"application/x-stata-13","originalFormatLabel":"Stata
-        13 Binary","originalFileSize":145901,"UNF":"UNF:6:c58B4yiPjtrg5/bFF8douA==","rootDataFileId":-1,"md5":"d064ce33f0099d31dfe6791cc95a88c2","checksum":{"type":"MD5","value":"d064ce33f0099d31dfe6791cc95a88c2"},"creationDate":"2018-12-04"}},{"description":"Read-me
-        file for data, figures and tables","label":"READ_ME-RESTAT.pdf","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323444,"persistentId":"doi:10.7910/DVN/3MJ7IR/W20FPS","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/W20FPS","filename":"READ_ME-RESTAT.pdf","contentType":"application/pdf","filesize":74043,"description":"Read-me
+        13 Binary","originalFileSize":145901,"originalFileName":"fires_sugarproduction_yearly.dta","UNF":"UNF:6:c58B4yiPjtrg5/bFF8douA==","rootDataFileId":-1,"md5":"d064ce33f0099d31dfe6791cc95a88c2","checksum":{"type":"MD5","value":"d064ce33f0099d31dfe6791cc95a88c2"},"creationDate":"2018-12-04"}},{"description":"Read-me
+        file for data, figures and tables","label":"READ_ME-RESTAT.pdf","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323444,"persistentId":"doi:10.7910/DVN/3MJ7IR/W20FPS","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/W20FPS","filename":"READ_ME-RESTAT.pdf","contentType":"application/pdf","filesize":74043,"description":"Read-me
         file for data, figures and tables","storageIdentifier":"s3://dvn-cloud:1677a1f9f1e-92a2ccdd1035","rootDataFileId":-1,"md5":"2113ccf828d37cf3560beb0f52357224","checksum":{"type":"MD5","value":"2113ccf828d37cf3560beb0f52357224"},"creationDate":"2018-12-04"}},{"description":"STATA
-        data","label":"rolling_fires_SPstate.tab","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323448,"persistentId":"doi:10.7910/DVN/3MJ7IR/WSFJOM","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/WSFJOM","filename":"rolling_fires_SPstate.tab","contentType":"text/tab-separated-values","filesize":178865,"description":"STATA
+        data","label":"rolling_fires_SPstate.tab","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323448,"persistentId":"doi:10.7910/DVN/3MJ7IR/WSFJOM","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/WSFJOM","filename":"rolling_fires_SPstate.tab","contentType":"text/tab-separated-values","filesize":178865,"description":"STATA
         data","storageIdentifier":"s3://dvn-cloud:1677a264aa9-a0c712268f3f","originalFileFormat":"application/x-stata-13","originalFormatLabel":"Stata
-        13 Binary","originalFileSize":81866,"UNF":"UNF:6:ZdbmbODkPYG3DODjqu3ixw==","rootDataFileId":-1,"md5":"482f6d3cd917a81f0c410f03396fd3c8","checksum":{"type":"MD5","value":"482f6d3cd917a81f0c410f03396fd3c8"},"creationDate":"2018-12-04"}},{"description":"STATA
-        program","label":"T_Figure1.do","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323451,"persistentId":"doi:10.7910/DVN/3MJ7IR/PSKL0F","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/PSKL0F","filename":"T_Figure1.do","contentType":"application/x-stata-syntax","filesize":2294,"description":"STATA
+        13 Binary","originalFileSize":81866,"originalFileName":"rolling_fires_SPstate.dta","UNF":"UNF:6:ZdbmbODkPYG3DODjqu3ixw==","rootDataFileId":-1,"md5":"482f6d3cd917a81f0c410f03396fd3c8","checksum":{"type":"MD5","value":"482f6d3cd917a81f0c410f03396fd3c8"},"creationDate":"2018-12-04"}},{"description":"STATA
+        program","label":"T_Figure1.do","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323451,"persistentId":"doi:10.7910/DVN/3MJ7IR/PSKL0F","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/PSKL0F","filename":"T_Figure1.do","contentType":"application/x-stata-syntax","filesize":2294,"description":"STATA
         program","storageIdentifier":"s3://dvn-cloud:1677a283938-a9f88298c2f8","rootDataFileId":-1,"md5":"9e91f8f12332ff3ff6cc9c2c085fd888","checksum":{"type":"MD5","value":"9e91f8f12332ff3ff6cc9c2c085fd888"},"creationDate":"2018-12-04"}},{"description":"STATA
-        program","label":"T_Table1.do","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323456,"persistentId":"doi:10.7910/DVN/3MJ7IR/0XLMWE","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/0XLMWE","filename":"T_Table1.do","contentType":"application/x-stata-syntax","filesize":2531,"description":"STATA
+        program","label":"T_Table1.do","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323456,"persistentId":"doi:10.7910/DVN/3MJ7IR/0XLMWE","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/0XLMWE","filename":"T_Table1.do","contentType":"application/x-stata-syntax","filesize":2531,"description":"STATA
         program","storageIdentifier":"s3://dvn-cloud:1677a2840fa-5214de66e137","rootDataFileId":-1,"md5":"1eb56db15f89a0a72787da1449ac2b06","checksum":{"type":"MD5","value":"1eb56db15f89a0a72787da1449ac2b06"},"creationDate":"2018-12-04"}},{"description":"STATA
-        program","label":"T_Table2.do","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323446,"persistentId":"doi:10.7910/DVN/3MJ7IR/0QARF9","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/0QARF9","filename":"T_Table2.do","contentType":"application/x-stata-syntax","filesize":9202,"description":"STATA
+        program","label":"T_Table2.do","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323446,"persistentId":"doi:10.7910/DVN/3MJ7IR/0QARF9","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/0QARF9","filename":"T_Table2.do","contentType":"application/x-stata-syntax","filesize":9202,"description":"STATA
         program","storageIdentifier":"s3://dvn-cloud:1677a283f80-7da6087d4444","rootDataFileId":-1,"md5":"2b1ace4eade509460946af8512d37672","checksum":{"type":"MD5","value":"2b1ace4eade509460946af8512d37672"},"creationDate":"2018-12-04"}},{"description":"STATA
-        program","label":"T_Table3.do","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323450,"persistentId":"doi:10.7910/DVN/3MJ7IR/4TIC3O","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/4TIC3O","filename":"T_Table3.do","contentType":"application/x-stata-syntax","filesize":10453,"description":"STATA
+        program","label":"T_Table3.do","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323450,"persistentId":"doi:10.7910/DVN/3MJ7IR/4TIC3O","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/4TIC3O","filename":"T_Table3.do","contentType":"application/x-stata-syntax","filesize":10453,"description":"STATA
         program","storageIdentifier":"s3://dvn-cloud:1677a283dab-eb3b6b28c159","rootDataFileId":-1,"md5":"5872a9c34235d38c710cdcfc14698898","checksum":{"type":"MD5","value":"5872a9c34235d38c710cdcfc14698898"},"creationDate":"2018-12-04"}},{"description":"STATA
-        program","label":"T_Table4.do","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323452,"persistentId":"doi:10.7910/DVN/3MJ7IR/UBBVHC","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/UBBVHC","filename":"T_Table4.do","contentType":"application/x-stata-syntax","filesize":11083,"description":"STATA
+        program","label":"T_Table4.do","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323452,"persistentId":"doi:10.7910/DVN/3MJ7IR/UBBVHC","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/UBBVHC","filename":"T_Table4.do","contentType":"application/x-stata-syntax","filesize":11083,"description":"STATA
         program","storageIdentifier":"s3://dvn-cloud:1677a283a9e-33fc070dd959","rootDataFileId":-1,"md5":"910fe4649ab246c63f778ebfa81fbb4d","checksum":{"type":"MD5","value":"910fe4649ab246c63f778ebfa81fbb4d"},"creationDate":"2018-12-04"}},{"description":"STATA
-        program","label":"T_Table5.do","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323449,"persistentId":"doi:10.7910/DVN/3MJ7IR/DNDDB2","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/DNDDB2","filename":"T_Table5.do","contentType":"application/x-stata-syntax","filesize":25845,"description":"STATA
+        program","label":"T_Table5.do","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323449,"persistentId":"doi:10.7910/DVN/3MJ7IR/DNDDB2","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/DNDDB2","filename":"T_Table5.do","contentType":"application/x-stata-syntax","filesize":25845,"description":"STATA
         program","storageIdentifier":"s3://dvn-cloud:1677a283c1f-99c647f44f77","rootDataFileId":-1,"md5":"744a03386a62d36efd33f02bd9e45622","checksum":{"type":"MD5","value":"744a03386a62d36efd33f02bd9e45622"},"creationDate":"2018-12-04"}},{"description":"STATA
-        ado","label":"wild_areg.ado","restricted":false,"version":1,"datasetVersionId":175798,"dataFile":{"id":3323454,"persistentId":"doi:10.7910/DVN/3MJ7IR/BETO9L","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/BETO9L","filename":"wild_areg.ado","contentType":"application/x-stata-ado","filesize":5026,"description":"STATA
-        ado","storageIdentifier":"s3://dvn-cloud:1677a2993d3-18d968b1a03a","rootDataFileId":-1,"md5":"9460079d25dad04c0546ff88fa002a90","checksum":{"type":"MD5","value":"9460079d25dad04c0546ff88fa002a90"},"creationDate":"2018-12-04"}}]}}}'}
+        ado","label":"wild_areg.ado","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323454,"persistentId":"doi:10.7910/DVN/3MJ7IR/BETO9L","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/BETO9L","filename":"wild_areg.ado","contentType":"application/x-stata-ado","filesize":5026,"description":"STATA
+        ado","storageIdentifier":"s3://dvn-cloud:1677a2993d3-18d968b1a03a","rootDataFileId":-1,"md5":"9460079d25dad04c0546ff88fa002a90","checksum":{"type":"MD5","value":"9460079d25dad04c0546ff88fa002a90"},"creationDate":"2018-12-04"}}]}}}'
     headers:
-      Access-Control-Allow-Headers: ['Content-Type, X-Dataverse-Key']
-      Access-Control-Allow-Methods: ['PUT, GET, POST, DELETE, OPTIONS']
-      Access-Control-Allow-Origin: ['*']
-      Cache-control: [no-cache="set-cookie"]
-      Connection: [Close]
-      Content-Length: ['12630']
-      Content-Type: [application/json]
-      Date: ['Mon, 10 Feb 2020 18:54:23 GMT']
-      Server: [Apache]
-      Set-Cookie: [JSESSIONID=073d924e903aedb2a56ab24bf4c7; Path=/; Secure; HttpOnly,
-        AWSELB=EB1179591E49E298C6825A3028F74991071DEE12D3CF6A1B0A2CD5F2F144400DE0E06A10F0DBD3EC37C4E69D8B958E3FBF8CF81403222DF6AABE0F6509EF79AB1D548B7265;PATH=/;MAX-AGE=28800]
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, X-Dataverse-Key
+      Access-Control-Allow-Methods:
+      - PUT, GET, POST, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json;charset=UTF-8
+      Date:
+      - Thu, 08 Jul 2021 15:55:19 GMT
+      Server:
+      - Apache
+      Set-Cookie:
+      - AWSALB=aaYMUdXDkXb3/bw4zICfYbPXj5ztF3JmAQjdaHK2PQ33pUjma9iw6bLenaG53IUOglUqUno4ggwEmxnb9sWJwchZFS5v67WRzNwYlYoFEtcGDCuc6/bQPfHeZkkr;
+        Expires=Thu, 15 Jul 2021 15:55:17 GMT; Path=/
+      - AWSALBCORS=aaYMUdXDkXb3/bw4zICfYbPXj5ztF3JmAQjdaHK2PQ33pUjma9iw6bLenaG53IUOglUqUno4ggwEmxnb9sWJwchZFS5v67WRzNwYlYoFEtcGDCuc6/bQPfHeZkkr;
+        Expires=Thu, 15 Jul 2021 15:55:17 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=6d49d416981b4999ab4545e4fe2f; Path=/; Secure; HttpOnly
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
 - request:
     body: null
     headers:
-      Connection: [close]
-      Host: [dataverse.harvard.edu]
-      User-Agent: [Python-urllib/3.6]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.20.1
+    method: GET
+    uri: https://dataverse.harvard.edu/api/datasets/:persistentId?persistentId=doi:10.7910/DVN/3MJ7IR
+  response:
+    body:
+      string: '{"status":"OK","data":{"id":3323443,"identifier":"DVN/3MJ7IR","persistentUrl":"https://doi.org/10.7910/DVN/3MJ7IR","protocol":"doi","authority":"10.7910","publisher":"Harvard
+        Dataverse","publicationDate":"2018-12-07","storageIdentifier":"s3://10.7910/DVN/3MJ7IR","latestVersion":{"id":176686,"datasetId":3323443,"datasetPersistentId":"doi:10.7910/DVN/3MJ7IR","storageIdentifier":"s3://10.7910/DVN/3MJ7IR","versionNumber":1,"versionMinorNumber":2,"versionState":"RELEASED","UNF":"UNF:6:m14gXeiGZwgzeoGJoFms4Q==","lastUpdateTime":"2020-06-30T16:26:50Z","releaseTime":"2020-06-30T16:26:50Z","createTime":"2019-10-24T18:23:53Z","license":"CC0","termsOfUse":"CC0
+        Waiver","fileAccessRequest":false,"metadataBlocks":{"citation":{"displayName":"Citation
+        Metadata","fields":[{"typeName":"title","multiple":false,"typeClass":"primitive","value":"Replication
+        Data for: \"Agricultural Fires and Health at Birth\""},{"typeName":"author","multiple":true,"typeClass":"compound","value":[{"authorName":{"typeName":"authorName","multiple":false,"typeClass":"primitive","value":"Rangel,
+        Marcos A."},"authorAffiliation":{"typeName":"authorAffiliation","multiple":false,"typeClass":"primitive","value":"Duke
+        University"}},{"authorName":{"typeName":"authorName","multiple":false,"typeClass":"primitive","value":"Vogl,
+        Tom"},"authorAffiliation":{"typeName":"authorAffiliation","multiple":false,"typeClass":"primitive","value":"University
+        of Texas at Austin"}}]},{"typeName":"datasetContact","multiple":true,"typeClass":"compound","value":[{"datasetContactName":{"typeName":"datasetContactName","multiple":false,"typeClass":"primitive","value":"Marcos
+        A. rangel"},"datasetContactAffiliation":{"typeName":"datasetContactAffiliation","multiple":false,"typeClass":"primitive","value":"Duke
+        University"},"datasetContactEmail":{"typeName":"datasetContactEmail","multiple":false,"typeClass":"primitive","value":"marcos.rangel@duke.edu"}}]},{"typeName":"dsDescription","multiple":true,"typeClass":"compound","value":[{"dsDescriptionValue":{"typeName":"dsDescriptionValue","multiple":false,"typeClass":"primitive","value":"Rangel,
+        Marcos A., and Vogl, Tom S., (2019) \"Agricultural Fires and Health at Birth.\"
+        Review of Economics and Statistics 101:4, 616-630."}}]},{"typeName":"subject","multiple":true,"typeClass":"controlledVocabulary","value":["Social
+        Sciences"]},{"typeName":"publication","multiple":true,"typeClass":"compound","value":[{"publicationIDType":{"typeName":"publicationIDType","multiple":false,"typeClass":"controlledVocabulary","value":"doi"},"publicationIDNumber":{"typeName":"publicationIDNumber","multiple":false,"typeClass":"primitive","value":"10.1162/rest_a_00806"},"publicationURL":{"typeName":"publicationURL","multiple":false,"typeClass":"primitive","value":"https://doi.org/10.1162/rest_a_00806"}}]},{"typeName":"depositor","multiple":false,"typeClass":"primitive","value":"Rangel,
+        Marcos A."},{"typeName":"dateOfDeposit","multiple":false,"typeClass":"primitive","value":"2018-12-04"}]},"journal":{"displayName":"Journal
+        Metadata","fields":[]}},"files":[{"description":"STATA data","label":"calendarmonth_fires_SPstate.tab","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323458,"persistentId":"doi:10.7910/DVN/3MJ7IR/HXD9ID","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/HXD9ID","filename":"calendarmonth_fires_SPstate.tab","contentType":"text/tab-separated-values","filesize":349,"description":"STATA
+        data","storageIdentifier":"s3://dvn-cloud:1677a26a950-495a76918f65","originalFileFormat":"application/x-stata-13","originalFormatLabel":"Stata
+        13 Binary","originalFileSize":1506,"originalFileName":"calendarmonth_fires_SPstate.dta","UNF":"UNF:6:btjqFbZKc4YU4gmU/T/tgA==","rootDataFileId":-1,"md5":"88fb4e0d8de04a6da50d713b2567bd4a","checksum":{"type":"MD5","value":"88fb4e0d8de04a6da50d713b2567bd4a"},"creationDate":"2018-12-04"}},{"description":"TAR
+        of STATA data","label":"fires_birthoutcomes.tar.gz","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323455,"persistentId":"doi:10.7910/DVN/3MJ7IR/VIPIFX","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/VIPIFX","filename":"fires_birthoutcomes.tar.gz","contentType":"application/gzip","filesize":27291610,"description":"TAR
+        of STATA data","storageIdentifier":"s3://dvn-cloud:1677a26a4f0-82cc40eec979","rootDataFileId":-1,"md5":"6574dacbc02001a44efd30ab7dd8d2b5","checksum":{"type":"MD5","value":"6574dacbc02001a44efd30ab7dd8d2b5"},"creationDate":"2018-12-04"}},{"description":"TAR
+        of STATA data","label":"fires_birthoutcomes_wfetaldeath.tar.gz","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323447,"persistentId":"doi:10.7910/DVN/3MJ7IR/DSQZF8","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/DSQZF8","filename":"fires_birthoutcomes_wfetaldeath.tar.gz","contentType":"application/gzip","filesize":4406895,"description":"TAR
+        of STATA data","storageIdentifier":"s3://dvn-cloud:1677a26a808-beb617ec6269","rootDataFileId":-1,"md5":"4843f67d4ca1a9544dde41a86836f13c","checksum":{"type":"MD5","value":"4843f67d4ca1a9544dde41a86836f13c"},"creationDate":"2018-12-04"}},{"description":"STATA
+        data","label":"fires_jobsflows_monthly.tab","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323445,"persistentId":"doi:10.7910/DVN/3MJ7IR/AHYYJM","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/AHYYJM","filename":"fires_jobsflows_monthly.tab","contentType":"text/tab-separated-values","filesize":3266623,"description":"STATA
+        data","storageIdentifier":"s3://dvn-cloud:1677a26ab18-706b0e83783a","originalFileFormat":"application/x-stata-13","originalFormatLabel":"Stata
+        13 Binary","originalFileSize":1118174,"originalFileName":"fires_jobsflows_monthly.dta","UNF":"UNF:6:mAY+VVnj39jABDQvh/TB+A==","rootDataFileId":-1,"md5":"a69721c1c4977b2551acb6a684b0535c","checksum":{"type":"MD5","value":"a69721c1c4977b2551acb6a684b0535c"},"creationDate":"2018-12-04"}},{"description":"TAR
+        of STATA data","label":"fires_pollution.tar.gz","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323453,"persistentId":"doi:10.7910/DVN/3MJ7IR/JX4YGA","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/JX4YGA","filename":"fires_pollution.tar.gz","contentType":"application/gzip","filesize":1883291,"description":"TAR
+        of STATA data","storageIdentifier":"s3://dvn-cloud:1677a269a88-cc30723c470c","rootDataFileId":-1,"md5":"e3532a798871e81830904f4ddcc95011","checksum":{"type":"MD5","value":"e3532a798871e81830904f4ddcc95011"},"creationDate":"2018-12-04"}},{"description":"STATA
+        data","label":"fires_sugarproduction_yearly.tab","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323457,"persistentId":"doi:10.7910/DVN/3MJ7IR/4THBAA","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/4THBAA","filename":"fires_sugarproduction_yearly.tab","contentType":"text/tab-separated-values","filesize":297510,"description":"STATA
+        data","storageIdentifier":"s3://dvn-cloud:1677a26ac7a-9f0f91bfc259","originalFileFormat":"application/x-stata-13","originalFormatLabel":"Stata
+        13 Binary","originalFileSize":145901,"originalFileName":"fires_sugarproduction_yearly.dta","UNF":"UNF:6:c58B4yiPjtrg5/bFF8douA==","rootDataFileId":-1,"md5":"d064ce33f0099d31dfe6791cc95a88c2","checksum":{"type":"MD5","value":"d064ce33f0099d31dfe6791cc95a88c2"},"creationDate":"2018-12-04"}},{"description":"Read-me
+        file for data, figures and tables","label":"READ_ME-RESTAT.pdf","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323444,"persistentId":"doi:10.7910/DVN/3MJ7IR/W20FPS","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/W20FPS","filename":"READ_ME-RESTAT.pdf","contentType":"application/pdf","filesize":74043,"description":"Read-me
+        file for data, figures and tables","storageIdentifier":"s3://dvn-cloud:1677a1f9f1e-92a2ccdd1035","rootDataFileId":-1,"md5":"2113ccf828d37cf3560beb0f52357224","checksum":{"type":"MD5","value":"2113ccf828d37cf3560beb0f52357224"},"creationDate":"2018-12-04"}},{"description":"STATA
+        data","label":"rolling_fires_SPstate.tab","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323448,"persistentId":"doi:10.7910/DVN/3MJ7IR/WSFJOM","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/WSFJOM","filename":"rolling_fires_SPstate.tab","contentType":"text/tab-separated-values","filesize":178865,"description":"STATA
+        data","storageIdentifier":"s3://dvn-cloud:1677a264aa9-a0c712268f3f","originalFileFormat":"application/x-stata-13","originalFormatLabel":"Stata
+        13 Binary","originalFileSize":81866,"originalFileName":"rolling_fires_SPstate.dta","UNF":"UNF:6:ZdbmbODkPYG3DODjqu3ixw==","rootDataFileId":-1,"md5":"482f6d3cd917a81f0c410f03396fd3c8","checksum":{"type":"MD5","value":"482f6d3cd917a81f0c410f03396fd3c8"},"creationDate":"2018-12-04"}},{"description":"STATA
+        program","label":"T_Figure1.do","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323451,"persistentId":"doi:10.7910/DVN/3MJ7IR/PSKL0F","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/PSKL0F","filename":"T_Figure1.do","contentType":"application/x-stata-syntax","filesize":2294,"description":"STATA
+        program","storageIdentifier":"s3://dvn-cloud:1677a283938-a9f88298c2f8","rootDataFileId":-1,"md5":"9e91f8f12332ff3ff6cc9c2c085fd888","checksum":{"type":"MD5","value":"9e91f8f12332ff3ff6cc9c2c085fd888"},"creationDate":"2018-12-04"}},{"description":"STATA
+        program","label":"T_Table1.do","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323456,"persistentId":"doi:10.7910/DVN/3MJ7IR/0XLMWE","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/0XLMWE","filename":"T_Table1.do","contentType":"application/x-stata-syntax","filesize":2531,"description":"STATA
+        program","storageIdentifier":"s3://dvn-cloud:1677a2840fa-5214de66e137","rootDataFileId":-1,"md5":"1eb56db15f89a0a72787da1449ac2b06","checksum":{"type":"MD5","value":"1eb56db15f89a0a72787da1449ac2b06"},"creationDate":"2018-12-04"}},{"description":"STATA
+        program","label":"T_Table2.do","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323446,"persistentId":"doi:10.7910/DVN/3MJ7IR/0QARF9","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/0QARF9","filename":"T_Table2.do","contentType":"application/x-stata-syntax","filesize":9202,"description":"STATA
+        program","storageIdentifier":"s3://dvn-cloud:1677a283f80-7da6087d4444","rootDataFileId":-1,"md5":"2b1ace4eade509460946af8512d37672","checksum":{"type":"MD5","value":"2b1ace4eade509460946af8512d37672"},"creationDate":"2018-12-04"}},{"description":"STATA
+        program","label":"T_Table3.do","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323450,"persistentId":"doi:10.7910/DVN/3MJ7IR/4TIC3O","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/4TIC3O","filename":"T_Table3.do","contentType":"application/x-stata-syntax","filesize":10453,"description":"STATA
+        program","storageIdentifier":"s3://dvn-cloud:1677a283dab-eb3b6b28c159","rootDataFileId":-1,"md5":"5872a9c34235d38c710cdcfc14698898","checksum":{"type":"MD5","value":"5872a9c34235d38c710cdcfc14698898"},"creationDate":"2018-12-04"}},{"description":"STATA
+        program","label":"T_Table4.do","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323452,"persistentId":"doi:10.7910/DVN/3MJ7IR/UBBVHC","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/UBBVHC","filename":"T_Table4.do","contentType":"application/x-stata-syntax","filesize":11083,"description":"STATA
+        program","storageIdentifier":"s3://dvn-cloud:1677a283a9e-33fc070dd959","rootDataFileId":-1,"md5":"910fe4649ab246c63f778ebfa81fbb4d","checksum":{"type":"MD5","value":"910fe4649ab246c63f778ebfa81fbb4d"},"creationDate":"2018-12-04"}},{"description":"STATA
+        program","label":"T_Table5.do","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323449,"persistentId":"doi:10.7910/DVN/3MJ7IR/DNDDB2","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/DNDDB2","filename":"T_Table5.do","contentType":"application/x-stata-syntax","filesize":25845,"description":"STATA
+        program","storageIdentifier":"s3://dvn-cloud:1677a283c1f-99c647f44f77","rootDataFileId":-1,"md5":"744a03386a62d36efd33f02bd9e45622","checksum":{"type":"MD5","value":"744a03386a62d36efd33f02bd9e45622"},"creationDate":"2018-12-04"}},{"description":"STATA
+        ado","label":"wild_areg.ado","restricted":false,"version":1,"datasetVersionId":176686,"dataFile":{"id":3323454,"persistentId":"doi:10.7910/DVN/3MJ7IR/BETO9L","pidURL":"https://doi.org/10.7910/DVN/3MJ7IR/BETO9L","filename":"wild_areg.ado","contentType":"application/x-stata-ado","filesize":5026,"description":"STATA
+        ado","storageIdentifier":"s3://dvn-cloud:1677a2993d3-18d968b1a03a","rootDataFileId":-1,"md5":"9460079d25dad04c0546ff88fa002a90","checksum":{"type":"MD5","value":"9460079d25dad04c0546ff88fa002a90"},"creationDate":"2018-12-04"}}]}}}'
+    headers:
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, X-Dataverse-Key
+      Access-Control-Allow-Methods:
+      - PUT, GET, POST, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json;charset=UTF-8
+      Date:
+      - Thu, 08 Jul 2021 15:55:21 GMT
+      Server:
+      - Apache
+      Set-Cookie:
+      - AWSALB=zWW0g5ITw0t996NlWEmp4QbXQr+IRoCikmneJQXxOC6flUeXes8u0hLjOUvZURiC8YN7nbzK8SQNIZurLMFo/5UZSonJnyJNTPmj9UMAvOpn51mBK9PCKygj6Ebe;
+        Expires=Thu, 15 Jul 2021 15:55:19 GMT; Path=/
+      - AWSALBCORS=zWW0g5ITw0t996NlWEmp4QbXQr+IRoCikmneJQXxOC6flUeXes8u0hLjOUvZURiC8YN7nbzK8SQNIZurLMFo/5UZSonJnyJNTPmj9UMAvOpn51mBK9PCKygj6Ebe;
+        Expires=Thu, 15 Jul 2021 15:55:19 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=6d4a424e04f41116a7eaea76f420; Path=/; Secure; HttpOnly
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.20.1
     method: HEAD
     uri: https://dataverse.harvard.edu/api/access/datafile/3323458?format=original
   response:
-    body: {string: ''}
+    body:
+      string: ''
     headers:
-      Access-Control-Allow-Headers: ['Content-Type, X-Dataverse-Key']
-      Access-Control-Allow-Methods: ['PUT, GET, POST, DELETE, OPTIONS']
-      Access-Control-Allow-Origin: ['*']
-      Cache-control: [no-cache="set-cookie"]
-      Connection: [Close]
-      Content-Length: ['1506']
-      Content-Type: [application/x-stata-13; name="calendarmonth_fires_SPstate.dta"]
-      Content-disposition: [attachment; filename="calendarmonth_fires_SPstate.dta"]
-      Date: ['Mon, 10 Feb 2020 18:54:23 GMT']
-      Server: [Apache]
-      Set-Cookie: [JSESSIONID=073db45bcf72435884b8e34d1005; Path=/; Secure; HttpOnly,
-        AWSELB=EB1179591E49E298C6825A3028F74991071DEE12D3CF6A1B0A2CD5F2F144400DE0E06A10F0DBD3EC37C4E69D8B958E3FBF8CF81403222DF6AABE0F6509EF79AB1D548B7265;PATH=/;MAX-AGE=28800]
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, X-Dataverse-Key
+      Access-Control-Allow-Methods:
+      - PUT, GET, POST, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/xml;charset=UTF-8
+      Date:
+      - Thu, 08 Jul 2021 15:55:22 GMT
+      Location:
+      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/3MJ7IR/1677a26a950-495a76918f65.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27calendarmonth_fires_SPstate.dta&response-content-type=application%2Fx-stata-13&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210708T155522Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20210708%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=1358e7ff76111825f003c1002684fa333cb6b4a9bbefd82e532ec001917c6266
+      Server:
+      - Apache
+      Set-Cookie:
+      - AWSALB=1DWpRM+pxQTjPeSZcxX9wvoiXenl1pJrnQnS00KuQMFg+e/cdsBg6jXGNgEQvnvDJAWtLQN2BZEUXG3AGPaKAG5GaoQrv46YeYJggB88F0UxoI2wXkiHnDArByzz;
+        Expires=Thu, 15 Jul 2021 15:55:21 GMT; Path=/
+      - AWSALBCORS=1DWpRM+pxQTjPeSZcxX9wvoiXenl1pJrnQnS00KuQMFg+e/cdsBg6jXGNgEQvnvDJAWtLQN2BZEUXG3AGPaKAG5GaoQrv46YeYJggB88F0UxoI2wXkiHnDArByzz;
+        Expires=Thu, 15 Jul 2021 15:55:21 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=6d4a8555ede2063ebae983c38f3f; Path=/; Secure; HttpOnly
+    status:
+      code: 303
+      message: See Other
 - request:
     body: null
     headers:
-      Connection: [close]
-      Host: [dataverse.harvard.edu]
-      User-Agent: [Python-urllib/3.6]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.20.1
+    method: HEAD
+    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/3MJ7IR/1677a26a950-495a76918f65.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27calendarmonth_fires_SPstate.dta&response-content-type=application%2Fx-stata-13&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210708T155522Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20210708%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=1358e7ff76111825f003c1002684fa333cb6b4a9bbefd82e532ec001917c6266
+  response:
+    body:
+      string: ''
+    headers:
+      Content-Type:
+      - application/xml
+      Date:
+      - Thu, 08 Jul 2021 15:55:21 GMT
+      Server:
+      - AmazonS3
+      x-amz-id-2:
+      - 6KPSBIYswr+AM7xbXuF8cNntR/CIlhAQ1cnwT7GJQZ7q8X15M2pHA/Y1+BiJauLPqN3PtUytpnQ=
+      x-amz-request-id:
+      - WMCETFBCNMGKZEC5
+    status:
+      code: 403
+      message: Forbidden
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Range:
+      - bytes=0-100
+      User-Agent:
+      - python-requests/2.20.1
+    method: GET
+    uri: https://dataverse.harvard.edu/api/access/datafile/3323458?format=original
+  response:
+    body:
+      string: ''
+    headers:
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, X-Dataverse-Key
+      Access-Control-Allow-Methods:
+      - PUT, GET, POST, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      Date:
+      - Thu, 08 Jul 2021 15:55:23 GMT
+      Location:
+      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/3MJ7IR/1677a26a950-495a76918f65.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27calendarmonth_fires_SPstate.dta&response-content-type=application%2Fx-stata-13&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210708T155523Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20210708%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=9f615a7777e67a2eb33c904c0f0fb3941b813da2429c1d6b022212c581bfc6df
+      Server:
+      - Apache
+      Set-Cookie:
+      - AWSALB=PptGlCgywCeXP4ggUO1Ewn8X/HPQW7ax1pBnciDTK3ya/79ZoIrBEiVPN1TergsPVweVypfEuWjaTJ6NNvMpaLD7IbNXyu/gZgoSsh8rdmuZIpeSp5Id6lqGdJaC;
+        Expires=Thu, 15 Jul 2021 15:55:22 GMT; Path=/
+      - AWSALBCORS=PptGlCgywCeXP4ggUO1Ewn8X/HPQW7ax1pBnciDTK3ya/79ZoIrBEiVPN1TergsPVweVypfEuWjaTJ6NNvMpaLD7IbNXyu/gZgoSsh8rdmuZIpeSp5Id6lqGdJaC;
+        Expires=Thu, 15 Jul 2021 15:55:22 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=6d4ad2426dfa4f2dc7c45878cda2; Path=/; Secure; HttpOnly
+    status:
+      code: 303
+      message: See Other
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Range:
+      - bytes=0-100
+      User-Agent:
+      - python-requests/2.20.1
+    method: GET
+    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/3MJ7IR/1677a26a950-495a76918f65.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27calendarmonth_fires_SPstate.dta&response-content-type=application%2Fx-stata-13&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210708T155523Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20210708%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=9f615a7777e67a2eb33c904c0f0fb3941b813da2429c1d6b022212c581bfc6df
+  response:
+    body:
+      string: "<stata_dta><header><release>117</release><byteorder>LSF</byteorder><K>\x04\0</K><N>\f\0\0\0</N><label>\0</labe"
+    headers:
+      Accept-Ranges:
+      - bytes
+      Content-Disposition:
+      - attachment; filename*=UTF-8''calendarmonth_fires_SPstate.dta
+      Content-Length:
+      - '101'
+      Content-Range:
+      - bytes 0-100/1506
+      Content-Type:
+      - application/x-stata-13
+      Date:
+      - Thu, 08 Jul 2021 15:55:24 GMT
+      ETag:
+      - '"88fb4e0d8de04a6da50d713b2567bd4a"'
+      Last-Modified:
+      - Tue, 04 Dec 2018 17:00:58 GMT
+      Server:
+      - AmazonS3
+      x-amz-id-2:
+      - Kq2J4f/tO/KFJKfqd6/oNM9FIaz9rqCc0cB2SX65o+9hz5u5ehRZYV5/f+wku2EmKfRW+EpWQvk=
+      x-amz-replication-status:
+      - COMPLETED
+      x-amz-request-id:
+      - C8WVFPDHNK07H9XP
+      x-amz-version-id:
+      - cRAe6VRTNh.xiguyfeUps8dgd7m2kHfo
+    status:
+      code: 206
+      message: Partial Content
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.20.1
     method: HEAD
     uri: https://dataverse.harvard.edu/api/access/datafile/3323458
   response:
-    body: {string: ''}
+    body:
+      string: ''
     headers:
-      Access-Control-Allow-Headers: ['Content-Type, X-Dataverse-Key']
-      Access-Control-Allow-Methods: ['PUT, GET, POST, DELETE, OPTIONS']
-      Access-Control-Allow-Origin: ['*']
-      Cache-control: [no-cache="set-cookie"]
-      Connection: [Close]
-      Content-Length: ['395']
-      Content-Type: [text/tab-separated-values; name="calendarmonth_fires_SPstate.tab"]
-      Content-disposition: [attachment; filename="calendarmonth_fires_SPstate.tab"]
-      Date: ['Mon, 10 Feb 2020 18:54:24 GMT']
-      Server: [Apache]
-      Set-Cookie: [JSESSIONID=073dcb227c5272348569eba9bc2e; Path=/; Secure; HttpOnly,
-        AWSELB=EB1179591E49E298C6825A3028F74991071DEE12D3CF6A1B0A2CD5F2F144400DE0E06A10F0DBD3EC37C4E69D8B958E3FBF8CF81403222DF6AABE0F6509EF79AB1D548B7265;PATH=/;MAX-AGE=28800]
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, X-Dataverse-Key
+      Access-Control-Allow-Methods:
+      - PUT, GET, POST, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '395'
+      Content-Type:
+      - text/tab-separated-values; name="calendarmonth_fires_SPstate.tab";charset=UTF-8
+      Content-disposition:
+      - attachment; filename="calendarmonth_fires_SPstate.tab"
+      Date:
+      - Thu, 08 Jul 2021 15:55:24 GMT
+      Server:
+      - Apache
+      Set-Cookie:
+      - AWSALB=lGOjbZwf+hsJi7tvoQM0GAyUYkwUIVIWwarPtvsbs+nXreJy06kQdlMqweKJv77W3zJ3Lu+4GZ5KLqtaUn5Wsrs7cjjgsXeEFsnsKzwCB6pQy8KIhi9XB+lkv5s6;
+        Expires=Thu, 15 Jul 2021 15:55:23 GMT; Path=/
+      - AWSALBCORS=lGOjbZwf+hsJi7tvoQM0GAyUYkwUIVIWwarPtvsbs+nXreJy06kQdlMqweKJv77W3zJ3Lu+4GZ5KLqtaUn5Wsrs7cjjgsXeEFsnsKzwCB6pQy8KIhi9XB+lkv5s6;
+        Expires=Thu, 15 Jul 2021 15:55:23 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=6d4b199680c958332fdf0361342b; Path=/; Secure; HttpOnly
+    status:
+      code: 200
+      message: OK
 - request:
     body: null
     headers:
-      Connection: [close]
-      Host: [dataverse.harvard.edu]
-      User-Agent: [Python-urllib/3.6]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.20.1
     method: HEAD
     uri: https://dataverse.harvard.edu/api/access/datafile/3323445?format=original
   response:
-    body: {string: ''}
+    body:
+      string: ''
     headers:
-      Access-Control-Allow-Headers: ['Content-Type, X-Dataverse-Key']
-      Access-Control-Allow-Methods: ['PUT, GET, POST, DELETE, OPTIONS']
-      Access-Control-Allow-Origin: ['*']
-      Cache-control: [no-cache="set-cookie"]
-      Connection: [Close]
-      Content-Length: ['1118174']
-      Content-Type: [application/x-stata-13; name="fires_jobsflows_monthly.dta"]
-      Content-disposition: [attachment; filename="fires_jobsflows_monthly.dta"]
-      Date: ['Mon, 10 Feb 2020 18:54:24 GMT']
-      Server: [Apache]
-      Set-Cookie: [JSESSIONID=073de11ffe03e85ae892267916dd; Path=/; Secure; HttpOnly,
-        AWSELB=EB1179591E49E298C6825A3028F74991071DEE12D3FE010BDBAE7AE7E438B31BFA0246B9F2DBD3EC37C4E69D8B958E3FBF8CF814030B5CB9749AB70FE33A8BB5BB36A149CB;PATH=/;MAX-AGE=28800]
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, X-Dataverse-Key
+      Access-Control-Allow-Methods:
+      - PUT, GET, POST, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/xml;charset=UTF-8
+      Date:
+      - Thu, 08 Jul 2021 15:55:25 GMT
+      Location:
+      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/3MJ7IR/1677a26ab18-706b0e83783a.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27fires_jobsflows_monthly.dta&response-content-type=application%2Fx-stata-13&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210708T155525Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20210708%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=3055fadab219cd973a942faab5ee8810a9f0a88b88f22d7693a3a8189fbd51b1
+      Server:
+      - Apache
+      Set-Cookie:
+      - AWSALB=CMWj+UdrRhi/lTkyicJwpr2tywLqN8ap3AekPOM8G3zrCp7H7p3DvRIaOz/HVHcuANeptxmnBgsp9i2zW85dKapusDJlo924pvu5Ib2fwrmQwvjGdTi8kvawbMpA;
+        Expires=Thu, 15 Jul 2021 15:55:24 GMT; Path=/
+      - AWSALBCORS=CMWj+UdrRhi/lTkyicJwpr2tywLqN8ap3AekPOM8G3zrCp7H7p3DvRIaOz/HVHcuANeptxmnBgsp9i2zW85dKapusDJlo924pvu5Ib2fwrmQwvjGdTi8kvawbMpA;
+        Expires=Thu, 15 Jul 2021 15:55:24 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=6d4b5055d6045e47fa0e25afa381; Path=/; Secure; HttpOnly
+    status:
+      code: 303
+      message: See Other
 - request:
     body: null
     headers:
-      Connection: [close]
-      Host: [dataverse.harvard.edu]
-      User-Agent: [Python-urllib/3.6]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.20.1
+    method: HEAD
+    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/3MJ7IR/1677a26ab18-706b0e83783a.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27fires_jobsflows_monthly.dta&response-content-type=application%2Fx-stata-13&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210708T155525Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20210708%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=3055fadab219cd973a942faab5ee8810a9f0a88b88f22d7693a3a8189fbd51b1
+  response:
+    body:
+      string: ''
+    headers:
+      Content-Type:
+      - application/xml
+      Date:
+      - Thu, 08 Jul 2021 15:55:24 GMT
+      Server:
+      - AmazonS3
+      x-amz-id-2:
+      - ADrLyss6Hm3LnuENqhGT8ed+aRYFvyx7SqcgVuQqOCFPczJUhnz8SU9cpGqYi+4ZiZaeGV933ZY=
+      x-amz-request-id:
+      - TY1ES6D6GYC2V84Z
+    status:
+      code: 403
+      message: Forbidden
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Range:
+      - bytes=0-100
+      User-Agent:
+      - python-requests/2.20.1
+    method: GET
+    uri: https://dataverse.harvard.edu/api/access/datafile/3323445?format=original
+  response:
+    body:
+      string: ''
+    headers:
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, X-Dataverse-Key
+      Access-Control-Allow-Methods:
+      - PUT, GET, POST, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      Date:
+      - Thu, 08 Jul 2021 15:55:26 GMT
+      Location:
+      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/3MJ7IR/1677a26ab18-706b0e83783a.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27fires_jobsflows_monthly.dta&response-content-type=application%2Fx-stata-13&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210708T155526Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20210708%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=704bc3944363bced5350f746f1c68e8ff8e8127b001b4c3a5e48bb00b4785778
+      Server:
+      - Apache
+      Set-Cookie:
+      - AWSALB=quVwjSLSUAkIejNVzIR/3pP1cvax4gepOGgazsTx/T1mVstMmECHAsAASUoS4JlgBLcTortIrIymPSFjU52SvW1jR5XIDXoEepjvguZauzJ3aJ1B+kWLB9nzOjV8;
+        Expires=Thu, 15 Jul 2021 15:55:25 GMT; Path=/
+      - AWSALBCORS=quVwjSLSUAkIejNVzIR/3pP1cvax4gepOGgazsTx/T1mVstMmECHAsAASUoS4JlgBLcTortIrIymPSFjU52SvW1jR5XIDXoEepjvguZauzJ3aJ1B+kWLB9nzOjV8;
+        Expires=Thu, 15 Jul 2021 15:55:25 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=6d4ba1cd9b9844a15eb652cb3dd4; Path=/; Secure; HttpOnly
+    status:
+      code: 303
+      message: See Other
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Range:
+      - bytes=0-100
+      User-Agent:
+      - python-requests/2.20.1
+    method: GET
+    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/3MJ7IR/1677a26ab18-706b0e83783a.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27fires_jobsflows_monthly.dta&response-content-type=application%2Fx-stata-13&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210708T155526Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20210708%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=704bc3944363bced5350f746f1c68e8ff8e8127b001b4c3a5e48bb00b4785778
+  response:
+    body:
+      string: !!binary |
+        PHN0YXRhX2R0YT48aGVhZGVyPjxyZWxlYXNlPjExNzwvcmVsZWFzZT48Ynl0ZW9yZGVyPkxTRjwv
+        Ynl0ZW9yZGVyPjxLPgcAPC9LPjxOPmi1AAA8L04+PGxhYmVsPgA8L2xhYmU=
+    headers:
+      Accept-Ranges:
+      - bytes
+      Content-Disposition:
+      - attachment; filename*=UTF-8''fires_jobsflows_monthly.dta
+      Content-Length:
+      - '101'
+      Content-Range:
+      - bytes 0-100/1118174
+      Content-Type:
+      - application/x-stata-13
+      Date:
+      - Thu, 08 Jul 2021 15:55:28 GMT
+      ETag:
+      - '"a69721c1c4977b2551acb6a684b0535c"'
+      Last-Modified:
+      - Tue, 04 Dec 2018 17:01:04 GMT
+      Server:
+      - AmazonS3
+      x-amz-id-2:
+      - mH3/ORgVyqm+hJ+LwqQyYNu9Z29KHeQPFQ+sr4Kw4Tl/+NsIgWX0SQXdxS2Q9Vk9iBF5SgszuCA=
+      x-amz-replication-status:
+      - COMPLETED
+      x-amz-request-id:
+      - 62FXJ1ZHWFEXKPSN
+      x-amz-version-id:
+      - 7aFRH8ItnYd.Q3d0HQB9O_xWZpGfjhGh
+    status:
+      code: 206
+      message: Partial Content
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.20.1
     method: HEAD
     uri: https://dataverse.harvard.edu/api/access/datafile/3323445
   response:
-    body: {string: ''}
+    body:
+      string: ''
     headers:
-      Access-Control-Allow-Headers: ['Content-Type, X-Dataverse-Key']
-      Access-Control-Allow-Methods: ['PUT, GET, POST, DELETE, OPTIONS']
-      Access-Control-Allow-Origin: ['*']
-      Cache-control: [no-cache="set-cookie"]
-      Connection: [Close]
-      Content-Length: ['3266697']
-      Content-Type: [text/tab-separated-values; name="fires_jobsflows_monthly.tab"]
-      Content-disposition: [attachment; filename="fires_jobsflows_monthly.tab"]
-      Date: ['Mon, 10 Feb 2020 18:54:25 GMT']
-      Server: [Apache]
-      Set-Cookie: [JSESSIONID=073dfa8bc6f3fc69e10d82b033b1; Path=/; Secure; HttpOnly,
-        AWSELB=EB1179591E49E298C6825A3028F74991071DEE12D3CF6A1B0A2CD5F2F144400DE0E06A10F0DBD3EC37C4E69D8B958E3FBF8CF81403222DF6AABE0F6509EF79AB1D548B7265;PATH=/;MAX-AGE=28800]
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, X-Dataverse-Key
+      Access-Control-Allow-Methods:
+      - PUT, GET, POST, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '3266697'
+      Content-Type:
+      - text/tab-separated-values; name="fires_jobsflows_monthly.tab";charset=UTF-8
+      Content-disposition:
+      - attachment; filename="fires_jobsflows_monthly.tab"
+      Date:
+      - Thu, 08 Jul 2021 15:55:28 GMT
+      Server:
+      - Apache
+      Set-Cookie:
+      - AWSALB=o/pxtZeKHxK6DqKJ+6a9PdHnvnpjEX3sy00YqBOQcOrqMgej6n5I5sQCneQ6dW45l6SN1Y+MnAfT+UaY/Rzf2l/VVREJdPGTBndw61ljv3XuExCvH5bWLdo/UkRH;
+        Expires=Thu, 15 Jul 2021 15:55:27 GMT; Path=/
+      - AWSALBCORS=o/pxtZeKHxK6DqKJ+6a9PdHnvnpjEX3sy00YqBOQcOrqMgej6n5I5sQCneQ6dW45l6SN1Y+MnAfT+UaY/Rzf2l/VVREJdPGTBndw61ljv3XuExCvH5bWLdo/UkRH;
+        Expires=Thu, 15 Jul 2021 15:55:27 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=6d4bff46c4afb9930c5359147fd0; Path=/; Secure; HttpOnly
+    status:
+      code: 200
+      message: OK
 - request:
     body: null
     headers:
-      Connection: [close]
-      Host: [dataverse.harvard.edu]
-      User-Agent: [Python-urllib/3.6]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.20.1
     method: HEAD
     uri: https://dataverse.harvard.edu/api/access/datafile/3323457?format=original
   response:
-    body: {string: ''}
+    body:
+      string: ''
     headers:
-      Access-Control-Allow-Headers: ['Content-Type, X-Dataverse-Key']
-      Access-Control-Allow-Methods: ['PUT, GET, POST, DELETE, OPTIONS']
-      Access-Control-Allow-Origin: ['*']
-      Cache-control: [no-cache="set-cookie"]
-      Connection: [Close]
-      Content-Length: ['145901']
-      Content-Type: [application/x-stata-13; name="fires_sugarproduction_yearly.dta"]
-      Content-disposition: [attachment; filename="fires_sugarproduction_yearly.dta"]
-      Date: ['Mon, 10 Feb 2020 18:54:25 GMT']
-      Server: [Apache]
-      Set-Cookie: [JSESSIONID=073e194200459fb7727fe95196cb; Path=/; Secure; HttpOnly,
-        AWSELB=EB1179591E49E298C6825A3028F74991071DEE12D3FE010BDBAE7AE7E438B31BFA0246B9F2DBD3EC37C4E69D8B958E3FBF8CF814030B5CB9749AB70FE33A8BB5BB36A149CB;PATH=/;MAX-AGE=28800]
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, X-Dataverse-Key
+      Access-Control-Allow-Methods:
+      - PUT, GET, POST, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/xml;charset=UTF-8
+      Date:
+      - Thu, 08 Jul 2021 15:55:29 GMT
+      Location:
+      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/3MJ7IR/1677a26ac7a-9f0f91bfc259.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27fires_sugarproduction_yearly.dta&response-content-type=application%2Fx-stata-13&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210708T155529Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20210708%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=dbf3e29a9aa1128fcbee385ee8e1ea87918c54200847c579c40268ad78a8d5eb
+      Server:
+      - Apache
+      Set-Cookie:
+      - AWSALB=Yf7p5ufIvZRzeCvQEJRrs362ODKoAL25NX3ct1zm5/2oqemYfNjvGxq516a0AW2XY1qfRr9txaWtNOr7MofHkmBJrnRbUNA+/uj9yF8M3H/v9pJDFVGHxg3ybnEU;
+        Expires=Thu, 15 Jul 2021 15:55:28 GMT; Path=/
+      - AWSALBCORS=Yf7p5ufIvZRzeCvQEJRrs362ODKoAL25NX3ct1zm5/2oqemYfNjvGxq516a0AW2XY1qfRr9txaWtNOr7MofHkmBJrnRbUNA+/uj9yF8M3H/v9pJDFVGHxg3ybnEU;
+        Expires=Thu, 15 Jul 2021 15:55:28 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=6d4c517db374d0fbc4079fe8f6ed; Path=/; Secure; HttpOnly
+    status:
+      code: 303
+      message: See Other
 - request:
     body: null
     headers:
-      Connection: [close]
-      Host: [dataverse.harvard.edu]
-      User-Agent: [Python-urllib/3.6]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.20.1
+    method: HEAD
+    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/3MJ7IR/1677a26ac7a-9f0f91bfc259.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27fires_sugarproduction_yearly.dta&response-content-type=application%2Fx-stata-13&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210708T155529Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20210708%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=dbf3e29a9aa1128fcbee385ee8e1ea87918c54200847c579c40268ad78a8d5eb
+  response:
+    body:
+      string: ''
+    headers:
+      Content-Type:
+      - application/xml
+      Date:
+      - Thu, 08 Jul 2021 15:55:29 GMT
+      Server:
+      - AmazonS3
+      x-amz-id-2:
+      - Bp6y3NSCfJyfbeK/6nNLf+txefdl9fmiwf/9/MLgoYHurHCKpaUhYKGsFSLVZz5IeO+ILj5NfQQ=
+      x-amz-request-id:
+      - C1FCSXY2SXM9AEKT
+    status:
+      code: 403
+      message: Forbidden
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Range:
+      - bytes=0-100
+      User-Agent:
+      - python-requests/2.20.1
+    method: GET
+    uri: https://dataverse.harvard.edu/api/access/datafile/3323457?format=original
+  response:
+    body:
+      string: ''
+    headers:
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, X-Dataverse-Key
+      Access-Control-Allow-Methods:
+      - PUT, GET, POST, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      Date:
+      - Thu, 08 Jul 2021 15:55:30 GMT
+      Location:
+      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/3MJ7IR/1677a26ac7a-9f0f91bfc259.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27fires_sugarproduction_yearly.dta&response-content-type=application%2Fx-stata-13&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210708T155530Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3599&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20210708%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=212266595b8b8144f28c2049eecd2260a3774e1501d71e2de6980c540d0b1116
+      Server:
+      - Apache
+      Set-Cookie:
+      - AWSALB=rw4a9K+QTQLfCiBtAJ/ImxHtF671DXOidSomt8XDgDWcyIUSVXkcdnuPdhuBw7wuSXHAzpx9VBFT06y4qgn3pa8/ibO/FETWQOGRr7kdHgZR9LbpqLhzIlGZAavL;
+        Expires=Thu, 15 Jul 2021 15:55:29 GMT; Path=/
+      - AWSALBCORS=rw4a9K+QTQLfCiBtAJ/ImxHtF671DXOidSomt8XDgDWcyIUSVXkcdnuPdhuBw7wuSXHAzpx9VBFT06y4qgn3pa8/ibO/FETWQOGRr7kdHgZR9LbpqLhzIlGZAavL;
+        Expires=Thu, 15 Jul 2021 15:55:29 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=6d4c87e19b062abecb7fbd24702f; Path=/; Secure; HttpOnly
+    status:
+      code: 303
+      message: See Other
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Range:
+      - bytes=0-100
+      User-Agent:
+      - python-requests/2.20.1
+    method: GET
+    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/3MJ7IR/1677a26ac7a-9f0f91bfc259.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27fires_sugarproduction_yearly.dta&response-content-type=application%2Fx-stata-13&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210708T155530Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3599&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20210708%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=212266595b8b8144f28c2049eecd2260a3774e1501d71e2de6980c540d0b1116
+  response:
+    body:
+      string: !!binary |
+        PHN0YXRhX2R0YT48aGVhZGVyPjxyZWxlYXNlPjExNzwvcmVsZWFzZT48Ynl0ZW9yZGVyPkxTRjwv
+        Ynl0ZW9yZGVyPjxLPgwAPC9LPjxOPrcbAAA8L04+PGxhYmVsPgA8L2xhYmU=
+    headers:
+      Accept-Ranges:
+      - bytes
+      Content-Disposition:
+      - attachment; filename*=UTF-8''fires_sugarproduction_yearly.dta
+      Content-Length:
+      - '101'
+      Content-Range:
+      - bytes 0-100/145901
+      Content-Type:
+      - application/x-stata-13
+      Date:
+      - Thu, 08 Jul 2021 15:55:31 GMT
+      ETag:
+      - '"d064ce33f0099d31dfe6791cc95a88c2"'
+      Last-Modified:
+      - Tue, 04 Dec 2018 17:00:59 GMT
+      Server:
+      - AmazonS3
+      x-amz-id-2:
+      - PiEL7cIliUpG07lK41r0KiYfAgk0tYg5Fn0bnqk5Bw3gIYJoPWRjl4IgPG6XgaOKzrKuUW1JR9g=
+      x-amz-replication-status:
+      - COMPLETED
+      x-amz-request-id:
+      - 2NZCGVG5KBCMPSNV
+      x-amz-version-id:
+      - R19O3CApOvlAhhh606oeD7wHP0Oe52hs
+    status:
+      code: 206
+      message: Partial Content
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.20.1
     method: HEAD
     uri: https://dataverse.harvard.edu/api/access/datafile/3323457
   response:
-    body: {string: ''}
+    body:
+      string: ''
     headers:
-      Access-Control-Allow-Headers: ['Content-Type, X-Dataverse-Key']
-      Access-Control-Allow-Methods: ['PUT, GET, POST, DELETE, OPTIONS']
-      Access-Control-Allow-Origin: ['*']
-      Cache-control: [no-cache="set-cookie"]
-      Connection: [Close]
-      Content-Length: ['297653']
-      Content-Type: [text/tab-separated-values; name="fires_sugarproduction_yearly.tab"]
-      Content-disposition: [attachment; filename="fires_sugarproduction_yearly.tab"]
-      Date: ['Mon, 10 Feb 2020 18:54:25 GMT']
-      Server: [Apache]
-      Set-Cookie: [JSESSIONID=073e3217f48b7fb48626f9ac6169; Path=/; Secure; HttpOnly,
-        AWSELB=EB1179591E49E298C6825A3028F74991071DEE12D3CF6A1B0A2CD5F2F144400DE0E06A10F0DBD3EC37C4E69D8B958E3FBF8CF81403222DF6AABE0F6509EF79AB1D548B7265;PATH=/;MAX-AGE=28800]
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, X-Dataverse-Key
+      Access-Control-Allow-Methods:
+      - PUT, GET, POST, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '297653'
+      Content-Type:
+      - text/tab-separated-values; name="fires_sugarproduction_yearly.tab";charset=UTF-8
+      Content-disposition:
+      - attachment; filename="fires_sugarproduction_yearly.tab"
+      Date:
+      - Thu, 08 Jul 2021 15:55:31 GMT
+      Server:
+      - Apache
+      Set-Cookie:
+      - AWSALB=VxviPG669pmtSTeizE+20CHsG2uWb4GvKkINZ9QL/Yc1oCxtFvNSWgbV7xW7i9aDuKEpp2o4YC/iLIQTIa5JpT1I2hAaWK/8YGqLgId0BWruac6TR8A7NdHgKgNA;
+        Expires=Thu, 15 Jul 2021 15:55:30 GMT; Path=/
+      - AWSALBCORS=VxviPG669pmtSTeizE+20CHsG2uWb4GvKkINZ9QL/Yc1oCxtFvNSWgbV7xW7i9aDuKEpp2o4YC/iLIQTIa5JpT1I2hAaWK/8YGqLgId0BWruac6TR8A7NdHgKgNA;
+        Expires=Thu, 15 Jul 2021 15:55:30 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=6d4cc75c4c555bebc0ad62cfd157; Path=/; Secure; HttpOnly
+    status:
+      code: 200
+      message: OK
 - request:
     body: null
     headers:
-      Connection: [close]
-      Host: [dataverse.harvard.edu]
-      User-Agent: [Python-urllib/3.6]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.20.1
     method: HEAD
     uri: https://dataverse.harvard.edu/api/access/datafile/3323448?format=original
   response:
-    body: {string: ''}
+    body:
+      string: ''
     headers:
-      Access-Control-Allow-Headers: ['Content-Type, X-Dataverse-Key']
-      Access-Control-Allow-Methods: ['PUT, GET, POST, DELETE, OPTIONS']
-      Access-Control-Allow-Origin: ['*']
-      Cache-control: [no-cache="set-cookie"]
-      Connection: [Close]
-      Content-Length: ['81866']
-      Content-Type: [application/x-stata-13; name="rolling_fires_SPstate.dta"]
-      Content-disposition: [attachment; filename="rolling_fires_SPstate.dta"]
-      Date: ['Mon, 10 Feb 2020 18:54:26 GMT']
-      Server: [Apache]
-      Set-Cookie: [JSESSIONID=073e4a4ef02f4abb67cfa4bf4b98; Path=/; Secure; HttpOnly,
-        AWSELB=EB1179591E49E298C6825A3028F74991071DEE12D3FE010BDBAE7AE7E438B31BFA0246B9F2DBD3EC37C4E69D8B958E3FBF8CF814030B5CB9749AB70FE33A8BB5BB36A149CB;PATH=/;MAX-AGE=28800]
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, X-Dataverse-Key
+      Access-Control-Allow-Methods:
+      - PUT, GET, POST, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/xml;charset=UTF-8
+      Date:
+      - Thu, 08 Jul 2021 15:55:31 GMT
+      Location:
+      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/3MJ7IR/1677a264aa9-a0c712268f3f.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27rolling_fires_SPstate.dta&response-content-type=application%2Fx-stata-13&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210708T155531Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20210708%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=d6b1b94bb4990003343e736545b0f57e35a47add93b83fd56d1b9b054eb65d49
+      Server:
+      - Apache
+      Set-Cookie:
+      - AWSALB=h761Lye+ilPzsHWtWzzrpiAoSb7aOWHzDzRgaLWpeBrX41BOPK0EH98bWmllIy9HBtRbWzUTc2INbepC1VCMSULu0OyvOmHO1hCDEEACRiQjXdw6tnz7x7gbhWoU;
+        Expires=Thu, 15 Jul 2021 15:55:31 GMT; Path=/
+      - AWSALBCORS=h761Lye+ilPzsHWtWzzrpiAoSb7aOWHzDzRgaLWpeBrX41BOPK0EH98bWmllIy9HBtRbWzUTc2INbepC1VCMSULu0OyvOmHO1hCDEEACRiQjXdw6tnz7x7gbhWoU;
+        Expires=Thu, 15 Jul 2021 15:55:31 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=6d4cf58c1222fe43af18c11202cb; Path=/; Secure; HttpOnly
+    status:
+      code: 303
+      message: See Other
 - request:
     body: null
     headers:
-      Connection: [close]
-      Host: [dataverse.harvard.edu]
-      User-Agent: [Python-urllib/3.6]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.20.1
+    method: HEAD
+    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/3MJ7IR/1677a264aa9-a0c712268f3f.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27rolling_fires_SPstate.dta&response-content-type=application%2Fx-stata-13&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210708T155531Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20210708%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=d6b1b94bb4990003343e736545b0f57e35a47add93b83fd56d1b9b054eb65d49
+  response:
+    body:
+      string: ''
+    headers:
+      Content-Type:
+      - application/xml
+      Date:
+      - Thu, 08 Jul 2021 15:55:31 GMT
+      Server:
+      - AmazonS3
+      x-amz-id-2:
+      - CsJ3bHvtwnvs0nZzzboyLLXKla/CdYGJTIfcQJsPKqZfvTNeP6MfwnRQjsClvliNLiSmfDcA2G4=
+      x-amz-request-id:
+      - YNJM3XYF27PJGMKV
+    status:
+      code: 403
+      message: Forbidden
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Range:
+      - bytes=0-100
+      User-Agent:
+      - python-requests/2.20.1
+    method: GET
+    uri: https://dataverse.harvard.edu/api/access/datafile/3323448?format=original
+  response:
+    body:
+      string: ''
+    headers:
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, X-Dataverse-Key
+      Access-Control-Allow-Methods:
+      - PUT, GET, POST, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      Date:
+      - Thu, 08 Jul 2021 15:55:32 GMT
+      Location:
+      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/3MJ7IR/1677a264aa9-a0c712268f3f.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27rolling_fires_SPstate.dta&response-content-type=application%2Fx-stata-13&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210708T155532Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20210708%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=9d5d2c9333b7f52c42898b2d9af394fd66ecbeea6eb6a7e6227def217dcd30f6
+      Server:
+      - Apache
+      Set-Cookie:
+      - AWSALB=HTqt7PmvMzgT2zqczdYBHT4VYLD2GqVxTMtq7duWf6Gy3Cje/HbOou9C3wJzlksFYX8mLisKiFSkRjVUUe9HdblUJFPryWChQ+7gibtBZaWGfHL+zC879rspYAN3;
+        Expires=Thu, 15 Jul 2021 15:55:32 GMT; Path=/
+      - AWSALBCORS=HTqt7PmvMzgT2zqczdYBHT4VYLD2GqVxTMtq7duWf6Gy3Cje/HbOou9C3wJzlksFYX8mLisKiFSkRjVUUe9HdblUJFPryWChQ+7gibtBZaWGfHL+zC879rspYAN3;
+        Expires=Thu, 15 Jul 2021 15:55:32 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=6d4d22184d182dd2917ed3636504; Path=/; Secure; HttpOnly
+    status:
+      code: 303
+      message: See Other
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Range:
+      - bytes=0-100
+      User-Agent:
+      - python-requests/2.20.1
+    method: GET
+    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/3MJ7IR/1677a264aa9-a0c712268f3f.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27rolling_fires_SPstate.dta&response-content-type=application%2Fx-stata-13&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210708T155532Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20210708%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=9d5d2c9333b7f52c42898b2d9af394fd66ecbeea6eb6a7e6227def217dcd30f6
+  response:
+    body:
+      string: "<stata_dta><header><release>117</release><byteorder>LSF</byteorder><K>\t\0</K><N>r\r\0\0</N><label>\0</labe"
+    headers:
+      Accept-Ranges:
+      - bytes
+      Content-Disposition:
+      - attachment; filename*=UTF-8''rolling_fires_SPstate.dta
+      Content-Length:
+      - '101'
+      Content-Range:
+      - bytes 0-100/81866
+      Content-Type:
+      - application/x-stata-13
+      Date:
+      - Thu, 08 Jul 2021 15:55:33 GMT
+      ETag:
+      - '"482f6d3cd917a81f0c410f03396fd3c8"'
+      Last-Modified:
+      - Tue, 04 Dec 2018 17:00:58 GMT
+      Server:
+      - AmazonS3
+      x-amz-id-2:
+      - IKNO0HEKR8iAPGFQ1iMIDRVaId2FS0RA3XDtiRTZRy1dSwAPTAVtgtwLRv8+U9ynTyQLatiaHNU=
+      x-amz-replication-status:
+      - COMPLETED
+      x-amz-request-id:
+      - NEZYTWW3M0YNNFET
+      x-amz-version-id:
+      - Fv6k.Bb.w7G00qNlbidNbBVahbZ1wcEF
+    status:
+      code: 206
+      message: Partial Content
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.20.1
     method: HEAD
     uri: https://dataverse.harvard.edu/api/access/datafile/3323448
   response:
-    body: {string: ''}
+    body:
+      string: ''
     headers:
-      Access-Control-Allow-Headers: ['Content-Type, X-Dataverse-Key']
-      Access-Control-Allow-Methods: ['PUT, GET, POST, DELETE, OPTIONS']
-      Access-Control-Allow-Origin: ['*']
-      Cache-control: [no-cache="set-cookie"]
-      Connection: [Close]
-      Content-Length: ['178955']
-      Content-Type: [text/tab-separated-values; name="rolling_fires_SPstate.tab"]
-      Content-disposition: [attachment; filename="rolling_fires_SPstate.tab"]
-      Date: ['Mon, 10 Feb 2020 18:54:26 GMT']
-      Server: [Apache]
-      Set-Cookie: [JSESSIONID=073e6390300f5bf154b9c15a32f0; Path=/; Secure; HttpOnly,
-        AWSELB=EB1179591E49E298C6825A3028F74991071DEE12D3CF6A1B0A2CD5F2F144400DE0E06A10F0DBD3EC37C4E69D8B958E3FBF8CF81403222DF6AABE0F6509EF79AB1D548B7265;PATH=/;MAX-AGE=28800]
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, X-Dataverse-Key
+      Access-Control-Allow-Methods:
+      - PUT, GET, POST, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '178955'
+      Content-Type:
+      - text/tab-separated-values; name="rolling_fires_SPstate.tab";charset=UTF-8
+      Content-disposition:
+      - attachment; filename="rolling_fires_SPstate.tab"
+      Date:
+      - Thu, 08 Jul 2021 15:55:33 GMT
+      Server:
+      - Apache
+      Set-Cookie:
+      - AWSALB=z8vs8wMH7vmmkyrDIUloHUh3r34+8Gc6BD1KF5pCB6ut8CZXK0j1eMr+bvbF6siwZOqMiKQ0mtTWv5reQuYmmYbgZ9Hh5jgZWmiK7dA+Rajri38s0j1o6QvpVoyo;
+        Expires=Thu, 15 Jul 2021 15:55:33 GMT; Path=/
+      - AWSALBCORS=z8vs8wMH7vmmkyrDIUloHUh3r34+8Gc6BD1KF5pCB6ut8CZXK0j1eMr+bvbF6siwZOqMiKQ0mtTWv5reQuYmmYbgZ9Hh5jgZWmiK7dA+Rajri38s0j1o6QvpVoyo;
+        Expires=Thu, 15 Jul 2021 15:55:33 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=6d4d59634821b2dc43b2e3aae19b; Path=/; Secure; HttpOnly
+    status:
+      code: 200
+      message: OK
 - request:
     body: null
     headers:
-      Connection: [close]
-      Host: [api.datacite.org]
-      User-Agent: [Python-urllib/3.6]
+      Connection:
+      - close
+      Host:
+      - api.datacite.org
+      User-Agent:
+      - Python-urllib/3.8
     method: GET
     uri: https://api.datacite.org/dois/text/x-bibliography/10.7910/DVN/3MJ7IR?style=harvard-cite-them-right
   response:
-    body: {string: "Rangel, M. A. and Vogl, T. (2018) \u201CReplication Data for:
-        \u2018Agricultural Fires and Health at Birth.\u2019\u201D Harvard Dataverse.
-        doi: 10.7910/DVN/3MJ7IR."}
+    body:
+      string: "Rangel, M. A. and Vogl, T. (2018) \u201CReplication Data for: \u2018Agricultural
+        Fires and Health at Birth.\u2019\u201D Harvard Dataverse. doi: 10.7910/DVN/3MJ7IR."
     headers:
-      Cache-Control: ['max-age=0, private, must-revalidate']
-      Connection: [close]
-      Content-Type: [text/x-bibliography; charset=utf-8]
-      Date: ['Mon, 10 Feb 2020 18:54:27 GMT']
-      ETag: [W/"fc8e6f50677306e573beae7411a62107"]
-      Server: [nginx/1.14.0 + Phusion Passenger 6.0.4]
-      Status: [200 OK]
-      Transfer-Encoding: [chunked]
-      Vary: ['Accept-Encoding, Origin']
-      X-Anonymous-Consumer: ['true']
-      X-Powered-By: [Phusion Passenger 6.0.4]
-      X-Request-Id: [e63c7fc9-fb7d-4622-94b9-690c13af7e87]
-      X-Runtime: ['0.039376']
-    status: {code: 200, message: OK}
-- request:
-    body: null
-    headers:
-      Connection: [close]
-      Host: [api.datacite.org]
-      User-Agent: [Python-urllib/3.6]
-    method: GET
-    uri: https://api.datacite.org/dois/text/x-bibliography/10.7910/DVN/3MJ7IR?style=harvard-cite-them-right
-  response:
-    body: {string: "Rangel, M. A. and Vogl, T. (2018) \u201CReplication Data for:
-        \u2018Agricultural Fires and Health at Birth.\u2019\u201D Harvard Dataverse.
-        doi: 10.7910/DVN/3MJ7IR."}
-    headers:
-      Cache-Control: ['max-age=0, private, must-revalidate']
-      Connection: [close]
-      Content-Type: [text/x-bibliography; charset=utf-8]
-      Date: ['Mon, 10 Feb 2020 18:54:28 GMT']
-      ETag: [W/"fc8e6f50677306e573beae7411a62107"]
-      Server: [nginx/1.14.0 + Phusion Passenger 6.0.4]
-      Status: [200 OK]
-      Transfer-Encoding: [chunked]
-      Vary: ['Accept-Encoding, Origin']
-      X-Anonymous-Consumer: ['true']
-      X-Powered-By: [Phusion Passenger 6.0.4]
-      X-Request-Id: [3812272d-6a8e-472a-bb89-9af11259c1b3]
-      X-Runtime: ['0.036931']
-    status: {code: 200, message: OK}
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Connection:
+      - close
+      Content-Type:
+      - text/x-bibliography; charset=utf-8
+      Date:
+      - Thu, 08 Jul 2021 15:55:36 GMT
+      ETag:
+      - W/"fc8e6f50677306e573beae7411a62107"
+      Server:
+      - nginx/1.14.0 + Phusion Passenger(R) 6.0.9
+      Status:
+      - 200 OK
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding, Origin
+      X-Anonymous-Consumer:
+      - 'true'
+      X-Powered-By:
+      - Phusion Passenger(R) 6.0.9
+      X-Rack-CORS:
+      - miss; no-origin
+      X-Request-Id:
+      - 3e7979a7-28e4-4355-a3c8-54e6283464a0
+      X-Runtime:
+      - '0.760319'
+    status:
+      code: 200
+      message: OK
 version: 1

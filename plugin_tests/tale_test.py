@@ -730,7 +730,7 @@ class TaleTestCase(base.TestCase):
             # self.assertEqual(tale['imageInfo']['status'], ImageStatus.INVALID)
 
     def testTaleNotifications(self):
-        since = datetime.now().isoformat()
+        since = datetime.utcnow().isoformat()
         with httmock.HTTMock(mockOtherRequest):
             # Create a new tale from a user image
             resp = self.request(
@@ -772,7 +772,7 @@ class TaleTestCase(base.TestCase):
                     'name': '%s %s' % (self.admin['firstName'], self.admin['lastName'])
                 }],
             "groups": []}
-        since = datetime.now().isoformat()
+        since = datetime.utcnow().isoformat()
 
         resp = self.request(
             path='/tale/%s/access' % tale['_id'], method='PUT',
@@ -786,7 +786,7 @@ class TaleTestCase(base.TestCase):
         self.assertEqual(events[0]['data']['affectedResourceIds']['taleId'], tale['_id'])
 
         # Update tale, confirm notifications
-        since = datetime.now().isoformat()
+        since = datetime.utcnow().isoformat()
         resp = self.request(
             path='/tale/{}'.format(str(tale['_id'])),
             method='PUT',
@@ -823,7 +823,7 @@ class TaleTestCase(base.TestCase):
                     "name": "%s %s" % (self.user['firstName'], self.user['lastName'])
                 }],
             "groups": []}
-        since = datetime.now().isoformat()
+        since = datetime.utcnow().isoformat()
 
         resp = self.request(
             path='/tale/%s/access' % tale['_id'], method='PUT',
@@ -843,7 +843,7 @@ class TaleTestCase(base.TestCase):
         self.assertStatusOk(resp)
 
         # Delete tale, test notification
-        since = datetime.now().isoformat()
+        since = datetime.utcnow().isoformat()
         resp = self.request(
             path='/tale/{_id}'.format(**tale), method='DELETE',
             user=self.admin)
@@ -1050,7 +1050,7 @@ class TaleWithWorkspaceTestCase(base.TestCase):
 
         copied_file_path = re.sub(workspace['name'], new_tale['_id'], fullPath)
         job = Job().findOne({'type': 'wholetale.copy_workspace'})
-        for _ in range(10):
+        for _ in range(100):
             job = Job().load(job['_id'], force=True)
             if job['status'] == JobStatus.SUCCESS:
                 break

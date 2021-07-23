@@ -135,7 +135,7 @@ def dataverseExternalTools(
         url = "{scheme}://{netloc}/api/datasets/{_id}".format(
             scheme=site.scheme, netloc=site.netloc, _id=datasetId
         )
-        title, _, doi = DataverseImportProvider._parse_dataset(urlparse(url))
+        title, _, doi = DataverseImportProvider()._parse_dataset(urlparse(url))
         url = _dataset_full_url(site, doi)
     elif filePid:
         url = "{scheme}://{netloc}/file.xhtml?persistentId={doi}".format(
@@ -144,7 +144,7 @@ def dataverseExternalTools(
         title, _, doi = DataverseImportProvider._parse_file_url(urlparse(url))
     elif datasetPid:
         url = _dataset_full_url(site, datasetPid)
-        title, _, doi = DataverseImportProvider._parse_dataset(urlparse(url))
+        title, _, doi = DataverseImportProvider()._parse_dataset(urlparse(url))
 
     if not force:
         redirect_if_tale_exists(user, self.getCurrentToken(), doi)

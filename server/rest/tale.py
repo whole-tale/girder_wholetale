@@ -4,7 +4,6 @@ import cherrypy
 import json
 import os
 import pathlib
-import textwrap
 from urllib.parse import urlparse
 from girder import events
 from girder.api import access
@@ -241,42 +240,36 @@ class Tale(Resource):
                     base_url=lookupKwargs.get("base_url", DataONELocations.prod_cn),
                     lookup=True
                 )[0]
+                provider = IMPORT_PROVIDERS.providerMap[dataMap["repository"]]
+
                 if dataMap["tale"]:  # url points to a published Tale
-                    provider = IMPORT_PROVIDERS.providerMap[dataMap["repository"]]
-                    tale = provider.import_tale(dataMap["dataId"], user)
-                    return tale
+                    return provider.import_tale(dataMap["dataId"], user)
 
-                if asTale:
-                    relation = "IsDerivedFrom"
-                else:
-                    relation = "Cites"
-                related_id = [
-                    {
-                        "relation": relation,
-                        "identifier": dataMap["doi"] or dataMap["dataId"]
-                    }
-                ]
-
-                if "title" not in taleKwargs:
-                    long_name = dataMap["name"]
-                    long_name = long_name.replace('-', ' ').replace('_', ' ')
-                    shortened_name = textwrap.shorten(text=long_name, width=30)
-                    taleKwargs["title"] = f"A Tale for \"{shortened_name}\""
+                proto_tale = provider.proto_tale_from_datamap(dataMap, asTale)
             else:
-                related_id = [{"relation": "IsSupplementTo", "identifier": url}]
-                if "title" not in taleKwargs:
-                    git_url = urlparse(url)
-                    if git_url.netloc == "github.com":
-                        name = "/".join(pathlib.Path(git_url.path).parts[1:3])
-                        taleKwargs["title"] = f"A Tale for \"gh:{name}\""
-                    else:
-                        taleKwargs["title"] = f"A Tale for \"{url}\""
+                git_url = urlparse(url)
+                if git_url.netloc == "github.com":
+                    name = "/".join(pathlib.Path(git_url.path).parts[1:3])
+                    title = f"A Tale for \"gh:{name}\""
+                else:
+                    title = f"A Tale for \"{url}\""
+                proto_tale = {
+                    "category": "science",
+                    "relatedIdentifiers": [{"relation": "IsSupplementTo", "identifier": url}],
+                    "title": title,
+                }
 
-            all_related_ids = related_id + taleKwargs.get("relatedIdentifiers", [])
+            if "title" in taleKwargs and "title" in proto_tale:
+                proto_tale.pop("title")
+
+            all_related_ids = proto_tale.pop("relatedIdentifiers") + \
+                taleKwargs.get("relatedIdentifiers", [])
             taleKwargs["relatedIdentifiers"] = [
                 json.loads(rel_id)
                 for rel_id in {json.dumps(_, sort_keys=True) for _ in all_related_ids}
             ]
+
+            taleKwargs.update(proto_tale)
 
             if not (imageId or url):
                 msg = (
@@ -295,7 +288,6 @@ class Tale(Resource):
                 image,
                 [],
                 creator=user,
-                category="science",
                 save=True,
                 public=False,
                 status=TaleStatus.PREPARING,

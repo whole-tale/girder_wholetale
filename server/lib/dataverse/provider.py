@@ -143,8 +143,8 @@ class DataverseImportProvider(ImportProvider):
         self._regex = None
 
     @staticmethod
-    def _parse_dataset(url):
-        """Extract title, file, doi from Dataverse resource.
+    def _get_meta_from_dataset(url):
+        """Get metadata for Dataverse dataset.
 
         Handles: {siteURL}/dataset.xhtml?persistentId={persistentId}
         Handles: {siteURL}/api/datasets/{:id}
@@ -156,7 +156,15 @@ class DataverseImportProvider(ImportProvider):
         else:
             dataset_url = urlunparse(url)
         req = requests.get(dataset_url)
-        data = req.json()
+        return req.json()
+
+    def _parse_dataset(self, url):
+        """Extract title, file, doi from Dataverse resource.
+
+        Handles: {siteURL}/dataset.xhtml?persistentId={persistentId}
+        Handles: {siteURL}/api/datasets/{:id}
+        """
+        data = self._get_meta_from_dataset(url)
         meta = data['data']['latestVersion']['metadataBlocks']['citation']['fields']
         title = next(_['value'] for _ in meta if _['typeName'] == 'title')
         doi = '{protocol}:{authority}/{identifier}'.format(**data['data'])
@@ -315,3 +323,43 @@ class DataverseImportProvider(ImportProvider):
         yield ImportItem(ImportItem.FOLDER, name=title, identifier=doi)
         yield from _recurse_hierarchy(hierarchy)
         yield ImportItem(ImportItem.END_FOLDER)
+
+    def proto_tale_from_datamap(self, dataMap: DataMap, asTale: bool) -> object:
+        proto_tale = super().proto_tale_from_datamap(dataMap, asTale)  # get the defaults
+        if not asTale:
+            return proto_tale  # We only bring extra metadata for datasets imported as Tales
+        data = self._get_meta_from_dataset(urlparse(dataMap["dataId"]))
+        meta = data["data"]["latestVersion"]["metadataBlocks"]["citation"]["fields"]
+
+        for field in meta:
+            if field["typeName"] == "title":
+                proto_tale["title"] = field["value"]
+            elif field["typeName"] == "dsDescription":
+                # In theory there can be more than one ... needs example
+                proto_tale["description"] = field["value"][0]["dsDescriptionValue"]["value"]
+            elif field["typeName"] == "subject":
+                proto_tale["category"] = "; ".join(field["value"])
+            elif field["typeName"] == "author":
+                authors = []
+                for author in field["value"]:
+                    raw_author = author["authorName"]["value"]
+                    if "," in raw_author:
+                        lastName, firstName = raw_author.split(",", 1)
+                    else:
+                        firstName, lastName = raw_author.split(" ", 1)
+                    if (
+                        "authorIdentifierScheme" in author
+                        and author["authorIdentifierScheme"]["value"] == "ORCID"  # noqa
+                    ):
+                        orcid = author["authorIdentifier"]["value"]
+                    else:
+                        orcid = "0000-0000-0000-0000"
+                    authors.append(
+                        dict(
+                            firstName=firstName.strip(),
+                            lastName=lastName.strip(),
+                            orcid=f"https://www.orcid.org/{orcid}",
+                        )
+                    )
+                proto_tale["authors"] = authors
+        return proto_tale

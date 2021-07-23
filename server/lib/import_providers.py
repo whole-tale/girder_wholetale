@@ -1,3 +1,5 @@
+import textwrap
+
 from girder.utility.model_importer import ModelImporter
 
 from .entity import Entity
@@ -50,6 +52,28 @@ class ImportProvider:
     def import_tale(self, dataId: str, user: object, force=False) -> object:
         """Given a dataId import dataset as Tale"""
         raise NotImplementedError()
+
+    def proto_tale_from_datamap(self, dataMap: DataMap, asTale: bool) -> object:
+        if asTale:
+            relation = "IsDerivedFrom"
+        else:
+            relation = "Cites"
+
+        related_id = [
+            {
+                "relation": relation,
+                "identifier": dataMap["doi"] or dataMap["dataId"]
+            }
+        ]
+
+        long_name = dataMap["name"]
+        long_name = long_name.replace('-', ' ').replace('_', ' ')
+        shortened_name = textwrap.shorten(text=long_name, width=30)
+        return {
+            "relatedIdentifiers": related_id,
+            "title": f"A Tale for \"{shortened_name}\"",
+            "category": "science",
+        }
 
     def register(self, parent: object, parentType: str, progress, user, dataMap: DataMap,
                  base_url: str = None):
