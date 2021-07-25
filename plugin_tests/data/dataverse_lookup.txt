@@ -19,7 +19,7 @@ interactions:
       CF-Cache-Status:
       - DYNAMIC
       CF-RAY:
-      - 6dae99af1ce6810b-ORD
+      - 6dbfbd873e3c6362-ORD
       Connection:
       - keep-alive
       Content-Length:
@@ -27,13 +27,13 @@ interactions:
       Content-Type:
       - text/html;charset=utf-8
       Date:
-      - Wed, 09 Feb 2022 16:51:04 GMT
+      - Fri, 11 Feb 2022 18:46:30 GMT
       Expect-CT:
       - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
       NEL:
       - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=dXXE7Ur6REDNGAGV5i9%2BrTUCROlYZhWDYFEpbb%2BsSWRolTXKUqIDG4%2FwG9gVIBHSRSP9WtwnmxITTVCvRjWvEdBkuGXiyeQQ5r1Yt%2F2v26IeEXfY%2BM4jPDCNdQjk1OnhX15mX2Y%3D"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=wkgNggYWxcGF3C2RopRVgpvkjcjticwuz1PbJeo%2F8N7Gx6CrxWCrS9YqEQVkcYaasFGDKVv2kTzzCNf%2FtQ04r3FahhHVhyIVlIsF7L%2FsBmhoz2t0lGlIYODNNz6NMAQx5%2Bjb06g%3D"}],"group":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
       Strict-Transport-Security:
@@ -41,7 +41,7 @@ interactions:
       alt-svc:
       - h3=":443"; ma=86400, h3-29=":443"; ma=86400
       expires:
-      - Wed, 09 Feb 2022 17:33:39 GMT
+      - Fri, 11 Feb 2022 19:21:21 GMT
       location:
       - https://dataverse.harvard.edu/citation?persistentId=doi:10.7910/DVN/RLMYMR
       vary:
@@ -73,16 +73,16 @@ interactions:
       Content-Type:
       - text/html;charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:51:04 GMT
+      - Fri, 11 Feb 2022 18:46:30 GMT
       Location:
       - https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/RLMYMR
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=wl3lVlwI+6VuhpepA6/rEQX9YX2A+vkRN8IEEZImqpdGjxUnsQiIyKXPwSIX0vJGM50wXjhMMVOv9dIzReO/alXBCMXPTMBbOf60GZlQIEiIVmx4/h2U7NUA80mX;
-        Expires=Wed, 16 Feb 2022 16:51:04 GMT; Path=/
-      - AWSALBCORS=wl3lVlwI+6VuhpepA6/rEQX9YX2A+vkRN8IEEZImqpdGjxUnsQiIyKXPwSIX0vJGM50wXjhMMVOv9dIzReO/alXBCMXPTMBbOf60GZlQIEiIVmx4/h2U7NUA80mX;
-        Expires=Wed, 16 Feb 2022 16:51:04 GMT; Path=/; SameSite=None; Secure
+      - AWSALB=AvTOcwL8UHGc78m1/rjozxeCdbiCvXFxd8fqxxmXhb7Rr5HUj7xHNyeV631CbuXozNjYjpWsp3p15Dt5Gn4bUSCs7tPuY7wt5RC0H6Ovv+VN57zMbj5MMf97UhjG;
+        Expires=Fri, 18 Feb 2022 18:46:30 GMT; Path=/
+      - AWSALBCORS=AvTOcwL8UHGc78m1/rjozxeCdbiCvXFxd8fqxxmXhb7Rr5HUj7xHNyeV631CbuXozNjYjpWsp3p15Dt5Gn4bUSCs7tPuY7wt5RC0H6Ovv+VN57zMbj5MMf97UhjG;
+        Expires=Fri, 18 Feb 2022 18:46:30 GMT; Path=/; SameSite=None; Secure
     status:
       code: 302
       message: Found
@@ -96,8 +96,8 @@ interactions:
       Connection:
       - keep-alive
       Cookie:
-      - AWSALB=wl3lVlwI+6VuhpepA6/rEQX9YX2A+vkRN8IEEZImqpdGjxUnsQiIyKXPwSIX0vJGM50wXjhMMVOv9dIzReO/alXBCMXPTMBbOf60GZlQIEiIVmx4/h2U7NUA80mX;
-        AWSALBCORS=wl3lVlwI+6VuhpepA6/rEQX9YX2A+vkRN8IEEZImqpdGjxUnsQiIyKXPwSIX0vJGM50wXjhMMVOv9dIzReO/alXBCMXPTMBbOf60GZlQIEiIVmx4/h2U7NUA80mX
+      - AWSALB=AvTOcwL8UHGc78m1/rjozxeCdbiCvXFxd8fqxxmXhb7Rr5HUj7xHNyeV631CbuXozNjYjpWsp3p15Dt5Gn4bUSCs7tPuY7wt5RC0H6Ovv+VN57zMbj5MMf97UhjG;
+        AWSALBCORS=AvTOcwL8UHGc78m1/rjozxeCdbiCvXFxd8fqxxmXhb7Rr5HUj7xHNyeV631CbuXozNjYjpWsp3p15Dt5Gn4bUSCs7tPuY7wt5RC0H6Ovv+VN57zMbj5MMf97UhjG
       User-Agent:
       - python-requests/2.26.0
     method: HEAD
@@ -111,15 +111,15 @@ interactions:
       Content-Type:
       - text/html;charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:51:05 GMT
+      - Fri, 11 Feb 2022 18:46:31 GMT
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=ibhU0BJBOYTjkB8BGyRLgli8DWv1JwbzCxlWotpjANThkPXjY4tfv8tIdsKf1eNeUcr9jOfzZQO2ZEm9sQPiQ21SWumha6w7nXL+usJC1NE1ul6OXkYbZGiYA30I;
-        Expires=Wed, 16 Feb 2022 16:51:04 GMT; Path=/
-      - AWSALBCORS=ibhU0BJBOYTjkB8BGyRLgli8DWv1JwbzCxlWotpjANThkPXjY4tfv8tIdsKf1eNeUcr9jOfzZQO2ZEm9sQPiQ21SWumha6w7nXL+usJC1NE1ul6OXkYbZGiYA30I;
-        Expires=Wed, 16 Feb 2022 16:51:04 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=f654a9ba794c62090be277a2f34d; Path=/; Secure; HttpOnly
+      - AWSALB=TMPCsz7kO2VTyQb6ZFuVFhtsTwJ2gNRU7XkFgAaCESiqia1CZSardspzzomOLmtVi1FXjTc5szI99EnFGEhwuIFhfCUOn3Dn/4uBIgnJFR+34kEkkhaO/cIAek5G;
+        Expires=Fri, 18 Feb 2022 18:46:30 GMT; Path=/
+      - AWSALBCORS=TMPCsz7kO2VTyQb6ZFuVFhtsTwJ2gNRU7XkFgAaCESiqia1CZSardspzzomOLmtVi1FXjTc5szI99EnFGEhwuIFhfCUOn3Dn/4uBIgnJFR+34kEkkhaO/cIAek5G;
+        Expires=Fri, 18 Feb 2022 18:46:30 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=a1bb1f3e3c968a07dbf08243b8a9; Path=/; Secure; HttpOnly
     status:
       code: 200
       message: OK
@@ -206,15 +206,15 @@ interactions:
       Content-Type:
       - application/json;charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:51:06 GMT
+      - Fri, 11 Feb 2022 18:46:32 GMT
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=99Deq6GLLVBrIY3at4OPKufi3jzKyhJos5EZFJLg3lVjIziscw0cg7D6Z1kmOzXH+3RKmh84zwQTR7IM1+aa4VNnQCt1Uy68z0pVRtq9XXwgT+t2MowVmwbopYhK;
-        Expires=Wed, 16 Feb 2022 16:51:05 GMT; Path=/
-      - AWSALBCORS=99Deq6GLLVBrIY3at4OPKufi3jzKyhJos5EZFJLg3lVjIziscw0cg7D6Z1kmOzXH+3RKmh84zwQTR7IM1+aa4VNnQCt1Uy68z0pVRtq9XXwgT+t2MowVmwbopYhK;
-        Expires=Wed, 16 Feb 2022 16:51:05 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=f65502f77ce625e91b5ac954826a; Path=/; Secure; HttpOnly
+      - AWSALB=vfPhdkS+EiDu+Tu1/58lItvHycwvNdW7FP9dz+z8JLWLGudSB1lemrXALMXXMdXF9uZGioJ/UILXibQOF29m7x1SoZnlg93CM3YIe88I0r3b7n8SwqOQ1KwwyjPk;
+        Expires=Fri, 18 Feb 2022 18:46:32 GMT; Path=/
+      - AWSALBCORS=vfPhdkS+EiDu+Tu1/58lItvHycwvNdW7FP9dz+z8JLWLGudSB1lemrXALMXXMdXF9uZGioJ/UILXibQOF29m7x1SoZnlg93CM3YIe88I0r3b7n8SwqOQ1KwwyjPk;
+        Expires=Fri, 18 Feb 2022 18:46:32 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=a1bb7aa52d82cac4074fa29184de; Path=/; Secure; HttpOnly
       Transfer-Encoding:
       - chunked
     status:
@@ -240,7 +240,7 @@ interactions:
       CF-Cache-Status:
       - DYNAMIC
       CF-RAY:
-      - 6dae99bc7b3d2a09-ORD
+      - 6dbfbd94fa538137-ORD
       Connection:
       - keep-alive
       Content-Length:
@@ -248,13 +248,13 @@ interactions:
       Content-Type:
       - text/html;charset=utf-8
       Date:
-      - Wed, 09 Feb 2022 16:51:06 GMT
+      - Fri, 11 Feb 2022 18:46:32 GMT
       Expect-CT:
       - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
       NEL:
       - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=65S10p2%2BA1aEyiyJmwSqyxNZee0BdMqhz9wKM%2BB0xUVA6VwQ92we1xk7BfvOaLXcRttq%2BDg2XaYyPqvEzmJsdvEfDnSXC0t7mf8G%2F3FapV%2BBH8AP75P0s8KJsamO%2B8lD0eM9c6o%3D"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=pOwmJr1mBX2p6%2FyUkODS%2BJj91%2BZS4Pp4We6LGNdUyCQw5NWI1WP1Y7THpLOVdBL42CRbNogBoWgoE1xqTyrqvF04aRZKwvv6B9hD7WnCrNCQjeYWr8VCtdaCa9c1vyfLsqsmqi4%3D"}],"group":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
       Strict-Transport-Security:
@@ -262,7 +262,7 @@ interactions:
       alt-svc:
       - h3=":443"; ma=86400, h3-29=":443"; ma=86400
       expires:
-      - Wed, 09 Feb 2022 17:38:20 GMT
+      - Fri, 11 Feb 2022 19:39:25 GMT
       location:
       - https://dataverse.harvard.edu/file.xhtml?persistentId=doi:10.7910/DVN/RLMYMR/WNKD3W
       vary:
@@ -292,15 +292,15 @@ interactions:
       Content-Type:
       - text/html;charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:51:06 GMT
+      - Fri, 11 Feb 2022 18:46:33 GMT
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=krt0de+piXAT3C670lUc5OMohqgA+HwZ2Ld0YKbCp+o6tw2ZLlNZ+SeAO2ojiqFqp1bZesqjsvUBSCmk/iwk7hkxPUd2ERdHS/CtIke98NfBwPcP4/SjsiA3h0m5;
-        Expires=Wed, 16 Feb 2022 16:51:06 GMT; Path=/
-      - AWSALBCORS=krt0de+piXAT3C670lUc5OMohqgA+HwZ2Ld0YKbCp+o6tw2ZLlNZ+SeAO2ojiqFqp1bZesqjsvUBSCmk/iwk7hkxPUd2ERdHS/CtIke98NfBwPcP4/SjsiA3h0m5;
-        Expires=Wed, 16 Feb 2022 16:51:06 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=f6552c4d049b6d926cdf8681b05b; Path=/; Secure; HttpOnly
+      - AWSALB=/BkM3hLHHPglzOgDoZaSTK1OTWa7WIJbXkUHbtPPu4RDg0o8ImO2FsaAwzmG/Tt9k8uDBd7O4UzyUrF3WHiR7WL3pqZ5hkuQDI4XAMMeSIBe2ZiHoMcZNkSL28I6;
+        Expires=Fri, 18 Feb 2022 18:46:32 GMT; Path=/
+      - AWSALBCORS=/BkM3hLHHPglzOgDoZaSTK1OTWa7WIJbXkUHbtPPu4RDg0o8ImO2FsaAwzmG/Tt9k8uDBd7O4UzyUrF3WHiR7WL3pqZ5hkuQDI4XAMMeSIBe2ZiHoMcZNkSL28I6;
+        Expires=Fri, 18 Feb 2022 18:46:32 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=a1bbb1b1d266109b7dd12042a4c1; Path=/; Secure; HttpOnly
     status:
       code: 200
       message: OK
@@ -339,14 +339,14 @@ interactions:
       Content-Type:
       - application/json;charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:51:06 GMT
+      - Fri, 11 Feb 2022 18:46:41 GMT
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=hxy+WLO48pDnqNj9+zYnXVZqePBhn1B2kT3VXTyWViQmbUQ3/D6QtQAaaKAjuFCcfIHKhu78K1fPt+CcCVAcK4nu+VNJQkiQm+55VPeuS0ovwnCF3VC+wLx1/V8U;
-        Expires=Wed, 16 Feb 2022 16:51:06 GMT; Path=/
-      - AWSALBCORS=hxy+WLO48pDnqNj9+zYnXVZqePBhn1B2kT3VXTyWViQmbUQ3/D6QtQAaaKAjuFCcfIHKhu78K1fPt+CcCVAcK4nu+VNJQkiQm+55VPeuS0ovwnCF3VC+wLx1/V8U;
-        Expires=Wed, 16 Feb 2022 16:51:06 GMT; Path=/; SameSite=None; Secure
+      - AWSALB=2AjtAjJ/hu5XBFOSSN9lEoh4s4GWzu56vthE7dtXiLPyfBDdQxeissBmmaudevQ6kubltaT95gAQAmyvC3t6hFCswYXlmSKwAo5rhbOePVkXRd+abZyOfw9oD9pw;
+        Expires=Fri, 18 Feb 2022 18:46:33 GMT; Path=/
+      - AWSALBCORS=2AjtAjJ/hu5XBFOSSN9lEoh4s4GWzu56vthE7dtXiLPyfBDdQxeissBmmaudevQ6kubltaT95gAQAmyvC3t6hFCswYXlmSKwAo5rhbOePVkXRd+abZyOfw9oD9pw;
+        Expires=Fri, 18 Feb 2022 18:46:33 GMT; Path=/; SameSite=None; Secure
     status:
       code: 200
       message: OK
@@ -370,7 +370,7 @@ interactions:
       CF-Cache-Status:
       - DYNAMIC
       CF-RAY:
-      - 6dae99c14cb58127-ORD
+      - 6dbfbdcfdda68692-ORD
       Connection:
       - keep-alive
       Content-Length:
@@ -378,28 +378,28 @@ interactions:
       Content-Type:
       - text/html;charset=utf-8
       Date:
-      - Wed, 09 Feb 2022 16:51:07 GMT
+      - Fri, 11 Feb 2022 18:46:41 GMT
       Expect-CT:
       - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
-      Expires:
-      - Wed, 09 Feb 2022 17:38:20 GMT
-      Location:
-      - https://dataverse.harvard.edu/citation?persistentId=doi:10.7910/DVN/RLMYMR
       NEL:
       - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=f7%2F5XFp%2B2YNt4i5xG1NZK0pIiGRy7kW6VKNAQTJwrWN%2FY512zSTcN7XJcKeuonFxHIFih1RNAqf%2FV2o9MQomEqWuOcy8wWjg0OBTAmfFLsRdlIBZqHy6kmevfGKbZJB%2FQfK5Ki8%3D"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=rofulNIEtZ5kIF2am8rWG6Uxa36cbvlYjCzLitUTL%2BCcfjHKf5ntNzJ07Cr5GuQl3FVR%2FPJCLT%2BUkcfJN8vkGo9eljtRZ8l5Rz0Ddt04%2Fp41I07N84hiBdLdSnyCsDoQp3p%2FruY%3D"}],"group":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains; preload
-      Vary:
-      - Accept
       alt-svc:
       - h3=":443"; ma=86400, h3-29=":443"; ma=86400
+      expires:
+      - Fri, 11 Feb 2022 19:09:02 GMT
+      location:
+      - https://dataverse.harvard.edu/citation?persistentId=doi:10.7910/DVN/RLMYMR
+      vary:
+      - Accept
     status:
       code: 302
-      message: ''
+      message: Found
 - request:
     body: null
     headers:
@@ -424,16 +424,16 @@ interactions:
       Content-Type:
       - text/html;charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:51:07 GMT
+      - Fri, 11 Feb 2022 18:46:42 GMT
       Location:
       - https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/RLMYMR
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=01JalbfsP81MatOfh8SGhK2gV/l/kAG7DODjAnrWRoRQIgKyW/1alG3cHTNlp+k5zqPjt6tQRa8kTzO1qLneRsvwPZu4TIb1X8TTlm7nez5RRSrMRuLqsk6INrZN;
-        Expires=Wed, 16 Feb 2022 16:51:07 GMT; Path=/
-      - AWSALBCORS=01JalbfsP81MatOfh8SGhK2gV/l/kAG7DODjAnrWRoRQIgKyW/1alG3cHTNlp+k5zqPjt6tQRa8kTzO1qLneRsvwPZu4TIb1X8TTlm7nez5RRSrMRuLqsk6INrZN;
-        Expires=Wed, 16 Feb 2022 16:51:07 GMT; Path=/; SameSite=None; Secure
+      - AWSALB=2aj7zpk3CymlzTAHelDmjmpUG3bYbVTrR9eCT+CRHtHk/pjTQHxeX8CmsRgZk4K6Uvo6A5/g/AHhwfonsuUdr67C5ciszfSZ6RMP5kuo9UfHalYfLy8NMW24TCo9;
+        Expires=Fri, 18 Feb 2022 18:46:42 GMT; Path=/
+      - AWSALBCORS=2aj7zpk3CymlzTAHelDmjmpUG3bYbVTrR9eCT+CRHtHk/pjTQHxeX8CmsRgZk4K6Uvo6A5/g/AHhwfonsuUdr67C5ciszfSZ6RMP5kuo9UfHalYfLy8NMW24TCo9;
+        Expires=Fri, 18 Feb 2022 18:46:42 GMT; Path=/; SameSite=None; Secure
     status:
       code: 302
       message: Found
@@ -447,8 +447,8 @@ interactions:
       Connection:
       - keep-alive
       Cookie:
-      - AWSALB=01JalbfsP81MatOfh8SGhK2gV/l/kAG7DODjAnrWRoRQIgKyW/1alG3cHTNlp+k5zqPjt6tQRa8kTzO1qLneRsvwPZu4TIb1X8TTlm7nez5RRSrMRuLqsk6INrZN;
-        AWSALBCORS=01JalbfsP81MatOfh8SGhK2gV/l/kAG7DODjAnrWRoRQIgKyW/1alG3cHTNlp+k5zqPjt6tQRa8kTzO1qLneRsvwPZu4TIb1X8TTlm7nez5RRSrMRuLqsk6INrZN
+      - AWSALB=2aj7zpk3CymlzTAHelDmjmpUG3bYbVTrR9eCT+CRHtHk/pjTQHxeX8CmsRgZk4K6Uvo6A5/g/AHhwfonsuUdr67C5ciszfSZ6RMP5kuo9UfHalYfLy8NMW24TCo9;
+        AWSALBCORS=2aj7zpk3CymlzTAHelDmjmpUG3bYbVTrR9eCT+CRHtHk/pjTQHxeX8CmsRgZk4K6Uvo6A5/g/AHhwfonsuUdr67C5ciszfSZ6RMP5kuo9UfHalYfLy8NMW24TCo9
       User-Agent:
       - python-requests/2.26.0
     method: HEAD
@@ -462,15 +462,15 @@ interactions:
       Content-Type:
       - text/html;charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:51:08 GMT
+      - Fri, 11 Feb 2022 18:46:43 GMT
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=43FoKME0yKawc3Kz3OwTZ9eSKhL0eActH25cXV4re5X958Y7/bmf+2LDe86nKgLRus7HdCUL1ZskeiZiCGTO7v2qs94rcCI/vjpmYXN0iZpAfzKk5oweZQu6CRnt;
-        Expires=Wed, 16 Feb 2022 16:51:07 GMT; Path=/
-      - AWSALBCORS=43FoKME0yKawc3Kz3OwTZ9eSKhL0eActH25cXV4re5X958Y7/bmf+2LDe86nKgLRus7HdCUL1ZskeiZiCGTO7v2qs94rcCI/vjpmYXN0iZpAfzKk5oweZQu6CRnt;
-        Expires=Wed, 16 Feb 2022 16:51:07 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=f65561e67d2c9615270a51f7db7b; Path=/; Secure; HttpOnly
+      - AWSALB=Pk1M9FSXtBmp45/nQTb4mYY3rfsazNjCLUekGT+p2E5iqpxwoQPYtfsZZf9+A7wIa9BrVRx9eKumLFIxp4JSQzDZyihvE+VFfzRZ6bXMUF1LA3peKAQ7m7DHvq2O;
+        Expires=Fri, 18 Feb 2022 18:46:42 GMT; Path=/
+      - AWSALBCORS=Pk1M9FSXtBmp45/nQTb4mYY3rfsazNjCLUekGT+p2E5iqpxwoQPYtfsZZf9+A7wIa9BrVRx9eKumLFIxp4JSQzDZyihvE+VFfzRZ6bXMUF1LA3peKAQ7m7DHvq2O;
+        Expires=Fri, 18 Feb 2022 18:46:42 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=a1bdf1f9589796de75603cc4d111; Path=/; Secure; HttpOnly
     status:
       code: 200
       message: OK
@@ -557,15 +557,15 @@ interactions:
       Content-Type:
       - application/json;charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:51:08 GMT
+      - Fri, 11 Feb 2022 18:46:43 GMT
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=aVnGhlD7dkB/VED/wFJLYlPrv2Suc6O1pQtZpVRoDYfKfJ+aQidmpJOfaXZBlEwc0TmtU9HhUbyqvD/MD7uuJUBxVo8jx1OAjqbMHNL/zvxlwmrExG9+jbZAS4Qv;
-        Expires=Wed, 16 Feb 2022 16:51:08 GMT; Path=/
-      - AWSALBCORS=aVnGhlD7dkB/VED/wFJLYlPrv2Suc6O1pQtZpVRoDYfKfJ+aQidmpJOfaXZBlEwc0TmtU9HhUbyqvD/MD7uuJUBxVo8jx1OAjqbMHNL/zvxlwmrExG9+jbZAS4Qv;
-        Expires=Wed, 16 Feb 2022 16:51:08 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=f655a838128c77a75bb131aef798; Path=/; Secure; HttpOnly
+      - AWSALB=oCOdkqrbArTm5kYf5SW9ZqbvgDh4qzHSrrc15Gb2aya+oH6GPX0t+n3NWDIdDBofyOTmFZZwoeDaH2pbVsP+jmK+D8DcUgwquRzgEgMt0ykN6+ndHzF3Cb6YGS2v;
+        Expires=Fri, 18 Feb 2022 18:46:43 GMT; Path=/
+      - AWSALBCORS=oCOdkqrbArTm5kYf5SW9ZqbvgDh4qzHSrrc15Gb2aya+oH6GPX0t+n3NWDIdDBofyOTmFZZwoeDaH2pbVsP+jmK+D8DcUgwquRzgEgMt0ykN6+ndHzF3Cb6YGS2v;
+        Expires=Fri, 18 Feb 2022 18:46:43 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=a1be4ee83d0d7116e82b2886416e; Path=/; Secure; HttpOnly
       Transfer-Encoding:
       - chunked
     status:
@@ -599,17 +599,17 @@ interactions:
       Content-Type:
       - application/xml;charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:51:09 GMT
+      - Fri, 11 Feb 2022 18:46:44 GMT
       Location:
-      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220209T165109Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220209%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=9efb6469a15fb4b0b353e3ee314d1ecb96ac471b69f5a41d19b499640a3e684a
+      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T184644Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3599&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=1315d33497029a0e11f7a01cd3e7f41fae333c47355801e1a4cf8f11a6b4ee5b
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=Vf6trcdTO2HrykdexVQeq9q4aDggFA61csqak6w1dS2BCOR4HvfjTu3Fa04IO5c//I+TDG9NFxoAq8TMqwSn0Cte1W5IkXWbJ8D1llxO72zzSn6dgytAubgvCCNu;
-        Expires=Wed, 16 Feb 2022 16:51:09 GMT; Path=/
-      - AWSALBCORS=Vf6trcdTO2HrykdexVQeq9q4aDggFA61csqak6w1dS2BCOR4HvfjTu3Fa04IO5c//I+TDG9NFxoAq8TMqwSn0Cte1W5IkXWbJ8D1llxO72zzSn6dgytAubgvCCNu;
-        Expires=Wed, 16 Feb 2022 16:51:09 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=f655cb0870228d9adbdd9abeca6e; Path=/; Secure; HttpOnly
+      - AWSALB=LiOvGJDGqN4UuGhIfmW8sVIEmVUDUL+dKiwh6mhsBTBINvbojxd01w44Dovn9cG8aKlXBCyRooyy0mKJRT3xxRmgr0gkEK/BxfrrJojQCENp2nEab1LgojY5HWgT;
+        Expires=Fri, 18 Feb 2022 18:46:44 GMT; Path=/
+      - AWSALBCORS=LiOvGJDGqN4UuGhIfmW8sVIEmVUDUL+dKiwh6mhsBTBINvbojxd01w44Dovn9cG8aKlXBCyRooyy0mKJRT3xxRmgr0gkEK/BxfrrJojQCENp2nEab1LgojY5HWgT;
+        Expires=Fri, 18 Feb 2022 18:46:44 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=a1be76283b23251e1d9be3f1bd19; Path=/; Secure; HttpOnly
     status:
       code: 303
       message: See Other
@@ -625,7 +625,7 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: HEAD
-    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220209T165109Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220209%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=9efb6469a15fb4b0b353e3ee314d1ecb96ac471b69f5a41d19b499640a3e684a
+    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T184644Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3599&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=1315d33497029a0e11f7a01cd3e7f41fae333c47355801e1a4cf8f11a6b4ee5b
   response:
     body:
       string: ''
@@ -633,13 +633,15 @@ interactions:
       Content-Type:
       - application/xml
       Date:
-      - Wed, 09 Feb 2022 16:51:09 GMT
+      - Fri, 11 Feb 2022 18:46:44 GMT
       Server:
       - AmazonS3
+      Transfer-Encoding:
+      - chunked
       x-amz-id-2:
-      - l8KxAVZDzU/g7G8ZOoMY7bGQx25eIh0bgFWpxAB3v8b8XSZlenBRXXIClsG7EfgBlYFr53ymCWo=
+      - F3gl2KeOcakKToFDbu00ejPEggSrFMZNXDn2ewKeQ320VfnzNIi/46h63G5WhsKgIRcW+iSMKBM=
       x-amz-request-id:
-      - C4FF6QSQQNB8JS9V
+      - V4Q0T5BXQ8VFK13G
     status:
       code: 403
       message: Forbidden
@@ -673,17 +675,17 @@ interactions:
       Content-Length:
       - '0'
       Date:
-      - Wed, 09 Feb 2022 16:51:09 GMT
+      - Fri, 11 Feb 2022 18:46:44 GMT
       Location:
-      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220209T165109Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220209%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=9efb6469a15fb4b0b353e3ee314d1ecb96ac471b69f5a41d19b499640a3e684a
+      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T184644Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=97bce07800c8e236b397207aada8858aedf770ebea8dcacc8ffc8109aef05680
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=zOhVE7epqYCFGgscma5Ke0sz/laVg6X1cznSAkSVEksfenjf//nJ/eeNFlIRqJfwEHJjC+eIaLA4wy9nh3GEVpsbpmhUV6I5dZyVSVmDoU/1I072kmpQFxWrw0kF;
-        Expires=Wed, 16 Feb 2022 16:51:09 GMT; Path=/
-      - AWSALBCORS=zOhVE7epqYCFGgscma5Ke0sz/laVg6X1cznSAkSVEksfenjf//nJ/eeNFlIRqJfwEHJjC+eIaLA4wy9nh3GEVpsbpmhUV6I5dZyVSVmDoU/1I072kmpQFxWrw0kF;
-        Expires=Wed, 16 Feb 2022 16:51:09 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=f655f73a9ea8cf22883c713d894d; Path=/; Secure; HttpOnly
+      - AWSALB=Hq1eOlR8A2KMW4UKSewNIQoamPVlDCuAMkhn6O2Ch1GuqTAm6klYRLUjGlIx8UmtnNpA1xyF5YfFhI4NqiEMoHSiQd1zTbeSo74pJMSTs9ifU/0d2/Gxz5vaOs6r;
+        Expires=Fri, 18 Feb 2022 18:46:44 GMT; Path=/
+      - AWSALBCORS=Hq1eOlR8A2KMW4UKSewNIQoamPVlDCuAMkhn6O2Ch1GuqTAm6klYRLUjGlIx8UmtnNpA1xyF5YfFhI4NqiEMoHSiQd1zTbeSo74pJMSTs9ifU/0d2/Gxz5vaOs6r;
+        Expires=Fri, 18 Feb 2022 18:46:44 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=a1be97da27fe72c83a272121992a; Path=/; Secure; HttpOnly
     status:
       code: 303
       message: See Other
@@ -701,7 +703,7 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220209T165109Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220209%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=9efb6469a15fb4b0b353e3ee314d1ecb96ac471b69f5a41d19b499640a3e684a
+    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T184644Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=97bce07800c8e236b397207aada8858aedf770ebea8dcacc8ffc8109aef05680
   response:
     body:
       string: !!binary |
@@ -719,7 +721,7 @@ interactions:
       Content-Type:
       - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
       Date:
-      - Wed, 09 Feb 2022 16:51:11 GMT
+      - Fri, 11 Feb 2022 18:46:46 GMT
       ETag:
       - '"ca9dea905295ac52db4ea3c7c8bf00e9"'
       Last-Modified:
@@ -727,11 +729,179 @@ interactions:
       Server:
       - AmazonS3
       x-amz-id-2:
-      - 5x9RkmCfinzokq8BkQblHKRjIZtuL33VFU35yusM/TQ22T0f/GCoyUFkRuKLLo0Lr3O96QpLwIk=
+      - 41HO8sqERqjDpwuY1TIP0se1E+T6NfKpVLGIFUT0JFLLYQB8a9UkGzzdboeNSqv1VbTFzw21Pf4=
       x-amz-replication-status:
       - COMPLETED
       x-amz-request-id:
-      - 4PYAG2WPAVJZA44S
+      - WCF484DHRE63K24T
+      x-amz-version-id:
+      - 8Uv3Yrd.dfBXa57kWF6KNDwyWs06bgpF
+    status:
+      code: 206
+      message: Partial Content
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+    method: HEAD
+    uri: https://dataverse.harvard.edu/api/access/datafile/3315157?format=original
+  response:
+    body:
+      string: ''
+    headers:
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, X-Dataverse-Key
+      Access-Control-Allow-Methods:
+      - PUT, GET, POST, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/xml;charset=UTF-8
+      Date:
+      - Fri, 11 Feb 2022 18:46:45 GMT
+      Location:
+      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T184645Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=b924fe9b62c0ec03833852e284cea49786fdb6b3a4efb9630f3a41a4379ede3a
+      Server:
+      - Apache
+      Set-Cookie:
+      - AWSALB=jDy7xPJz0+bjjARDSwIylt1MTo2U1q9nHLBOsgII76mhlObDXTUsW/P2Aw8p8YRtlHXSV3ykR/PSNp6Cp9v8YimZlF0gQF9VxXC3BhyVqXKKbkkfU48kJrIPzhEt;
+        Expires=Fri, 18 Feb 2022 18:46:45 GMT; Path=/
+      - AWSALBCORS=jDy7xPJz0+bjjARDSwIylt1MTo2U1q9nHLBOsgII76mhlObDXTUsW/P2Aw8p8YRtlHXSV3ykR/PSNp6Cp9v8YimZlF0gQF9VxXC3BhyVqXKKbkkfU48kJrIPzhEt;
+        Expires=Fri, 18 Feb 2022 18:46:45 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=a1bebcb183a86ead7e048c660fed; Path=/; Secure; HttpOnly
+    status:
+      code: 303
+      message: See Other
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+    method: HEAD
+    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T184645Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=b924fe9b62c0ec03833852e284cea49786fdb6b3a4efb9630f3a41a4379ede3a
+  response:
+    body:
+      string: ''
+    headers:
+      Content-Type:
+      - application/xml
+      Date:
+      - Fri, 11 Feb 2022 18:46:45 GMT
+      Server:
+      - AmazonS3
+      Transfer-Encoding:
+      - chunked
+      x-amz-id-2:
+      - OajxaktMmIEgzw7CfQpc3L51sJNiUVyLGXA5tPRJ9SMLJOhxgX223JlDw/NoA8UmkHSfcEnYuXA=
+      x-amz-request-id:
+      - WCF4MYB9BK1P1R5Z
+    status:
+      code: 403
+      message: Forbidden
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Range:
+      - bytes=0-100
+      User-Agent:
+      - python-requests/2.26.0
+    method: GET
+    uri: https://dataverse.harvard.edu/api/access/datafile/3315157?format=original
+  response:
+    body:
+      string: ''
+    headers:
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, X-Dataverse-Key
+      Access-Control-Allow-Methods:
+      - PUT, GET, POST, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      Date:
+      - Fri, 11 Feb 2022 18:46:46 GMT
+      Location:
+      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T184646Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=813013e81eba4cf46595bbb9a1977fd4eda46c687f3e58a1500765956c3a9bdc
+      Server:
+      - Apache
+      Set-Cookie:
+      - AWSALB=hdY0PTNiKkvthekztI2ICNETw0Y1MjQePY+PqpzMV1z0vAcHXOxQ0rrXXSQ+Z4qVaqgi1jXugg8FBLecnpH8WrcZEd5hj+D3VZ6dHQw5/TgNzZopWfNgxIKexFNr;
+        Expires=Fri, 18 Feb 2022 18:46:45 GMT; Path=/
+      - AWSALBCORS=hdY0PTNiKkvthekztI2ICNETw0Y1MjQePY+PqpzMV1z0vAcHXOxQ0rrXXSQ+Z4qVaqgi1jXugg8FBLecnpH8WrcZEd5hj+D3VZ6dHQw5/TgNzZopWfNgxIKexFNr;
+        Expires=Fri, 18 Feb 2022 18:46:45 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=a1bedf096a61b5bb966b41b053f2; Path=/; Secure; HttpOnly
+    status:
+      code: 303
+      message: See Other
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Range:
+      - bytes=0-100
+      User-Agent:
+      - python-requests/2.26.0
+    method: GET
+    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T184646Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=813013e81eba4cf46595bbb9a1977fd4eda46c687f3e58a1500765956c3a9bdc
+  response:
+    body:
+      string: !!binary |
+        UEsDBBQABgAIAAAAIQDA14IQxQEAAMUKAAATAL4BW0NvbnRlbnRfVHlwZXNdLnhtbCCiugEooAAC
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+    headers:
+      Accept-Ranges:
+      - bytes
+      Content-Disposition:
+      - attachment; filename*=UTF-8''Karnataka_DD%26FS_Data-1.xlsx
+      Content-Length:
+      - '101'
+      Content-Range:
+      - bytes 0-100/700840
+      Content-Type:
+      - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+      Date:
+      - Fri, 11 Feb 2022 18:46:47 GMT
+      ETag:
+      - '"ca9dea905295ac52db4ea3c7c8bf00e9"'
+      Last-Modified:
+      - Thu, 15 Nov 2018 16:01:47 GMT
+      Server:
+      - AmazonS3
+      x-amz-id-2:
+      - 1c5Zg8R77G1thd0cgLbVm3SCezsQATfhx+wIcXQc+bGWJoQG7ATqBzgGyktXchIyGRRTABahsyg=
+      x-amz-replication-status:
+      - COMPLETED
+      x-amz-request-id:
+      - 8S3VFAGP0S7YP3C7
       x-amz-version-id:
       - 8Uv3Yrd.dfBXa57kWF6KNDwyWs06bgpF
     status:
@@ -799,15 +969,15 @@ interactions:
       Content-disposition:
       - attachment; filename="Karnataka_DD%26FS_Data-1.tab"
       Date:
-      - Wed, 09 Feb 2022 16:51:10 GMT
+      - Fri, 11 Feb 2022 18:46:46 GMT
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=VEwr1OEsXG+mF3bxS7NL58Rq+XcaVJb8mP2MhTNo9NLs1vUEKLcJaspQsZp4p3HiuOVHf/5bVKK4ucFHzKiWkFJQlbkjqQKxJdFtnSg+4K0w7AanLzczIpNkLWsf;
-        Expires=Wed, 16 Feb 2022 16:51:10 GMT; Path=/
-      - AWSALBCORS=VEwr1OEsXG+mF3bxS7NL58Rq+XcaVJb8mP2MhTNo9NLs1vUEKLcJaspQsZp4p3HiuOVHf/5bVKK4ucFHzKiWkFJQlbkjqQKxJdFtnSg+4K0w7AanLzczIpNkLWsf;
-        Expires=Wed, 16 Feb 2022 16:51:10 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=f6561aaa7ad10fb25163b2d445a7; Path=/; Secure; HttpOnly
+      - AWSALB=fyA0ETxBMpr8d211J4tz2tonMxNXLwWhyjGqpdIToiLLt0N1JL4FdHdQU2LMus0Ec5g9O+bI46Dc7pD3T73x1rUvPgQw37L3f+XNI7LULzT1eGDUVprOZMFw5ama;
+        Expires=Fri, 18 Feb 2022 18:46:46 GMT; Path=/
+      - AWSALBCORS=fyA0ETxBMpr8d211J4tz2tonMxNXLwWhyjGqpdIToiLLt0N1JL4FdHdQU2LMus0Ec5g9O+bI46Dc7pD3T73x1rUvPgQw37L3f+XNI7LULzT1eGDUVprOZMFw5ama;
+        Expires=Fri, 18 Feb 2022 18:46:46 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=a1bf04f9625f30a76a2f8647c075; Path=/; Secure; HttpOnly
     status:
       code: 200
       message: OK
@@ -831,7 +1001,7 @@ interactions:
       CF-Cache-Status:
       - DYNAMIC
       CF-RAY:
-      - 6dae99d75b118737-ORD
+      - 6dbfbdee7ff262ab-ORD
       Connection:
       - keep-alive
       Content-Length:
@@ -839,13 +1009,13 @@ interactions:
       Content-Type:
       - text/html;charset=utf-8
       Date:
-      - Wed, 09 Feb 2022 16:51:10 GMT
+      - Fri, 11 Feb 2022 18:46:46 GMT
       Expect-CT:
       - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
       NEL:
       - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=u53oN2e59zZzn%2Bh3hGggbp%2BI%2BTjbKQ9UDeVVaz9yt7TTDLTXza20RL5LOYSpgNG%2FaTNm6QBCeOTaWLytxg2IX6Y4hZRmW9wTzr4sgUrYPXNBI%2FCWgSdoUdGZwkiq%2F5NM58Cdguw%3D"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=oDdJjl0qMLjKDXbGOyYHErKvo21BlkcKQRcP%2FCzRKAw0lHWRQB6ingFeisnmaBcKXr%2FgRqfWbBaZN4rq9lUS79sFoLxX8bCcbmUGIWd5P2rgJ01ZyW%2F0SKlV41%2FQiYotpdwmzp4%3D"}],"group":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
       Strict-Transport-Security:
@@ -853,7 +1023,7 @@ interactions:
       alt-svc:
       - h3=":443"; ma=86400, h3-29=":443"; ma=86400
       expires:
-      - Wed, 09 Feb 2022 17:18:35 GMT
+      - Fri, 11 Feb 2022 19:17:39 GMT
       location:
       - https://dataverse.harvard.edu/file.xhtml?persistentId=doi:10.7910/DVN/RLMYMR/WNKD3W
       vary:
@@ -883,15 +1053,15 @@ interactions:
       Content-Type:
       - text/html;charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:51:10 GMT
+      - Fri, 11 Feb 2022 18:46:47 GMT
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=XkAMtgxg372UXRLPb8tp4ftypcLtA7YVRAhxo7rlHAS8ExnO4wQe0EgjudlnXCrz2JbWZnAF4GFlX+y417OZ5qwm0n1KUPT42Wze4/DuPK21mYNNF8jC7/7QkWjK;
-        Expires=Wed, 16 Feb 2022 16:51:10 GMT; Path=/
-      - AWSALBCORS=XkAMtgxg372UXRLPb8tp4ftypcLtA7YVRAhxo7rlHAS8ExnO4wQe0EgjudlnXCrz2JbWZnAF4GFlX+y417OZ5qwm0n1KUPT42Wze4/DuPK21mYNNF8jC7/7QkWjK;
-        Expires=Wed, 16 Feb 2022 16:51:10 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=f65638b285ab56575aa8de81a9ef; Path=/; Secure; HttpOnly
+      - AWSALB=9cbr8iVM7OGzkXLEl0y0w9NnwiLxlnDQ7dzhoRVWFJ9r0oi+qlSd0kqfULvFZMhqbK9/RNKibDCua/0u4JJSw/ViP06u7YONBM3w+M/l+AkIpAc2FdjhjHWhg9iQ;
+        Expires=Fri, 18 Feb 2022 18:46:46 GMT; Path=/
+      - AWSALBCORS=9cbr8iVM7OGzkXLEl0y0w9NnwiLxlnDQ7dzhoRVWFJ9r0oi+qlSd0kqfULvFZMhqbK9/RNKibDCua/0u4JJSw/ViP06u7YONBM3w+M/l+AkIpAc2FdjhjHWhg9iQ;
+        Expires=Fri, 18 Feb 2022 18:46:46 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=a1bf1db4287c7a17eb32cc27b423; Path=/; Secure; HttpOnly
     status:
       code: 200
       message: OK
@@ -930,14 +1100,14 @@ interactions:
       Content-Type:
       - application/json;charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:51:11 GMT
+      - Fri, 11 Feb 2022 18:46:55 GMT
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=LJavdXkhniCOWlHSUl4VS3SzkrmPfEP3cLx/u22hz5O3ig4aEZk/8lVJ/al4ias8G81hyhv8M5/Qha2tN0Ui5i2d23xPY++mwzwI6BCAYJSmEscannQUzydW2HeI;
-        Expires=Wed, 16 Feb 2022 16:51:11 GMT; Path=/
-      - AWSALBCORS=LJavdXkhniCOWlHSUl4VS3SzkrmPfEP3cLx/u22hz5O3ig4aEZk/8lVJ/al4ias8G81hyhv8M5/Qha2tN0Ui5i2d23xPY++mwzwI6BCAYJSmEscannQUzydW2HeI;
-        Expires=Wed, 16 Feb 2022 16:51:11 GMT; Path=/; SameSite=None; Secure
+      - AWSALB=+uQKSTdI/4l+MaHAQ41fKAwHhKsOrQXCvs5B7lo4ujLVMTE9fu4u1PBtZkqKcGz6t2L8pY49f/LpCaUZeTti/fAG4vuaZ2hvRmbqyk5Gh35tLJCC4gZ/3qv7xSJM;
+        Expires=Fri, 18 Feb 2022 18:46:47 GMT; Path=/
+      - AWSALBCORS=+uQKSTdI/4l+MaHAQ41fKAwHhKsOrQXCvs5B7lo4ujLVMTE9fu4u1PBtZkqKcGz6t2L8pY49f/LpCaUZeTti/fAG4vuaZ2hvRmbqyk5Gh35tLJCC4gZ/3qv7xSJM;
+        Expires=Fri, 18 Feb 2022 18:46:47 GMT; Path=/; SameSite=None; Secure
     status:
       code: 200
       message: OK
@@ -969,17 +1139,17 @@ interactions:
       Content-Type:
       - application/xml;charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:51:11 GMT
+      - Fri, 11 Feb 2022 18:46:56 GMT
       Location:
-      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220209T165111Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220209%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=e10c63e80736cd7e54ab05fbef1e80dda1fe37c5babed44e120a78a3d8fc8f37
+      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T184656Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=48be2e90bcbf876338f5a7c11d387449c9c547d893eab301f11c46f5db4c8b8d
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=WMI34uXFvXnKSO8vsHsufq45pN199R4bGaR4d3q0CYnHyizgXU4IbEGtESKwaPtw2DEG8wppBqEFfAAoj+miztAdW1mxouX93oGe5O7ZyHQSPxgKB56Fd+17l/yX;
-        Expires=Wed, 16 Feb 2022 16:51:11 GMT; Path=/
-      - AWSALBCORS=WMI34uXFvXnKSO8vsHsufq45pN199R4bGaR4d3q0CYnHyizgXU4IbEGtESKwaPtw2DEG8wppBqEFfAAoj+miztAdW1mxouX93oGe5O7ZyHQSPxgKB56Fd+17l/yX;
-        Expires=Wed, 16 Feb 2022 16:51:11 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=f656601ade2ce41ca576f427a663; Path=/; Secure; HttpOnly
+      - AWSALB=jAIfgT07wJFTy9sHBFnVGUh4S3dhBIMdT8UAQl/ZhYUeGQYGCVFxYChClrmRCwo09mE4ji+q7R3JEdd614sNFw9YS0s8OSNeJ9I1Lzkz46EnFP8Ge1/bq7SO/Ijf;
+        Expires=Fri, 18 Feb 2022 18:46:56 GMT; Path=/
+      - AWSALBCORS=jAIfgT07wJFTy9sHBFnVGUh4S3dhBIMdT8UAQl/ZhYUeGQYGCVFxYChClrmRCwo09mE4ji+q7R3JEdd614sNFw9YS0s8OSNeJ9I1Lzkz46EnFP8Ge1/bq7SO/Ijf;
+        Expires=Fri, 18 Feb 2022 18:46:56 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=a1c15d84c7ce0d7e803ba7cbd960; Path=/; Secure; HttpOnly
     status:
       code: 303
       message: See Other
@@ -995,7 +1165,7 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: HEAD
-    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220209T165111Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220209%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=e10c63e80736cd7e54ab05fbef1e80dda1fe37c5babed44e120a78a3d8fc8f37
+    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T184656Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=48be2e90bcbf876338f5a7c11d387449c9c547d893eab301f11c46f5db4c8b8d
   response:
     body:
       string: ''
@@ -1003,13 +1173,13 @@ interactions:
       Content-Type:
       - application/xml
       Date:
-      - Wed, 09 Feb 2022 16:51:11 GMT
+      - Fri, 11 Feb 2022 18:46:56 GMT
       Server:
       - AmazonS3
       x-amz-id-2:
-      - CDm+FjEPxAhJlIh4N5EEUAQdM3bIW8lXzcKeLhf2aRo7ARwWoKtj3GkEOSrAxrmYJ34oIFkrGHs=
+      - JTbNnzMqjLj6KG9dKiteEb6w5XyTf18UFS5zJZdDbf5UYz9bzlMF5D7Bwor+QLoburIb30dZORo=
       x-amz-request-id:
-      - 1RRKFJBMJNVD133Q
+      - P4GXPAD5M89V1PYW
     status:
       code: 403
       message: Forbidden
@@ -1043,17 +1213,17 @@ interactions:
       Content-Length:
       - '0'
       Date:
-      - Wed, 09 Feb 2022 16:51:12 GMT
+      - Fri, 11 Feb 2022 18:46:57 GMT
       Location:
-      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220209T165112Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220209%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=b43bc1352080151b9c572d25c22850a6de53f20d874678c42ae4852ea8de20aa
+      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T184657Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=ce928d5d60ae6ab58530f4923354e552b79c72f336a2a25480d74d34b45561f2
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=lU77WJbCnWwg31ynyvQTLyhqPs/bhyHOV1a2FkqXaZ8BZ2IvthE4L1AbY2YyIUL0T9tO0+GoKJg4KHvY78xnxWUgFc1ZkeIa0kFWW0MuMcFjTTz0veHr79k0SO24;
-        Expires=Wed, 16 Feb 2022 16:51:12 GMT; Path=/
-      - AWSALBCORS=lU77WJbCnWwg31ynyvQTLyhqPs/bhyHOV1a2FkqXaZ8BZ2IvthE4L1AbY2YyIUL0T9tO0+GoKJg4KHvY78xnxWUgFc1ZkeIa0kFWW0MuMcFjTTz0veHr79k0SO24;
-        Expires=Wed, 16 Feb 2022 16:51:12 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=f656862de1f17b888b74d2448eed; Path=/; Secure; HttpOnly
+      - AWSALB=FuLk7rzPImimv6ZZy00poRmnjzxlen+9EQQxwCAPqz//qYqj235Lq/iXBIb+kHd0JSsmtqxIefKsdjMQVmiChoaXB0vEpEPrMdWIaWir9+vDHseEzrEQny83zEkX;
+        Expires=Fri, 18 Feb 2022 18:46:56 GMT; Path=/
+      - AWSALBCORS=FuLk7rzPImimv6ZZy00poRmnjzxlen+9EQQxwCAPqz//qYqj235Lq/iXBIb+kHd0JSsmtqxIefKsdjMQVmiChoaXB0vEpEPrMdWIaWir9+vDHseEzrEQny83zEkX;
+        Expires=Fri, 18 Feb 2022 18:46:56 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=a1c1a7d3b871f918b522a1e4060e; Path=/; Secure; HttpOnly
     status:
       code: 303
       message: See Other
@@ -1071,7 +1241,7 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220209T165112Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220209%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=b43bc1352080151b9c572d25c22850a6de53f20d874678c42ae4852ea8de20aa
+    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T184657Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=ce928d5d60ae6ab58530f4923354e552b79c72f336a2a25480d74d34b45561f2
   response:
     body:
       string: !!binary |
@@ -1089,7 +1259,7 @@ interactions:
       Content-Type:
       - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
       Date:
-      - Wed, 09 Feb 2022 16:51:13 GMT
+      - Fri, 11 Feb 2022 18:46:58 GMT
       ETag:
       - '"ca9dea905295ac52db4ea3c7c8bf00e9"'
       Last-Modified:
@@ -1097,11 +1267,177 @@ interactions:
       Server:
       - AmazonS3
       x-amz-id-2:
-      - UDfTAP3rEJnmhvuWDF4MlOlJsJPQXUJV1cHdqtpMfVYD85vom+fYmI3ahH2jtGMg9mnbOppMl7o=
+      - eilkJzvxIhwmPb6jh68DJTAT2haxxD51Ia4Rrwty/2WLeUKzMJyYsfgyTUri3N1uE7nZpXe2R24=
       x-amz-replication-status:
       - COMPLETED
       x-amz-request-id:
-      - C12Z8PZFSW4E04CW
+      - ZPZ6F08TWRWNFTXN
+      x-amz-version-id:
+      - 8Uv3Yrd.dfBXa57kWF6KNDwyWs06bgpF
+    status:
+      code: 206
+      message: Partial Content
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+    method: HEAD
+    uri: https://dataverse.harvard.edu/api/access/datafile/3315157?format=original
+  response:
+    body:
+      string: ''
+    headers:
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, X-Dataverse-Key
+      Access-Control-Allow-Methods:
+      - PUT, GET, POST, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/xml;charset=UTF-8
+      Date:
+      - Fri, 11 Feb 2022 18:46:58 GMT
+      Location:
+      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T184658Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=6b0601fc638205363b84280504fc09521a9250792e661c7988bf75ce805c6776
+      Server:
+      - Apache
+      Set-Cookie:
+      - AWSALB=Val+WWg89KUWkvcpUgO2HayGLHOPujRpC6tfCSUJL2DNXW76mvC0VvBjtFmbFuqTsY1S0EuQxN/pkhkJw5YO6JunCm5uZoRQAmkSHQxq2SpZJ7Ax/PVcflFd6Xol;
+        Expires=Fri, 18 Feb 2022 18:46:58 GMT; Path=/
+      - AWSALBCORS=Val+WWg89KUWkvcpUgO2HayGLHOPujRpC6tfCSUJL2DNXW76mvC0VvBjtFmbFuqTsY1S0EuQxN/pkhkJw5YO6JunCm5uZoRQAmkSHQxq2SpZJ7Ax/PVcflFd6Xol;
+        Expires=Fri, 18 Feb 2022 18:46:58 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=a1c1f4df213e967facf9e198cb3f; Path=/; Secure; HttpOnly
+    status:
+      code: 303
+      message: See Other
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+    method: HEAD
+    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T184658Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=6b0601fc638205363b84280504fc09521a9250792e661c7988bf75ce805c6776
+  response:
+    body:
+      string: ''
+    headers:
+      Content-Type:
+      - application/xml
+      Date:
+      - Fri, 11 Feb 2022 18:46:58 GMT
+      Server:
+      - AmazonS3
+      x-amz-id-2:
+      - B9XCJQmwM0LC3Z0S/j1jVHwm5oneYJlTBL0pM9xGbPjszrSZOXSqPXjYtwtkfXnOMW163SYLg8c=
+      x-amz-request-id:
+      - XE87RGMSQZJRV71R
+    status:
+      code: 403
+      message: Forbidden
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Range:
+      - bytes=0-100
+      User-Agent:
+      - python-requests/2.26.0
+    method: GET
+    uri: https://dataverse.harvard.edu/api/access/datafile/3315157?format=original
+  response:
+    body:
+      string: ''
+    headers:
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, X-Dataverse-Key
+      Access-Control-Allow-Methods:
+      - PUT, GET, POST, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      Date:
+      - Fri, 11 Feb 2022 18:46:59 GMT
+      Location:
+      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T184659Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=321d3c6506adacf3d0a72c5fb3d219ccd0db3408002046652ca0acaf22161c10
+      Server:
+      - Apache
+      Set-Cookie:
+      - AWSALB=fzVq1eHNaBD5lR7TuoIZakp2QIQVd9OTyX1GR6bwkbyT+GK8UGvXmaWAa5IkTlIshfW4XQCQZJWhWAzik4rn1kDJkCrFWajKvwrPox7J42TIQGYxBNQAKTfu5k9w;
+        Expires=Fri, 18 Feb 2022 18:46:59 GMT; Path=/
+      - AWSALBCORS=fzVq1eHNaBD5lR7TuoIZakp2QIQVd9OTyX1GR6bwkbyT+GK8UGvXmaWAa5IkTlIshfW4XQCQZJWhWAzik4rn1kDJkCrFWajKvwrPox7J42TIQGYxBNQAKTfu5k9w;
+        Expires=Fri, 18 Feb 2022 18:46:59 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=a1c2141d30b3c114e0a2a3c60724; Path=/; Secure; HttpOnly
+    status:
+      code: 303
+      message: See Other
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Range:
+      - bytes=0-100
+      User-Agent:
+      - python-requests/2.26.0
+    method: GET
+    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T184659Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=321d3c6506adacf3d0a72c5fb3d219ccd0db3408002046652ca0acaf22161c10
+  response:
+    body:
+      string: !!binary |
+        UEsDBBQABgAIAAAAIQDA14IQxQEAAMUKAAATAL4BW0NvbnRlbnRfVHlwZXNdLnhtbCCiugEooAAC
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+    headers:
+      Accept-Ranges:
+      - bytes
+      Content-Disposition:
+      - attachment; filename*=UTF-8''Karnataka_DD%26FS_Data-1.xlsx
+      Content-Length:
+      - '101'
+      Content-Range:
+      - bytes 0-100/700840
+      Content-Type:
+      - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+      Date:
+      - Fri, 11 Feb 2022 18:47:00 GMT
+      ETag:
+      - '"ca9dea905295ac52db4ea3c7c8bf00e9"'
+      Last-Modified:
+      - Thu, 15 Nov 2018 16:01:47 GMT
+      Server:
+      - AmazonS3
+      x-amz-id-2:
+      - uP8q5njka5Ttss7iWPiDlwVJukat/0iOtLLUcpPTsxGUKYO79Ej4B4lbLaju/eKS9M6Jlbl6fcU=
+      x-amz-replication-status:
+      - COMPLETED
+      x-amz-request-id:
+      - 8XXA9SDS6C6TB6X1
       x-amz-version-id:
       - 8Uv3Yrd.dfBXa57kWF6KNDwyWs06bgpF
     status:
@@ -1169,15 +1505,15 @@ interactions:
       Content-disposition:
       - attachment; filename="Karnataka_DD%26FS_Data-1.tab"
       Date:
-      - Wed, 09 Feb 2022 16:51:12 GMT
+      - Fri, 11 Feb 2022 18:46:59 GMT
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=SqoEAMf00e3mJu02VGTnzM1HL/cwB7VssscpgZIwfIojm03IagiG69oL8d9VbG3TmyHT+X/Y8ceVyN8mFrWPTKvzQkd/YQLVfwJ24SYXqEBkKiDj4pLHCyx4Cr0E;
-        Expires=Wed, 16 Feb 2022 16:51:12 GMT; Path=/
-      - AWSALBCORS=SqoEAMf00e3mJu02VGTnzM1HL/cwB7VssscpgZIwfIojm03IagiG69oL8d9VbG3TmyHT+X/Y8ceVyN8mFrWPTKvzQkd/YQLVfwJ24SYXqEBkKiDj4pLHCyx4Cr0E;
-        Expires=Wed, 16 Feb 2022 16:51:12 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=f656ad97738f498fe9152e547cf9; Path=/; Secure; HttpOnly
+      - AWSALB=4cK2YLRdTlZTfj8nCJH/hmGvwDt1KhjqjDRyXww6fv0/rUwfOR2qDHL0h70ssohDIuXZH3HIXqhWspvXr1lPfAbXzpszRDpOjJGpwypGhwSXPXZaMlm+SIP6QV/M;
+        Expires=Fri, 18 Feb 2022 18:46:59 GMT; Path=/
+      - AWSALBCORS=4cK2YLRdTlZTfj8nCJH/hmGvwDt1KhjqjDRyXww6fv0/rUwfOR2qDHL0h70ssohDIuXZH3HIXqhWspvXr1lPfAbXzpszRDpOjJGpwypGhwSXPXZaMlm+SIP6QV/M;
+        Expires=Fri, 18 Feb 2022 18:46:59 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=a1c2360212dcc9782b28155ae135; Path=/; Secure; HttpOnly
     status:
       code: 200
       message: OK
@@ -1209,17 +1545,17 @@ interactions:
       Content-Type:
       - application/xml;charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:51:13 GMT
+      - Fri, 11 Feb 2022 18:47:00 GMT
       Location:
-      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/15d9aaf2757-ed846fe49d13.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272017-07-31.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220209T165113Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220209%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=22c63a8429a8c2497afb64f9aeefe3c70aaded04007215a04de536cc6fbcef03
+      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/15d9aaf2757-ed846fe49d13.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272017-07-31.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T184700Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=5726b91358ceb2371741058132035f00cf09e6110e4e3a814b35f47eae6c8e64
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=FDTHy8U/GQUhZS89BhlfNdDuTYhhVdiCMsTL4i8hm5PPxVTJjm2B2tyq5zGdsHFWL2TWoZMWnTpQAgYburNwNctsrtoBSa2u5gAZda5qTJNIjm6P+gJCAwjA4S64;
-        Expires=Wed, 16 Feb 2022 16:51:13 GMT; Path=/
-      - AWSALBCORS=FDTHy8U/GQUhZS89BhlfNdDuTYhhVdiCMsTL4i8hm5PPxVTJjm2B2tyq5zGdsHFWL2TWoZMWnTpQAgYburNwNctsrtoBSa2u5gAZda5qTJNIjm6P+gJCAwjA4S64;
-        Expires=Wed, 16 Feb 2022 16:51:13 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=f656c2386a711a018d8b255fb615; Path=/; Secure; HttpOnly
+      - AWSALB=M3ovN8EQUW+nrgI0xD15k8Q7ugMm7jHBGOheh/De+pQGwKZbPGfsq9TTchPmOum/uP36g6ZxYyV/dfS7z6WuJu2qWuuM4kw6PgI9sN54kBR68zrUdgSYGmLeWv51;
+        Expires=Fri, 18 Feb 2022 18:47:00 GMT; Path=/
+      - AWSALBCORS=M3ovN8EQUW+nrgI0xD15k8Q7ugMm7jHBGOheh/De+pQGwKZbPGfsq9TTchPmOum/uP36g6ZxYyV/dfS7z6WuJu2qWuuM4kw6PgI9sN54kBR68zrUdgSYGmLeWv51;
+        Expires=Fri, 18 Feb 2022 18:47:00 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=a1c24b5a22c50f8a70fac1b2edb8; Path=/; Secure; HttpOnly
     status:
       code: 303
       message: See Other
@@ -1235,7 +1571,7 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: HEAD
-    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/15d9aaf2757-ed846fe49d13.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272017-07-31.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220209T165113Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220209%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=22c63a8429a8c2497afb64f9aeefe3c70aaded04007215a04de536cc6fbcef03
+    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/15d9aaf2757-ed846fe49d13.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272017-07-31.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T184700Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=5726b91358ceb2371741058132035f00cf09e6110e4e3a814b35f47eae6c8e64
   response:
     body:
       string: ''
@@ -1243,13 +1579,13 @@ interactions:
       Content-Type:
       - application/xml
       Date:
-      - Wed, 09 Feb 2022 16:51:13 GMT
+      - Fri, 11 Feb 2022 18:46:59 GMT
       Server:
       - AmazonS3
       x-amz-id-2:
-      - ciGkp7WG2nuRgH3rWXy9E9c0O+7erj4n/btDyFZn0X/BaGomeoucIxCxm2UZZx0FBsrQxscanqs=
+      - vdz12Yb7d9wExZ1084nYiBNNflER5dXKMleLd2EJImZLtVBz5jie5jcPfHCmVZSqu/i7bEMIDAw=
       x-amz-request-id:
-      - G7T30CKMSWDA73RS
+      - PTWDZKFHBF32JK1F
     status:
       code: 403
       message: Forbidden
@@ -1283,17 +1619,17 @@ interactions:
       Content-Length:
       - '0'
       Date:
-      - Wed, 09 Feb 2022 16:51:13 GMT
+      - Fri, 11 Feb 2022 18:47:00 GMT
       Location:
-      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/15d9aaf2757-ed846fe49d13.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272017-07-31.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220209T165113Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3599&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220209%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=44cff76721d775c25061993f1475d3f58a547a319ed2a601c448771d0e53ec04
+      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/15d9aaf2757-ed846fe49d13.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272017-07-31.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T184700Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=5726b91358ceb2371741058132035f00cf09e6110e4e3a814b35f47eae6c8e64
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=fOZkFBUwc4L5Q/ybia9ieRPtS2qyO8yNxJXAeSJrxMJ6Zfmsogubrj+/kcyhN3Q7hh45JuTYD5Ss0tq9KZkLea44o6bKJ/Kusv34vrQOYYQS5FlW2N7jFgv6byz4;
-        Expires=Wed, 16 Feb 2022 16:51:13 GMT; Path=/
-      - AWSALBCORS=fOZkFBUwc4L5Q/ybia9ieRPtS2qyO8yNxJXAeSJrxMJ6Zfmsogubrj+/kcyhN3Q7hh45JuTYD5Ss0tq9KZkLea44o6bKJ/Kusv34vrQOYYQS5FlW2N7jFgv6byz4;
-        Expires=Wed, 16 Feb 2022 16:51:13 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=f656e81cff5ea308f4606aadf8ab; Path=/; Secure; HttpOnly
+      - AWSALB=qRnhX+s21d33Jjo3H9kGECxCMWDLwX5KxRFfWfuH1qjFXoZKWOgvuNbbfnaHf4IkpCLNHnfUfwqTvZ7nb0U+uGI4QArW+IYYIuCcbtURe5X6EeODK8vbNYXbVVOa;
+        Expires=Fri, 18 Feb 2022 18:47:00 GMT; Path=/
+      - AWSALBCORS=qRnhX+s21d33Jjo3H9kGECxCMWDLwX5KxRFfWfuH1qjFXoZKWOgvuNbbfnaHf4IkpCLNHnfUfwqTvZ7nb0U+uGI4QArW+IYYIuCcbtURe5X6EeODK8vbNYXbVVOa;
+        Expires=Fri, 18 Feb 2022 18:47:00 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=a1c26819c8689100137506fb5b3b; Path=/; Secure; HttpOnly
     status:
       code: 303
       message: See Other
@@ -1311,7 +1647,7 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/15d9aaf2757-ed846fe49d13.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272017-07-31.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220209T165113Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3599&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220209%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=44cff76721d775c25061993f1475d3f58a547a319ed2a601c448771d0e53ec04
+    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/15d9aaf2757-ed846fe49d13.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272017-07-31.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T184700Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=5726b91358ceb2371741058132035f00cf09e6110e4e3a814b35f47eae6c8e64
   response:
     body:
       string: 'stars,language,updated,issues,size,forks,watchers,repo,created,description
@@ -1329,7 +1665,7 @@ interactions:
       Content-Type:
       - text/csv
       Date:
-      - Wed, 09 Feb 2022 16:51:15 GMT
+      - Fri, 11 Feb 2022 18:47:01 GMT
       ETag:
       - '"e7dd2f725941b978d45fed3f33ff640c"'
       Last-Modified:
@@ -1337,13 +1673,181 @@ interactions:
       Server:
       - AmazonS3
       x-amz-id-2:
-      - 5Y1dlhSX3rcGqkqEeaDI84miAVWNjCW4NNGdZJkk7lPt23oLgt2s754BbAQdJg8ylxUixfLxgXA=
+      - vidQOG0ujjm//LO2LnrzB/6ajp3Hak8f8o41RwXvAIGKPxnvF8xsT9xW1BUm5jqGdnw+A1vbxuI=
       x-amz-meta-touched:
       - 'true'
       x-amz-replication-status:
       - COMPLETED
       x-amz-request-id:
-      - 7HQ5HGFY5CB34H05
+      - PTW019DX1V5SFARK
+      x-amz-version-id:
+      - a21WUb4tKN1QOmLladm_DSqEFmWTanqm
+    status:
+      code: 206
+      message: Partial Content
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+    method: HEAD
+    uri: https://dataverse.harvard.edu/api/access/datafile/3040230?format=original
+  response:
+    body:
+      string: ''
+    headers:
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, X-Dataverse-Key
+      Access-Control-Allow-Methods:
+      - PUT, GET, POST, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/xml;charset=UTF-8
+      Date:
+      - Fri, 11 Feb 2022 18:47:01 GMT
+      Location:
+      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/15d9aaf2757-ed846fe49d13.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272017-07-31.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T184701Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=992b52f0703f93cd4a40fcc46b1a34fa252905ec4afa2b5fa6e17d9c2e897a05
+      Server:
+      - Apache
+      Set-Cookie:
+      - AWSALB=O8ShikqGCCzQ3/OAMI2s6Ye7vnnraOGeyOXNi0QgwY+FrgnbC+LNM2tUSlOsqwc+JYbuJ6rK9T0uWXuYE7AoUgZtesvE6SVJQBGkMeqZI9r5RhcDDamu+hh9tENk;
+        Expires=Fri, 18 Feb 2022 18:47:01 GMT; Path=/
+      - AWSALBCORS=O8ShikqGCCzQ3/OAMI2s6Ye7vnnraOGeyOXNi0QgwY+FrgnbC+LNM2tUSlOsqwc+JYbuJ6rK9T0uWXuYE7AoUgZtesvE6SVJQBGkMeqZI9r5RhcDDamu+hh9tENk;
+        Expires=Fri, 18 Feb 2022 18:47:01 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=a1c2966e2f166073cb0bf9f85bf2; Path=/; Secure; HttpOnly
+    status:
+      code: 303
+      message: See Other
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+    method: HEAD
+    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/15d9aaf2757-ed846fe49d13.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272017-07-31.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T184701Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=992b52f0703f93cd4a40fcc46b1a34fa252905ec4afa2b5fa6e17d9c2e897a05
+  response:
+    body:
+      string: ''
+    headers:
+      Content-Type:
+      - application/xml
+      Date:
+      - Fri, 11 Feb 2022 18:47:00 GMT
+      Server:
+      - AmazonS3
+      x-amz-id-2:
+      - NAqoceWAxKGz7CvUkM1/dQc8tal2+wtgrKuGpeevNMt5vvKQnfWhczRgvKGWSwj7MU7F8cStGdM=
+      x-amz-request-id:
+      - QJ1KQ4D4YYSDSW2A
+    status:
+      code: 403
+      message: Forbidden
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Range:
+      - bytes=0-100
+      User-Agent:
+      - python-requests/2.26.0
+    method: GET
+    uri: https://dataverse.harvard.edu/api/access/datafile/3040230?format=original
+  response:
+    body:
+      string: ''
+    headers:
+      Access-Control-Allow-Headers:
+      - Accept, Content-Type, X-Dataverse-Key
+      Access-Control-Allow-Methods:
+      - PUT, GET, POST, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      Date:
+      - Fri, 11 Feb 2022 18:47:01 GMT
+      Location:
+      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/15d9aaf2757-ed846fe49d13.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272017-07-31.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T184701Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=992b52f0703f93cd4a40fcc46b1a34fa252905ec4afa2b5fa6e17d9c2e897a05
+      Server:
+      - Apache
+      Set-Cookie:
+      - AWSALB=96rDcKdYO+GB919H63zG2Wm/4lqD6KIip6KZYyOecCCw3E8JpD+FHCyrupKg9EGcd/LzaOQr3Yzy4LidVG9Qepb8tXGHKGnAw8mA8xLI7329WMRdIlUJxVU4/2ET;
+        Expires=Fri, 18 Feb 2022 18:47:01 GMT; Path=/
+      - AWSALBCORS=96rDcKdYO+GB919H63zG2Wm/4lqD6KIip6KZYyOecCCw3E8JpD+FHCyrupKg9EGcd/LzaOQr3Yzy4LidVG9Qepb8tXGHKGnAw8mA8xLI7329WMRdIlUJxVU4/2ET;
+        Expires=Fri, 18 Feb 2022 18:47:01 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=a1c2b725dfe6817dd8f451b83fbf; Path=/; Secure; HttpOnly
+    status:
+      code: 303
+      message: See Other
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Range:
+      - bytes=0-100
+      User-Agent:
+      - python-requests/2.26.0
+    method: GET
+    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/15d9aaf2757-ed846fe49d13.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272017-07-31.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T184701Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=992b52f0703f93cd4a40fcc46b1a34fa252905ec4afa2b5fa6e17d9c2e897a05
+  response:
+    body:
+      string: 'stars,language,updated,issues,size,forks,watchers,repo,created,description
+
+        196,Java,2017-07-31,692,53'
+    headers:
+      Accept-Ranges:
+      - bytes
+      Content-Disposition:
+      - attachment; filename*=UTF-8''2017-07-31.csv
+      Content-Length:
+      - '101'
+      Content-Range:
+      - bytes 0-100/11684
+      Content-Type:
+      - text/csv
+      Date:
+      - Fri, 11 Feb 2022 18:47:03 GMT
+      ETag:
+      - '"e7dd2f725941b978d45fed3f33ff640c"'
+      Last-Modified:
+      - Tue, 13 Feb 2018 10:29:39 GMT
+      Server:
+      - AmazonS3
+      x-amz-id-2:
+      - L1qrc67yYfEu8bByQqCFVu2kaCqvKwE2FOL52WXxTNDmfgtQs8IwwQQr751+PtZ3+aBfHA47Xi8=
+      x-amz-meta-touched:
+      - 'true'
+      x-amz-replication-status:
+      - COMPLETED
+      x-amz-request-id:
+      - P03J05S1R4GQFHN1
       x-amz-version-id:
       - a21WUb4tKN1QOmLladm_DSqEFmWTanqm
     status:
@@ -1476,15 +1980,15 @@ interactions:
       Content-disposition:
       - attachment; filename="2017-07-31.tab"
       Date:
-      - Wed, 09 Feb 2022 16:51:14 GMT
+      - Fri, 11 Feb 2022 18:47:02 GMT
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=gNCexuqfLJXaRHoZ2Oem22DiUB+4kh2WKW4SFjxuJ3kJD21/GybwT0/RCPtyWBXmXPgcKgSQytPujw1jL/g1m/7XDW5Swv4kSYrhZiN9XjfNp1DoFgyjZ7ozXDuf;
-        Expires=Wed, 16 Feb 2022 16:51:14 GMT; Path=/
-      - AWSALBCORS=gNCexuqfLJXaRHoZ2Oem22DiUB+4kh2WKW4SFjxuJ3kJD21/GybwT0/RCPtyWBXmXPgcKgSQytPujw1jL/g1m/7XDW5Swv4kSYrhZiN9XjfNp1DoFgyjZ7ozXDuf;
-        Expires=Wed, 16 Feb 2022 16:51:14 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=f65714ce67e246f0e538d7bf0d04; Path=/; Secure; HttpOnly
+      - AWSALB=IHwEPb1CQHIyEwQwGznQriA98h8ZW3P3V70TC5b519PXhFZtiKRYPARLt14PagAfb4AAocwrp9++tPaiHKkxEYFitb9+GFrMvK/o9V3VwcaFDjsezpBvKrZO7y3z;
+        Expires=Fri, 18 Feb 2022 18:47:02 GMT; Path=/
+      - AWSALBCORS=IHwEPb1CQHIyEwQwGznQriA98h8ZW3P3V70TC5b519PXhFZtiKRYPARLt14PagAfb4AAocwrp9++tPaiHKkxEYFitb9+GFrMvK/o9V3VwcaFDjsezpBvKrZO7y3z;
+        Expires=Fri, 18 Feb 2022 18:47:02 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=a1c2d9b168c450143ac37bb3396d; Path=/; Secure; HttpOnly
     status:
       code: 200
       message: OK
