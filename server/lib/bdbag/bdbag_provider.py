@@ -5,8 +5,6 @@ import zipfile
 from typing import cast, Dict, Optional, Generator
 
 from ..import_item import ImportItem
-from ..data_map import DataMap
-from ..file_map import FileMap
 from ..entity import Entity
 from ..import_providers import ImportProvider
 
@@ -71,20 +69,6 @@ class _BagTree:
 class BDBagProvider(ImportProvider):
     def __init__(self) -> None:
         super().__init__('BDBag')
-
-    def lookup(self, entity: Entity) -> DataMap:
-        raise NotImplementedError('Unsupported operation')
-
-    def listFiles(self, entity: Entity) -> FileMap:
-        raise NotImplementedError('Unsupported operation')
-
-    def getDatasetUID(self, doc: object, user: object) -> str:
-        """Given a registered object, return dataset DOI"""
-        raise NotImplementedError('Unsupported operation')
-
-    def getURI(self, doc: object, user: object) -> str:
-        """Given a registered object, return a URI for it"""
-        raise NotImplementedError('Unsupported operation')
 
     def _listRecursive(self, user: Dict[str, object], pid: str, name: str,
                        base_url: Optional[str] = None,
