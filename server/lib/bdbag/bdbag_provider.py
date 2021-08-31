@@ -70,6 +70,9 @@ class BDBagProvider(ImportProvider):
     def __init__(self) -> None:
         super().__init__('BDBag')
 
+    def matches(self, entity: Entity) -> bool:
+        return False
+
     def _listRecursive(self, user: Dict[str, object], pid: str, name: str,
                        base_url: Optional[str] = None,
                        progress: Optional[object] = None) -> Generator[ImportItem, None, None]:
