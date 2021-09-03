@@ -52,19 +52,6 @@ class _BagTree:
                                  'exists: {}'.format(orig_path))
             dir._add(path.relative_to(name), url, orig_path, size=size)
 
-    def __str__(self) -> str:
-        s = ''
-        self._pp(s, '')
-        return s
-
-    def _pp(self, buf: str, indent: str) -> None:
-        if self.is_dir():
-            buf += indent[:-1] + '+' + self.name
-            for k, v in self.list.items():
-                v._pp(buf, indent + ' |')
-        else:
-            buf += indent + self.name
-
 
 class BDBagProvider(ImportProvider):
     def __init__(self) -> None:
