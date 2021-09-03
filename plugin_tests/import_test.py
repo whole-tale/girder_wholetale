@@ -12,6 +12,7 @@ from fs.osfs import OSFS
 from fs.copy import copy_fs
 from tests import base
 from girder import config
+from girder.utility.path import lookUpPath
 from girder.models.token import Token
 from datetime import datetime
 from .tests_helpers import get_events, event_types
@@ -419,6 +420,38 @@ class ImportTaleTestCase(base.TestCase):
 
         shutil.rmtree(tmpdir)
         Tale().remove(tale)
+
+    def test_bdbag_import(self):
+        with open(
+            os.path.join(DATA_PATH, "Reporter_Cell_Line_14-3QDC.zip"), "rb"
+        ) as fp:
+            resp = self.request(
+                path="/dataset/importBag",
+                method="POST",
+                user=self.user,
+                type="application/zip",
+                body=fp.read(),
+            )
+
+            self.assertStatusOk(resp)
+            job = resp.json
+
+            from girder.plugins.jobs.models.job import Job
+
+            for _ in range(600):
+                if job["status"] in {JobStatus.SUCCESS, JobStatus.ERROR}:
+                    break
+                time.sleep(0.1)
+                job = Job().load(job["_id"], force=True)
+            self.assertEqual(job["status"], JobStatus.SUCCESS)
+
+        base = "/collection/WholeTale Catalog/WholeTale Catalog/Reporter_Cell_Line_14-3QDC"
+        obj = lookUpPath(os.path.join(base, "fetch.txt"))
+        self.assertEqual(obj["model"], "item")
+        self.assertEqual(obj["document"]["size"], 416)
+        obj = lookUpPath(os.path.join(base, "data"))
+        self.assertEqual(obj["model"], "folder")
+        self.assertEqual(obj["document"]["size"], 2720)
 
     def tearDown(self):
         self.model("user").remove(self.user)

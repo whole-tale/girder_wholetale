@@ -1,12 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import os
+import tempfile
+
+import cherrypy
 from bson import ObjectId
 from girder.api import access
 from girder.api.docs import addModel
 from girder.api.describe import Description, autoDescribeRoute
-from girder.api.rest import Resource, filtermodel
+from girder.api.rest import Resource, filtermodel, iterBody
 from girder.constants import AccessType, SortDir, TokenScope
-from girder.exceptions import ValidationException
+from girder.exceptions import ValidationException, RestException
 from girder.models.item import Item
 from girder.models.user import User
 from girder.plugins.jobs.models.job import Job
@@ -97,6 +101,7 @@ class Dataset(Resource):
         self.route('GET', (':id',), self.getDataset)
         self.route('DELETE', (':id',), self.deleteUserDataset)
         self.route('POST', ('register',), self.importData)
+        self.route('POST', ('importBag',), self.importBDBag)
 
     @access.public
     @autoDescribeRoute(
@@ -232,6 +237,67 @@ class Dataset(Resource):
             resource, user, 'Registering Data',
             'Initialization', 2)
 
+        job = self._createImportJob(dataMap, parent, parentType, user, base_url, notification)
+        Job().scheduleJob(job)
+        return job
+
+    @access.user(scope=TokenScope.DATA_WRITE)
+    @autoDescribeRoute(
+        Description('Imports a BDBag.')
+        .notes('Files that exist in the bag are imported directly, whereas references are only '
+               'stored by reference and fetched on-demand.')
+        .param('parentId', 'Parent ID for the new parent of this folder.',
+               required=False)
+        .param('parentType', "Type of the folder's parent", required=False,
+               enum=['folder', 'user', 'collection'], strip=True, default='folder')
+        .param('public', 'Whether the folder should be publicly visible. '
+               'Defaults to True.',
+               required=False, dataType='boolean', default=True)
+        .errorResponse('Write access denied for parent collection.', 403)
+    )
+    def importBDBag(self, parentId, parentType, public, params):
+        user = self.getCurrentUser()
+        if not parentId or parentType not in ('folder', 'item'):
+            parent = getOrCreateRootFolder(CATALOG_NAME)
+            parentType = 'folder'
+        else:
+            parent = self.model(parentType).load(
+                parentId, user=user, level=AccessType.WRITE, exc=True)
+
+        if cherrypy.request.headers.get('Content-Type') == 'application/zip':
+            return self._importBDBagFromStream(iterBody, parent, parentType, public, user)
+        else:
+            raise RestException('Missing bag data')
+
+    def _importBDBagFromStream(self, stream, parent, parentType, public, user=None):
+        with tempfile.NamedTemporaryFile(delete=False) as f:
+            for data in stream():
+                f.write(data)
+            f.seek(0)
+
+            path = f.name
+            base_url = ''
+
+        try:
+            dataMap = {'dataId': path, 'repository': 'BDBag'}
+            resource = {
+                'type': 'wt_register_data',
+                'dataMap': dataMap,
+            }
+            notification = init_progress(
+                resource, user, 'Importing BDBag',
+                'Initialization', 2)
+
+            job = self._createImportJob([dataMap], parent, parentType, user, base_url, notification)
+            Job().scheduleJob(job)
+            return job
+        finally:
+            # This isn't right; the removal needs to be done after the job completes, which may be
+            # after control reaches this line.
+            # It happens to work if the job is a synchronous job, which it seems to be for now.
+            os.unlink(path)
+
+    def _createImportJob(self, dataMap, parent, parentType, user, base_url, notification):
         job = Job().createLocalJob(
             title='Registering Data', user=user,
             type='wholetale.register_data', public=False, _async=False,
@@ -240,5 +306,4 @@ class Dataset(Resource):
             kwargs={'base_url': base_url},
             otherFields={'wt_notification_id': str(notification['_id'])},
         )
-        Job().scheduleJob(job)
         return job

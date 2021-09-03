@@ -123,11 +123,17 @@ class ImportProvider:
             meta.update(item.meta)
         gitem = self.itemModel.setMetadata(gitem, meta)
 
-        # girder does not allow anything else than http and https. So we need a better
-        # mechanism here to communicate relevant information to WTDM
-        self.fileModel.createLinkFile(item.name, url=item.url, parent=gitem, parentType='item',
-                                      creator=user, size=item.size, mimeType=item.mimeType,
-                                      reuseExisting=True)
+        if item.url and item.url.startswith('file://'):
+            with open(item.url[len('file://'):], 'rb') as f:
+                ModelImporter.model('upload').uploadFromFile(f, item.size, item.name, parent=gitem,
+                                                             parentType='item', user=user,
+                                                             mimeType=item.mimeType)
+        else:
+            # girder does not allow anything else than http and https. So we need a better
+            # mechanism here to communicate relevant information to WTDM
+            self.fileModel.createLinkFile(item.name, url=item.url, parent=gitem, parentType='item',
+                                          creator=user, size=item.size, mimeType=item.mimeType,
+                                          reuseExisting=True)
         return (gitem, 'item')
 
     def _listRecursive(self, user, pid: str, name: str, base_url: str = None, progress=None):

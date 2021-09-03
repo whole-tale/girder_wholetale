@@ -16,6 +16,7 @@ add_python_test(import
   PLUGIN wholetale
   EXTERNAL_DATA
   plugins/wholetale/604126f45f6bb2c4c997e967.zip
+  plugins/wholetale/Reporter_Cell_Line_14-3QDC.zip
   plugins/wholetale/tale_import_binder.txt
   plugins/wholetale/tale_import_zip.txt
 )
