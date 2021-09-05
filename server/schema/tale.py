@@ -50,6 +50,10 @@ taleModel = {
             "type": "string",
             "description": "ID of a folder containing Tale's workspace"
         },
+        "dataDirId": {
+            "type": "string",
+            "description": "ID of a folder containing ro data uploaded by the user"
+        },
         "format": {
             "type": "integer",
             "description": "Tale format specification"

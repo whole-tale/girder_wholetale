@@ -21,7 +21,7 @@ from girder.utility import assetstore_utilities
 
 from .image import Image as imageModel
 from ..schema.misc import dataSetSchema
-from ..constants import TaleStatus
+from ..constants import TaleStatus, TALE_DATADIRS_NAME
 from ..schema.misc import related_identifiers_schema
 from ..utils import getOrCreateRootFolder, init_progress, notify_event, diff_access
 from ..lib.license import WholeTaleLicense
@@ -74,6 +74,7 @@ class Tale(AccessControlledModel):
                 "copyOfTale",
                 "created",
                 "creatorId",
+                "dataDirId",
                 "dataSet",
                 "dataSetCitation",
                 "description",
@@ -92,6 +93,9 @@ class Tale(AccessControlledModel):
                 "updated",
             }
         )
+
+        events.bind('model.tale.save.created', 'wholetale', self.createDataDir)
+        events.bind('model.tale.remove', 'wholetale', self.removeDataDir)
 
     @staticmethod
     def _validate_dataset(tale):
@@ -538,3 +542,16 @@ class Tale(AccessControlledModel):
         restored_tale.update(mp.get_tale_fields_from_environment(environment))
         restored_tale["dataSet"] = mp.get_dataset()
         return restored_tale
+
+    def createDataDir(self, event: events.Event):
+        tale = event.info
+        creator = User().load(tale["creatorId"], force=True)
+        dataDir = self._createAuxFolder(tale, TALE_DATADIRS_NAME, creator=creator)
+        tale["dataDirId"] = dataDir["_id"]
+        self.save(tale, triggerEvents=False, validate=False)
+
+    @staticmethod
+    def removeDataDir(event: events.Event):
+        tale = event.info
+        if (dataDir := Folder().load(tale["dataDirId"], force=True)):
+            Folder().remove(dataDir)
