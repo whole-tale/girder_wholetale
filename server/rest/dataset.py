@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 import tempfile
+import zipfile
 
 import cherrypy
 from bson import ObjectId
@@ -10,7 +11,7 @@ from girder.api.docs import addModel
 from girder.api.describe import Description, autoDescribeRoute
 from girder.api.rest import Resource, filtermodel, iterBody
 from girder.constants import AccessType, SortDir, TokenScope
-from girder.exceptions import ValidationException, RestException
+from girder.exceptions import ValidationException, RestException, GirderException
 from girder.models.item import Item
 from girder.models.user import User
 from girder.plugins.jobs.models.job import Job
@@ -275,17 +276,33 @@ class Dataset(Resource):
                 f.write(data)
             f.seek(0)
 
+            if not zipfile.is_zipfile(f):
+                raise GirderException("Provided file is not a zipfile")
+
             path = f.name
             base_url = ''
 
+            # Check if it's a bag.
+            # Would be cool to use bdbag's native api, but they have silly
+            # expectations, like: a path to an unpacked archive...
+            with zipfile.ZipFile(f) as z:
+                bagit_txt = next(
+                    (_ for _ in z.namelist() if _.endswith("bagit.txt")),
+                    None
+                )
+                if bagit_txt:
+                    repository = "BDBag"
+                else:
+                    repository = "Zip"
+
         try:
-            dataMap = {'dataId': path, 'repository': 'BDBag'}
+            dataMap = {'dataId': path, 'repository': repository}
             resource = {
                 'type': 'wt_register_data',
                 'dataMap': dataMap,
             }
             notification = init_progress(
-                resource, user, 'Importing BDBag',
+                resource, user, f"Importing Data from {repository}",
                 'Initialization', 2)
 
             job = self._createImportJob([dataMap], parent, parentType, user, base_url, notification)
