@@ -14,6 +14,7 @@ from girder.utility.progress import ProgressContext
 from ..models.tale import Tale
 from ..utils import notify_event
 from .bdbag.bdbag_provider import BDBagProvider
+from .bdbag.bdbag_provider import GenericZipProvider
 from .data_map import DataMap
 from .dataone.auth import DataONEVerificator
 from .dataone.provider import DataOneImportProvider
@@ -33,6 +34,7 @@ RESOLVERS.add(DOIResolver())
 
 IMPORT_PROVIDERS = ImportProviders()
 IMPORT_PROVIDERS.addProvider(BDBagProvider())
+IMPORT_PROVIDERS.addProvider(GenericZipProvider())
 IMPORT_PROVIDERS.addProvider(DataverseImportProvider())
 IMPORT_PROVIDERS.addProvider(ZenodoImportProvider())
 IMPORT_PROVIDERS.addProvider(GlobusImportProvider())
