@@ -35,6 +35,19 @@ def run(job):
             Path(workspace["fsPath"]),
             dirs_exist_ok=True,
         )
+
+        # Copy data
+        source_data_root = Folder().load(
+            old_tale["dataDirId"], user=user, exc=True, level=AccessType.READ
+        )
+        dest_data_root = Folder().load(
+            new_tale["dataDirId"], user=user, exc=True, level=AccessType.WRITE
+        )
+        # Remove 'current' that was created during Tale initialization
+        Folder().clean(dest_data_root)
+        # Copy data_dirs
+        Folder().copyFolderComponents(source_data_root, dest_data_root, user, None)
+
         events.trigger("wholetale.tale.copied", job["args"])
         Tale().update(
             {"_id": new_tale["_id"]}, update={"$set": {"status": TaleStatus.READY}}
