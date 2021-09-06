@@ -547,6 +547,12 @@ class Tale(AccessControlledModel):
         tale = event.info
         creator = User().load(tale["creatorId"], force=True)
         dataDir = self._createAuxFolder(tale, TALE_DATADIRS_NAME, creator=creator)
+        current = Folder().createFolder(
+            dataDir, "current", parentType="folder", public=tale["public"], reuseExisting=True
+        )
+        Folder().setUserAccess(
+            current, user=creator, level=AccessType.ADMIN, save=True
+        )
         tale["dataDirId"] = dataDir["_id"]
         self.save(tale, triggerEvents=False, validate=False)
 
