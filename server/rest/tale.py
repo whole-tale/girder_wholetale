@@ -144,6 +144,8 @@ class Tale(Resource):
         new_dataset = {(_['itemId'], _["_modelType"]) for _ in tale['dataSet']}
         update_citations = old_dataset ^ new_dataset  # XOR between new and old dataSet
 
+        if "dataDirId" not in tale:
+            tale["dataDirId"] = taleObj["dataDirId"]
         self._model.updateDataSet(
             tale, user, new_ds=tale["dataSet"]
         )

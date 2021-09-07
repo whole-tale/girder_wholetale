@@ -125,6 +125,7 @@ class DataverseImportProvider(ImportProvider):
             return re.compile("^$")
 
     def getDatasetUID(self, doc: object, user: object) -> str:
+        # TODO: does not work with tale's data dir...
         if 'folderId' in doc:
             # It's an item, grab the parent which should contain all the info
             doc = Folder().load(doc['folderId'], user=user, level=AccessType.READ)
