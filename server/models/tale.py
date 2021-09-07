@@ -215,7 +215,7 @@ class Tale(AccessControlledModel):
             'config': config or {},
             'copyOfTale': None,
             'creatorId': creatorId,
-            'dataSet': data or [],
+            'dataSet': [],
             'description': description,
             'format': _currentTaleFormat,
             'created': now,
@@ -245,6 +245,7 @@ class Tale(AccessControlledModel):
             tale = self.save(tale)
             notify_event([creator["_id"]], "wt_tale_created", {"taleId": tale['_id']})
 
+        tale = self.updateDataSet(tale, creator, new_ds=data or [])
         if tale['dataSet']:
             events.daemon.trigger(
                 eventName="tale.update_citation",
@@ -555,7 +556,6 @@ class Tale(AccessControlledModel):
             current, user=creator, level=AccessType.ADMIN, save=True
         )
         tale["dataDirId"] = dataDir["_id"]
-        tale["dataSet"] = self.generateDataSet(tale, creator, old_ds=[], new_ds=tale["dataSet"])
         # tale = self.save(tale, triggerEvents=False, validate=False)
         event.addResponse(tale)
 
@@ -624,20 +624,20 @@ class Tale(AccessControlledModel):
             for uuid in removed_objs:
                 obj = old_map[uuid]
                 if obj["_modelType"] == "folder":
-                    f = Folder().load(obj["itemId"], user=user, level=AccessType.WRITE)
+                    f = Folder().load(obj["itemId"], user=user, level=AccessType.WRITE, exc=True)
                     Folder().clean(f)
                     Folder().remove(f)
                 else:
-                    i = Item().load(obj["itemId"], user=user, level=AccessType.WRITE)
+                    i = Item().load(obj["itemId"], user=user, level=AccessType.WRITE, exc=True)
                     Item().remove(i)
 
             for uuid in added_objs:
                 obj = new_map[uuid]
                 if obj["_modelType"] == "folder":
-                    f = Folder().load(obj["itemId"], user=user, level=AccessType.READ)
-                    Folder().copyFolderComponents(f, data_dir, user, None)
+                    f = Folder().load(obj["itemId"], user=user, level=AccessType.READ, exc=True)
+                    Folder().copyFolder(f, parent=data_dir, parentType="folder", creator=user)
                 else:
-                    i = Item().load(obj["itemId"], user=user, level=AccessType.READ)
+                    i = Item().load(obj["itemId"], user=user, level=AccessType.READ, exc=True)
                     Item().copyItem(i, user, folder=data_dir)
 
         tale["dataSet"] = self.getDataSet(tale, user, data_dir=data_dir)
