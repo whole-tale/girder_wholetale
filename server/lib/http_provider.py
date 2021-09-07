@@ -7,7 +7,7 @@ from urllib.parse import urlparse, unquote
 from girder.utility.model_importer import ModelImporter
 from girder.models.folder import Folder
 
-from .import_providers import ImportProvider
+from .import_providers import ImportProvider, wt_uuid
 from .entity import Entity
 from .data_map import DataMap
 from .file_map import FileMap
@@ -82,8 +82,9 @@ class HTTPImportProvider(ImportProvider):
         parent = Folder().setMetadata(
             parent,
             {
-                'identifier': '{}://{}'.format(url.scheme, url.netloc),
-                'provider': url.scheme.upper(),
+                "identifier": f"{url.scheme}://{url.netloc}",
+                "provider": url.scheme.upper(),
+                "uuid": wt_uuid(),
             }
         )
 
@@ -110,8 +111,9 @@ class HTTPImportProvider(ImportProvider):
             parent = Folder().setMetadata(
                 parent,
                 {
-                    'identifier': new_url,
-                    'provider': url.scheme.upper(),
+                    "identifier": new_url,
+                    "provider": url.scheme.upper(),
+                    "uuid": wt_uuid(),
                 }
             )
 
@@ -125,7 +127,11 @@ class HTTPImportProvider(ImportProvider):
 
         gc_item = ModelImporter.model('item').load(
             gc_file['itemId'], force=True)
-        gc_item['meta'] = {'identifier': uri, 'provider': url.scheme.upper()}
+        gc_item["meta"] = {
+            "identifier": uri,
+            "provider": url.scheme.upper(),
+            "uuid": wt_uuid(),
+        }
         gc_item = ModelImporter.model('item').updateItem(gc_item)
         return ('item', gc_item)
 

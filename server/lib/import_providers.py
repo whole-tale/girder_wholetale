@@ -8,6 +8,11 @@ from .file_map import FileMap
 from .import_item import ImportItem
 
 
+def wt_uuid():
+    from bson import ObjectId
+    return ObjectId()
+
+
 class ImportProvider:
     _regex = None
 
@@ -106,6 +111,7 @@ class ImportProvider:
         meta = {
             "identifier": item.identifier,
             "provider": self.getName(),
+            "uuid": wt_uuid(),
         }
         if item.meta:
             meta.update(item.meta)
@@ -116,7 +122,7 @@ class ImportProvider:
     def _registerFile(self, stack, item: ImportItem, user):
         (parent, parentType) = stack[-1]
         gitem = self.itemModel.createItem(item.name, user, parent, reuseExisting=True)
-        meta = {'provider': self.getName()}
+        meta = {'provider': self.getName(), "uuid": wt_uuid()}
         if item.identifier:
             meta['identifier'] = item.identifier
         if item.meta:
