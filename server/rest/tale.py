@@ -121,7 +121,9 @@ class Tale(Resource):
         .errorResponse('Read access was denied for the tale.', 403)
     )
     def getTale(self, tale, params):
-        return tale
+        # TODO: This a temporary abomination.
+        # We are adding contents of tale's data dir on the fly
+        return self._model.updateDataSet(tale, self.getCurrentUser())
 
     @access.user
     @filtermodel(model='tale', plugin='wholetale')
@@ -137,15 +139,20 @@ class Tale(Resource):
     )
     def updateTale(self, taleObj, tale, params):
         is_public = tale.pop('public')
+        user = self.getCurrentUser()
+        old_dataset = {(_['itemId'], _["_modelType"]) for _ in taleObj['dataSet']}
+        new_dataset = {(_['itemId'], _["_modelType"]) for _ in tale['dataSet']}
+        update_citations = old_dataset ^ new_dataset  # XOR between new and old dataSet
 
-        update_citations = {_['itemId'] for _ in tale['dataSet']} ^ {
-            _['itemId'] for _ in taleObj['dataSet']
-        }  # XOR between new and old dataSet
+        self._model.updateDataSet(
+            tale, user, new_ds=tale["dataSet"]
+        )
+        ds = tale.pop("dataSet")  # Do not store it in db
 
         new_imageId = tale.pop("imageId")
         if new_imageId != str(taleObj["imageId"]):
             image = imageModel().load(
-                new_imageId, user=self.getCurrentUser(),
+                new_imageId, user=user,
                 level=AccessType.READ, exc=True)
             taleObj["imageId"] = image["_id"]
             tale["icon"] = image["icon"]  # Has to be consistent...
@@ -164,6 +171,7 @@ class Tale(Resource):
             taleObj = self._model.setAccessList(
                 taleObj, access, save=True, user=user, setPublic=is_public)
 
+        taleObj["dataSet"] = ds  # Do not store it in db
         if update_citations:
             eventParams = {
                 'tale': taleObj,
@@ -376,7 +384,6 @@ class Tale(Resource):
             "licenseSPDX": tale.get("licenseSPDX"),
             "relatedIdentifiers": tale.get("relatedIdentifiers") or [],
         }
-
         return self._model.createTale(
             image, tale["dataSet"], creator=user, save=True, **kwargs
         )

@@ -4,6 +4,7 @@ from bson.objectid import ObjectId
 import datetime
 import json
 import jsonschema
+from operator import itemgetter
 import tempfile
 import zipfile
 
@@ -554,7 +555,8 @@ class Tale(AccessControlledModel):
             current, user=creator, level=AccessType.ADMIN, save=True
         )
         tale["dataDirId"] = dataDir["_id"]
-        tale = self.save(tale)
+        tale["dataSet"] = self.generateDataSet(tale, creator, old_ds=[], new_ds=tale["dataSet"])
+        # tale = self.save(tale, triggerEvents=False, validate=False)
         event.addResponse(tale)
 
     @staticmethod
@@ -562,3 +564,81 @@ class Tale(AccessControlledModel):
         tale = event.info
         if (dataDir := Folder().load(tale["dataDirId"], force=True)):
             Folder().remove(dataDir)
+
+    @staticmethod
+    def _dataSet_to_uuids(ds):
+        mapping = {}
+        for obj in ds:
+            if obj["_modelType"] == "folder":
+                model = Folder()
+            else:
+                model = Item()
+            doc = model.load(obj["itemId"], force=True, fields=["meta"])
+            mapping[doc["meta"]["uuid"]] = obj
+        return mapping
+
+    def getDataSet(self, tale, user, data_dir=None):
+        if data_dir is None:
+            data_dir = self.getDataDir(tale, user)
+        ds = []
+        for folder in Folder().childFolders(data_dir, "folder", user=user):
+            ds.append(
+                {
+                    "itemId": folder["_id"],
+                    "mountPath": folder["name"],
+                    "_modelType": "folder"
+                }
+            )
+
+        for item in Folder().childItems(folder=data_dir):
+            ds.append(
+                {
+                    "itemId": item["_id"],
+                    "mountPath": item["name"],
+                    "_modelType": "item"
+                }
+            )
+        return sorted(ds, key=itemgetter("mountPath"))
+
+    @staticmethod
+    def getDataDir(tale, user):
+        root_data_dir = Folder().load(tale["dataDirId"], user=user, level=AccessType.READ)
+        return Folder().findWithPermissions(
+            query={"name": "current", "parentId": root_data_dir["_id"]}, user=user
+        )[0]
+
+    def updateDataSet(self, tale, user, new_ds=None):
+        data_dir = self.getDataDir(tale, user)
+        old_ds = self.getDataSet(tale, user, data_dir=data_dir)
+
+        if new_ds is not None:
+            old_map = self._dataSet_to_uuids(old_ds)
+            new_map = self._dataSet_to_uuids(new_ds)
+
+            old_uuids = set(old_map.keys())
+            new_uuids = set(new_map.keys())
+
+            removed_objs = old_uuids - new_uuids
+            added_objs = new_uuids - old_uuids
+
+            for uuid in removed_objs:
+                obj = old_map[uuid]
+                if obj["_modelType"] == "folder":
+                    f = Folder().load(obj["itemId"], user=user, level=AccessType.WRITE)
+                    Folder().clean(f)
+                    Folder().remove(f)
+                else:
+                    i = Item().load(obj["itemId"], user=user, level=AccessType.WRITE)
+                    Item().remove(i)
+
+            for uuid in added_objs:
+                obj = new_map[uuid]
+                if obj["_modelType"] == "folder":
+                    f = Folder().load(obj["itemId"], user=user, level=AccessType.READ)
+                    Folder().copyFolderComponents(f, data_dir, user, None)
+                else:
+                    i = Item().load(obj["itemId"], user=user, level=AccessType.READ)
+                    Item().copyItem(i, user, folder=data_dir)
+
+        tale["dataSet"] = self.getDataSet(tale, user, data_dir=data_dir)
+        return tale
