@@ -57,8 +57,6 @@ class _FileTree:
 class AbstractZipImportProvider(ImportProvider):
 
     def matches(self, entity: Entity) -> bool:
-        import pprint
-        pprint.pprint(entity)
         return False
 
     def _listFolder(self, branch: _FileTree,
