@@ -7,6 +7,7 @@ from urllib.parse import urlparse, urlunparse, parse_qs, unquote
 
 from girder import events, logger
 from girder.constants import AccessType
+from girder.models.item import Item
 from girder.models.folder import Folder
 from girder.models.setting import Setting
 
@@ -125,15 +126,18 @@ class DataverseImportProvider(ImportProvider):
             return re.compile("^$")
 
     def getDatasetUID(self, doc: object, user: object) -> str:
-        # TODO: does not work with tale's data dir...
-        if 'folderId' in doc:
+        if "folderId" in doc:
+            if originalId := doc["meta"].get("originalId"):
+                doc = Item().load(originalId, user=user, level=AccessType.READ)
             # It's an item, grab the parent which should contain all the info
             doc = Folder().load(doc['folderId'], user=user, level=AccessType.READ)
         # obj is a folder at this point use its meta
         if not doc["meta"].get("identifier"):
+            if originalId := doc["meta"].get("originalId"):
+                doc = Folder().load(originalId, user=user, level=AccessType.READ)
             doc = Folder().load(doc["parentId"], user=user, level=AccessType.READ)
             return self.getDatasetUID(doc, user)
-        return doc['meta']['identifier']
+        return doc["meta"]["identifier"]
 
     def setting_changed(self, event):
         triggers = {

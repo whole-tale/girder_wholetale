@@ -88,6 +88,7 @@ class ManifestTestCase(base.TestCase):
 
         def restore_catalog(parent, current):
             for folder in current["folders"]:
+                folder["meta"]["uuid"] = str(ObjectId())
                 resp = self.request(
                     path="/folder",
                     method="POST",
@@ -102,6 +103,7 @@ class ManifestTestCase(base.TestCase):
                 restore_catalog(folderObj, folder)
 
             for obj in current["files"]:
+                obj["meta"]["uuid"] = str(ObjectId())
                 resp = self.request(
                     path="/item",
                     method="POST",
@@ -323,9 +325,10 @@ class ManifestTestCase(base.TestCase):
     def _testGetFolderIdentifier(self):
         from server.lib.manifest import get_folder_identifier
 
-        folder_identifier = get_folder_identifier(
-            self.tale["dataSet"][0]["itemId"], self.user
+        folder = next(
+            (_ for _ in self.tale["dataSet"] if _["mountPath"].startswith("Humans")),
         )
+        folder_identifier = get_folder_identifier(folder["itemId"], self.user)
         self.assertEqual(folder_identifier, "doi:10.5065/D6862DM8")
 
     def _testWorkspace(self):

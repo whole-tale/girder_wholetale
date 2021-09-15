@@ -4,6 +4,7 @@ from typing import Tuple
 from urllib.parse import urlparse
 import requests
 
+from girder.constants import AccessType
 from girder.models.item import Item
 from girder.models.folder import Folder
 
@@ -116,18 +117,28 @@ class GlobusImportProvider(ImportProvider):
                     url='globus://%s/%s%s' % (endpoint, path, entry['name']))
 
     def getDatasetUID(self, doc, user):
+        if "folderId" in doc:
+            model = Item()
+        else:
+            model = Folder()
+        if "originalId" in doc["meta"]:
+            doc = model.load(doc["meta"]["originalId"], user=user, level=AccessType.READ)
+
         try:
             identifier = doc['meta']['identifier']  # if root of ds, it should have it
         except (KeyError, TypeError):
-            if 'folderId' in doc:
-                path_to_root = Item().parentsToRoot(doc, user=user)
-            else:
-                path_to_root = Folder().parentsToRoot(doc, user=user)
+            path_to_root = model.parentsToRoot(doc, user=user)
             # Collection{WT Catalog} / Folder{WT Catalog} / Folder{Globus ds root}
             identifier = path_to_root[2]['object']['meta']['identifier']
         return identifier
 
     def getURI(self, doc, user):
+        if "originalId" in doc["meta"]:
+            if "folderId" in doc:
+                doc = Item().load(doc["meta"]["originalId"], user=user, level=AccessType.READ)
+            else:
+                doc = Folder().load(doc["meta"]["originalId"], user=user, level=AccessType.READ)
+
         if 'folderId' in doc:
             fileObj = Item().childFiles(doc)[0]
             return fileObj['linkUrl']

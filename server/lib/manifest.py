@@ -540,6 +540,8 @@ def get_folder_identifier(folder_id, user):
                                                     user=user,
                                                     level=AccessType.READ,
                                                     exc=True)
+        if "originalId" in folder["meta"]:
+            get_folder_identifier(folder["meta"]["originalId"], user)
 
         meta = folder.get('meta')
         if meta:
@@ -549,7 +551,7 @@ def get_folder_identifier(folder_id, user):
             if identifier:
                 return identifier
 
-        get_folder_identifier(folder['parentID'], user)
+        get_folder_identifier(folder['parentId'], user)
 
     except (ValidationException, KeyError):
         pass
