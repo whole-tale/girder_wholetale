@@ -635,10 +635,16 @@ class Tale(AccessControlledModel):
                 obj = new_map[uuid]
                 if obj["_modelType"] == "folder":
                     f = Folder().load(obj["itemId"], user=user, level=AccessType.READ, exc=True)
-                    Folder().copyFolder(f, parent=data_dir, parentType="folder", creator=user)
+                    new_folder = Folder().copyFolder(
+                        f, parent=data_dir, parentType="folder", creator=user
+                    )
+                    new_folder["meta"]["originalId"] = f["_id"]
+                    Folder().save(new_folder)
                 else:
                     i = Item().load(obj["itemId"], user=user, level=AccessType.READ, exc=True)
-                    Item().copyItem(i, user, folder=data_dir)
+                    new_item = Item().copyItem(i, user, folder=data_dir)
+                    new_item["meta"]["originalId"] = i["_id"]
+                    Item().save(new_item)
 
         tale["dataSet"] = self.getDataSet(tale, user, data_dir=data_dir)
         return tale
