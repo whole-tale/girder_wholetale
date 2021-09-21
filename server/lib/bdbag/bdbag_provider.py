@@ -96,6 +96,9 @@ class GenericZipProvider(AbstractZipImportProvider):
     def __init__(self) -> None:
         super().__init__('Zip')
 
+    def getDatasetUID(self, doc: object, user: object) -> str:
+        return
+
     def _listRecursive(self, user: Dict[str, object], pid: str, name: str,
                        base_url: Optional[str] = None,
                        progress: Optional[object] = None) -> Generator[ImportItem, None, None]:

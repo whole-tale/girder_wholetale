@@ -15,6 +15,7 @@ DEFAULT_ILLUSTRATION = (
     "https://raw.githubusercontent.com/whole-tale/dashboard/master/public/"
     "images/demo-graph2.jpg"
 )
+RAW_DATA_PROVIDERS = {"BDBag", "Zip"}
 
 
 class HarvesterType:

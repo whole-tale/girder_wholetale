@@ -548,8 +548,10 @@ class Tale(Resource):
         :param itemIds: An optional list of items to include in the manifest
         :return: A JSON structure representing the Tale
         """
+        user = self.getCurrentUser()
+        tale = self._model.updateDataSet(tale, user)
         manifest_doc = Manifest(
-            tale, self.getCurrentUser(), expand_folders=expandFolders, versionId=versionId
+            tale, user, expand_folders=expandFolders, versionId=versionId
         )
         return manifest_doc.manifest
 
