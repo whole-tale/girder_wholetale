@@ -2,6 +2,7 @@ from datetime import datetime, timezone
 from hashlib import sha256, md5
 import os
 from urllib.parse import unquote
+from girder.models.folder import Folder
 from . import TaleExporter
 from gwvolman.constants import REPO2DOCKER_VERSION
 
@@ -103,6 +104,17 @@ class BagTaleExporter(TaleExporter):
             )
             oxum["num"] += 1
             oxum["size"] += os.path.getsize(fullpath)
+
+        for relpath, stream in Folder().fileList(
+            self.data_dir, user=self.user, subpath=False
+        ):
+            if stream.__name__ != "downloadGenerator":
+                continue
+            yield from self.dump_and_checksum(
+                stream, os.path.join("data/data", relpath)
+            )
+            oxum["num"] += 1
+            oxum["size"] += 1  # FIXME
 
         # Compute checksums for the extrafiles
         for path, content in extra_files.items():

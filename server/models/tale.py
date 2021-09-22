@@ -601,10 +601,14 @@ class Tale(AccessControlledModel):
         return sorted(ds, key=itemgetter("mountPath"))
 
     @staticmethod
-    def getDataDir(tale, user):
+    def getDataDir(tale, user, versionId=None):
+        if versionId:
+            name = str(versionId)
+        else:
+            name = "current"
         root_data_dir = Folder().load(tale["dataDirId"], user=user, level=AccessType.READ)
         return Folder().findWithPermissions(
-            query={"name": "current", "parentId": root_data_dir["_id"]}, user=user
+            query={"name": name, "parentId": root_data_dir["_id"]}, user=user
         )[0]
 
     def updateDataSet(self, tale, user, new_ds=None):

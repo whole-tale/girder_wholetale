@@ -59,10 +59,11 @@ class TaleExporter:
        README.md: This file"""
     default_bagit = "BagIt-Version: 0.97\nTag-File-Character-Encoding: UTF-8\n"
 
-    def __init__(self, user, manifest, environment, algs=None):
+    def __init__(self, user, manifest, environment, data_dir, algs=None):
         self.user = user
         self.manifest = manifest
         self.environment = environment
+        self.data_dir = data_dir
 
         if algs is None:
             self.algs = ["md5", "sha256"]

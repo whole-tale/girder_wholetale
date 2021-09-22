@@ -515,6 +515,7 @@ class Tale(Resource):
         manifest_doc = Manifest(
             tale, self.getCurrentUser(), expand_folders=True, versionId=version["_id"]
         )
+        data_dir = self._model.getDataDir(tale, user, versionId=versionId)
 
         with open(os.path.join(version["fsPath"], "environment.json"), "r") as fp:
             environment = json.load(fp)
@@ -524,7 +525,7 @@ class Tale(Resource):
         elif taleFormat == 'native':
             export_func = NativeTaleExporter
 
-        exporter = export_func(user, manifest_doc.manifest, environment)
+        exporter = export_func(user, manifest_doc.manifest, environment, data_dir)
         setResponseHeader('Content-Type', 'application/zip')
         setContentDisposition(f"{version['_id']}.zip")
         return exporter.stream

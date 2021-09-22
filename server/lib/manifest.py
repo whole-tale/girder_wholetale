@@ -548,13 +548,14 @@ class Manifest:
         data_dir = Folder().load(
             self.tale["dataDirId"], user=self.user, level=AccessType.READ
         )
-        if self.version["_modelType"] == "tale":
-            data_dir_name = "current"
-        else:
-            data_dir_name = str(self.version["_id"])
-        return Folder().childFolders(
-            data_dir, "folder", user=self.user, filters={"name": data_dir_name}
-        )[0]
+        try:
+            return Folder().childFolders(
+                data_dir, "folder", user=self.user, filters={"name": str(self.version["_id"])}
+            )[0]
+        except IndexError:  # No version yet...
+            return Folder().childFolders(
+                data_dir, "folder", user=self.user, filters={"name": "current"}
+            )[0]
 
 
 def get_folder_identifier(folder_id, user):
