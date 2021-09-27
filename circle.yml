@@ -7,6 +7,11 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Update WT Versioning plugin
+          command: |
+            rm -rf /girder/plugins/wt_versioning
+            git clone https://github.com/whole-tale/wt_versioning -b tale_data_dir /girder/plugins/wt_versioning
+      - run:
           name: Installing Plugin Dependencies
           command: |
             rm -rf /girder/plugins/wholetale
