@@ -62,6 +62,7 @@ class Tale(Resource):
         self.route('GET', (':id', 'manifest'), self.generateManifest)
         self.route('PUT', (':id', 'build'), self.buildImage)
         self.route('PUT', (':id', 'publish'), self.publishTale)
+        self.route('PUT', (':id', 'relinquish'), self.relinquishTaleAccess)
 
     @access.public
     @filtermodel(model='tale', plugin='wholetale')
@@ -396,6 +397,18 @@ class Tale(Resource):
         user = self.getCurrentUser()
         return self._model.setAccessList(
             tale, access, save=True, user=user, setPublic=public, publicFlags=publicFlags)
+
+    @access.user(scope=TokenScope.DATA_READ)
+    @autoDescribeRoute(
+        Description('Remove user from access control list for a tale.')
+        .modelParam('id', model='tale', plugin='wholetale', level=AccessType.READ)
+        .errorResponse('ID was invalid.')
+        .errorResponse('Access was denied for the tale.', 403)
+    )
+    def relinquishTaleAccess(self, tale):
+        user = self.getCurrentUser()
+        self._model.setUserAccess(tale, user, None, save=True)
+        cherrypy.response.status = 204
 
     @staticmethod
     def _get_version(user, tale, versionId):
