@@ -326,6 +326,30 @@ class Tale(AccessControlledModel):
 
         return doc
 
+    def setUserAccess(
+        self, doc, user, level, save=False, flags=None, currentUser=None, force=False
+    ):
+        if level < AccessType.READ:
+            event_type = "wt_tale_unshared"
+        else:
+            event_type = "wt_tale_shared"
+
+        if "_id" in doc:  # During creation of Tale it's not there yet.
+            notify_event([user["_id"]], event_type, {"taleId": str(doc["_id"])})
+            for folder in Folder().find({"meta.taleId": str(doc["_id"])}):
+                Folder().setUserAccess(
+                    folder,
+                    user,
+                    level,
+                    save=save,
+                    flags=flags,
+                    currentUser=currentUser,
+                    force=force
+                )
+        return super().setUserAccess(
+            doc, user, level, save=save, flags=flags, currentUser=currentUser, force=force
+        )
+
     def buildImage(self, tale, user, force=False):
         """
         Build the image for the tale

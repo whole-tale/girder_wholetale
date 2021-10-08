@@ -58,7 +58,7 @@ class GlobusProviderTestCase(base.TestCase):
     def testLookup(self):
         resolved_lookup = {
             "dataId": (
-                "https://petreldata.alcf.anl.gov/mdf/detail/"
+                "https://acdc.alcf.anl.gov/mdf/detail/"
                 "pub_30_shahani_twinmediated_v1.2/"
             ),
             "doi": "doi:10.18126/M2301J",
@@ -77,7 +77,7 @@ class GlobusProviderTestCase(base.TestCase):
                     [
                         "doi:10.18126/M2301J",
                         (
-                            "https://petreldata.alcf.anl.gov/mdf/detail/"
+                            "https://acdc.alcf.anl.gov/mdf/detail/"
                             "pub_30_shahani_twinmediated_v1.2/"
                         ),
                     ]
