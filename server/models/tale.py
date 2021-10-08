@@ -329,7 +329,7 @@ class Tale(AccessControlledModel):
     def setUserAccess(
         self, doc, user, level, save=False, flags=None, currentUser=None, force=False
     ):
-        if level is None:
+        if level < AccessType.READ:
             event_type = "wt_tale_unshared"
         else:
             event_type = "wt_tale_shared"

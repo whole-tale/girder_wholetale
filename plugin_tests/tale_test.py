@@ -1174,6 +1174,20 @@ class TaleWithWorkspaceTestCase(base.TestCase):
         self.assertStatusOk(resp)
         self.assertEqual(resp.json["_accessLevel"], AccessType.READ)
 
+        # I want to hack it!
+        resp = self.request(
+            path=f"/tale/{tale['_id']}/relinquish", method="PUT", user=self.user,
+            exception=True, params={"level": AccessType.WRITE},
+        )
+        self.assertStatus(resp, 403)
+
+        # I want to do a noop
+        resp = self.request(
+            path=f"/tale/{tale['_id']}/relinquish", method="PUT", user=self.user,
+            exception=True, params={"level": AccessType.READ},
+        )
+        self.assertStatusOk(resp)
+
         # I don't want it!
         resp = self.request(
             path=f"/tale/{tale['_id']}/relinquish", method="PUT", user=self.user,

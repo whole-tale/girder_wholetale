@@ -400,14 +400,27 @@ class Tale(Resource):
 
     @access.user(scope=TokenScope.DATA_READ)
     @autoDescribeRoute(
-        Description('Remove user from access control list for a tale.')
+        Description('Remove or decrease the level of user access to a tale.')
         .modelParam('id', model='tale', plugin='wholetale', level=AccessType.READ)
-        .errorResponse('ID was invalid.')
-        .errorResponse('Access was denied for the tale.', 403)
+        .param(
+            "level", "New access level. Must be lower than current.",
+            enum=[AccessType.WRITE, AccessType.READ, AccessType.NONE],
+            default=AccessType.NONE,
+            dataType="integer",
+        )
+        .errorResponse("No content (Tale access level set to NONE)", 204)
+        .errorResponse("ID was invalid.")
+        .errorResponse("Access was denied for the tale.", 403)
+        .errorResponse("Request to increase access level was denied.", 403)
     )
-    def relinquishTaleAccess(self, tale):
+    def relinquishTaleAccess(self, tale, level):
         user = self.getCurrentUser()
-        self._model.setUserAccess(tale, user, None, save=True)
+        if level > self._model.filter(tale, user)["_accessLevel"]:
+            raise RestException("Request to increase access level was denied.", 403)
+
+        tale = self._model.setUserAccess(tale, user, level, save=True)
+        if level > AccessType.NONE:
+            return self._model.filter(tale, user)
         cherrypy.response.status = 204
 
     @staticmethod
