@@ -334,6 +334,9 @@ class Tale(AccessControlledModel):
         else:
             event_type = "wt_tale_shared"
 
+        if level == AccessType.NONE:
+            level = None
+
         if "_id" in doc:  # During creation of Tale it's not there yet.
             notify_event([user["_id"]], event_type, {"taleId": str(doc["_id"])})
             for folder in Folder().find({"meta.taleId": str(doc["_id"])}):
