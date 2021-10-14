@@ -556,8 +556,7 @@ class Tale(AccessControlledModel):
             current, user=creator, level=AccessType.ADMIN, save=True
         )
         tale["dataDirId"] = dataDir["_id"]
-        # tale = self.save(tale, triggerEvents=False, validate=False)
-        event.addResponse(tale)
+        tale = self.save(tale, triggerEvents=False, validate=False)
 
     @staticmethod
     def removeDataDir(event: events.Event):
