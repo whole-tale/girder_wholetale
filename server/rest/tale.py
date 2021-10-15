@@ -15,6 +15,7 @@ from girder.api.rest import Resource, filtermodel, RestException,\
 
 from girder.constants import AccessType, SortDir, TokenScope
 from girder.models.folder import Folder
+from girder.models.user import User
 from girder.models.token import Token
 from girder.models.setting import Setting
 from girder.plugins.jobs.models.job import Job
@@ -25,6 +26,7 @@ from girder.plugins.jobs.constants import JobStatus
 from ..schema.tale import taleModel as taleSchema
 from ..models.tale import Tale as taleModel
 from ..models.image import Image as imageModel
+from ..models.instance import Instance
 from ..lib import pids_to_entities, IMPORT_PROVIDERS
 from ..lib.dataone import DataONELocations  # TODO: get rid of it
 from ..lib.manifest import Manifest
@@ -177,12 +179,23 @@ class Tale(Resource):
     @autoDescribeRoute(
         Description('Delete an existing tale.')
         .modelParam('id', model='tale', plugin='wholetale', level=AccessType.ADMIN)
+        .param("force", "If instances for the Tale exist, they will be shutdown",
+               default=False, required=False, dataType="boolean")
         .errorResponse('ID was invalid.')
         .errorResponse('Admin access was denied for the tale.', 403)
+        .errorResponse("This Tale has running Instances.", 409)
     )
-    def deleteTale(self, tale):
+    def deleteTale(self, tale, force):
+        instances = Instance().find({"taleId": tale["_id"]})
+        if instances.count() > 0 and not force:
+            raise RestException("This Tale has running Instances.", 409)
+
+        # Shutdown any running Instance
+        for instance in instances:
+            instance_creator = User().load(instance["creatorId"], force=True)
+            Instance().deleteInstance(instance, instance_creator)
         self._model.remove(tale)
-        users = [str(user['id']) for user in tale['access']['users']]
+        users = [str(user["id"]) for user in tale["access"]["users"]]
         notify_event(users, "wt_tale_removed", {"taleId": str(tale["_id"])})
 
     @access.user
@@ -390,11 +403,31 @@ class Tale(Resource):
                    required=False)
         .param('public', 'Whether the tale should be publicly visible.', dataType='boolean',
                required=False)
+        .param("force", "If instances for the Tale exist, they will be shutdown",
+               default=False, required=False, dataType="boolean")
         .errorResponse('ID was invalid.')
         .errorResponse('Admin access was denied for the tale.', 403)
+        .errorResponse("This Tale has running Instances.", 409)
     )
-    def updateTaleAccess(self, tale, access, publicFlags, public):
+    def updateTaleAccess(self, tale, access, publicFlags, public, force):
         user = self.getCurrentUser()
+        orig_access = tale["access"]
+        tale = self._model.setAccessList(
+            tale, access, save=False, user=user, setPublic=public, publicFlags=publicFlags)
+
+        instances_to_kill = []
+        for instance in Instance().find({"taleId": tale["_id"]}):
+            creator = User().load(instance["creatorId"], force=True)
+            if not self._model.hasAccess(tale, user=creator, level=AccessType.WRITE):
+                instances_to_kill.append((instance, creator))
+
+        if instances_to_kill and not force:
+            raise RestException("This Tale has running Instances.", 409)
+
+        for instance, creator in instances_to_kill:
+            Instance().deleteInstance(instance, creator)
+
+        tale["access"] = orig_access  # For notifications
         return self._model.setAccessList(
             tale, access, save=True, user=user, setPublic=public, publicFlags=publicFlags)
 
@@ -408,17 +441,32 @@ class Tale(Resource):
             default=AccessType.NONE,
             dataType="integer",
         )
+        .param("force", "If instances for the Tale exist, they will be shutdown",
+               default=False, required=False, dataType="boolean")
         .errorResponse("No content (Tale access level set to NONE)", 204)
         .errorResponse("ID was invalid.")
         .errorResponse("Access was denied for the tale.", 403)
         .errorResponse("Request to increase access level was denied.", 403)
+        .errorResponse("This Tale has running Instances.", 409)
     )
-    def relinquishTaleAccess(self, tale, level):
+    def relinquishTaleAccess(self, tale, level, force):
         user = self.getCurrentUser()
         if level > self._model.filter(tale, user)["_accessLevel"]:
             raise RestException("Request to increase access level was denied.", 403)
 
+        updated_tale = self._model.setUserAccess(tale, user, level, save=False)
+        instances_to_kill = []
+        for instance in Instance().find({"taleId": tale["_id"], "creatorId": user["_id"]}):
+            if not self._model.hasAccess(updated_tale, user=user, level=AccessType.WRITE):
+                instances_to_kill.append(instance)
+
+        if len(instances_to_kill) > 0 and not force:
+            raise RestException("This Tale has running Instances.", 409)
+
+        for instance in instances_to_kill:
+            Instance().deleteInstance(instance, user)
         tale = self._model.setUserAccess(tale, user, level, save=True)
+
         if level > AccessType.NONE:
             return self._model.filter(tale, user)
         cherrypy.response.status = 204

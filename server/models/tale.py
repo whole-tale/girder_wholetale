@@ -312,17 +312,18 @@ class Tale(AccessControlledModel):
             doc = self.setPublicFlags(doc, publicFlags, user=user, save=False,
                                       force=force)
 
-        added, removed = diff_access(doc['access'], access)
-        notify_event(added, "wt_tale_shared", {"taleId": str(doc["_id"])})
-        notify_event(removed, "wt_tale_unshared", {"taleId": str(doc["_id"])})
-
+        added, removed = diff_access(doc["access"], access)
         doc = super().setAccessList(
             doc, access, user=user, save=save, force=force)
 
-        for folder in Folder().find({"meta.taleId": str(doc["_id"])}):
-            Folder().setAccessList(
-                folder, access, user=user, save=save, force=force, recurse=True,
-                setPublic=setPublic, publicFlags=publicFlags)
+        if save:
+            notify_event(added, "wt_tale_shared", {"taleId": str(doc["_id"])})
+            notify_event(removed, "wt_tale_unshared", {"taleId": str(doc["_id"])})
+
+            for folder in Folder().find({"meta.taleId": str(doc["_id"])}):
+                Folder().setAccessList(
+                    folder, access, user=user, save=save, force=force, recurse=True,
+                    setPublic=setPublic, publicFlags=publicFlags)
 
         return doc
 
@@ -337,7 +338,11 @@ class Tale(AccessControlledModel):
         if level == AccessType.NONE:
             level = None
 
-        if "_id" in doc:  # During creation of Tale it's not there yet.
+        doc = super().setUserAccess(
+            doc, user, level, save=save, flags=flags, currentUser=currentUser, force=force
+        )
+
+        if save and "_id" in doc:  # During creation of Tale it's not there yet.
             notify_event([user["_id"]], event_type, {"taleId": str(doc["_id"])})
             for folder in Folder().find({"meta.taleId": str(doc["_id"])}):
                 Folder().setUserAccess(
@@ -349,9 +354,7 @@ class Tale(AccessControlledModel):
                     currentUser=currentUser,
                     force=force
                 )
-        return super().setUserAccess(
-            doc, user, level, save=save, flags=flags, currentUser=currentUser, force=force
-        )
+        return doc
 
     def buildImage(self, tale, user, force=False):
         """

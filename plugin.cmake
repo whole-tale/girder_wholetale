@@ -70,5 +70,6 @@ add_python_test(git PLUGIN wholetale)
 add_python_test(publish PLUGIN wholetale)
 add_python_test(notification PLUGIN wholetale)
 add_python_test(globus PLUGIN wholetale)
+add_python_test(sharing PLUGIN wholetale)
 add_python_style_test(python_static_analysis_wholetale
                       "${PROJECT_SOURCE_DIR}/plugins/wholetale/server")
