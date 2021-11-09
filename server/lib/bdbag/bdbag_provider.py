@@ -14,7 +14,7 @@ _COPY_BUFSZ = 64 * 1024
 
 class _BagTree:
     def __init__(self, name: str, is_dir: bool = False, url: Optional[str] = None,
-                 size: Optional[int] = None):
+                 size: int = -1):
         self.name = name
         self._is_dir = is_dir
         self.size = size
@@ -35,7 +35,7 @@ class _BagTree:
         return self._is_dir
 
     def _add(self, path: pathlib.Path, url: Optional[str], orig_path: pathlib.Path,
-             size: Optional[int] = None) -> None:
+             size: int = -1) -> None:
         assert self.list is not None
         name = path.parts[0]
         if len(path.parts) == 1:
