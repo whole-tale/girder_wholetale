@@ -14,3 +14,4 @@ validators
 html2markdown
 fs.webdavfs>=0.4.2
 GitPython
+httpio>=0.3.0
