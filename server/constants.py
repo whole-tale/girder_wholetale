@@ -14,6 +14,26 @@ DEFAULT_ILLUSTRATION = (
     "https://raw.githubusercontent.com/whole-tale/dashboard/master/public/"
     "images/demo-graph2.jpg"
 )
+# NOTE: changing order of ENV_FILES will result in cache invalidation.
+# You have been warned.
+ENV_FILES = (
+    "environment.yml",
+    "Pipfile",
+    "Pipfile.lock",
+    "requirements.txt",
+    "setup.py",
+    "Project.toml",
+    "REQUIRE",
+    "install.R",
+    "apt.txt",
+    "DESCRIPTION",
+    "postBuild",
+    "start",
+    "runtime.txt",
+    "default.nix",
+    "install.do",
+    "Dockerfile",
+)
 
 
 class HarvesterType:

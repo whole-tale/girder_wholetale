@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from bson.objectid import ObjectId
+from pathlib import Path
 import datetime
+import hashlib
 import json
 import jsonschema
 import tempfile
@@ -17,11 +19,11 @@ from girder.models.user import User
 from girder.models.model_base import AccessControlledModel
 from girder.models.token import Token
 from girder.plugins.jobs.models.job import Job
-from girder.utility import assetstore_utilities
+from girder.utility import assetstore_utilities, JsonEncoder
 
 from .image import Image as imageModel
 from ..schema.misc import dataSetSchema
-from ..constants import TaleStatus
+from ..constants import TaleStatus, ENV_FILES
 from ..schema.misc import related_identifiers_schema
 from ..utils import getOrCreateRootFolder, init_progress, notify_event, diff_access
 from ..lib.license import WholeTaleLicense
@@ -538,3 +540,32 @@ class Tale(AccessControlledModel):
         restored_tale.update(mp.get_tale_fields_from_environment(environment))
         restored_tale["dataSet"] = mp.get_dataset()
         return restored_tale
+
+    def computeR2Dchecksum(self, tale: dict, user: dict):
+        """Compute checksum of r2d related files in the Tale's workspace."""
+        # We're grabbing files directly, because we know they are in a virtual folder.
+        # It's convenient, but certainly not the best solution. Going through Girder's
+        # abstraction layer would "the proper way"^{TM}, but we're guilty of this in
+        # so many different places already, that I did not bother.
+        workspace = Folder().load(tale["workspaceId"], user=user, exc=True)
+        workspace_path = Path(workspace["fsPath"])
+
+        # This snippet is duplicated from Manifest, which is a bad coding practice...
+        image = imageModel().load(tale["imageId"], user=user, level=AccessType.READ)
+        image["taleConfig"] = tale.get("config", {})
+        image = imageModel().filter(image, user)
+
+        # Arguably environment.json contains a lot of data that can change
+        # that doesn't influence the build process. In a perfect world we would only
+        # take into account those fields that matter.
+        env_json = json.dumps(image, cls=JsonEncoder, sort_keys=True, allow_nan=False)
+        h = hashlib.md5(env_json.encode())  # intialize hash with an environment definition
+
+        for fname in ENV_FILES:
+            env_file = workspace_path / fname
+            if env_file.is_file():
+                # hash the filename in an unlikely scenario that content is duplicated
+                h.update(fname.encode())
+                with open(env_file, "rb") as fp:
+                    h.update(fp.read())  # hash the content of an r2d file
+        return h.hexdigest()

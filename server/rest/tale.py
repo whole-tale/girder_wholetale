@@ -62,6 +62,7 @@ class Tale(Resource):
         self.route('PUT', (':id', 'git'), self.updateTaleWithGitRepo)
         self.route('GET', (':id', 'export'), self.exportTale)
         self.route('GET', (':id', 'manifest'), self.generateManifest)
+        self.route('GET', (':id', 'checksum'), self.generateWorkspaceChecksum)
         self.route('PUT', (':id', 'build'), self.buildImage)
         self.route('PUT', (':id', 'publish'), self.publishTale)
         self.route('PUT', (':id', 'relinquish'), self.relinquishTaleAccess)
@@ -722,3 +723,17 @@ class Tale(Resource):
             change_status=False,
             title="Adding git repo to the Tale's workspace"
         )
+
+    @access.user(scope=TokenScope.DATA_READ)
+    @autoDescribeRoute(
+        Description("Compute checksum of r2d related files and the environment")
+        .modelParam(
+            "id",
+            description="The ID of the tale that is going to be used.",
+            model="tale",
+            plugin="wholetale",
+            level=AccessType.READ,
+        )
+    )
+    def generateWorkspaceChecksum(self, tale):
+        return {"checksum": self._model.computeR2Dchecksum(tale, self.getCurrentUser())}
