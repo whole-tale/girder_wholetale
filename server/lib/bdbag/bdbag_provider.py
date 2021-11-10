@@ -193,14 +193,3 @@ class BDBagProvider(ImportProvider):
                 self._scan_dirs(root, item, strip_path)
             else:
                 root.add(self._relative_to(item, strip_path))
-
-
-class DerivaProvider(BDBagProvider):
-    def __init__(self) -> None:
-        super().__init__('DERIVA')
-
-    def matches(self, entity: Entity) -> bool:
-        try:
-            return entity.getValue().startswith('https://pbcconsortium.s3.amazonaws.com/')
-        except:
-            return False

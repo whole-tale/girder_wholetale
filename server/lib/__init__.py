@@ -13,7 +13,8 @@ from girder.utility.progress import ProgressContext
 
 from ..models.tale import Tale
 from ..utils import notify_event
-from .bdbag.bdbag_provider import BDBagProvider, DerivaProvider
+from .bdbag.bdbag_provider import BDBagProvider
+from .deriva.provider import DerivaProvider
 from .data_map import DataMap
 from .dataone.auth import DataONEVerificator
 from .dataone.provider import DataOneImportProvider
@@ -24,12 +25,13 @@ from .globus.globus_provider import GlobusImportProvider
 from .http_provider import HTTPImportProvider
 from .import_providers import ImportProviders
 from .null_provider import NullImportProvider
-from .resolvers import DOIResolver, ResolutionException, Resolvers
+from .resolvers import DOIResolver, ResolutionException, Resolvers, MinidResolver
 from .zenodo.auth import ZenodoVerificator
 from .zenodo.provider import ZenodoImportProvider
 
 RESOLVERS = Resolvers()
 RESOLVERS.add(DOIResolver())
+RESOLVERS.add(MinidResolver())
 
 IMPORT_PROVIDERS = ImportProviders()
 IMPORT_PROVIDERS.addProvider(BDBagProvider())
