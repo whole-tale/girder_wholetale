@@ -2,6 +2,9 @@ from ..data_map import DataMap
 from ..entity import Entity
 from ..bdbag.bdbag_provider import BDBagProvider
 
+from girder.plugins.oauth.providers.globus import Globus
+
+Globus.addScopes(['https://auth.globus.org/scopes/a77ee64a-fb7f-11e5-810e-8c705ad34f60/deriva_all'])
 
 class DerivaProvider(BDBagProvider):
     def __init__(self) -> None:
