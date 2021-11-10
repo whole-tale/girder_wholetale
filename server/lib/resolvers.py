@@ -1,3 +1,4 @@
+import json
 import re
 from .entity import Entity
 from typing import Optional
@@ -90,3 +91,21 @@ class DOIResolver(Resolver):
 
         entity.setValue(resolved_url)
         entity['DOI'] = doi
+
+
+class MinidResolver(Resolver):
+    def resolve(self, entity: Entity) -> Optional[Entity]:
+        value = entity.getValue()
+        if value.startswith('https://identifiers.fair-research.org/'):
+            response = requests.get(value, headers={'Accept': 'application/json'})
+            response.raise_for_status()
+            data = json.loads(response.text)
+            entity.setValue(data['location'][0])
+            try:
+                entity['size'] = data['metadata']['length']
+                entity['name'] = data['metadata']['title']
+            except:
+                pass
+            return entity
+        else:
+            return None
