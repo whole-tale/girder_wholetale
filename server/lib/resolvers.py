@@ -42,10 +42,16 @@ class Resolvers:
 
     def resolve(self, entity: Entity) -> Optional[Entity]:
         while True:
+            # try all resolvers; if any matches, repeat; if none matches, return last
+            no_match = True
             for resolver in self.resolvers:
                 result = resolver.resolve(entity)
-                if result is None:
-                    return entity
+                if result is not None:
+                    entity = result
+                    no_match = False
+                    break
+            if no_match:
+                return entity
 
 
 class ResolutionException(Exception):
