@@ -69,10 +69,7 @@ class BDBagProvider(ImportProvider):
         super().__init__(name)
 
     def matches(self, entity: Entity) -> bool:
-        try:
-            return str(entity.getValue()).endswith('.zip')
-        except:
-            return False
+        return str(entity.getValue()).endswith('.zip')
 
     def _listRecursive(self, user: Dict[str, object], pid: str, name: str,
                        base_url: Optional[str] = None,
