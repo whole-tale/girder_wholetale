@@ -1,3 +1,6 @@
+import pathlib
+from urllib.parse import urlparse
+
 from ..data_map import DataMap
 from ..entity import Entity
 from ..bdbag.bdbag_provider import BDBagProvider
@@ -20,7 +23,7 @@ class DerivaProvider(BDBagProvider):
         sz = -1
         if 'size' in entity:
             sz = entity['size']
-        name = None
+        name = pathlib.Path(urlparse(entity.getValue()).path).with_suffix('').name
         if 'name' in entity:
             name = entity['name']
         return DataMap(entity.getValue(), size=sz, repository='DERIVA', name=name)
