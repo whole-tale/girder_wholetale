@@ -2,7 +2,7 @@ import pathlib
 import tempfile
 import urllib
 import zipfile
-from typing import cast, Dict, Optional, Generator
+from typing import Dict, Optional, Generator
 from zipfile import Path
 
 import httpio

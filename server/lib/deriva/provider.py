@@ -9,15 +9,13 @@ from girder.plugins.oauth.providers.globus import Globus
 
 Globus.addScopes(['https://auth.globus.org/scopes/a77ee64a-fb7f-11e5-810e-8c705ad34f60/deriva_all'])
 
+
 class DerivaProvider(BDBagProvider):
     def __init__(self) -> None:
         super().__init__('DERIVA')
 
     def matches(self, entity: Entity) -> bool:
-        try:
-            return entity.getValue().startswith('https://pbcconsortium.s3.amazonaws.com/')
-        except:
-            return False
+        return str(entity.getValue()).startswith('https://pbcconsortium.s3.amazonaws.com/')
 
     def lookup(self, entity: Entity) -> DataMap:
         sz = -1

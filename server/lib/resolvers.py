@@ -104,7 +104,7 @@ class MinidResolver(Resolver):
             try:
                 entity['size'] = data['metadata']['length']
                 entity['name'] = data['metadata']['title']
-            except:
+            except Exception:
                 pass
             return entity
         else:
