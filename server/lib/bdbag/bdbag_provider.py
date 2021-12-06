@@ -17,7 +17,7 @@ _COPY_BUFSZ = 64 * 1024
 
 def _text(o: object) -> str:
     if isinstance(o, str):
-        return str
+        return o
     if isinstance(o, bytes):
         return o.decode('UTF-8')
     raise ValueError('Don\'t know how to convert object of type "%s" to string' % type(o))
