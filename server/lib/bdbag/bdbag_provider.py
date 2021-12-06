@@ -77,8 +77,6 @@ class BDBagProvider(ImportProvider):
         # base_url + '/' + name is expected to be a path to a zip file
         if not pid:
             raise ValueError('pid must contain a path to a bag.')
-        if base_url:
-            pid = base_url + '/' + pid
         if pid.startswith('https://'):
             # may need tokens
 
