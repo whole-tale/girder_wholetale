@@ -304,6 +304,8 @@ def signIn(self, redirect):
         raise cherrypy.HTTPRedirect(oauth_providers["Globus"])
     else:
         self.sendAuthTokenCookie(user=user, token=token)
+        cookie = cherrypy.response.cookie
+        cookie["girderToken"].update({"samesite": None})
         raise cherrypy.HTTPRedirect(redirect)
 
 
