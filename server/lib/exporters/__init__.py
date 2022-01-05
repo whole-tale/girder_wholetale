@@ -3,6 +3,8 @@ import json
 import magic
 import os
 from girder.utility import hash_state, ziputil, JsonEncoder
+from girder.models.folder import Folder
+from girder.constants import AccessType
 from ..license import WholeTaleLicense
 
 
@@ -57,12 +59,10 @@ class TaleExporter:
        README.md: This file"""
     default_bagit = "BagIt-Version: 0.97\nTag-File-Character-Encoding: UTF-8\n"
 
-    def __init__(self, manifest, environment, workspace_path, algs=None):
+    def __init__(self, user, manifest, environment, algs=None):
+        self.user = user
         self.manifest = manifest
         self.environment = environment
-        if not workspace_path.endswith("/"):
-            workspace_path += "/"
-        self.workspace_path = workspace_path
 
         if algs is None:
             self.algs = ["md5", "sha256"]
@@ -82,19 +82,34 @@ class TaleExporter:
         for alg in self.algs:
             self.state[alg] = []
 
-    def list_workspace(self):
+    def list_files(self):
         """
-        List contents of the workspace directory.
+        List contents of the version workspace and run directories.
 
         Returns a tuple for each file:
            fullpath - absolute path to a file
            relpath - path to a file relative to workspace root
         """
-        for curdir, _, files in os.walk(self.workspace_path):
+        versionUri = self.manifest["dct:hasVersion"]["@id"]
+        versionId = versionUri.rsplit("/", 1)[-1]
+        versionFolder = Folder().load(versionId, user=self.user, level=AccessType.READ)
+        workspace_path = versionFolder["fsPath"] + "/workspace"
+        for curdir, _, files in os.walk(workspace_path):
             for fname in files:
                 fullpath = os.path.join(curdir, fname)
-                relpath = fullpath.replace(self.workspace_path, "")
+                relpath = fullpath.replace(workspace_path, "workspace")
                 yield fullpath, relpath
+
+        for run in self.manifest["wt:hasRecordedRuns"]:
+            runUri = run["@id"]
+            runId = runUri.rsplit("/", 1)[-1]
+            runFolder = Folder().load(runId, user=self.user, level=AccessType.READ)
+            run_path = runFolder["fsPath"] + "/workspace"
+            for curdir, _, files in os.walk(run_path):
+                for fname in files:
+                    fullpath = os.path.join(curdir, fname)
+                    relpath = fullpath.replace(run_path, "runs/" + run["schema:name"])
+                    yield fullpath, relpath
 
     @staticmethod
     def bytes_from_file(filename, chunksize=8192):
@@ -131,28 +146,26 @@ class TaleExporter:
         """
         aggs = self.manifest["aggregates"]
         for path, chksum in self.state['md5']:
-            uri = "./" + path.replace("data/", "", 1)
+            uri = "./" + path.replace("data/", "")
             index = self._agg_index_by_uri(uri)
             if index is not None:
                 aggs[index]['wt:md5'] = chksum
 
-    def append_aggregate_filesize_mimetypes(self, prepended_path):
+    def append_aggregate_filesize_mimetypes(self):
         """
         Adds the file size and mimetype to the workspace files
-        :param prepended_path: Any additions to the file URI
-        :type prepended_path: str
         :return: None
         """
         magic_wrapper = magic.Magic(mime=True, uncompress=True)
         aggs = self.manifest["aggregates"]
-        for fullpath, relpath in self.list_workspace():
-            uri = prepended_path + relpath
+        for fullpath, relpath in self.list_files():
+            uri = "./" + relpath
             index = self._agg_index_by_uri(uri)
             if index is not None:
                 aggs[index]["wt:mimeType"] = (
                     magic_wrapper.from_file(fullpath) or "application/octet-stream"
                 )
-            aggs[index]["wt:size"] = os.path.getsize(fullpath)
+                aggs[index]["wt:size"] = os.path.getsize(fullpath)
 
     def append_extras_filesize_mimetypes(self, extra_files):
         """

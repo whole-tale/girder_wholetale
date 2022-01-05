@@ -4,6 +4,7 @@ from urllib.parse import quote
 
 from girder import logger
 from girder.models.folder import Folder
+from girder.models.user import User
 from girder.utility import JsonEncoder
 from girder.utility.model_importer import ModelImporter
 from girder.exceptions import ValidationException
@@ -65,6 +66,7 @@ class Manifest:
         self.add_dataset_records()
         self.add_license_record()
         self.add_version_info()
+        self.add_run_info()
 
     publishers = {
         "DataONE":
@@ -118,6 +120,7 @@ class Manifest:
             "schema:schemaVersion": self.tale["format"],
             "aggregates": list(),
             "wt:usesDataset": list(),
+            "wt:hasRecordedRuns": list(),
         }
 
     def add_tale_creator(self):
@@ -297,6 +300,26 @@ class Manifest:
             record["wt:identifier"] = obj["wt:identifier"]
             self.manifest['aggregates'].append(record)
 
+        # Add records for files in each recorded_run
+        for run in Folder().find({'parentId': self.tale['runsRootId'], 'parentCollection': 'folder',
+                                  'runVersionId': self.version['_id']}):
+            run_rootpath = run["fsPath"]
+            if not run_rootpath.endswith("/"):
+                run_rootpath += "/"
+            run_rootpath += "/workspace/"
+
+            for curdir, _, files in os.walk(run_rootpath):
+                for fname in files:
+                    rfile = os.path.join(curdir, fname).replace(run_rootpath, run['name'] + "/")
+                    rinfo = {
+                        'uri': './runs/' + rfile,
+                        'wt:isPartOfRun': (
+                            "https://data.wholetale.org/api/v1/"
+                            f"folder/{run['_id']}"
+                        )
+                    }
+                    self.manifest['aggregates'].append(rinfo)
+
     def _expand_folder_into_items(self, folder, user, relpath=''):
         """
         Recursively handle data folder and return all child items as ext objs
@@ -450,6 +473,30 @@ class Manifest:
                 "schema:email": user["email"],
             },
         }
+
+    def add_run_info(self):
+        """Adds recorded run metadata."""
+
+        for run in Folder().find({'parentId': self.tale['runsRootId'], 'parentCollection': 'folder',
+                                  'runVersionId': self.version['_id']}):
+            creator = User().load(run["creatorId"], force=True)
+            run = {
+                "@id": (
+                    "https://data.wholetale.org/api/v1/"
+                    f"folder/{run['_id']}"
+                ),
+                "@type": "wt:RecordedRun",
+                "schema:name": run["name"],
+                "schema:dateModified": run["created"],
+                "schema:creator": {
+                    "@id": f"mailto:{creator['email']}",
+                    "@type": "schema:Person",
+                    "schema:givenName": creator["firstName"],
+                    "schema:familyName": creator["lastName"],
+                    "schema:email": creator["email"],
+                }
+            }
+            self.manifest['wt:hasRecordedRuns'].append(run)
 
     def dump_manifest(self, **kwargs):
         return json.dumps(

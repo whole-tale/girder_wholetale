@@ -97,9 +97,9 @@ class BagTaleExporter(TaleExporter):
         oxum = dict(size=0, num=0)
 
         # Add files from the workspace computing their checksum
-        for fullpath, relpath in self.list_workspace():
+        for fullpath, relpath in self.list_files():
             yield from self.dump_and_checksum(
-                self.bytes_from_file(fullpath), 'data/workspace/' + relpath
+                self.bytes_from_file(fullpath), 'data/' + relpath
             )
             oxum["num"] += 1
             oxum["size"] += os.path.getsize(fullpath)
@@ -115,7 +115,7 @@ class BagTaleExporter(TaleExporter):
         self.append_aggergate_checksums()
 
         # Update manifest with filesizes and mimeTypes for workspace items
-        self.append_aggregate_filesize_mimetypes('./workspace/')
+        self.append_aggregate_filesize_mimetypes()
 
         # Update manifest with filesizes and mimeTypes for extra items
         self.append_extras_filesize_mimetypes(extra_files)
