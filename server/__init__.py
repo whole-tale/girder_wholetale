@@ -295,7 +295,7 @@ def setUserMetadata(self, params):
 )
 @boundHandler()
 def signIn(self, redirect):
-    user = self.getCurrentUser()
+    user, token = self.getCurrentUser(returnToken=True)
 
     # If there's no user, initiate the oauth flow with this endpoint
     # as the callback along with the fhost parameter
@@ -303,6 +303,7 @@ def signIn(self, redirect):
         oauth_providers = OAuthResource().listProviders(params={"redirect": redirect})
         raise cherrypy.HTTPRedirect(oauth_providers["Globus"])
     else:
+        self.sendAuthTokenCookie(user=user, token=token)
         raise cherrypy.HTTPRedirect(redirect)
 
 
