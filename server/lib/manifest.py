@@ -464,8 +464,11 @@ class Manifest:
         image = self.imageModel.load(
             self.tale["imageId"], user=self.user, level=AccessType.READ
         )
+        # Filter, but keep in mind it removes extra keywords, so we need to add
+        # extra stuff like 'taleConfig' afterwards.
+        image = self.imageModel.filter(image, self.user)
         image["taleConfig"] = self.tale.get("config", {})
-        return self.imageModel.filter(image, self.user)
+        return image
 
     def dump_environment(self, **kwargs):
         return json.dumps(

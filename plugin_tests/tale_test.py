@@ -526,7 +526,7 @@ class TaleTestCase(base.TestCase):
         self.assertEqual(resp.json['imageId'], str(image['_id']))
         self.assertEqual(resp.json['title'], title)
         self.assertEqual(resp.json['description'], description)
-        self.assertEqual(resp.json['config'], {})
+        self.assertEqual(resp.json['config'], config)
         self.assertEqual(resp.json['public'], public)
         self.assertEqual(resp.json['publishInfo'][0]['pid'], 'published_pid')
         self.assertEqual(resp.json['publishInfo'][0]['uri'], 'published_url')
