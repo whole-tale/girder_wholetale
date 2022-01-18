@@ -90,25 +90,19 @@ class TaleExporter:
            fullpath - absolute path to a file
            relpath - path to a file relative to workspace root
         """
-        versionUri = self.manifest["dct:hasVersion"]["@id"]
-        versionId = versionUri.rsplit("/", 1)[-1]
-        versionFolder = Folder().load(versionId, user=self.user, level=AccessType.READ)
-        workspace_path = versionFolder["fsPath"] + "/workspace"
-        for curdir, _, files in os.walk(workspace_path):
-            for fname in files:
-                fullpath = os.path.join(curdir, fname)
-                relpath = fullpath.replace(workspace_path, "workspace")
-                yield fullpath, relpath
-
-        for run in self.manifest["wt:hasRecordedRuns"]:
-            runUri = run["@id"]
-            runId = runUri.rsplit("/", 1)[-1]
-            runFolder = Folder().load(runId, user=self.user, level=AccessType.READ)
-            run_path = runFolder["fsPath"] + "/workspace"
-            for curdir, _, files in os.walk(run_path):
+        for obj in [self.manifest["dct:hasVersion"]] + self.manifest["wt:hasRecordedRuns"]:
+            uri = obj["@id"]
+            obj_type = obj["@type"]
+            obj_id = uri.rsplit("/", 1)[-1]
+            folder = Folder().load(obj_id, user=self.user, level=AccessType.READ)
+            workspace_path = folder["fsPath"] + "/workspace"
+            for curdir, _, files in os.walk(workspace_path):
                 for fname in files:
                     fullpath = os.path.join(curdir, fname)
-                    relpath = fullpath.replace(run_path, "runs/" + run["schema:name"])
+                    if obj_type == "wt:RecordedRun":
+                        relpath = fullpath.replace(workspace_path, "runs/" + obj["schema:name"])
+                    else:
+                        relpath = fullpath.replace(workspace_path, "workspace")
                     yield fullpath, relpath
 
     @staticmethod
@@ -146,7 +140,7 @@ class TaleExporter:
         """
         aggs = self.manifest["aggregates"]
         for path, chksum in self.state['md5']:
-            uri = "./" + path.replace("data/", "")
+            uri = "./" + path.replace("data/", "", 1)
             index = self._agg_index_by_uri(uri)
             if index is not None:
                 aggs[index]['wt:md5'] = chksum
