@@ -18,6 +18,7 @@ DATA_PATH = os.path.join(
 def setUpModule():
     base.enabledPlugins.append('wholetale')
     base.enabledPlugins.append('wt_home_dir')
+    base.enabledPlugins.append('wt_versioning')
     base.startServer()
 
 

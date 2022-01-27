@@ -13,6 +13,7 @@ def setUpModule():
     base.enabledPlugins.append("virtual_resources")
     base.enabledPlugins.append("wholetale")
     base.enabledPlugins.append("wt_home_dir")
+    base.enabledPlugins.append("wt_versioning")
     base.startServer()
 
 

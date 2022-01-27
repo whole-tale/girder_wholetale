@@ -1107,6 +1107,70 @@ class TaleWithWorkspaceTestCase(base.TestCase):
         self.model('tale', 'wholetale').remove(tale)
         self.model('collection').remove(self.data_collection)
 
+    def testExportBagWithRun(self):
+        tale = self._create_water_tale()
+
+        resp = self.request(
+            path="/version",
+            method="POST",
+            user=self.user,
+            params={"name": "version1", "taleId": tale["_id"]},
+        )
+        self.assertStatusOk(resp)
+        version = resp.json
+
+        resp = self.request(
+            path="/run",
+            method="POST",
+            user=self.user,
+            params={"versionId": version["_id"], "name": "run1"},
+        )
+        self.assertStatusOk(resp)
+        run = resp.json
+
+        # Set status to COMPLETED
+        resp = self.request(
+            path=f"/run/{run['_id']}/status",
+            method="PATCH",
+            user=self.user,
+            params={"status": 3},
+        )
+        self.assertStatusOk(resp)
+
+        resp = self.request(
+            path=f"/tale/{tale['_id']}/export", method='GET',
+            params={'taleFormat': 'bagit', 'versionId': run['runVersionId']},
+            isJson=False, user=self.user)
+        dirpath = tempfile.mkdtemp()
+        bag_file = os.path.join(dirpath, resp.headers["Content-Disposition"].split('"')[1])
+        with open(bag_file, 'wb') as fp:
+            for content in resp.body:
+                fp.write(content)
+        temp_path = bdb.extract_bag(bag_file, temp=True)
+        try:
+            bdb.validate_bag_structure(temp_path)
+        except bagit.BagValidationError:
+            # Results in UnexpectedRemoteFile because DataONE provides incompatible
+            # Results in error [UnexpectedRemoteFile] data/data/usco2000.xls exists in
+            # fetch.txt but is not in manifest. Ensure that any remote file references
+            # from fetch.txt are also present in the manifest..."
+            # This is because DataONE provides incompatible hashes in metadata for remote
+            # files and we do not recalculate them on export.
+            pass
+
+        self.assertTrue(os.path.exists(
+                        os.path.join(temp_path,
+                                     "data/runs/run1/wt_quickstart.ipynb")))
+
+        with open(os.path.join(temp_path, "metadata/manifest.json"), 'r') as f:
+            m = json.loads(f.read())
+            items = [i for i in m["aggregates"] if i["uri"] == "./runs/run1/wt_quickstart.ipynb"]
+            self.assertTrue(len(items) == 1)
+            self.assertTrue(m["dct:hasVersion"]["schema:name"] == "version1")
+            self.assertTrue(m["wt:hasRecordedRuns"][0]["schema:name"] == "run1")
+
+        shutil.rmtree(dirpath)
+
     def test_tale_defaults(self):
         tale = Tale().createTale(
             self.image,

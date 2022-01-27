@@ -501,9 +501,12 @@ class Tale(Resource):
     def exportTale(self, tale, taleFormat, versionId):
         user = self.getCurrentUser()
         version = self._get_version(user, tale, versionId)
-        workspace_path = os.path.join(version["fsPath"], "workspace")
-        with open(os.path.join(version["fsPath"], "manifest.json"), "r") as fp:
-            manifest = json.load(fp)
+
+        # Get the manifest for the version, which may contain recorded run information
+        manifest_doc = Manifest(
+            tale, self.getCurrentUser(), expand_folders=True, versionId=version["_id"]
+        )
+
         with open(os.path.join(version["fsPath"], "environment.json"), "r") as fp:
             environment = json.load(fp)
 
@@ -512,7 +515,7 @@ class Tale(Resource):
         elif taleFormat == 'native':
             export_func = NativeTaleExporter
 
-        exporter = export_func(manifest, environment, workspace_path)
+        exporter = export_func(user, manifest_doc.manifest, environment)
         setResponseHeader('Content-Type', 'application/zip')
         setContentDisposition(f"{version['_id']}.zip")
         return exporter.stream
