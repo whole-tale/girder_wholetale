@@ -2,7 +2,7 @@ version: 2.0
 jobs:
   build:
     docker:
-      - image: craigwillis/girder:rrevents
+      - image: wholetale/girder:latest
       - image: mongo:3.4
     steps:
       - checkout
