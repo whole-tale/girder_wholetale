@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import cherrypy
+import datetime
 import os
 import pathlib
 import sys
@@ -15,7 +16,7 @@ from girder.constants import TokenScope
 from girder.models.folder import Folder
 from girder.models.user import User
 from girder.models.token import Token
-from girder.utility import config
+from girder.utility import config, parseTimestamp
 from girder.plugins.jobs.constants import JobStatus, REST_CREATE_JOB_TOKEN_SCOPE
 from girder.plugins.jobs.models.job import Job
 
@@ -110,19 +111,42 @@ def run(job):
                 copy_fs(OSFS(workdir), webdav_handle)
 
         # Create a version
-        if "dct:hasVersion" in mp.manifest:
-            version_name = mp.manifest["dct:hasVersion"]["schema:name"]
-        else:
-            version_name = None
+        version_obj = mp.manifest.get(
+            "dct:hasVersion",
+            {"schema:name": None, "schema:dateModified": datetime.datetime.utcnow()}
+        )
+        version_date = version_obj["schema:dateModified"]
+        if isinstance(version_date, str):
+            version_date = parseTimestamp(version_date)
         api_root = cherrypy.tree.apps["/api"]
         version_resource = api_root.root.v1.version
         setCurrentUser(user)
         version = version_resource.create(
-            taleId=tale["_id"], name=version_name, params={}
+            taleId=tale["_id"], name=version_obj["schema:name"], params={}
         )
         version = Folder().load(version["_id"], force=True)  # above is filtered...
         version["meta"] = {"publishInfo": tale["publishInfo"]}
+        version["updated"] = version_date
         version = Folder().updateFolder(version)
+
+        # Create potential runs
+        orig_tale_id = pathlib.Path(manifest_file).parts[0]
+        orig_runs_dir = pathlib.Path(orig_tale_id) / "data" / "runs"
+        run_resource = api_root.root.v1.run
+        for run_obj in mp.manifest.get("wt:hasRecordedRuns", []):
+            orig_run_dir = orig_runs_dir / run_obj["schema:name"]
+            if not orig_run_dir.is_dir():
+                continue
+            run = run_resource.create(
+                versionId=version["_id"], name=run_obj["schema:name"], params={}
+            )
+            run = Folder().load(run["_id"], force=True)  # we need fsPath
+            dest_run_dir = pathlib.Path(run["fsPath"]) / "workspace"
+            copy_fs(OSFS(orig_run_dir), OSFS(dest_run_dir))
+            # NOTE: there's no status in the bag now, let's assume it was successful...
+            status_code = 3  # TODO: fixme
+            run["updated"] = parseTimestamp(run_obj["schema:dateModified"])
+            run_resource._setStatus(run, int(status_code))
 
         # Tale is ready to be built
         Tale().update(
