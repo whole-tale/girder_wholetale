@@ -480,7 +480,8 @@ class Manifest:
             ),
             "@type": "wt:TaleVersion",
             "schema:name": self.version["name"],
-            "schema:dateModified": self.version["created"],  # FIXME: should it be updated?
+            "schema:dateCreated": self.version["created"],
+            "schema:dateModified": self.version["updated"],
             "schema:creator": {
                 "@id": f"mailto:{user['email']}",
                 "@type": "schema:Person",
@@ -503,7 +504,9 @@ class Manifest:
                 ),
                 "@type": "wt:RecordedRun",
                 "schema:name": run["name"],
-                "schema:dateModified": run["created"],
+                "schema:dateCreated": run["created"],
+                "schema:dateModified": run["updated"],
+                "wt:runStatus": run["runStatus"],
                 "schema:creator": {
                     "@id": f"mailto:{creator['email']}",
                     "@type": "schema:Person",
