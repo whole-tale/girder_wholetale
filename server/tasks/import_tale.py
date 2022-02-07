@@ -113,11 +113,15 @@ def run(job):
         # Create a version
         version_obj = mp.manifest.get(
             "dct:hasVersion",
-            {"schema:name": None, "schema:dateModified": datetime.datetime.utcnow()}
+            {
+                "schema:name": None,
+                "schema:dateModified": datetime.datetime.utcnow(),
+                "schema:dateCreated": datetime.datetime.utcnow(),
+            }
         )
-        version_date = version_obj["schema:dateModified"]
-        if isinstance(version_date, str):
-            version_date = parseTimestamp(version_date)
+        for date_key in ("schema:dateCreated", "schema:dateModified"):
+            if isinstance(version_obj[date_key], str):
+                version_obj[date_key] = parseTimestamp(version_obj[date_key])
         api_root = cherrypy.tree.apps["/api"]
         version_resource = api_root.root.v1.version
         setCurrentUser(user)
@@ -126,8 +130,9 @@ def run(job):
         )
         version = Folder().load(version["_id"], force=True)  # above is filtered...
         version["meta"] = {"publishInfo": tale["publishInfo"]}
-        version["updated"] = version_date
-        version = Folder().updateFolder(version)
+        version["updated"] = version_obj["schema:dateModified"]
+        version["created"] = version_obj["schema:dateCreated"]
+        version = Folder().save(version)
 
         # Create potential runs
         orig_tale_id = pathlib.Path(manifest_file).parts[0]
@@ -143,10 +148,9 @@ def run(job):
             run = Folder().load(run["_id"], force=True)  # we need fsPath
             dest_run_dir = pathlib.Path(run["fsPath"]) / "workspace"
             copy_fs(OSFS(orig_run_dir), OSFS(dest_run_dir))
-            # NOTE: there's no status in the bag now, let's assume it was successful...
-            status_code = 3  # TODO: fixme
             run["updated"] = parseTimestamp(run_obj["schema:dateModified"])
-            run_resource._setStatus(run, int(status_code))
+            run["created"] = parseTimestamp(run_obj["schema:dateCreated"])
+            run_resource._setStatus(run, int(run_obj["wt:runStatus"]))  # calls save()
 
         # Tale is ready to be built
         Tale().update(
