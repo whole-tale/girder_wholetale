@@ -142,14 +142,13 @@ def run(job):
         run_resource = api_root.root.v1.run
         for run_obj in mp.manifest.get("wt:hasRecordedRuns", []):
             orig_run_dir = orig_runs_dir / run_obj["schema:name"]
-            if not orig_run_dir.is_dir():
-                continue
             run = run_resource.create(
                 versionId=version["_id"], name=run_obj["schema:name"], params={}
             )
             run = Folder().load(run["_id"], force=True)  # we need fsPath
             dest_run_dir = pathlib.Path(run["fsPath"]) / "workspace"
-            copy_fs(OSFS(orig_run_dir), OSFS(dest_run_dir))
+            if orig_run_dir.is_dir():
+                copy_fs(OSFS(orig_run_dir), OSFS(dest_run_dir))
             run["updated"] = parseTimestamp(run_obj["schema:dateModified"])
             run["created"] = parseTimestamp(run_obj["schema:dateCreated"])
             run_resource._setStatus(run, int(run_obj["wt:runStatus"]))  # calls save()
