@@ -109,8 +109,10 @@ def run(job):
             },
         )
         for date_key in ("schema:dateCreated", "schema:dateModified"):
-            if isinstance(version_obj[date_key], str):
+            if isinstance(version_obj.get(date_key), str):
                 version_obj[date_key] = parseTimestamp(version_obj[date_key])
+            else:
+                version_obj[date_key] = datetime.datetime.utcnow()
         api_root = cherrypy.tree.apps["/api"]
         version_resource = api_root.root.v1.version
         setCurrentUser(user)
