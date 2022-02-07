@@ -43,7 +43,7 @@ def run(job):
     progressCurrent = 0
 
     try:
-        notify_event([user["_id"]], "wt_import_started", {"taleId": tale['_id']})
+        notify_event([user["_id"]], "wt_import_started", {"taleId": tale["_id"]})
 
         os.chdir(tale_dir)
         mp = ManifestParser(manifest_file)
@@ -78,7 +78,9 @@ def run(job):
             _["itemId"] for _ in dataSet
         }
         tale["dataSet"] = dataSet
-        Tale().update({"_id": tale["_id"]}, update={"$set": {"dataSet": tale["dataSet"]}})
+        Tale().update(
+            {"_id": tale["_id"]}, update={"$set": {"dataSet": tale["dataSet"]}}
+        )
 
         if update_citations:
             events.daemon.trigger(
@@ -117,7 +119,7 @@ def run(job):
                 "schema:name": None,
                 "schema:dateModified": datetime.datetime.utcnow(),
                 "schema:dateCreated": datetime.datetime.utcnow(),
-            }
+            },
         )
         for date_key in ("schema:dateCreated", "schema:dateModified"):
             if isinstance(version_obj[date_key], str):
@@ -155,7 +157,9 @@ def run(job):
         # Tale is ready to be built
         Tale().update(
             {"_id": tale["_id"]},
-            update={"$set": {"status": TaleStatus.READY, "restoredFrom": version["_id"]}},
+            update={
+                "$set": {"status": TaleStatus.READY, "restoredFrom": version["_id"]}
+            },
         )
 
         progressCurrent += 1
@@ -168,11 +172,13 @@ def run(job):
             progressMessage="Tale created",
         )
 
-        notify_event([user["_id"]], "wt_import_completed", {"taleId": tale['_id']})
+        notify_event([user["_id"]], "wt_import_completed", {"taleId": tale["_id"]})
     except Exception:
-        Tale().update({"_id": tale["_id"]}, update={"$set": {"status": TaleStatus.ERROR}})
+        Tale().update(
+            {"_id": tale["_id"]}, update={"$set": {"status": TaleStatus.ERROR}}
+        )
         t, val, tb = sys.exc_info()
         log = "%s: %s\n%s" % (t.__name__, repr(val), traceback.extract_tb(tb))
         jobModel.updateJob(job, status=JobStatus.ERROR, log=log)
-        notify_event([user["_id"]], "wt_import_failed", {"taleId": tale['_id']})
+        notify_event([user["_id"]], "wt_import_failed", {"taleId": tale["_id"]})
         raise
