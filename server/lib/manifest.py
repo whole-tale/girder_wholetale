@@ -400,7 +400,8 @@ class Manifest:
                     except NotImplementedError:
                         uri = None
 
-                    if uri is None and self.expand_folders and not is_root_folder:
+                    # if uri is None and self.expand_folders and not is_root_folder:
+                    if self.expand_folders:
                         external_objects += self._expand_folder_into_items(doc, self.user)
                         continue
 
