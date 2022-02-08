@@ -182,6 +182,7 @@ class ZenodoImportProvider(ImportProvider):
                     "name": file_obj["key"].rsplit("/", maxsplit=1)[-1],
                     "url": file_obj["links"]["self"],
                     "mimeType": "application/octet-stream",
+                    "checksum": file_obj["checksum"],
                 }
             )
         return hierarchy
@@ -194,12 +195,14 @@ class ZenodoImportProvider(ImportProvider):
         def _recurse_hierarchy(hierarchy):
             files = hierarchy.pop("+files+")
             for obj in files:
+                alg, checksum = obj["checksum"].split(":")
                 yield ImportItem(
                     ImportItem.FILE,
                     obj["name"],
                     size=obj["size"],
                     mimeType=obj["mimeType"],
                     url=obj["url"],
+                    meta={"checksum": {alg: checksum}},
                 )
             for folder in hierarchy.keys():
                 yield ImportItem(ImportItem.FOLDER, name=folder)

@@ -252,6 +252,16 @@ class Manifest:
             aggregation['schema:isPartOf'] = parent_dataset_identifier
         return aggregation
 
+    @staticmethod
+    def _get_checksum(item_obj, file_obj):
+        try:
+            return f"sha512:{file_obj['sha512']}"
+        except KeyError:
+            if checksum := item_obj.get("meta", {}).get("checksum"):
+                for alg in ("md5", "sha512"):
+                    if alg in checksum:
+                        return f"{alg}:{checksum[alg]}"
+
     def add_tale_records(self):
         """
         Creates and adds file records to the internal manifest object for an entire Tale.
@@ -297,7 +307,7 @@ class Manifest:
                 bundle = self.create_bundle(obj["name"], None)
             record = self.create_aggregation_record(obj['uri'], bundle, obj['dataset_identifier'])
             record["wt:size"] = obj["size"]
-            record["wt:identifier"] = obj["wt:identifier"]
+            record.update({key: obj[key] for key in obj.keys() if key.startswith("wt:")})
             self.manifest['aggregates'].append(record)
 
         # Add records for files in each recorded_run
@@ -409,6 +419,9 @@ class Manifest:
                         'uri': fileObj['linkUrl'],
                         'size': fileObj['size']
                     })
+                    if checksum := self._get_checksum(doc, fileObj):
+                        alg, value = checksum.split(":")
+                        ext_obj[f"wt:{alg}"] = value
                 external_objects.append(ext_obj)
             except (ValidationException, KeyError):
                 msg = 'While creating a manifest for Tale "{}" '.format(str(self.tale['_id']))

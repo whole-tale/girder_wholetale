@@ -85,23 +85,23 @@ class DataOneImportProvider(ImportProvider):
         # Create a Dict to store folders' information
         # the data key is a concatenation of the data and any metadata objects
         # that aren't the main or documenting metadata
-
-        data += [doc for doc in metadata
-                 if doc['identifier'] != primary_metadata[0]['identifier']]
+        primary_identifier = primary_metadata[0]['identifier']
+        data += [doc for doc in metadata if doc['identifier'] != primary_identifier]
         if not name:
             name = primary_metadata[0]['title']
 
-        yield ImportItem(ImportItem.FOLDER, name, identifier=primary_metadata[0]['identifier'])
+        yield ImportItem(ImportItem.FOLDER, name, identifier=primary_identifier)
 
         for fileObj in data:
-            try:
-                fileName = fileObj['fileName']
-            except KeyError:
-                fileName = fileObj['identifier']
-
-            yield ImportItem(ImportItem.FILE, fileName, identifier=fileObj['identifier'],
-                             url=fileObj['url'], size=int(fileObj['size']),
-                             mimeType=fileObj['formatId'])
+            yield ImportItem(
+                ImportItem.FILE,
+                fileObj.get("fileName", fileObj["identifier"]),
+                identifier=fileObj["identifier"],
+                url=fileObj["url"],
+                size=int(fileObj["size"]),
+                mimeType=fileObj["formatId"],
+                meta={"checksum": {"md5": fileObj["checksum"]}},
+            )
 
         # Recurse and add child packages if any exist
         if children is not None and len(children) > 0:
