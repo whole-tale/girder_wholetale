@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from hashlib import sha256, md5
+from hashlib import sha512, md5
 import os
 from urllib.parse import unquote
 from . import TaleExporter
@@ -144,10 +144,20 @@ class BagTaleExporter(TaleExporter):
         def dump_checksums(alg):
             dump = ""
             for path, chksum in self.state[alg]:
-                dump += "{} {}\n".format(chksum, path)
+                dump += f"{chksum} {path}\n"
+            for bundle in self.manifest['aggregates']:
+                if 'bundledAs' not in bundle:
+                    continue
+                try:
+                    chksum = bundle[f"wt:{alg}"]
+                    folder = f"data{unquote(bundle['bundledAs']['folder'])[1:]}"
+                    filename = unquote(bundle['bundledAs'].get('filename', ''))
+                    dump += f"{chksum} {os.path.join(folder, filename)}\n"
+                except KeyError:
+                    pass
             return dump
 
-        tagmanifest = dict(md5="", sha256="")
+        tagmanifest = dict(md5="", sha512="")
         for payload, fname in (
             (lambda: top_readme, 'README.md'),
             (lambda: run_file, 'run-local.sh'),
@@ -155,21 +165,21 @@ class BagTaleExporter(TaleExporter):
             (lambda: bag_info, 'bag-info.txt'),
             (lambda: fetch_file, 'fetch.txt'),
             (lambda: dump_checksums('md5'), 'manifest-md5.txt'),
-            (lambda: dump_checksums('sha256'), 'manifest-sha256.txt'),
+            (lambda: dump_checksums('sha512'), 'manifest-sha512.txt'),
             (lambda: self.formated_dump(self.environment, indent=4), 'metadata/environment.json'),
             (lambda: self.formated_dump(self.manifest, indent=4), 'metadata/manifest.json'),
         ):
             tagmanifest['md5'] += "{} {}\n".format(
                 md5(payload().encode()).hexdigest(), fname
             )
-            tagmanifest['sha256'] += "{} {}\n".format(
-                sha256(payload().encode()).hexdigest(), fname
+            tagmanifest['sha512'] += "{} {}\n".format(
+                sha512(payload().encode()).hexdigest(), fname
             )
             yield from self.zip_generator.addFile(payload, fname)
 
         for payload, fname in (
             (lambda: tagmanifest['md5'], 'tagmanifest-md5.txt'),
-            (lambda: tagmanifest['sha256'], 'tagmanifest-sha256.txt'),
+            (lambda: tagmanifest['sha512'], 'tagmanifest-sha512.txt'),
         ):
             yield from self.zip_generator.addFile(payload, fname)
 

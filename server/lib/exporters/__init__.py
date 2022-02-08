@@ -1,7 +1,8 @@
-from hashlib import sha256, md5
+from hashlib import sha512, md5
 import json
 import magic
 import os
+import requests
 from girder.utility import hash_state, ziputil, JsonEncoder
 from girder.models.folder import Folder
 from girder.constants import AccessType
@@ -9,7 +10,7 @@ from ..license import WholeTaleLicense
 
 
 class HashFileStream:
-    """Generator that computes md5 and sha256 of data returned by it"""
+    """Generator that computes md5 and sha512 of data returned by it"""
 
     def __init__(self, gen):
         """
@@ -22,7 +23,7 @@ class HashFileStream:
             self.gen = gen
         self.state = {
             'md5': hash_state.serializeHex(md5()),
-            'sha256': hash_state.serializeHex(sha256()),
+            'sha512': hash_state.serializeHex(sha512()),
         }
 
     def __iter__(self):
@@ -41,8 +42,8 @@ class HashFileStream:
         return self
 
     @property
-    def sha256(self):
-        return hash_state.restoreHex(self.state['sha256'], 'sha256').hexdigest()
+    def sha512(self):
+        return hash_state.restoreHex(self.state['sha512'], 'sha512').hexdigest()
 
     @property
     def md5(self):
@@ -65,7 +66,7 @@ class TaleExporter:
         self.environment = environment
 
         if algs is None:
-            self.algs = ["md5", "sha256"]
+            self.algs = ["md5", "sha512"]
 
         zipname = os.path.basename(manifest["dct:hasVersion"]["@id"])
         self.zip_generator = ziputil.ZipGenerator(zipname)
@@ -144,6 +145,18 @@ class TaleExporter:
             index = self._agg_index_by_uri(uri)
             if index is not None:
                 aggs[index]['wt:md5'] = chksum
+        self.verify_aggregate_checksums()
+
+    def verify_aggregate_checksums(self):
+        """Check if every aggregate has a proper checksum."""
+        algs = {f"wt:{alg}" for alg in self.algs}
+        for index, agg in enumerate(self.manifest["aggregates"]):
+            if algs - set(agg.keys()) == algs:
+                req = requests.get(agg["uri"], allow_redirects=True, stream=True)
+                md5sum = md5()
+                for chunk in req.iter_content(chunk_size=4096):
+                    md5sum.update(chunk)
+                self.manifest["aggregates"][index]["wt:md5"] = md5sum.hexdigest()
 
     def append_aggregate_filesize_mimetypes(self):
         """
