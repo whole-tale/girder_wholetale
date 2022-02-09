@@ -65,7 +65,10 @@ class GlobusImportProvider(ImportProvider):
         globus_url = urlparse(globus_uri)
         identifier = deep_get(globus_meta, f"{meta_prefix}.dc.identifier.identifier")
         identifier_type = deep_get(globus_meta, f"{meta_prefix}.dc.identifier.identifierType")
-        doi = f"{identifier_type.lower()}:{identifier}"
+        if ":" in identifier:
+            doi = identifier
+        else:
+            doi = f"{identifier_type.lower()}:{identifier}"
         title = deep_get(globus_meta, f"{meta_prefix}.dc.titles.0.title")
         return globus_url.netloc, globus_url.path, doi, title
 
