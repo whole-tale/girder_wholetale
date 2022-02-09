@@ -1,0 +1,322 @@
+[
+  {
+    "uri": "./LICENSE",
+    "schema:license": "CC-BY-4.0"
+  },
+  {
+    "uri": "globus://82f1b5c6-6e9b-11e5-ba47-22000b92c6ec//published/publication_1106/data/Dmax/Dmax-data.obj",
+    "bundledAs": {
+      "folder": "./data/Dmax/",
+      "filename": "Dmax-data.obj"
+    },
+    "schema:isPartOf": "doi:10.18126/M2662X",
+    "wt:size": 18741196,
+    "wt:identifier": "6203fac3bd966c5a430ba0a4"
+  },
+  {
+    "uri": "globus://82f1b5c6-6e9b-11e5-ba47-22000b92c6ec//published/publication_1106/data/Dmax/Dmax.obj",
+    "bundledAs": {
+      "folder": "./data/Dmax/",
+      "filename": "Dmax.obj"
+    },
+    "schema:isPartOf": "doi:10.18126/M2662X",
+    "wt:size": 81391372,
+    "wt:identifier": "6203fac3bd966c5a430ba0a6"
+  },
+  {
+    "uri": "globus://82f1b5c6-6e9b-11e5-ba47-22000b92c6ec//published/publication_1106/data/Dmax/Dmax_cv.csv",
+    "bundledAs": {
+      "folder": "./data/Dmax/",
+      "filename": "Dmax_cv.csv"
+    },
+    "schema:isPartOf": "doi:10.18126/M2662X",
+    "wt:size": 165838,
+    "wt:identifier": "6203fac3bd966c5a430ba0a8"
+  },
+  {
+    "uri": "globus://82f1b5c6-6e9b-11e5-ba47-22000b92c6ec//published/publication_1106/data/Dmax/Dmax_kfold.json",
+    "bundledAs": {
+      "folder": "./data/Dmax/",
+      "filename": "Dmax_kfold.json"
+    },
+    "schema:isPartOf": "doi:10.18126/M2662X",
+    "wt:size": 1102739,
+    "wt:identifier": "6203fac3bd966c5a430ba0aa"
+  },
+  {
+    "uri": "globus://82f1b5c6-6e9b-11e5-ba47-22000b92c6ec//published/publication_1106/data/Dmax/Dmax_lobo.json",
+    "bundledAs": {
+      "folder": "./data/Dmax/",
+      "filename": "Dmax_lobo.json"
+    },
+    "schema:isPartOf": "doi:10.18126/M2662X",
+    "wt:size": 3643048,
+    "wt:identifier": "6203fac3bd966c5a430ba0ac"
+  },
+  {
+    "uri": "globus://82f1b5c6-6e9b-11e5-ba47-22000b92c6ec//published/publication_1106/data/Dmax/compute_R.out",
+    "bundledAs": {
+      "folder": "./data/Dmax/",
+      "filename": "compute_R.out"
+    },
+    "schema:isPartOf": "doi:10.18126/M2662X",
+    "wt:size": 265,
+    "wt:identifier": "6203fac3bd966c5a430ba0a0"
+  },
+  {
+    "uri": "globus://82f1b5c6-6e9b-11e5-ba47-22000b92c6ec//published/publication_1106/data/Dmax/compute_R.py",
+    "bundledAs": {
+      "folder": "./data/Dmax/",
+      "filename": "compute_R.py"
+    },
+    "schema:isPartOf": "doi:10.18126/M2662X",
+    "wt:size": 740,
+    "wt:identifier": "6203fac3bd966c5a430ba0a2"
+  },
+  {
+    "uri": "globus://82f1b5c6-6e9b-11e5-ba47-22000b92c6ec//published/publication_1106/data/Dmax/make-model.in",
+    "bundledAs": {
+      "folder": "./data/Dmax/",
+      "filename": "make-model.in"
+    },
+    "schema:isPartOf": "doi:10.18126/M2662X",
+    "wt:size": 1822,
+    "wt:identifier": "6203fac3bd966c5a430ba0ae"
+  },
+  {
+    "uri": "globus://82f1b5c6-6e9b-11e5-ba47-22000b92c6ec//published/publication_1106/data/Dmax/make-model.out",
+    "bundledAs": {
+      "folder": "./data/Dmax/",
+      "filename": "make-model.out"
+    },
+    "schema:isPartOf": "doi:10.18126/M2662X",
+    "wt:size": 3411,
+    "wt:identifier": "6203fac3bd966c5a430ba0b0"
+  },
+  {
+    "uri": "globus://82f1b5c6-6e9b-11e5-ba47-22000b92c6ec//published/publication_1106/data/Dmax/run_all.bs",
+    "bundledAs": {
+      "folder": "./data/Dmax/",
+      "filename": "run_all.bs"
+    },
+    "schema:isPartOf": "doi:10.18126/M2662X",
+    "wt:size": 130,
+    "wt:identifier": "6203fac3bd966c5a430ba0b2"
+  },
+  {
+    "uri": "globus://82f1b5c6-6e9b-11e5-ba47-22000b92c6ec//published/publication_113/data/D_whites_darks_AJS.hdf",
+    "bundledAs": {
+      "folder": "./data/",
+      "filename": "D_whites_darks_AJS.hdf"
+    },
+    "schema:isPartOf": "doi:10.18126/M2301J",
+    "wt:size": 8786120536,
+    "wt:identifier": "6203fac3bd966c5a430ba0fa"
+  },
+  {
+    "uri": "https://cn.dataone.org/cn/v2/resolve/urn:uuid:01a53103-8db1-46b3-967c-b42acf69ae08",
+    "bundledAs": {
+      "folder": "./data/Humans%20and%20Hydrology%20at%20High%20Latitudes%3A%20Water%20Use%20Information/",
+      "filename": "usco2005.xls"
+    },
+    "schema:isPartOf": "doi:10.5065/D6862DM8",
+    "wt:size": 6427136,
+    "wt:identifier": "6203fac3bd966c5a430ba0e6"
+  },
+  {
+    "uri": "https://cn.dataone.org/cn/v2/resolve/urn:uuid:01a53103-8db1-46b3-967c-b42acf69ae08",
+    "bundledAs": {
+      "folder": "./data/",
+      "filename": "usco2005.xls"
+    },
+    "schema:isPartOf": "doi:10.5065/D6862DM8",
+    "wt:size": 6427136,
+    "wt:identifier": "6203fac3bd966c5a430ba0e6"
+  },
+  {
+    "uri": "https://cn.dataone.org/cn/v2/resolve/urn:uuid:03c24891-8fd4-4286-bfdf-cc6e6858a672",
+    "bundledAs": {
+      "folder": "./data/Humans%20and%20Hydrology%20at%20High%20Latitudes%3A%20Water%20Use%20Information/",
+      "filename": "first_nations_canada_water_and_wastewater_systems.pdf"
+    },
+    "schema:isPartOf": "doi:10.5065/D6862DM8",
+    "wt:size": 373893,
+    "wt:identifier": "6203fac3bd966c5a430ba0dc"
+  },
+  {
+    "uri": "https://cn.dataone.org/cn/v2/resolve/urn:uuid:051184f2-2ee1-44db-8b5b-7fdd5b96d96d",
+    "bundledAs": {
+      "folder": "./data/Humans%20and%20Hydrology%20at%20High%20Latitudes%3A%20Water%20Use%20Information/",
+      "filename": "datadict2005.html"
+    },
+    "schema:isPartOf": "doi:10.5065/D6862DM8",
+    "wt:size": 13783,
+    "wt:identifier": "6203fac3bd966c5a430ba0d4"
+  },
+  {
+    "uri": "https://cn.dataone.org/cn/v2/resolve/urn:uuid:1938c259-3b7e-4937-b79f-e26067bdab01",
+    "bundledAs": {
+      "folder": "./data/Humans%20and%20Hydrology%20at%20High%20Latitudes%3A%20Water%20Use%20Information/",
+      "filename": "withdrawal_ob_engl.xls"
+    },
+    "schema:isPartOf": "doi:10.5065/D6862DM8",
+    "wt:size": 45056,
+    "wt:identifier": "6203fac3bd966c5a430ba0ec"
+  },
+  {
+    "uri": "https://cn.dataone.org/cn/v2/resolve/urn:uuid:36f3673b-1f01-4eac-8d9e-7aff619edde6",
+    "bundledAs": {
+      "folder": "./data/Humans%20and%20Hydrology%20at%20High%20Latitudes%3A%20Water%20Use%20Information/",
+      "filename": "estimated_use_of_water_in_US_2005.pdf"
+    },
+    "schema:isPartOf": "doi:10.5065/D6862DM8",
+    "wt:size": 5011961,
+    "wt:identifier": "6203fac3bd966c5a430ba0da"
+  },
+  {
+    "uri": "https://cn.dataone.org/cn/v2/resolve/urn:uuid:4b56f9ba-c654-4692-83b6-6c72968893f1",
+    "bundledAs": {
+      "folder": "./data/Humans%20and%20Hydrology%20at%20High%20Latitudes%3A%20Water%20Use%20Information/",
+      "filename": "dictionary95.txt"
+    },
+    "schema:isPartOf": "doi:10.5065/D6862DM8",
+    "wt:size": 26803,
+    "wt:identifier": "6203fac3bd966c5a430ba0d6"
+  },
+  {
+    "uri": "https://cn.dataone.org/cn/v2/resolve/urn:uuid:62e1a8c5-406b-43f9-9234-1415277674cb",
+    "bundledAs": {
+      "folder": "./data/Humans%20and%20Hydrology%20at%20High%20Latitudes%3A%20Water%20Use%20Information/",
+      "filename": "usco2000.xls"
+    },
+    "schema:isPartOf": "doi:10.5065/D6862DM8",
+    "wt:size": 1558016,
+    "wt:identifier": "6203fac3bd966c5a430ba0e4"
+  },
+  {
+    "uri": "https://cn.dataone.org/cn/v2/resolve/urn:uuid:75308ecc-cdc2-4ce0-a1b0-2cd829ce46c8",
+    "bundledAs": {
+      "folder": "./data/Humans%20and%20Hydrology%20at%20High%20Latitudes%3A%20Water%20Use%20Information/",
+      "filename": "datadict2000.html"
+    },
+    "schema:isPartOf": "doi:10.5065/D6862DM8",
+    "wt:size": 8784,
+    "wt:identifier": "6203fac3bd966c5a430ba0d2"
+  },
+  {
+    "uri": "https://cn.dataone.org/cn/v2/resolve/urn:uuid:7f3d0f47-56db-4562-bdff-1182b78302ef",
+    "bundledAs": {
+      "folder": "./data/Humans%20and%20Hydrology%20at%20High%20Latitudes%3A%20Water%20Use%20Information/",
+      "filename": "readme.html"
+    },
+    "schema:isPartOf": "doi:10.5065/D6862DM8",
+    "wt:size": 8087,
+    "wt:identifier": "6203fac3bd966c5a430ba0de"
+  },
+  {
+    "uri": "https://cn.dataone.org/cn/v2/resolve/urn:uuid:80977cc2-1422-4369-804d-90a2e2109a92",
+    "bundledAs": {
+      "folder": "./data/Humans%20and%20Hydrology%20at%20High%20Latitudes%3A%20Water%20Use%20Information/",
+      "filename": "AK_counties_2000.xls"
+    },
+    "schema:isPartOf": "doi:10.5065/D6862DM8",
+    "wt:size": 53248,
+    "wt:identifier": "6203fac3bd966c5a430ba0d0"
+  },
+  {
+    "uri": "https://cn.dataone.org/cn/v2/resolve/urn:uuid:86ba12d0-82da-48bf-a73a-3e0cccf5455d",
+    "bundledAs": {
+      "folder": "./data/Humans%20and%20Hydrology%20at%20High%20Latitudes%3A%20Water%20Use%20Information/",
+      "filename": "usco95.xls"
+    },
+    "schema:isPartOf": "doi:10.5065/D6862DM8",
+    "wt:size": 4139493,
+    "wt:identifier": "6203fac3bd966c5a430ba0e8"
+  },
+  {
+    "uri": "https://cn.dataone.org/cn/v2/resolve/urn:uuid:92312ab7-ee0c-4874-ab4b-6944e1376265",
+    "bundledAs": {
+      "folder": "./data/Humans%20and%20Hydrology%20at%20High%20Latitudes%3A%20Water%20Use%20Information/",
+      "filename": "estimated_use_of_water_in_US_2000.pdf"
+    },
+    "schema:isPartOf": "doi:10.5065/D6862DM8",
+    "wt:size": 5775705,
+    "wt:identifier": "6203fac3bd966c5a430ba0d8"
+  },
+  {
+    "uri": "https://cn.dataone.org/cn/v2/resolve/urn:uuid:9440d2bc-234c-4955-85d7-2b144c8b71bd",
+    "bundledAs": {
+      "folder": "./data/Humans%20and%20Hydrology%20at%20High%20Latitudes%3A%20Water%20Use%20Information/",
+      "filename": "us90co.xls"
+    },
+    "schema:isPartOf": "doi:10.5065/D6862DM8",
+    "wt:size": 2686433,
+    "wt:identifier": "6203fac3bd966c5a430ba0e2"
+  },
+  {
+    "uri": "https://cn.dataone.org/cn/v2/resolve/urn:uuid:b4831b1b-7472-4015-b795-836d01ad0592",
+    "bundledAs": {
+      "folder": "./data/Humans%20and%20Hydrology%20at%20High%20Latitudes%3A%20Water%20Use%20Information/",
+      "filename": "us85co.xls"
+    },
+    "schema:isPartOf": "doi:10.5065/D6862DM8",
+    "wt:size": 2680787,
+    "wt:identifier": "6203fac3bd966c5a430ba0e0"
+  },
+  {
+    "uri": "https://cn.dataone.org/cn/v2/resolve/urn:uuid:bbec7da2-6789-4c5b-9736-f0db470cd0ad",
+    "bundledAs": {
+      "folder": "./data/Humans%20and%20Hydrology%20at%20High%20Latitudes%3A%20Water%20Use%20Information/",
+      "filename": "wastewaterNWT.xls"
+    },
+    "schema:isPartOf": "doi:10.5065/D6862DM8",
+    "wt:size": 15360,
+    "wt:identifier": "6203fac3bd966c5a430ba0ea"
+  },
+  {
+    "uri": "https://cn.dataone.org/cn/v2/resolve/urn:uuid:e0064b54-ee0e-42c1-891d-742bef38243a",
+    "bundledAs": {
+      "folder": "./data/Humans%20and%20Hydrology%20at%20High%20Latitudes%3A%20Water%20Use%20Information/",
+      "filename": "wudict.txt"
+    },
+    "schema:isPartOf": "doi:10.5065/D6862DM8",
+    "wt:size": 23909,
+    "wt:identifier": "6203fac3bd966c5a430ba0ee"
+  },
+  {
+    "uri": "https://www.gw-openscience.org/s/events/BBH_events_v3.json",
+    "bundledAs": {
+      "folder": "./data/",
+      "filename": "BBH_events_v3.json"
+    },
+    "wt:size": 2202,
+    "wt:identifier": "6203fac3bd966c5a430ba11d"
+  },
+  {
+    "uri": "https://www.gw-openscience.org/s/events/GW170104/GW170104_4_template.hdf5",
+    "bundledAs": {
+      "folder": "./data/GW170104/",
+      "filename": "GW170104_4_template.hdf5"
+    },
+    "wt:size": 1056864,
+    "wt:identifier": "6203fac3bd966c5a430ba110"
+  },
+  {
+    "uri": "https://www.gw-openscience.org/s/events/GW170104/H-H1_LOSC_4_V1-1167559920-32.hdf5",
+    "bundledAs": {
+      "folder": "./data/GW170104/",
+      "filename": "H-H1_LOSC_4_V1-1167559920-32.hdf5"
+    },
+    "wt:size": 1033609,
+    "wt:identifier": "6203fac3bd966c5a430ba112"
+  },
+  {
+    "uri": "https://www.gw-openscience.org/s/events/GW170104/L-L1_LOSC_4_V1-1167559920-32.hdf5",
+    "bundledAs": {
+      "folder": "./data/GW170104/",
+      "filename": "L-L1_LOSC_4_V1-1167559920-32.hdf5"
+    },
+    "wt:size": 1005007,
+    "wt:identifier": "6203fac3bd966c5a430ba114"
+  }
+]

@@ -1,9 +1,9 @@
 import copy
 import json
+from operator import itemgetter
 import os
 import pytest
 from tests import base
-from urllib.parse import quote
 from bson import ObjectId
 from girder.exceptions import AccessException, ValidationException
 from girder.utility.path import lookUpPath
@@ -348,69 +348,13 @@ class ManifestTestCase(base.TestCase):
         from server.lib.manifest import Manifest
 
         # Test that all of the files in the dataSet are added
-        reference_aggregates = [
-            {
-                "uri": "doi:10.5065/D6862DM8",
-                "bundledAs": {
-                    "folder": quote("./data/Humans and Hydrology at High Latitudes: Water Use Information/")
-                },
-                "wt:size": 28848454,
-            },
-            {
-                "uri": "https://cn.dataone.org/cn/v2/resolve/urn:uuid:01a53103-8db1-46b3-967c-b42acf69ae08",
-                "bundledAs": {"folder": "./data/", "filename": "usco2005.xls"},
-                "schema:isPartOf": "doi:10.5065/D6862DM8",
-                "wt:size": 6427136,
-            },
-            {
-                "uri": "globus://82f1b5c6-6e9b-11e5-ba47-22000b92c6ec//published/publication_113/data/D_whites_darks_AJS.hdf",
-                "bundledAs": {
-                    "folder": "./data/",
-                    "filename": "D_whites_darks_AJS.hdf",
-                },
-                "schema:isPartOf": "doi:10.18126/M2301J",
-                "wt:size": 8786120536,
-            },
-            {
-                "uri": "globus://82f1b5c6-6e9b-11e5-ba47-22000b92c6ec//published/publication_1106/data/Dmax",
-                "bundledAs": {"folder": "./data/Dmax/"},
-                "schema:isPartOf": "doi:10.18126/M2662X",
-                "wt:size": 105050561,
-            },
-            {
-                "uri": "https://www.gw-openscience.org/s/events/BBH_events_v3.json",
-                "bundledAs": {"folder": "./data/", "filename": "BBH_events_v3.json"},
-                "wt:size": 2202,
-            },
-            {
-                "uri": "https://www.gw-openscience.org/s/events/GW170104/GW170104_4_template.hdf5",
-                "bundledAs": {
-                    "folder": "./data/GW170104/",
-                    "filename": "GW170104_4_template.hdf5",
-                },
-                "wt:size": 1056864,
-            },
-            {
-                "uri": "https://www.gw-openscience.org/s/events/GW170104/H-H1_LOSC_4_V1-1167559920-32.hdf5",
-                "bundledAs": {
-                    "folder": "./data/GW170104/",
-                    "filename": "H-H1_LOSC_4_V1-1167559920-32.hdf5",
-                },
-                "wt:size": 1033609,
-            },
-            {
-                "uri": "https://www.gw-openscience.org/s/events/GW170104/L-L1_LOSC_4_V1-1167559920-32.hdf5",
-                "bundledAs": {
-                    "folder": "./data/GW170104/",
-                    "filename": "L-L1_LOSC_4_V1-1167559920-32.hdf5",
-                },
-                "wt:size": 1005007,
-            },
-            {"uri": "./LICENSE", "schema:license": "CC-BY-4.0"},
-        ]
-        from operator import itemgetter
+        with open(os.path.join(DATA_PATH, "reference_dataset.json"), "r") as fp:
+            reference_aggregates = json.load(fp)
 
         reference_aggregates = sorted(reference_aggregates, key=itemgetter("uri"))
+        for d in reference_aggregates:
+            if "wt:identifier" in d:
+                d.pop("wt:identifier")
         manifest_doc = Manifest(self.tale, self.user, expand_folders=True)
         tale_dataset_ids = {str(_["itemId"]) for _ in self.tale["dataSet"]}
         for i, aggregate in enumerate(
