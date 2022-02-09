@@ -20,6 +20,7 @@ from .dataone.auth import DataONEVerificator
 from .dataone.provider import DataOneImportProvider
 from .dataverse.auth import DataverseVerificator
 from .dataverse.provider import DataverseImportProvider
+from .deriva.auth import DerivaVerificator
 from .entity import Entity
 from .globus.globus_provider import GlobusImportProvider
 from .http_provider import HTTPImportProvider
@@ -55,6 +56,7 @@ Verificators = {
     "dataonedev": DataONEVerificator,
     "dataonestage": DataONEVerificator,
     "dataonestage2": DataONEVerificator,
+    "deriva": DerivaVerificator
 }
 
 
