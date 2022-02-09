@@ -2,278 +2,478 @@ interactions:
 - request:
     body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.19.1]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
     method: GET
     uri: https://cn.dataone.org/cn/v2/query/solr/?q=identifier:%22urn%3Auuid%3A7ec733c4-aa63-405a-a58d-1d773a9025a9%22&fl=identifier,formatType,formatId,resourceMap&rows=1000&start=0&wt=json
   response:
-    body: {string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"identifier:\"urn:uuid:7ec733c4-aa63-405a-a58d-1d773a9025a9\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"urn:uuid:7ec733c4-aa63-405a-a58d-1d773a9025a9","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_urn:uuid:7ec733c4-aa63-405a-a58d-1d773a9025a9"]}]}}
+    body:
+      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"identifier:\"urn:uuid:7ec733c4-aa63-405a-a58d-1d773a9025a9\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"urn:uuid:7ec733c4-aa63-405a-a58d-1d773a9025a9","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_urn:uuid:7ec733c4-aa63-405a-a58d-1d773a9025a9"]}]}}
 
-'}
+        '
     headers:
-      Access-Control-Allow-Credentials: ['true']
-      Access-Control-Allow-Headers: ['Authorization, Content-Type, Location, Content-Length,
-          x-annotator-auth-token']
-      Access-Control-Allow-Methods: ['POST, GET, OPTIONS, PUT, DELETE']
-      Access-Control-Allow-Origin: ['']
-      Access-Control-Expose-Headers: ['Content-Length, Content-Type, Location']
-      Connection: [Keep-Alive]
-      Content-Type: [application/json; charset=UTF-8]
-      Date: ['Wed, 21 Nov 2018 18:57:02 GMT']
-      Keep-Alive: ['timeout=5, max=100']
-      Server: [Apache/2.4.7 (Ubuntu)]
-      Transfer-Encoding: [chunked]
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Authorization, Content-Type, Location, Content-Length, x-annotator-auth-token,
+        Cache-Control
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE
+      Access-Control-Allow-Origin:
+      - ''
+      Access-Control-Expose-Headers:
+      - Content-Length, Content-Type, Location
+      Connection:
+      - Keep-Alive
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 09 Feb 2022 16:49:23 GMT
+      Keep-Alive:
+      - timeout=5, max=100
+      Server:
+      - Apache/2.4.52 (Ubuntu)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+    status:
+      code: 200
+      message: OK
 - request:
     body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.19.1]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_urn%3Auuid%3A7ec733c4-aa63-405a-a58d-1d773a9025a9%22&fl=identifier,formatType,title,size,formatId,fileName,documents&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_urn%3Auuid%3A7ec733c4-aa63-405a-a58d-1d773a9025a9%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
   response:
-    body: {string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_urn:uuid:7ec733c4-aa63-405a-a58d-1d773a9025a9\"","fl":"identifier,formatType,title,size,formatId,fileName,documents","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":5,"start":0,"docs":[{"identifier":"urn:uuid:7ec733c4-aa63-405a-a58d-1d773a9025a9","fileName":"science_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":8961,"title":"Doctoral
+    body:
+      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_urn:uuid:7ec733c4-aa63-405a-a58d-1d773a9025a9\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":5,"start":0,"docs":[{"identifier":"urn:uuid:7ec733c4-aa63-405a-a58d-1d773a9025a9","fileName":"science_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":8961,"checksum":"272f3030b1f27dcafcde09594679bb8af90c7bb6","title":"Doctoral
         Dissertation Research: Mapping Community Exposure to Coastal Climate Hazards
-        in the Arctic: A Case Study in Alaska''s North Slope","documents":["resource_map_doi:10.18739/A2PT0N","resource_map_doi:10.18739/A2VV3P","resource_map_doi:10.18739/A2TH5P","urn:uuid:7ec733c4-aa63-405a-a58d-1d773a9025a9","resource_map_doi:10.18739/A2R48D"]},{"identifier":"resource_map_doi:10.18739/A2R48D","fileName":"file16b4761a23a7b","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":2801},{"identifier":"resource_map_doi:10.18739/A2PT0N","fileName":"file466e26f0df74","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":2801},{"identifier":"resource_map_doi:10.18739/A2TH5P","fileName":"file466e3509408","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":2801},{"identifier":"resource_map_doi:10.18739/A2VV3P","fileName":"file16b4779ff25fe","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":2801}]}}
+        in the Arctic: A Case Study in Alaska''s North Slope","documents":["resource_map_doi:10.18739/A2PT0N","resource_map_doi:10.18739/A2VV3P","resource_map_doi:10.18739/A2TH5P","urn:uuid:7ec733c4-aa63-405a-a58d-1d773a9025a9","resource_map_doi:10.18739/A2R48D"]},{"identifier":"resource_map_doi:10.18739/A2R48D","fileName":"resource_map_doi_10_18739_A2R48D.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":2801,"checksum":"6ead17f3f62fddcc795ec324625014d0607c51df"},{"identifier":"resource_map_doi:10.18739/A2PT0N","fileName":"resource_map_doi_10_18739_A2PT0N.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":2801,"checksum":"3eed453708ec65208f8468ac9eba612f16b11edf"},{"identifier":"resource_map_doi:10.18739/A2TH5P","fileName":"resource_map_doi_10_18739_A2TH5P.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":2801,"checksum":"763d08eb00679f358a9eb0655b726f1baf5fdf9e"},{"identifier":"resource_map_doi:10.18739/A2VV3P","fileName":"resource_map_doi_10_18739_A2VV3P.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":2801,"checksum":"653743a5aba7d4a86375d932113dae70c36ea242"}]}}
 
-'}
+        '
     headers:
-      Access-Control-Allow-Credentials: ['true']
-      Access-Control-Allow-Headers: ['Authorization, Content-Type, Location, Content-Length,
-          x-annotator-auth-token']
-      Access-Control-Allow-Methods: ['POST, GET, OPTIONS, PUT, DELETE']
-      Access-Control-Allow-Origin: ['']
-      Access-Control-Expose-Headers: ['Content-Length, Content-Type, Location']
-      Connection: [Keep-Alive]
-      Content-Type: [application/json; charset=UTF-8]
-      Date: ['Wed, 21 Nov 2018 18:57:02 GMT']
-      Keep-Alive: ['timeout=5, max=100']
-      Server: [Apache/2.4.7 (Ubuntu)]
-      Transfer-Encoding: [chunked]
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Authorization, Content-Type, Location, Content-Length, x-annotator-auth-token,
+        Cache-Control
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE
+      Access-Control-Allow-Origin:
+      - ''
+      Access-Control-Expose-Headers:
+      - Content-Length, Content-Type, Location
+      Connection:
+      - Keep-Alive
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 09 Feb 2022 16:49:24 GMT
+      Keep-Alive:
+      - timeout=5, max=100
+      Server:
+      - Apache/2.4.52 (Ubuntu)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+    status:
+      code: 200
+      message: OK
 - request:
     body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.19.1]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
     method: GET
     uri: https://cn.dataone.org/cn/v2/query/solr/?q=identifier:%22doi%3A10.18739%2FA2R48D%22&fl=identifier,formatType,formatId,resourceMap&rows=1000&start=0&wt=json
   response:
-    body: {string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"identifier:\"doi:10.18739/A2R48D\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2R48D","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.18739/A2R48D"]}]}}
+    body:
+      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"identifier:\"doi:10.18739/A2R48D\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2R48D","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.18739/A2R48D"]}]}}
 
-'}
+        '
     headers:
-      Access-Control-Allow-Credentials: ['true']
-      Access-Control-Allow-Headers: ['Authorization, Content-Type, Location, Content-Length,
-          x-annotator-auth-token']
-      Access-Control-Allow-Methods: ['POST, GET, OPTIONS, PUT, DELETE']
-      Access-Control-Allow-Origin: ['']
-      Access-Control-Expose-Headers: ['Content-Length, Content-Type, Location']
-      Connection: [Keep-Alive]
-      Content-Type: [application/json; charset=UTF-8]
-      Date: ['Wed, 21 Nov 2018 18:57:03 GMT']
-      Keep-Alive: ['timeout=5, max=100']
-      Server: [Apache/2.4.7 (Ubuntu)]
-      Transfer-Encoding: [chunked]
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Authorization, Content-Type, Location, Content-Length, x-annotator-auth-token,
+        Cache-Control
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE
+      Access-Control-Allow-Origin:
+      - ''
+      Access-Control-Expose-Headers:
+      - Content-Length, Content-Type, Location
+      Connection:
+      - Keep-Alive
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 09 Feb 2022 16:49:24 GMT
+      Keep-Alive:
+      - timeout=5, max=100
+      Server:
+      - Apache/2.4.52 (Ubuntu)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+    status:
+      code: 200
+      message: OK
 - request:
     body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.19.1]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2R48D%22&fl=identifier,formatType,title,size,formatId,fileName,documents&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2R48D%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
   response:
-    body: {string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2R48D\"","fl":"identifier,formatType,title,size,formatId,fileName,documents","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2R48D","fileName":"science_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":7577,"title":"Arctic
+    body:
+      string: '{"responseHeader":{"status":0,"QTime":2,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2R48D\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2R48D","fileName":"science_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":7577,"checksum":"f662dc214317e6167dfcc166912bed15cc49f551","title":"Arctic
         Slope Shoreline Change Risk Spatial Data Model, 2015-16","documents":["doi:10.18739/A2R48D"]}]}}
 
-'}
+        '
     headers:
-      Access-Control-Allow-Credentials: ['true']
-      Access-Control-Allow-Headers: ['Authorization, Content-Type, Location, Content-Length,
-          x-annotator-auth-token']
-      Access-Control-Allow-Methods: ['POST, GET, OPTIONS, PUT, DELETE']
-      Access-Control-Allow-Origin: ['']
-      Access-Control-Expose-Headers: ['Content-Length, Content-Type, Location']
-      Connection: [Keep-Alive]
-      Content-Type: [application/json; charset=UTF-8]
-      Date: ['Wed, 21 Nov 2018 18:57:03 GMT']
-      Keep-Alive: ['timeout=5, max=100']
-      Server: [Apache/2.4.7 (Ubuntu)]
-      Transfer-Encoding: [chunked]
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Authorization, Content-Type, Location, Content-Length, x-annotator-auth-token,
+        Cache-Control
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE
+      Access-Control-Allow-Origin:
+      - ''
+      Access-Control-Expose-Headers:
+      - Content-Length, Content-Type, Location
+      Connection:
+      - Keep-Alive
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 09 Feb 2022 16:49:25 GMT
+      Keep-Alive:
+      - timeout=5, max=100
+      Server:
+      - Apache/2.4.52 (Ubuntu)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+    status:
+      code: 200
+      message: OK
 - request:
     body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.19.1]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
     method: GET
     uri: https://cn.dataone.org/cn/v2/query/solr/?q=identifier:%22doi%3A10.18739%2FA2PT0N%22&fl=identifier,formatType,formatId,resourceMap&rows=1000&start=0&wt=json
   response:
-    body: {string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"identifier:\"doi:10.18739/A2PT0N\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2PT0N","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.18739/A2PT0N"]}]}}
+    body:
+      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"identifier:\"doi:10.18739/A2PT0N\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2PT0N","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.18739/A2PT0N"]}]}}
 
-'}
+        '
     headers:
-      Access-Control-Allow-Credentials: ['true']
-      Access-Control-Allow-Headers: ['Authorization, Content-Type, Location, Content-Length,
-          x-annotator-auth-token']
-      Access-Control-Allow-Methods: ['POST, GET, OPTIONS, PUT, DELETE']
-      Access-Control-Allow-Origin: ['']
-      Access-Control-Expose-Headers: ['Content-Length, Content-Type, Location']
-      Connection: [Keep-Alive]
-      Content-Type: [application/json; charset=UTF-8]
-      Date: ['Wed, 21 Nov 2018 18:57:04 GMT']
-      Keep-Alive: ['timeout=5, max=100']
-      Server: [Apache/2.4.7 (Ubuntu)]
-      Transfer-Encoding: [chunked]
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Authorization, Content-Type, Location, Content-Length, x-annotator-auth-token,
+        Cache-Control
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE
+      Access-Control-Allow-Origin:
+      - ''
+      Access-Control-Expose-Headers:
+      - Content-Length, Content-Type, Location
+      Connection:
+      - Keep-Alive
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 09 Feb 2022 16:49:25 GMT
+      Keep-Alive:
+      - timeout=5, max=100
+      Server:
+      - Apache/2.4.52 (Ubuntu)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+    status:
+      code: 200
+      message: OK
 - request:
     body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.19.1]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2PT0N%22&fl=identifier,formatType,title,size,formatId,fileName,documents&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2PT0N%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
   response:
-    body: {string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2PT0N\"","fl":"identifier,formatType,title,size,formatId,fileName,documents","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2PT0N","fileName":"science_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":7940,"title":"North
+    body:
+      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2PT0N\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2PT0N","fileName":"science_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":7940,"checksum":"20c156453d653c407fe8710fcb668ed9b3850101","title":"North
         Slope Borough shoreline change risk WebGIS usability workshop.","documents":["doi:10.18739/A2PT0N"]}]}}
 
-'}
+        '
     headers:
-      Access-Control-Allow-Credentials: ['true']
-      Access-Control-Allow-Headers: ['Authorization, Content-Type, Location, Content-Length,
-          x-annotator-auth-token']
-      Access-Control-Allow-Methods: ['POST, GET, OPTIONS, PUT, DELETE']
-      Access-Control-Allow-Origin: ['']
-      Access-Control-Expose-Headers: ['Content-Length, Content-Type, Location']
-      Connection: [Keep-Alive]
-      Content-Type: [application/json; charset=UTF-8]
-      Date: ['Wed, 21 Nov 2018 18:57:04 GMT']
-      Keep-Alive: ['timeout=5, max=100']
-      Server: [Apache/2.4.7 (Ubuntu)]
-      Transfer-Encoding: [chunked]
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Authorization, Content-Type, Location, Content-Length, x-annotator-auth-token,
+        Cache-Control
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE
+      Access-Control-Allow-Origin:
+      - ''
+      Access-Control-Expose-Headers:
+      - Content-Length, Content-Type, Location
+      Connection:
+      - Keep-Alive
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 09 Feb 2022 16:49:26 GMT
+      Keep-Alive:
+      - timeout=5, max=100
+      Server:
+      - Apache/2.4.52 (Ubuntu)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+    status:
+      code: 200
+      message: OK
 - request:
     body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.19.1]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
     method: GET
     uri: https://cn.dataone.org/cn/v2/query/solr/?q=identifier:%22doi%3A10.18739%2FA2TH5P%22&fl=identifier,formatType,formatId,resourceMap&rows=1000&start=0&wt=json
   response:
-    body: {string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"identifier:\"doi:10.18739/A2TH5P\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2TH5P","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.18739/A2TH5P"]}]}}
+    body:
+      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"identifier:\"doi:10.18739/A2TH5P\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2TH5P","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.18739/A2TH5P"]}]}}
 
-'}
+        '
     headers:
-      Access-Control-Allow-Credentials: ['true']
-      Access-Control-Allow-Headers: ['Authorization, Content-Type, Location, Content-Length,
-          x-annotator-auth-token']
-      Access-Control-Allow-Methods: ['POST, GET, OPTIONS, PUT, DELETE']
-      Access-Control-Allow-Origin: ['']
-      Access-Control-Expose-Headers: ['Content-Length, Content-Type, Location']
-      Connection: [Keep-Alive]
-      Content-Type: [application/json; charset=UTF-8]
-      Date: ['Wed, 21 Nov 2018 18:57:05 GMT']
-      Keep-Alive: ['timeout=5, max=100']
-      Server: [Apache/2.4.7 (Ubuntu)]
-      Transfer-Encoding: [chunked]
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Authorization, Content-Type, Location, Content-Length, x-annotator-auth-token,
+        Cache-Control
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE
+      Access-Control-Allow-Origin:
+      - ''
+      Access-Control-Expose-Headers:
+      - Content-Length, Content-Type, Location
+      Connection:
+      - Keep-Alive
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 09 Feb 2022 16:49:26 GMT
+      Keep-Alive:
+      - timeout=5, max=100
+      Server:
+      - Apache/2.4.52 (Ubuntu)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+    status:
+      code: 200
+      message: OK
 - request:
     body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.19.1]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2TH5P%22&fl=identifier,formatType,title,size,formatId,fileName,documents&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2TH5P%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
   response:
-    body: {string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2TH5P\"","fl":"identifier,formatType,title,size,formatId,fileName,documents","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2TH5P","fileName":"science_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":14250,"title":"Local
+    body:
+      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2TH5P\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2TH5P","fileName":"science_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":14250,"checksum":"36c81def85ecdd84dbbbb1908fd6013ada71c778","title":"Local
         community verification of shoreline change risks along the Alaskan Arctic
         Ocean coast (North Slope).","documents":["doi:10.18739/A2TH5P"]}]}}
 
-'}
+        '
     headers:
-      Access-Control-Allow-Credentials: ['true']
-      Access-Control-Allow-Headers: ['Authorization, Content-Type, Location, Content-Length,
-          x-annotator-auth-token']
-      Access-Control-Allow-Methods: ['POST, GET, OPTIONS, PUT, DELETE']
-      Access-Control-Allow-Origin: ['']
-      Access-Control-Expose-Headers: ['Content-Length, Content-Type, Location']
-      Connection: [Keep-Alive]
-      Content-Type: [application/json; charset=UTF-8]
-      Date: ['Wed, 21 Nov 2018 18:57:05 GMT']
-      Keep-Alive: ['timeout=5, max=100']
-      Server: [Apache/2.4.7 (Ubuntu)]
-      Transfer-Encoding: [chunked]
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Authorization, Content-Type, Location, Content-Length, x-annotator-auth-token,
+        Cache-Control
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE
+      Access-Control-Allow-Origin:
+      - ''
+      Access-Control-Expose-Headers:
+      - Content-Length, Content-Type, Location
+      Connection:
+      - Keep-Alive
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 09 Feb 2022 16:49:27 GMT
+      Keep-Alive:
+      - timeout=5, max=100
+      Server:
+      - Apache/2.4.52 (Ubuntu)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+    status:
+      code: 200
+      message: OK
 - request:
     body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.19.1]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
     method: GET
     uri: https://cn.dataone.org/cn/v2/query/solr/?q=identifier:%22doi%3A10.18739%2FA2VV3P%22&fl=identifier,formatType,formatId,resourceMap&rows=1000&start=0&wt=json
   response:
-    body: {string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"identifier:\"doi:10.18739/A2VV3P\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2VV3P","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.18739/A2VV3P"]}]}}
+    body:
+      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"identifier:\"doi:10.18739/A2VV3P\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2VV3P","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.18739/A2VV3P"]}]}}
 
-'}
+        '
     headers:
-      Access-Control-Allow-Credentials: ['true']
-      Access-Control-Allow-Headers: ['Authorization, Content-Type, Location, Content-Length,
-          x-annotator-auth-token']
-      Access-Control-Allow-Methods: ['POST, GET, OPTIONS, PUT, DELETE']
-      Access-Control-Allow-Origin: ['']
-      Access-Control-Expose-Headers: ['Content-Length, Content-Type, Location']
-      Connection: [Keep-Alive]
-      Content-Type: [application/json; charset=UTF-8]
-      Date: ['Wed, 21 Nov 2018 18:57:06 GMT']
-      Keep-Alive: ['timeout=5, max=100']
-      Server: [Apache/2.4.7 (Ubuntu)]
-      Transfer-Encoding: [chunked]
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Authorization, Content-Type, Location, Content-Length, x-annotator-auth-token,
+        Cache-Control
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE
+      Access-Control-Allow-Origin:
+      - ''
+      Access-Control-Expose-Headers:
+      - Content-Length, Content-Type, Location
+      Connection:
+      - Keep-Alive
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 09 Feb 2022 16:49:27 GMT
+      Keep-Alive:
+      - timeout=5, max=100
+      Server:
+      - Apache/2.4.52 (Ubuntu)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+    status:
+      code: 200
+      message: OK
 - request:
     body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.19.1]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2VV3P%22&fl=identifier,formatType,title,size,formatId,fileName,documents&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2VV3P%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
   response:
-    body: {string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2VV3P\"","fl":"identifier,formatType,title,size,formatId,fileName,documents","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2VV3P","fileName":"science_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":10491,"title":"Arctic
+    body:
+      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2VV3P\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2VV3P","fileName":"science_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":10491,"checksum":"f153fa6592936af1649bf2dea144b0114502ab0f","title":"Arctic
         Slope Shoreline Change Susceptibility Spatial Data Model, 2015-16","documents":["doi:10.18739/A2VV3P"]}]}}
 
-'}
+        '
     headers:
-      Access-Control-Allow-Credentials: ['true']
-      Access-Control-Allow-Headers: ['Authorization, Content-Type, Location, Content-Length,
-          x-annotator-auth-token']
-      Access-Control-Allow-Methods: ['POST, GET, OPTIONS, PUT, DELETE']
-      Access-Control-Allow-Origin: ['']
-      Access-Control-Expose-Headers: ['Content-Length, Content-Type, Location']
-      Connection: [Keep-Alive]
-      Content-Type: [application/json; charset=UTF-8]
-      Date: ['Wed, 21 Nov 2018 18:57:06 GMT']
-      Keep-Alive: ['timeout=5, max=100']
-      Server: [Apache/2.4.7 (Ubuntu)]
-      Transfer-Encoding: [chunked]
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Authorization, Content-Type, Location, Content-Length, x-annotator-auth-token,
+        Cache-Control
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE
+      Access-Control-Allow-Origin:
+      - ''
+      Access-Control-Expose-Headers:
+      - Content-Length, Content-Type, Location
+      Connection:
+      - Keep-Alive
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 09 Feb 2022 16:49:28 GMT
+      Keep-Alive:
+      - timeout=5, max=100
+      Server:
+      - Apache/2.4.52 (Ubuntu)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+    status:
+      code: 200
+      message: OK
 version: 1

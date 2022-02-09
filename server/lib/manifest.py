@@ -355,6 +355,16 @@ class Manifest:
             ext += self._expand_folder_into_items(subfolder, user, relpath=curpath)
         return ext
 
+    def _get_folder_uri(self, doc, provider, top_identifier):
+        is_root_folder = doc["meta"].get("identifier") == top_identifier
+        try:
+            if is_root_folder:
+                return top_identifier
+            else:
+                return provider.getURI(doc, self.user)
+        except NotImplementedError:
+            pass
+
     def _parse_dataSet(self, dataSet=None, relpath=''):
         """
         Get the basic info about the contents of `dataSet`
@@ -391,15 +401,7 @@ class Manifest:
                 }
 
                 if obj['_modelType'] == 'folder':
-                    is_root_folder = doc['meta'].get('identifier') == top_identifier
-                    try:
-                        if is_root_folder:
-                            uri = top_identifier
-                        else:
-                            uri = provider.getURI(doc, self.user)
-                    except NotImplementedError:
-                        uri = None
-
+                    uri = self._get_folder_uri(doc, provider, top_identifier)
                     # if uri is None and self.expand_folders and not is_root_folder:
                     if self.expand_folders:
                         external_objects += self._expand_folder_into_items(doc, self.user)

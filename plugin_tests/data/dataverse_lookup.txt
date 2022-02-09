@@ -9,7 +9,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
     method: HEAD
     uri: https://doi.org/10.7910/DVN/RLMYMR
   response:
@@ -19,7 +19,7 @@ interactions:
       CF-Cache-Status:
       - DYNAMIC
       CF-RAY:
-      - 66366f2fdfe22998-ORD
+      - 6dae99af1ce6810b-ORD
       Connection:
       - keep-alive
       Content-Length:
@@ -27,31 +27,28 @@ interactions:
       Content-Type:
       - text/html;charset=utf-8
       Date:
-      - Tue, 22 Jun 2021 15:15:50 GMT
+      - Wed, 09 Feb 2022 16:51:04 GMT
       Expect-CT:
       - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
-      Expires:
-      - Tue, 22 Jun 2021 15:41:44 GMT
-      Location:
-      - https://dataverse.harvard.edu/citation?persistentId=doi:10.7910/DVN/RLMYMR
       NEL:
-      - '{"report_to":"cf-nel","max_age":604800}'
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v2?s=RgqRfVn3Jm96RvhtmYOet5AgN2dK6jBG0%2Fv5M1b06tJ2zr5y0tNNOr4IRcKC3L9KHR%2FAKfQZPyWr6f58kv3bpgSEf2%2Bg4AiwUVC5Hfus%2FQwTLpKYrX6oS98ylsIj3QQu"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=dXXE7Ur6REDNGAGV5i9%2BrTUCROlYZhWDYFEpbb%2BsSWRolTXKUqIDG4%2FwG9gVIBHSRSP9WtwnmxITTVCvRjWvEdBkuGXiyeQQ5r1Yt%2F2v26IeEXfY%2BM4jPDCNdQjk1OnhX15mX2Y%3D"}],"group":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains; preload
-      Vary:
-      - Accept
       alt-svc:
-      - h3-27=":443"; ma=86400, h3-28=":443"; ma=86400, h3-29=":443"; ma=86400, h3=":443";
-        ma=86400
-      cf-request-id:
-      - 0ad5e3d1eb000029985ca39000000001
+      - h3=":443"; ma=86400, h3-29=":443"; ma=86400
+      expires:
+      - Wed, 09 Feb 2022 17:33:39 GMT
+      location:
+      - https://dataverse.harvard.edu/citation?persistentId=doi:10.7910/DVN/RLMYMR
+      vary:
+      - Accept
     status:
       code: 302
-      message: ''
+      message: Found
 - request:
     body: null
     headers:
@@ -62,7 +59,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
     method: HEAD
     uri: https://dataverse.harvard.edu/citation?persistentId=doi:10.7910/DVN/RLMYMR
   response:
@@ -76,16 +73,16 @@ interactions:
       Content-Type:
       - text/html;charset=UTF-8
       Date:
-      - Tue, 22 Jun 2021 15:15:50 GMT
+      - Wed, 09 Feb 2022 16:51:04 GMT
       Location:
       - https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/RLMYMR
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=rF7sSsDyjwCKv6T6c2P0cUjDs40EVcsLog4Uch975RP08GURfxXbEMXmsypb2lNo75ZKCKrX6ymemoOzqOvLVeD5ZWXz3Bxq9mHe11tRmQHVJ22aAnKqQHOoztW+;
-        Expires=Tue, 29 Jun 2021 15:15:50 GMT; Path=/
-      - AWSALBCORS=rF7sSsDyjwCKv6T6c2P0cUjDs40EVcsLog4Uch975RP08GURfxXbEMXmsypb2lNo75ZKCKrX6ymemoOzqOvLVeD5ZWXz3Bxq9mHe11tRmQHVJ22aAnKqQHOoztW+;
-        Expires=Tue, 29 Jun 2021 15:15:50 GMT; Path=/; SameSite=None; Secure
+      - AWSALB=wl3lVlwI+6VuhpepA6/rEQX9YX2A+vkRN8IEEZImqpdGjxUnsQiIyKXPwSIX0vJGM50wXjhMMVOv9dIzReO/alXBCMXPTMBbOf60GZlQIEiIVmx4/h2U7NUA80mX;
+        Expires=Wed, 16 Feb 2022 16:51:04 GMT; Path=/
+      - AWSALBCORS=wl3lVlwI+6VuhpepA6/rEQX9YX2A+vkRN8IEEZImqpdGjxUnsQiIyKXPwSIX0vJGM50wXjhMMVOv9dIzReO/alXBCMXPTMBbOf60GZlQIEiIVmx4/h2U7NUA80mX;
+        Expires=Wed, 16 Feb 2022 16:51:04 GMT; Path=/; SameSite=None; Secure
     status:
       code: 302
       message: Found
@@ -99,10 +96,10 @@ interactions:
       Connection:
       - keep-alive
       Cookie:
-      - AWSALB=rF7sSsDyjwCKv6T6c2P0cUjDs40EVcsLog4Uch975RP08GURfxXbEMXmsypb2lNo75ZKCKrX6ymemoOzqOvLVeD5ZWXz3Bxq9mHe11tRmQHVJ22aAnKqQHOoztW+;
-        AWSALBCORS=rF7sSsDyjwCKv6T6c2P0cUjDs40EVcsLog4Uch975RP08GURfxXbEMXmsypb2lNo75ZKCKrX6ymemoOzqOvLVeD5ZWXz3Bxq9mHe11tRmQHVJ22aAnKqQHOoztW+
+      - AWSALB=wl3lVlwI+6VuhpepA6/rEQX9YX2A+vkRN8IEEZImqpdGjxUnsQiIyKXPwSIX0vJGM50wXjhMMVOv9dIzReO/alXBCMXPTMBbOf60GZlQIEiIVmx4/h2U7NUA80mX;
+        AWSALBCORS=wl3lVlwI+6VuhpepA6/rEQX9YX2A+vkRN8IEEZImqpdGjxUnsQiIyKXPwSIX0vJGM50wXjhMMVOv9dIzReO/alXBCMXPTMBbOf60GZlQIEiIVmx4/h2U7NUA80mX
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
     method: HEAD
     uri: https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/RLMYMR
   response:
@@ -114,15 +111,15 @@ interactions:
       Content-Type:
       - text/html;charset=UTF-8
       Date:
-      - Tue, 22 Jun 2021 15:15:52 GMT
+      - Wed, 09 Feb 2022 16:51:05 GMT
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=y/5TABb3Qjcntg4XaBIdQVf0Jf3z69ZgnsJFZEszEBFh6nBvZipn5RsXDqoef+Ikoa6s2AFyf6gs9Os3C+fKfmiv6UNSmC9GKPETN+To6WotfF1PejCHQ2f6UnJl;
-        Expires=Tue, 29 Jun 2021 15:15:50 GMT; Path=/
-      - AWSALBCORS=y/5TABb3Qjcntg4XaBIdQVf0Jf3z69ZgnsJFZEszEBFh6nBvZipn5RsXDqoef+Ikoa6s2AFyf6gs9Os3C+fKfmiv6UNSmC9GKPETN+To6WotfF1PejCHQ2f6UnJl;
-        Expires=Tue, 29 Jun 2021 15:15:50 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=44abb5d1589b78a282c3e98c797f; Path=/; Secure; HttpOnly
+      - AWSALB=ibhU0BJBOYTjkB8BGyRLgli8DWv1JwbzCxlWotpjANThkPXjY4tfv8tIdsKf1eNeUcr9jOfzZQO2ZEm9sQPiQ21SWumha6w7nXL+usJC1NE1ul6OXkYbZGiYA30I;
+        Expires=Wed, 16 Feb 2022 16:51:04 GMT; Path=/
+      - AWSALBCORS=ibhU0BJBOYTjkB8BGyRLgli8DWv1JwbzCxlWotpjANThkPXjY4tfv8tIdsKf1eNeUcr9jOfzZQO2ZEm9sQPiQ21SWumha6w7nXL+usJC1NE1ul6OXkYbZGiYA30I;
+        Expires=Wed, 16 Feb 2022 16:51:04 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=f654a9ba794c62090be277a2f34d; Path=/; Secure; HttpOnly
     status:
       code: 200
       message: OK
@@ -136,13 +133,13 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
     method: GET
     uri: https://dataverse.harvard.edu/api/datasets/:persistentId?persistentId=doi:10.7910/DVN/RLMYMR
   response:
     body:
       string: '{"status":"OK","data":{"id":2966297,"identifier":"DVN/RLMYMR","persistentUrl":"https://doi.org/10.7910/DVN/RLMYMR","protocol":"doi","authority":"10.7910","publisher":"Harvard
-        Dataverse","publicationDate":"2016-12-20","storageIdentifier":"s3://10.7910/DVN/RLMYMR","latestVersion":{"id":147203,"datasetId":2966297,"datasetPersistentId":"doi:10.7910/DVN/RLMYMR","storageIdentifier":"s3://10.7910/DVN/RLMYMR","versionNumber":2,"versionMinorNumber":0,"versionState":"RELEASED","UNF":"UNF:6:wBvSbRl2RTVRfu9kpjgnrw==","lastUpdateTime":"2018-11-15T16:04:00Z","releaseTime":"2018-11-15T16:04:00Z","createTime":"2018-11-15T16:00:10Z","license":"NONE","termsOfUse":"Attribution
+        Dataverse","publicationDate":"2016-12-20","storageIdentifier":"s3://10.7910/DVN/RLMYMR","metadataLanguage":"undefined","latestVersion":{"id":147203,"datasetId":2966297,"datasetPersistentId":"doi:10.7910/DVN/RLMYMR","storageIdentifier":"s3://10.7910/DVN/RLMYMR","versionNumber":2,"versionMinorNumber":0,"versionState":"RELEASED","UNF":"UNF:6:wBvSbRl2RTVRfu9kpjgnrw==","lastUpdateTime":"2018-11-15T16:04:00Z","releaseTime":"2018-11-15T16:04:00Z","createTime":"2018-11-15T16:00:10Z","license":"NONE","termsOfUse":"Attribution
         is required","disclaimer":"These datasets are provided \"as is\" and in no
         event shall Bioversity International be liable for any damages resulting from
         use of the data. While great effort was taken to obtain high quality data,
@@ -153,7 +150,7 @@ interactions:
         from the files. For some of the datasets, the user will need to take care
         in handling missing observations, outlier values and violations of logical
         consistency. ","fileAccessRequest":false,"metadataBlocks":{"citation":{"displayName":"Citation
-        Metadata","fields":[{"typeName":"title","multiple":false,"typeClass":"primitive","value":"Karnataka
+        Metadata","name":"citation","fields":[{"typeName":"title","multiple":false,"typeClass":"primitive","value":"Karnataka
         Diet Diversity and Food Security for Agricultural Biodiversity Assessment"},{"typeName":"author","multiple":true,"typeClass":"compound","value":[{"authorName":{"typeName":"authorName","multiple":false,"typeClass":"primitive","value":"Ntandou-Bouzitou,
         G.D."},"authorAffiliation":{"typeName":"authorAffiliation","multiple":false,"typeClass":"primitive","value":"Bioversity
         International"}},{"authorName":{"typeName":"authorName","multiple":false,"typeClass":"primitive","value":"Kennedy,
@@ -194,7 +191,7 @@ interactions:
         International"},{"typeName":"dateOfDeposit","multiple":false,"typeClass":"primitive","value":"2016-12-20"},{"typeName":"timePeriodCovered","multiple":true,"typeClass":"compound","value":[{"timePeriodCoveredStart":{"typeName":"timePeriodCoveredStart","multiple":false,"typeClass":"primitive","value":"2014-08"},"timePeriodCoveredEnd":{"typeName":"timePeriodCoveredEnd","multiple":false,"typeClass":"primitive","value":"2014-10"}}]},{"typeName":"dateOfCollection","multiple":true,"typeClass":"compound","value":[{"dateOfCollectionStart":{"typeName":"dateOfCollectionStart","multiple":false,"typeClass":"primitive","value":"2014-08"},"dateOfCollectionEnd":{"typeName":"dateOfCollectionEnd","multiple":false,"typeClass":"primitive","value":"2014-10"}}]},{"typeName":"kindOfData","multiple":true,"typeClass":"primitive","value":["Household/Survey
         data"]},{"typeName":"otherReferences","multiple":true,"typeClass":"primitive","value":["CRP
         1.1: CGIAR Research Program on Dryland Agricultural Production Systems"]}]},"geospatial":{"displayName":"Geospatial
-        Metadata","fields":[{"typeName":"geographicCoverage","multiple":true,"typeClass":"compound","value":[{"country":{"typeName":"country","multiple":false,"typeClass":"controlledVocabulary","value":"India"},"state":{"typeName":"state","multiple":false,"typeClass":"primitive","value":"Karnataka"},"otherGeographicCoverage":{"typeName":"otherGeographicCoverage","multiple":false,"typeClass":"primitive","value":"Bijapur
+        Metadata","name":"geospatial","fields":[{"typeName":"geographicCoverage","multiple":true,"typeClass":"compound","value":[{"country":{"typeName":"country","multiple":false,"typeClass":"controlledVocabulary","value":"India"},"state":{"typeName":"state","multiple":false,"typeClass":"primitive","value":"Karnataka"},"otherGeographicCoverage":{"typeName":"otherGeographicCoverage","multiple":false,"typeClass":"primitive","value":"Bijapur
         District"}}]}]}},"files":[{"description":"Data","label":"Karnataka_DD&FS_Data-1.tab","restricted":false,"version":2,"datasetVersionId":147203,"dataFile":{"id":3315157,"persistentId":"doi:10.7910/DVN/RLMYMR/WNKD3W","pidURL":"https://doi.org/10.7910/DVN/RLMYMR/WNKD3W","filename":"Karnataka_DD&FS_Data-1.tab","contentType":"text/tab-separated-values","filesize":2321,"description":"Data","storageIdentifier":"s3://dvn-cloud:167181b3a0e-b7e18f26cfad","originalFileFormat":"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet","originalFormatLabel":"MS
         Excel Spreadsheet","originalFileSize":700840,"originalFileName":"Karnataka_DD&FS_Data-1.xlsx","UNF":"UNF:6:wBvSbRl2RTVRfu9kpjgnrw==","rootDataFileId":2966302,"previousDataFileId":2966302,"md5":"ca9dea905295ac52db4ea3c7c8bf00e9","checksum":{"type":"MD5","value":"ca9dea905295ac52db4ea3c7c8bf00e9"},"creationDate":"2018-11-15"}},{"label":"Karnataka_DD&FS_Questionnaire.pdf","restricted":false,"version":1,"datasetVersionId":147203,"dataFile":{"id":2966301,"persistentId":"doi:10.7910/DVN/RLMYMR/UKYKS9","pidURL":"https://doi.org/10.7910/DVN/RLMYMR/UKYKS9","filename":"Karnataka_DD&FS_Questionnaire.pdf","contentType":"application/pdf","filesize":493564,"storageIdentifier":"s3://dvn-cloud:1591ccfc017-1eeea525e902","rootDataFileId":-1,"md5":"d9de390c8f132916b4bb97d6ea0c8ed6","checksum":{"type":"MD5","value":"d9de390c8f132916b4bb97d6ea0c8ed6"},"creationDate":"2016-12-20"}}]}}}'
     headers:
@@ -209,15 +206,15 @@ interactions:
       Content-Type:
       - application/json;charset=UTF-8
       Date:
-      - Tue, 22 Jun 2021 15:15:53 GMT
+      - Wed, 09 Feb 2022 16:51:06 GMT
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=kGUimUn2frrMHIwBEbeE8s9m6/1BlBqZ/oOmr9EmVr4Bqb/oRPrtlBk82QbZU5FTizLc9L6GX/9Kl2Cyc3FTIpi2QN2h1esCUhAEfR2veYJ2TaQU2TZ6mAFgViih;
-        Expires=Tue, 29 Jun 2021 15:15:52 GMT; Path=/
-      - AWSALBCORS=kGUimUn2frrMHIwBEbeE8s9m6/1BlBqZ/oOmr9EmVr4Bqb/oRPrtlBk82QbZU5FTizLc9L6GX/9Kl2Cyc3FTIpi2QN2h1esCUhAEfR2veYJ2TaQU2TZ6mAFgViih;
-        Expires=Tue, 29 Jun 2021 15:15:52 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=44ac3ebe92b5f7dade2d22f43d0e; Path=/; Secure; HttpOnly
+      - AWSALB=99Deq6GLLVBrIY3at4OPKufi3jzKyhJos5EZFJLg3lVjIziscw0cg7D6Z1kmOzXH+3RKmh84zwQTR7IM1+aa4VNnQCt1Uy68z0pVRtq9XXwgT+t2MowVmwbopYhK;
+        Expires=Wed, 16 Feb 2022 16:51:05 GMT; Path=/
+      - AWSALBCORS=99Deq6GLLVBrIY3at4OPKufi3jzKyhJos5EZFJLg3lVjIziscw0cg7D6Z1kmOzXH+3RKmh84zwQTR7IM1+aa4VNnQCt1Uy68z0pVRtq9XXwgT+t2MowVmwbopYhK;
+        Expires=Wed, 16 Feb 2022 16:51:05 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=f65502f77ce625e91b5ac954826a; Path=/; Secure; HttpOnly
       Transfer-Encoding:
       - chunked
     status:
@@ -233,7 +230,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
     method: HEAD
     uri: https://doi.org/10.7910/DVN/RLMYMR/WNKD3W
   response:
@@ -243,7 +240,7 @@ interactions:
       CF-Cache-Status:
       - DYNAMIC
       CF-RAY:
-      - 66366f42c9862c4c-ORD
+      - 6dae99bc7b3d2a09-ORD
       Connection:
       - keep-alive
       Content-Length:
@@ -251,31 +248,28 @@ interactions:
       Content-Type:
       - text/html;charset=utf-8
       Date:
-      - Tue, 22 Jun 2021 15:15:53 GMT
+      - Wed, 09 Feb 2022 16:51:06 GMT
       Expect-CT:
       - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
-      Expires:
-      - Tue, 22 Jun 2021 15:26:15 GMT
-      Location:
-      - https://dataverse.harvard.edu/file.xhtml?persistentId=doi:10.7910/DVN/RLMYMR/WNKD3W
       NEL:
-      - '{"report_to":"cf-nel","max_age":604800}'
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v2?s=DJuarYzle%2Bxko1RrBE2I%2B1RGxVC4efO15UrlDwrbkZKI9JPUudOMxM9miqPdsid5L3xLmoSGWW9BUwy3rmlE8CfJtdXm7jjR9JOO9MsVXzst1GctOe6wQG895QrLJPfq"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=65S10p2%2BA1aEyiyJmwSqyxNZee0BdMqhz9wKM%2BB0xUVA6VwQ92we1xk7BfvOaLXcRttq%2BDg2XaYyPqvEzmJsdvEfDnSXC0t7mf8G%2F3FapV%2BBH8AP75P0s8KJsamO%2B8lD0eM9c6o%3D"}],"group":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains; preload
-      Vary:
-      - Accept
       alt-svc:
-      - h3-27=":443"; ma=86400, h3-28=":443"; ma=86400, h3-29=":443"; ma=86400, h3=":443";
-        ma=86400
-      cf-request-id:
-      - 0ad5e3ddc200002c4c2e23b000000001
+      - h3=":443"; ma=86400, h3-29=":443"; ma=86400
+      expires:
+      - Wed, 09 Feb 2022 17:38:20 GMT
+      location:
+      - https://dataverse.harvard.edu/file.xhtml?persistentId=doi:10.7910/DVN/RLMYMR/WNKD3W
+      vary:
+      - Accept
     status:
       code: 302
-      message: ''
+      message: Found
 - request:
     body: null
     headers:
@@ -286,7 +280,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
     method: HEAD
     uri: https://dataverse.harvard.edu/file.xhtml?persistentId=doi:10.7910/DVN/RLMYMR/WNKD3W
   response:
@@ -298,15 +292,15 @@ interactions:
       Content-Type:
       - text/html;charset=UTF-8
       Date:
-      - Tue, 22 Jun 2021 15:15:54 GMT
+      - Wed, 09 Feb 2022 16:51:06 GMT
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=rqxJTNpwNoMsjtL78+rL6vxPp1UtVFoAeyvPffA9odvPnj9T+Yrq1kYi+lq9/v8g2sPOTVERMvazezUaTQh/qkA4ZQu6rAuc3CRQWKZYQwX9NuccFRrJ83GGOHCs;
-        Expires=Tue, 29 Jun 2021 15:15:53 GMT; Path=/
-      - AWSALBCORS=rqxJTNpwNoMsjtL78+rL6vxPp1UtVFoAeyvPffA9odvPnj9T+Yrq1kYi+lq9/v8g2sPOTVERMvazezUaTQh/qkA4ZQu6rAuc3CRQWKZYQwX9NuccFRrJ83GGOHCs;
-        Expires=Tue, 29 Jun 2021 15:15:53 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=44ac7107fa9564325a778cbcf840; Path=/; Secure; HttpOnly
+      - AWSALB=krt0de+piXAT3C670lUc5OMohqgA+HwZ2Ld0YKbCp+o6tw2ZLlNZ+SeAO2ojiqFqp1bZesqjsvUBSCmk/iwk7hkxPUd2ERdHS/CtIke98NfBwPcP4/SjsiA3h0m5;
+        Expires=Wed, 16 Feb 2022 16:51:06 GMT; Path=/
+      - AWSALBCORS=krt0de+piXAT3C670lUc5OMohqgA+HwZ2Ld0YKbCp+o6tw2ZLlNZ+SeAO2ojiqFqp1bZesqjsvUBSCmk/iwk7hkxPUd2ERdHS/CtIke98NfBwPcP4/SjsiA3h0m5;
+        Expires=Wed, 16 Feb 2022 16:51:06 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=f6552c4d049b6d926cdf8681b05b; Path=/; Secure; HttpOnly
     status:
       code: 200
       message: OK
@@ -320,7 +314,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
     method: GET
     uri: https://dataverse.harvard.edu/api/search?q=filePersistentId:WNKD3W
   response:
@@ -345,14 +339,14 @@ interactions:
       Content-Type:
       - application/json;charset=UTF-8
       Date:
-      - Tue, 22 Jun 2021 15:15:57 GMT
+      - Wed, 09 Feb 2022 16:51:06 GMT
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=uFBkQl0m/T/dC9kRG3FLoYeHF6PG7h0CQNmvianx/+gUN/CXnsz3KHVfcFeFpgrspsW5y8xBTjaHej5VfEHvcvYTWm1wmO9zBw6zKcK6/x0CyXF2FG/GaOP0AAR5;
-        Expires=Tue, 29 Jun 2021 15:15:54 GMT; Path=/
-      - AWSALBCORS=uFBkQl0m/T/dC9kRG3FLoYeHF6PG7h0CQNmvianx/+gUN/CXnsz3KHVfcFeFpgrspsW5y8xBTjaHej5VfEHvcvYTWm1wmO9zBw6zKcK6/x0CyXF2FG/GaOP0AAR5;
-        Expires=Tue, 29 Jun 2021 15:15:54 GMT; Path=/; SameSite=None; Secure
+      - AWSALB=hxy+WLO48pDnqNj9+zYnXVZqePBhn1B2kT3VXTyWViQmbUQ3/D6QtQAaaKAjuFCcfIHKhu78K1fPt+CcCVAcK4nu+VNJQkiQm+55VPeuS0ovwnCF3VC+wLx1/V8U;
+        Expires=Wed, 16 Feb 2022 16:51:06 GMT; Path=/
+      - AWSALBCORS=hxy+WLO48pDnqNj9+zYnXVZqePBhn1B2kT3VXTyWViQmbUQ3/D6QtQAaaKAjuFCcfIHKhu78K1fPt+CcCVAcK4nu+VNJQkiQm+55VPeuS0ovwnCF3VC+wLx1/V8U;
+        Expires=Wed, 16 Feb 2022 16:51:06 GMT; Path=/; SameSite=None; Secure
     status:
       code: 200
       message: OK
@@ -366,7 +360,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
     method: HEAD
     uri: https://doi.org/10.7910/DVN/RLMYMR
   response:
@@ -376,7 +370,7 @@ interactions:
       CF-Cache-Status:
       - DYNAMIC
       CF-RAY:
-      - 66366f60af0e2c44-ORD
+      - 6dae99c14cb58127-ORD
       Connection:
       - keep-alive
       Content-Length:
@@ -384,17 +378,17 @@ interactions:
       Content-Type:
       - text/html;charset=utf-8
       Date:
-      - Tue, 22 Jun 2021 15:15:58 GMT
+      - Wed, 09 Feb 2022 16:51:07 GMT
       Expect-CT:
       - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
       Expires:
-      - Tue, 22 Jun 2021 15:41:44 GMT
+      - Wed, 09 Feb 2022 17:38:20 GMT
       Location:
       - https://dataverse.harvard.edu/citation?persistentId=doi:10.7910/DVN/RLMYMR
       NEL:
-      - '{"report_to":"cf-nel","max_age":604800}'
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v2?s=yV%2BexXV7Osg6Nb3ECihSBOS%2B9AzCpjbPysulN9ueHNeDcvEIpJaS%2Bk7cMihpuBgVNx7tbM1kYF9eO8UeJedkUzMeshkXoTeuQIxzntls1fcnKduDd0cjDDvL5qHdx3Cz"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=f7%2F5XFp%2B2YNt4i5xG1NZK0pIiGRy7kW6VKNAQTJwrWN%2FY512zSTcN7XJcKeuonFxHIFih1RNAqf%2FV2o9MQomEqWuOcy8wWjg0OBTAmfFLsRdlIBZqHy6kmevfGKbZJB%2FQfK5Ki8%3D"}],"group":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
       Strict-Transport-Security:
@@ -402,10 +396,7 @@ interactions:
       Vary:
       - Accept
       alt-svc:
-      - h3-27=":443"; ma=86400, h3-28=":443"; ma=86400, h3-29=":443"; ma=86400, h3=":443";
-        ma=86400
-      cf-request-id:
-      - 0ad5e3f06700002c44f3387000000001
+      - h3=":443"; ma=86400, h3-29=":443"; ma=86400
     status:
       code: 302
       message: ''
@@ -419,7 +410,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
     method: HEAD
     uri: https://dataverse.harvard.edu/citation?persistentId=doi:10.7910/DVN/RLMYMR
   response:
@@ -433,16 +424,16 @@ interactions:
       Content-Type:
       - text/html;charset=UTF-8
       Date:
-      - Tue, 22 Jun 2021 15:15:58 GMT
+      - Wed, 09 Feb 2022 16:51:07 GMT
       Location:
       - https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/RLMYMR
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=SOngHKYg36ppyRT0BqB5gxYB/GY3qkxckxfJZoAzqtNXdQdjMwuptz/Gu3oHIY0kgwHcAjuWwmuzU5Q67b9RXVNDNz3NTZeTfN9Qez2kGUrYasPA75SMB+f419tg;
-        Expires=Tue, 29 Jun 2021 15:15:58 GMT; Path=/
-      - AWSALBCORS=SOngHKYg36ppyRT0BqB5gxYB/GY3qkxckxfJZoAzqtNXdQdjMwuptz/Gu3oHIY0kgwHcAjuWwmuzU5Q67b9RXVNDNz3NTZeTfN9Qez2kGUrYasPA75SMB+f419tg;
-        Expires=Tue, 29 Jun 2021 15:15:58 GMT; Path=/; SameSite=None; Secure
+      - AWSALB=01JalbfsP81MatOfh8SGhK2gV/l/kAG7DODjAnrWRoRQIgKyW/1alG3cHTNlp+k5zqPjt6tQRa8kTzO1qLneRsvwPZu4TIb1X8TTlm7nez5RRSrMRuLqsk6INrZN;
+        Expires=Wed, 16 Feb 2022 16:51:07 GMT; Path=/
+      - AWSALBCORS=01JalbfsP81MatOfh8SGhK2gV/l/kAG7DODjAnrWRoRQIgKyW/1alG3cHTNlp+k5zqPjt6tQRa8kTzO1qLneRsvwPZu4TIb1X8TTlm7nez5RRSrMRuLqsk6INrZN;
+        Expires=Wed, 16 Feb 2022 16:51:07 GMT; Path=/; SameSite=None; Secure
     status:
       code: 302
       message: Found
@@ -456,10 +447,10 @@ interactions:
       Connection:
       - keep-alive
       Cookie:
-      - AWSALB=SOngHKYg36ppyRT0BqB5gxYB/GY3qkxckxfJZoAzqtNXdQdjMwuptz/Gu3oHIY0kgwHcAjuWwmuzU5Q67b9RXVNDNz3NTZeTfN9Qez2kGUrYasPA75SMB+f419tg;
-        AWSALBCORS=SOngHKYg36ppyRT0BqB5gxYB/GY3qkxckxfJZoAzqtNXdQdjMwuptz/Gu3oHIY0kgwHcAjuWwmuzU5Q67b9RXVNDNz3NTZeTfN9Qez2kGUrYasPA75SMB+f419tg
+      - AWSALB=01JalbfsP81MatOfh8SGhK2gV/l/kAG7DODjAnrWRoRQIgKyW/1alG3cHTNlp+k5zqPjt6tQRa8kTzO1qLneRsvwPZu4TIb1X8TTlm7nez5RRSrMRuLqsk6INrZN;
+        AWSALBCORS=01JalbfsP81MatOfh8SGhK2gV/l/kAG7DODjAnrWRoRQIgKyW/1alG3cHTNlp+k5zqPjt6tQRa8kTzO1qLneRsvwPZu4TIb1X8TTlm7nez5RRSrMRuLqsk6INrZN
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
     method: HEAD
     uri: https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/RLMYMR
   response:
@@ -471,15 +462,15 @@ interactions:
       Content-Type:
       - text/html;charset=UTF-8
       Date:
-      - Tue, 22 Jun 2021 15:16:00 GMT
+      - Wed, 09 Feb 2022 16:51:08 GMT
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=maZ1tjxbp+J0ZuxUtuSECePHNLclLyBqKL+Bm3o2qB83SHqUrAWA+f1QnGxsjacss7xvCPafsGYXUUYVVOwi5Hy2ahtGbI1eNYDi4Fp+P1IgfNbBgFpxrVsI0Bqm;
-        Expires=Tue, 29 Jun 2021 15:15:58 GMT; Path=/
-      - AWSALBCORS=maZ1tjxbp+J0ZuxUtuSECePHNLclLyBqKL+Bm3o2qB83SHqUrAWA+f1QnGxsjacss7xvCPafsGYXUUYVVOwi5Hy2ahtGbI1eNYDi4Fp+P1IgfNbBgFpxrVsI0Bqm;
-        Expires=Tue, 29 Jun 2021 15:15:58 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=44ad987717647d08dc9b18b87e8d; Path=/; Secure; HttpOnly
+      - AWSALB=43FoKME0yKawc3Kz3OwTZ9eSKhL0eActH25cXV4re5X958Y7/bmf+2LDe86nKgLRus7HdCUL1ZskeiZiCGTO7v2qs94rcCI/vjpmYXN0iZpAfzKk5oweZQu6CRnt;
+        Expires=Wed, 16 Feb 2022 16:51:07 GMT; Path=/
+      - AWSALBCORS=43FoKME0yKawc3Kz3OwTZ9eSKhL0eActH25cXV4re5X958Y7/bmf+2LDe86nKgLRus7HdCUL1ZskeiZiCGTO7v2qs94rcCI/vjpmYXN0iZpAfzKk5oweZQu6CRnt;
+        Expires=Wed, 16 Feb 2022 16:51:07 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=f65561e67d2c9615270a51f7db7b; Path=/; Secure; HttpOnly
     status:
       code: 200
       message: OK
@@ -493,13 +484,13 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
     method: GET
     uri: https://dataverse.harvard.edu/api/datasets/:persistentId?persistentId=doi:10.7910/DVN/RLMYMR
   response:
     body:
       string: '{"status":"OK","data":{"id":2966297,"identifier":"DVN/RLMYMR","persistentUrl":"https://doi.org/10.7910/DVN/RLMYMR","protocol":"doi","authority":"10.7910","publisher":"Harvard
-        Dataverse","publicationDate":"2016-12-20","storageIdentifier":"s3://10.7910/DVN/RLMYMR","latestVersion":{"id":147203,"datasetId":2966297,"datasetPersistentId":"doi:10.7910/DVN/RLMYMR","storageIdentifier":"s3://10.7910/DVN/RLMYMR","versionNumber":2,"versionMinorNumber":0,"versionState":"RELEASED","UNF":"UNF:6:wBvSbRl2RTVRfu9kpjgnrw==","lastUpdateTime":"2018-11-15T16:04:00Z","releaseTime":"2018-11-15T16:04:00Z","createTime":"2018-11-15T16:00:10Z","license":"NONE","termsOfUse":"Attribution
+        Dataverse","publicationDate":"2016-12-20","storageIdentifier":"s3://10.7910/DVN/RLMYMR","metadataLanguage":"undefined","latestVersion":{"id":147203,"datasetId":2966297,"datasetPersistentId":"doi:10.7910/DVN/RLMYMR","storageIdentifier":"s3://10.7910/DVN/RLMYMR","versionNumber":2,"versionMinorNumber":0,"versionState":"RELEASED","UNF":"UNF:6:wBvSbRl2RTVRfu9kpjgnrw==","lastUpdateTime":"2018-11-15T16:04:00Z","releaseTime":"2018-11-15T16:04:00Z","createTime":"2018-11-15T16:00:10Z","license":"NONE","termsOfUse":"Attribution
         is required","disclaimer":"These datasets are provided \"as is\" and in no
         event shall Bioversity International be liable for any damages resulting from
         use of the data. While great effort was taken to obtain high quality data,
@@ -510,7 +501,7 @@ interactions:
         from the files. For some of the datasets, the user will need to take care
         in handling missing observations, outlier values and violations of logical
         consistency. ","fileAccessRequest":false,"metadataBlocks":{"citation":{"displayName":"Citation
-        Metadata","fields":[{"typeName":"title","multiple":false,"typeClass":"primitive","value":"Karnataka
+        Metadata","name":"citation","fields":[{"typeName":"title","multiple":false,"typeClass":"primitive","value":"Karnataka
         Diet Diversity and Food Security for Agricultural Biodiversity Assessment"},{"typeName":"author","multiple":true,"typeClass":"compound","value":[{"authorName":{"typeName":"authorName","multiple":false,"typeClass":"primitive","value":"Ntandou-Bouzitou,
         G.D."},"authorAffiliation":{"typeName":"authorAffiliation","multiple":false,"typeClass":"primitive","value":"Bioversity
         International"}},{"authorName":{"typeName":"authorName","multiple":false,"typeClass":"primitive","value":"Kennedy,
@@ -551,7 +542,7 @@ interactions:
         International"},{"typeName":"dateOfDeposit","multiple":false,"typeClass":"primitive","value":"2016-12-20"},{"typeName":"timePeriodCovered","multiple":true,"typeClass":"compound","value":[{"timePeriodCoveredStart":{"typeName":"timePeriodCoveredStart","multiple":false,"typeClass":"primitive","value":"2014-08"},"timePeriodCoveredEnd":{"typeName":"timePeriodCoveredEnd","multiple":false,"typeClass":"primitive","value":"2014-10"}}]},{"typeName":"dateOfCollection","multiple":true,"typeClass":"compound","value":[{"dateOfCollectionStart":{"typeName":"dateOfCollectionStart","multiple":false,"typeClass":"primitive","value":"2014-08"},"dateOfCollectionEnd":{"typeName":"dateOfCollectionEnd","multiple":false,"typeClass":"primitive","value":"2014-10"}}]},{"typeName":"kindOfData","multiple":true,"typeClass":"primitive","value":["Household/Survey
         data"]},{"typeName":"otherReferences","multiple":true,"typeClass":"primitive","value":["CRP
         1.1: CGIAR Research Program on Dryland Agricultural Production Systems"]}]},"geospatial":{"displayName":"Geospatial
-        Metadata","fields":[{"typeName":"geographicCoverage","multiple":true,"typeClass":"compound","value":[{"country":{"typeName":"country","multiple":false,"typeClass":"controlledVocabulary","value":"India"},"state":{"typeName":"state","multiple":false,"typeClass":"primitive","value":"Karnataka"},"otherGeographicCoverage":{"typeName":"otherGeographicCoverage","multiple":false,"typeClass":"primitive","value":"Bijapur
+        Metadata","name":"geospatial","fields":[{"typeName":"geographicCoverage","multiple":true,"typeClass":"compound","value":[{"country":{"typeName":"country","multiple":false,"typeClass":"controlledVocabulary","value":"India"},"state":{"typeName":"state","multiple":false,"typeClass":"primitive","value":"Karnataka"},"otherGeographicCoverage":{"typeName":"otherGeographicCoverage","multiple":false,"typeClass":"primitive","value":"Bijapur
         District"}}]}]}},"files":[{"description":"Data","label":"Karnataka_DD&FS_Data-1.tab","restricted":false,"version":2,"datasetVersionId":147203,"dataFile":{"id":3315157,"persistentId":"doi:10.7910/DVN/RLMYMR/WNKD3W","pidURL":"https://doi.org/10.7910/DVN/RLMYMR/WNKD3W","filename":"Karnataka_DD&FS_Data-1.tab","contentType":"text/tab-separated-values","filesize":2321,"description":"Data","storageIdentifier":"s3://dvn-cloud:167181b3a0e-b7e18f26cfad","originalFileFormat":"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet","originalFormatLabel":"MS
         Excel Spreadsheet","originalFileSize":700840,"originalFileName":"Karnataka_DD&FS_Data-1.xlsx","UNF":"UNF:6:wBvSbRl2RTVRfu9kpjgnrw==","rootDataFileId":2966302,"previousDataFileId":2966302,"md5":"ca9dea905295ac52db4ea3c7c8bf00e9","checksum":{"type":"MD5","value":"ca9dea905295ac52db4ea3c7c8bf00e9"},"creationDate":"2018-11-15"}},{"label":"Karnataka_DD&FS_Questionnaire.pdf","restricted":false,"version":1,"datasetVersionId":147203,"dataFile":{"id":2966301,"persistentId":"doi:10.7910/DVN/RLMYMR/UKYKS9","pidURL":"https://doi.org/10.7910/DVN/RLMYMR/UKYKS9","filename":"Karnataka_DD&FS_Questionnaire.pdf","contentType":"application/pdf","filesize":493564,"storageIdentifier":"s3://dvn-cloud:1591ccfc017-1eeea525e902","rootDataFileId":-1,"md5":"d9de390c8f132916b4bb97d6ea0c8ed6","checksum":{"type":"MD5","value":"d9de390c8f132916b4bb97d6ea0c8ed6"},"creationDate":"2016-12-20"}}]}}}'
     headers:
@@ -566,15 +557,15 @@ interactions:
       Content-Type:
       - application/json;charset=UTF-8
       Date:
-      - Tue, 22 Jun 2021 15:16:00 GMT
+      - Wed, 09 Feb 2022 16:51:08 GMT
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=dKdJ25GxRkgijCHy4yylJ5ZJti/fMY8j9seM1X+5bBxhrPXqcCnqU4W7ehk9I4zZdYnigE4VcG33JMaJEw25sDdjvL4txZSCB1L9pxWzJ6HSfDIMBsebxx+FKulS;
-        Expires=Tue, 29 Jun 2021 15:16:00 GMT; Path=/
-      - AWSALBCORS=dKdJ25GxRkgijCHy4yylJ5ZJti/fMY8j9seM1X+5bBxhrPXqcCnqU4W7ehk9I4zZdYnigE4VcG33JMaJEw25sDdjvL4txZSCB1L9pxWzJ6HSfDIMBsebxx+FKulS;
-        Expires=Tue, 29 Jun 2021 15:16:00 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=44ae1fcd1ae2e8ce2df5f702fdd9; Path=/; Secure; HttpOnly
+      - AWSALB=aVnGhlD7dkB/VED/wFJLYlPrv2Suc6O1pQtZpVRoDYfKfJ+aQidmpJOfaXZBlEwc0TmtU9HhUbyqvD/MD7uuJUBxVo8jx1OAjqbMHNL/zvxlwmrExG9+jbZAS4Qv;
+        Expires=Wed, 16 Feb 2022 16:51:08 GMT; Path=/
+      - AWSALBCORS=aVnGhlD7dkB/VED/wFJLYlPrv2Suc6O1pQtZpVRoDYfKfJ+aQidmpJOfaXZBlEwc0TmtU9HhUbyqvD/MD7uuJUBxVo8jx1OAjqbMHNL/zvxlwmrExG9+jbZAS4Qv;
+        Expires=Wed, 16 Feb 2022 16:51:08 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=f655a838128c77a75bb131aef798; Path=/; Secure; HttpOnly
       Transfer-Encoding:
       - chunked
     status:
@@ -590,7 +581,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
     method: HEAD
     uri: https://dataverse.harvard.edu/api/access/datafile/3315157?format=original
   response:
@@ -608,17 +599,17 @@ interactions:
       Content-Type:
       - application/xml;charset=UTF-8
       Date:
-      - Tue, 22 Jun 2021 15:16:01 GMT
+      - Wed, 09 Feb 2022 16:51:09 GMT
       Location:
-      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210622T151601Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20210622%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=da650599ac940cc1c549bb374e7b841010fd3ab965a39d5d01e3418e7fe83eb5
+      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220209T165109Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220209%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=9efb6469a15fb4b0b353e3ee314d1ecb96ac471b69f5a41d19b499640a3e684a
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=lSnSmBfdrBu/4kRaNY267IaQ9wosMqP9l298IyfD+kdln8xrfziFl4y7aKfCpRk6DGQRgRaxTbMsbfMKioFWn9qgO8oUg8Yj/NeYWSEEBfpeP44RjbNpLUYrRueK;
-        Expires=Tue, 29 Jun 2021 15:16:01 GMT; Path=/
-      - AWSALBCORS=lSnSmBfdrBu/4kRaNY267IaQ9wosMqP9l298IyfD+kdln8xrfziFl4y7aKfCpRk6DGQRgRaxTbMsbfMKioFWn9qgO8oUg8Yj/NeYWSEEBfpeP44RjbNpLUYrRueK;
-        Expires=Tue, 29 Jun 2021 15:16:01 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=44ae3d4d15bf7363aae686a399e2; Path=/; Secure; HttpOnly
+      - AWSALB=Vf6trcdTO2HrykdexVQeq9q4aDggFA61csqak6w1dS2BCOR4HvfjTu3Fa04IO5c//I+TDG9NFxoAq8TMqwSn0Cte1W5IkXWbJ8D1llxO72zzSn6dgytAubgvCCNu;
+        Expires=Wed, 16 Feb 2022 16:51:09 GMT; Path=/
+      - AWSALBCORS=Vf6trcdTO2HrykdexVQeq9q4aDggFA61csqak6w1dS2BCOR4HvfjTu3Fa04IO5c//I+TDG9NFxoAq8TMqwSn0Cte1W5IkXWbJ8D1llxO72zzSn6dgytAubgvCCNu;
+        Expires=Wed, 16 Feb 2022 16:51:09 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=f655cb0870228d9adbdd9abeca6e; Path=/; Secure; HttpOnly
     status:
       code: 303
       message: See Other
@@ -632,9 +623,9 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
     method: HEAD
-    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210622T151601Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20210622%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=da650599ac940cc1c549bb374e7b841010fd3ab965a39d5d01e3418e7fe83eb5
+    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220209T165109Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220209%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=9efb6469a15fb4b0b353e3ee314d1ecb96ac471b69f5a41d19b499640a3e684a
   response:
     body:
       string: ''
@@ -642,13 +633,13 @@ interactions:
       Content-Type:
       - application/xml
       Date:
-      - Tue, 22 Jun 2021 15:16:00 GMT
+      - Wed, 09 Feb 2022 16:51:09 GMT
       Server:
       - AmazonS3
       x-amz-id-2:
-      - itPGnEoCRbOxxc/bcMer3qISBy6ajOAmHQSr4HtDwTEJU9VDbu7THcR6w7b5dXoFG4tIzsNHqA8=
+      - l8KxAVZDzU/g7G8ZOoMY7bGQx25eIh0bgFWpxAB3v8b8XSZlenBRXXIClsG7EfgBlYFr53ymCWo=
       x-amz-request-id:
-      - D1SFS40ND42KSFZ6
+      - C4FF6QSQQNB8JS9V
     status:
       code: 403
       message: Forbidden
@@ -664,7 +655,7 @@ interactions:
       Range:
       - bytes=0-100
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
     method: GET
     uri: https://dataverse.harvard.edu/api/access/datafile/3315157?format=original
   response:
@@ -682,17 +673,17 @@ interactions:
       Content-Length:
       - '0'
       Date:
-      - Tue, 22 Jun 2021 15:16:02 GMT
+      - Wed, 09 Feb 2022 16:51:09 GMT
       Location:
-      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210622T151602Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20210622%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=290d0a3a0f9d0506b433e50d7e24ecc7a72ebb1238013d8410d73ca09c000427
+      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220209T165109Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220209%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=9efb6469a15fb4b0b353e3ee314d1ecb96ac471b69f5a41d19b499640a3e684a
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=97natyCJEeAfK/LaPm3OpZyq9Ycd1ed8oEGqoslZs4T94YkPAZD8dqOti4m52BkSN8aim72TDR5hkhgLUk33qiI4LDJwaWmtq4jdIXkTdGFr+2s3CdtHEmT6kbr2;
-        Expires=Tue, 29 Jun 2021 15:16:01 GMT; Path=/
-      - AWSALBCORS=97natyCJEeAfK/LaPm3OpZyq9Ycd1ed8oEGqoslZs4T94YkPAZD8dqOti4m52BkSN8aim72TDR5hkhgLUk33qiI4LDJwaWmtq4jdIXkTdGFr+2s3CdtHEmT6kbr2;
-        Expires=Tue, 29 Jun 2021 15:16:01 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=44ae753ef62ef0790fa17ed120f8; Path=/; Secure; HttpOnly
+      - AWSALB=zOhVE7epqYCFGgscma5Ke0sz/laVg6X1cznSAkSVEksfenjf//nJ/eeNFlIRqJfwEHJjC+eIaLA4wy9nh3GEVpsbpmhUV6I5dZyVSVmDoU/1I072kmpQFxWrw0kF;
+        Expires=Wed, 16 Feb 2022 16:51:09 GMT; Path=/
+      - AWSALBCORS=zOhVE7epqYCFGgscma5Ke0sz/laVg6X1cznSAkSVEksfenjf//nJ/eeNFlIRqJfwEHJjC+eIaLA4wy9nh3GEVpsbpmhUV6I5dZyVSVmDoU/1I072kmpQFxWrw0kF;
+        Expires=Wed, 16 Feb 2022 16:51:09 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=f655f73a9ea8cf22883c713d894d; Path=/; Secure; HttpOnly
     status:
       code: 303
       message: See Other
@@ -708,9 +699,9 @@ interactions:
       Range:
       - bytes=0-100
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
     method: GET
-    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210622T151602Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20210622%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=290d0a3a0f9d0506b433e50d7e24ecc7a72ebb1238013d8410d73ca09c000427
+    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220209T165109Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220209%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=9efb6469a15fb4b0b353e3ee314d1ecb96ac471b69f5a41d19b499640a3e684a
   response:
     body:
       string: !!binary |
@@ -728,7 +719,7 @@ interactions:
       Content-Type:
       - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
       Date:
-      - Tue, 22 Jun 2021 15:16:03 GMT
+      - Wed, 09 Feb 2022 16:51:11 GMT
       ETag:
       - '"ca9dea905295ac52db4ea3c7c8bf00e9"'
       Last-Modified:
@@ -736,11 +727,11 @@ interactions:
       Server:
       - AmazonS3
       x-amz-id-2:
-      - fuVauVbtd/1wC2FqFWcBnILRgqi68o3QAPvpZftm334s0b33LreI1KsdWTm0uD5WMGXgOPHXjF0=
+      - 5x9RkmCfinzokq8BkQblHKRjIZtuL33VFU35yusM/TQ22T0f/GCoyUFkRuKLLo0Lr3O96QpLwIk=
       x-amz-replication-status:
       - COMPLETED
       x-amz-request-id:
-      - EKFPH89F8E9RX2J4
+      - 4PYAG2WPAVJZA44S
       x-amz-version-id:
       - 8Uv3Yrd.dfBXa57kWF6KNDwyWs06bgpF
     status:
@@ -756,12 +747,42 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
-    method: HEAD
+      - python-requests/2.26.0
+    method: GET
     uri: https://dataverse.harvard.edu/api/access/datafile/3315157
   response:
     body:
-      string: ''
+      string: "Datasetname\tKarnatakaDietDiversityandFoodSecurityforAgriculturalBiodiversityAssessment\n\"Description\"\t\"The
+        questionnaire elicited information on foods consumed and their sources for
+        selected mothers and children of the households interviewed for the ABD-Assessment
+        (24-hour recall); information on young and child feeding practices; and on
+        household food secuirty, and risk preferences of mother. In the same households
+        selected for the ABD-Assessment, one woman per household was selected. The
+        first choice of respondent was a woman that had a child between 6 and 59 months
+        old; if no woman was available with a child between 6 and 59 months, the interview
+        was perfomred with the woman that usually takes care of the food preparation
+        in the household. In case there were more women with children between 6 and
+        59 months living in the household,one of them was selected randomly . The
+        same procedure was done if more than one child of the selected woman is eligible
+        to participate in the study. For the food consumed by mother and child, the
+        period was the previous 24 hours. Interviews took place between the 25 of
+        August and 30 September 2014 (2 cases 30, 31 of October). For the household
+        food security data refer to the previous 30 days of the day of the interview.
+        For the infant and child feeding practices, they are in general. Three villages
+        in the Bijapur District: Mannur, Nandyal, Balaganur were surveyed.\"\n\"Primary
+        contributors\"\t\"Ntandou-Bouzitou G.D., Kennedy G., Bellon M.R., Mathur P.,
+        Dandin S. (all Bioversity International), Patil H.B. (Hort. Research Station
+        Vijayapura, Karnataka)\"\n\"Contact person\"\t\"Bellon M.(mrbellon@yahoo.com),
+        Bioversity-Dataverse (bioversity-dataverse@groups.cgiar.org)\"\n\"Dataset
+        published at\"\t\"Bioversity Dataverse (https://dataverse.harvard.edu/dataverse/Bioversity)\"\n\"Dataset
+        UID\"\t\"https://doi.org/10.7910/DVN/RLMYMR\"\n\"Last updated\"\t\"43419\"\n\"Update
+        description\"\t\"Added ReadMe, added ontology term ID's to variables.\"\n\"Worksheet\"\t\"Description\"\n\"ReadMe\"\t\"General
+        information. \"\n\"Codes\"\t\"Description of variables used\"\n\"Example\"\t\"Example\"\n\"General
+        Information\"\t\"Data on survey (location, time, household)\"\n\"I. Women
+        Dietary Diversity\"\t\"Data on dietary diversity women\"\n\"I. Child Dietary
+        Diversity\"\t\"Data on dietary diversity child\"\n\"II Child Feeding Practices\"\t\"Data
+        on feeding practices child\"\n\"III. Food Security & Risk\"\t\"Data on food
+        security and risk management\"\n"
     headers:
       Access-Control-Allow-Headers:
       - Accept, Content-Type, X-Dataverse-Key
@@ -778,15 +799,15 @@ interactions:
       Content-disposition:
       - attachment; filename="Karnataka_DD%26FS_Data-1.tab"
       Date:
-      - Tue, 22 Jun 2021 15:16:03 GMT
+      - Wed, 09 Feb 2022 16:51:10 GMT
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=xo4hSrFmrnsEzcKjwtiLszzsD04gTy2gkPPJTLBnmEBj/Jy5luHXnDfbMHZinAB2EaxTmzb0mrAI6nq69nruMk1f3BSfraLykTnWb+KIBNOPU7YCeZCojUqAvi+6;
-        Expires=Tue, 29 Jun 2021 15:16:02 GMT; Path=/
-      - AWSALBCORS=xo4hSrFmrnsEzcKjwtiLszzsD04gTy2gkPPJTLBnmEBj/Jy5luHXnDfbMHZinAB2EaxTmzb0mrAI6nq69nruMk1f3BSfraLykTnWb+KIBNOPU7YCeZCojUqAvi+6;
-        Expires=Tue, 29 Jun 2021 15:16:02 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=44aeab4aec09b9e1036ad49e38f1; Path=/; Secure; HttpOnly
+      - AWSALB=VEwr1OEsXG+mF3bxS7NL58Rq+XcaVJb8mP2MhTNo9NLs1vUEKLcJaspQsZp4p3HiuOVHf/5bVKK4ucFHzKiWkFJQlbkjqQKxJdFtnSg+4K0w7AanLzczIpNkLWsf;
+        Expires=Wed, 16 Feb 2022 16:51:10 GMT; Path=/
+      - AWSALBCORS=VEwr1OEsXG+mF3bxS7NL58Rq+XcaVJb8mP2MhTNo9NLs1vUEKLcJaspQsZp4p3HiuOVHf/5bVKK4ucFHzKiWkFJQlbkjqQKxJdFtnSg+4K0w7AanLzczIpNkLWsf;
+        Expires=Wed, 16 Feb 2022 16:51:10 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=f6561aaa7ad10fb25163b2d445a7; Path=/; Secure; HttpOnly
     status:
       code: 200
       message: OK
@@ -800,7 +821,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
     method: HEAD
     uri: https://doi.org/10.7910/DVN/RLMYMR/WNKD3W
   response:
@@ -810,7 +831,7 @@ interactions:
       CF-Cache-Status:
       - DYNAMIC
       CF-RAY:
-      - 66366f805f7b2be3-ORD
+      - 6dae99d75b118737-ORD
       Connection:
       - keep-alive
       Content-Length:
@@ -818,31 +839,28 @@ interactions:
       Content-Type:
       - text/html;charset=utf-8
       Date:
-      - Tue, 22 Jun 2021 15:16:03 GMT
+      - Wed, 09 Feb 2022 16:51:10 GMT
       Expect-CT:
       - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
-      Expires:
-      - Tue, 22 Jun 2021 15:41:44 GMT
-      Location:
-      - https://dataverse.harvard.edu/file.xhtml?persistentId=doi:10.7910/DVN/RLMYMR/WNKD3W
       NEL:
-      - '{"report_to":"cf-nel","max_age":604800}'
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v2?s=pzDz73lesyZven37q%2FWLQzSshX82jIg7NAL1EVLMbJc37BZj7okGeHyBeaIRdNtxU6Rn9YXDioRXT2WGwRAcaLjPuel5zB1506acRSDwRblSGiVqHUKKlVRpvBE2aEXm"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=u53oN2e59zZzn%2Bh3hGggbp%2BI%2BTjbKQ9UDeVVaz9yt7TTDLTXza20RL5LOYSpgNG%2FaTNm6QBCeOTaWLytxg2IX6Y4hZRmW9wTzr4sgUrYPXNBI%2FCWgSdoUdGZwkiq%2F5NM58Cdguw%3D"}],"group":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains; preload
-      Vary:
-      - Accept
       alt-svc:
-      - h3-27=":443"; ma=86400, h3-28=":443"; ma=86400, h3-29=":443"; ma=86400, h3=":443";
-        ma=86400
-      cf-request-id:
-      - 0ad5e4043900002be31625d000000001
+      - h3=":443"; ma=86400, h3-29=":443"; ma=86400
+      expires:
+      - Wed, 09 Feb 2022 17:18:35 GMT
+      location:
+      - https://dataverse.harvard.edu/file.xhtml?persistentId=doi:10.7910/DVN/RLMYMR/WNKD3W
+      vary:
+      - Accept
     status:
       code: 302
-      message: ''
+      message: Found
 - request:
     body: null
     headers:
@@ -853,7 +871,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
     method: HEAD
     uri: https://dataverse.harvard.edu/file.xhtml?persistentId=doi:10.7910/DVN/RLMYMR/WNKD3W
   response:
@@ -865,15 +883,15 @@ interactions:
       Content-Type:
       - text/html;charset=UTF-8
       Date:
-      - Tue, 22 Jun 2021 15:16:04 GMT
+      - Wed, 09 Feb 2022 16:51:10 GMT
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=I8MWyvBkEspAsImQkP+iHJCt335C4gXloqe+oqaTbjaSdrZ14GqgBpmw7+Lg0v9ihqKUvIX2s0BHxgO+7+Eg/eCXYsPsASktIW5ccaDR/t9KK/UpPoKMp1dZEV1c;
-        Expires=Tue, 29 Jun 2021 15:16:03 GMT; Path=/
-      - AWSALBCORS=I8MWyvBkEspAsImQkP+iHJCt335C4gXloqe+oqaTbjaSdrZ14GqgBpmw7+Lg0v9ihqKUvIX2s0BHxgO+7+Eg/eCXYsPsASktIW5ccaDR/t9KK/UpPoKMp1dZEV1c;
-        Expires=Tue, 29 Jun 2021 15:16:03 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=44aed29b7e4a21768b9c9282d196; Path=/; Secure; HttpOnly
+      - AWSALB=XkAMtgxg372UXRLPb8tp4ftypcLtA7YVRAhxo7rlHAS8ExnO4wQe0EgjudlnXCrz2JbWZnAF4GFlX+y417OZ5qwm0n1KUPT42Wze4/DuPK21mYNNF8jC7/7QkWjK;
+        Expires=Wed, 16 Feb 2022 16:51:10 GMT; Path=/
+      - AWSALBCORS=XkAMtgxg372UXRLPb8tp4ftypcLtA7YVRAhxo7rlHAS8ExnO4wQe0EgjudlnXCrz2JbWZnAF4GFlX+y417OZ5qwm0n1KUPT42Wze4/DuPK21mYNNF8jC7/7QkWjK;
+        Expires=Wed, 16 Feb 2022 16:51:10 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=f65638b285ab56575aa8de81a9ef; Path=/; Secure; HttpOnly
     status:
       code: 200
       message: OK
@@ -887,7 +905,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
     method: GET
     uri: https://dataverse.harvard.edu/api/search?q=filePersistentId:WNKD3W
   response:
@@ -912,14 +930,14 @@ interactions:
       Content-Type:
       - application/json;charset=UTF-8
       Date:
-      - Tue, 22 Jun 2021 15:16:07 GMT
+      - Wed, 09 Feb 2022 16:51:11 GMT
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=lG9pEe/YxIF0JYz+5TiS6+RtBG//dTWcBSCU6b39qZrYfrBZYeF8nGU1iByvlQVT8pIpw3wercaVMa6473CQ7TifYwfJze/QFzZqvEcsWF9sQqbTNkdKPfhhH4na;
-        Expires=Tue, 29 Jun 2021 15:16:04 GMT; Path=/
-      - AWSALBCORS=lG9pEe/YxIF0JYz+5TiS6+RtBG//dTWcBSCU6b39qZrYfrBZYeF8nGU1iByvlQVT8pIpw3wercaVMa6473CQ7TifYwfJze/QFzZqvEcsWF9sQqbTNkdKPfhhH4na;
-        Expires=Tue, 29 Jun 2021 15:16:04 GMT; Path=/; SameSite=None; Secure
+      - AWSALB=LJavdXkhniCOWlHSUl4VS3SzkrmPfEP3cLx/u22hz5O3ig4aEZk/8lVJ/al4ias8G81hyhv8M5/Qha2tN0Ui5i2d23xPY++mwzwI6BCAYJSmEscannQUzydW2HeI;
+        Expires=Wed, 16 Feb 2022 16:51:11 GMT; Path=/
+      - AWSALBCORS=LJavdXkhniCOWlHSUl4VS3SzkrmPfEP3cLx/u22hz5O3ig4aEZk/8lVJ/al4ias8G81hyhv8M5/Qha2tN0Ui5i2d23xPY++mwzwI6BCAYJSmEscannQUzydW2HeI;
+        Expires=Wed, 16 Feb 2022 16:51:11 GMT; Path=/; SameSite=None; Secure
     status:
       code: 200
       message: OK
@@ -933,7 +951,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
     method: HEAD
     uri: https://dataverse.harvard.edu/api/access/datafile/3315157?format=original
   response:
@@ -951,17 +969,17 @@ interactions:
       Content-Type:
       - application/xml;charset=UTF-8
       Date:
-      - Tue, 22 Jun 2021 15:16:07 GMT
+      - Wed, 09 Feb 2022 16:51:11 GMT
       Location:
-      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210622T151607Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20210622%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=d315f8e613b1caa2295a19655fc9447e7c06d9fb40d384bdfd8b49723a4d218c
+      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220209T165111Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220209%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=e10c63e80736cd7e54ab05fbef1e80dda1fe37c5babed44e120a78a3d8fc8f37
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=lw8aX5g1Kzd6G49BtBEPrBWL5h1PbwUvtTAob+ohACTbxxNuVBQF6imCouGyJLPqPBhvcGsO/NRN8+Zswvi783DFGuRLZKgRVHBTI3+3iM/m/vn1o7cFH50clT5L;
-        Expires=Tue, 29 Jun 2021 15:16:07 GMT; Path=/
-      - AWSALBCORS=lw8aX5g1Kzd6G49BtBEPrBWL5h1PbwUvtTAob+ohACTbxxNuVBQF6imCouGyJLPqPBhvcGsO/NRN8+Zswvi783DFGuRLZKgRVHBTI3+3iM/m/vn1o7cFH50clT5L;
-        Expires=Tue, 29 Jun 2021 15:16:07 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=44afcb5eb5431565b7a5fce6dd0f; Path=/; Secure; HttpOnly
+      - AWSALB=WMI34uXFvXnKSO8vsHsufq45pN199R4bGaR4d3q0CYnHyizgXU4IbEGtESKwaPtw2DEG8wppBqEFfAAoj+miztAdW1mxouX93oGe5O7ZyHQSPxgKB56Fd+17l/yX;
+        Expires=Wed, 16 Feb 2022 16:51:11 GMT; Path=/
+      - AWSALBCORS=WMI34uXFvXnKSO8vsHsufq45pN199R4bGaR4d3q0CYnHyizgXU4IbEGtESKwaPtw2DEG8wppBqEFfAAoj+miztAdW1mxouX93oGe5O7ZyHQSPxgKB56Fd+17l/yX;
+        Expires=Wed, 16 Feb 2022 16:51:11 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=f656601ade2ce41ca576f427a663; Path=/; Secure; HttpOnly
     status:
       code: 303
       message: See Other
@@ -975,9 +993,9 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
     method: HEAD
-    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210622T151607Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20210622%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=d315f8e613b1caa2295a19655fc9447e7c06d9fb40d384bdfd8b49723a4d218c
+    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220209T165111Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220209%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=e10c63e80736cd7e54ab05fbef1e80dda1fe37c5babed44e120a78a3d8fc8f37
   response:
     body:
       string: ''
@@ -985,13 +1003,13 @@ interactions:
       Content-Type:
       - application/xml
       Date:
-      - Tue, 22 Jun 2021 15:16:07 GMT
+      - Wed, 09 Feb 2022 16:51:11 GMT
       Server:
       - AmazonS3
       x-amz-id-2:
-      - 8at401IHIK5mcvJKP1S04DI3gxJuH1P1zCpVrW8K7QjY2hKP77mnmrl0Ph7WeV4AiqmZOoWxilE=
+      - CDm+FjEPxAhJlIh4N5EEUAQdM3bIW8lXzcKeLhf2aRo7ARwWoKtj3GkEOSrAxrmYJ34oIFkrGHs=
       x-amz-request-id:
-      - MJ10TY3MC8FADRZP
+      - 1RRKFJBMJNVD133Q
     status:
       code: 403
       message: Forbidden
@@ -1007,7 +1025,7 @@ interactions:
       Range:
       - bytes=0-100
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
     method: GET
     uri: https://dataverse.harvard.edu/api/access/datafile/3315157?format=original
   response:
@@ -1025,17 +1043,17 @@ interactions:
       Content-Length:
       - '0'
       Date:
-      - Tue, 22 Jun 2021 15:16:08 GMT
+      - Wed, 09 Feb 2022 16:51:12 GMT
       Location:
-      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210622T151608Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20210622%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=d962b03efbdb108d2c4f7f70e480a0ec93fde3cc9eefe98cbccebf094283a714
+      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220209T165112Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220209%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=b43bc1352080151b9c572d25c22850a6de53f20d874678c42ae4852ea8de20aa
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=DdEFcOi3b3Z09yvI5o8VFgKxpK5ib6nQFzMos0z6tcyEN87tCoo3Iv8bzI9Ds7Dyw267NGdPbHRiC0iBuybelqx0AFR8cMnvHwQ6fucvv4I70BYyIskATie3844x;
-        Expires=Tue, 29 Jun 2021 15:16:08 GMT; Path=/
-      - AWSALBCORS=DdEFcOi3b3Z09yvI5o8VFgKxpK5ib6nQFzMos0z6tcyEN87tCoo3Iv8bzI9Ds7Dyw267NGdPbHRiC0iBuybelqx0AFR8cMnvHwQ6fucvv4I70BYyIskATie3844x;
-        Expires=Tue, 29 Jun 2021 15:16:08 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=44b000477d1a92dc502bfe77245f; Path=/; Secure; HttpOnly
+      - AWSALB=lU77WJbCnWwg31ynyvQTLyhqPs/bhyHOV1a2FkqXaZ8BZ2IvthE4L1AbY2YyIUL0T9tO0+GoKJg4KHvY78xnxWUgFc1ZkeIa0kFWW0MuMcFjTTz0veHr79k0SO24;
+        Expires=Wed, 16 Feb 2022 16:51:12 GMT; Path=/
+      - AWSALBCORS=lU77WJbCnWwg31ynyvQTLyhqPs/bhyHOV1a2FkqXaZ8BZ2IvthE4L1AbY2YyIUL0T9tO0+GoKJg4KHvY78xnxWUgFc1ZkeIa0kFWW0MuMcFjTTz0veHr79k0SO24;
+        Expires=Wed, 16 Feb 2022 16:51:12 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=f656862de1f17b888b74d2448eed; Path=/; Secure; HttpOnly
     status:
       code: 303
       message: See Other
@@ -1051,9 +1069,9 @@ interactions:
       Range:
       - bytes=0-100
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
     method: GET
-    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210622T151608Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20210622%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=d962b03efbdb108d2c4f7f70e480a0ec93fde3cc9eefe98cbccebf094283a714
+    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/RLMYMR/167181b3a0e-b7e18f26cfad.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Karnataka_DD%2526FS_Data-1.xlsx&response-content-type=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220209T165112Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220209%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=b43bc1352080151b9c572d25c22850a6de53f20d874678c42ae4852ea8de20aa
   response:
     body:
       string: !!binary |
@@ -1071,7 +1089,7 @@ interactions:
       Content-Type:
       - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
       Date:
-      - Tue, 22 Jun 2021 15:16:09 GMT
+      - Wed, 09 Feb 2022 16:51:13 GMT
       ETag:
       - '"ca9dea905295ac52db4ea3c7c8bf00e9"'
       Last-Modified:
@@ -1079,11 +1097,11 @@ interactions:
       Server:
       - AmazonS3
       x-amz-id-2:
-      - kPgnTJVuOxKvy4oXYsomvWW5XvXi1w93QORrnkVFYYpiZOkkc6wtbg1ey3pWgPtJP8fUKaQW9ao=
+      - UDfTAP3rEJnmhvuWDF4MlOlJsJPQXUJV1cHdqtpMfVYD85vom+fYmI3ahH2jtGMg9mnbOppMl7o=
       x-amz-replication-status:
       - COMPLETED
       x-amz-request-id:
-      - MJ102H67W1DRK0GX
+      - C12Z8PZFSW4E04CW
       x-amz-version-id:
       - 8Uv3Yrd.dfBXa57kWF6KNDwyWs06bgpF
     status:
@@ -1099,12 +1117,42 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
-    method: HEAD
+      - python-requests/2.26.0
+    method: GET
     uri: https://dataverse.harvard.edu/api/access/datafile/3315157
   response:
     body:
-      string: ''
+      string: "Datasetname\tKarnatakaDietDiversityandFoodSecurityforAgriculturalBiodiversityAssessment\n\"Description\"\t\"The
+        questionnaire elicited information on foods consumed and their sources for
+        selected mothers and children of the households interviewed for the ABD-Assessment
+        (24-hour recall); information on young and child feeding practices; and on
+        household food secuirty, and risk preferences of mother. In the same households
+        selected for the ABD-Assessment, one woman per household was selected. The
+        first choice of respondent was a woman that had a child between 6 and 59 months
+        old; if no woman was available with a child between 6 and 59 months, the interview
+        was perfomred with the woman that usually takes care of the food preparation
+        in the household. In case there were more women with children between 6 and
+        59 months living in the household,one of them was selected randomly . The
+        same procedure was done if more than one child of the selected woman is eligible
+        to participate in the study. For the food consumed by mother and child, the
+        period was the previous 24 hours. Interviews took place between the 25 of
+        August and 30 September 2014 (2 cases 30, 31 of October). For the household
+        food security data refer to the previous 30 days of the day of the interview.
+        For the infant and child feeding practices, they are in general. Three villages
+        in the Bijapur District: Mannur, Nandyal, Balaganur were surveyed.\"\n\"Primary
+        contributors\"\t\"Ntandou-Bouzitou G.D., Kennedy G., Bellon M.R., Mathur P.,
+        Dandin S. (all Bioversity International), Patil H.B. (Hort. Research Station
+        Vijayapura, Karnataka)\"\n\"Contact person\"\t\"Bellon M.(mrbellon@yahoo.com),
+        Bioversity-Dataverse (bioversity-dataverse@groups.cgiar.org)\"\n\"Dataset
+        published at\"\t\"Bioversity Dataverse (https://dataverse.harvard.edu/dataverse/Bioversity)\"\n\"Dataset
+        UID\"\t\"https://doi.org/10.7910/DVN/RLMYMR\"\n\"Last updated\"\t\"43419\"\n\"Update
+        description\"\t\"Added ReadMe, added ontology term ID's to variables.\"\n\"Worksheet\"\t\"Description\"\n\"ReadMe\"\t\"General
+        information. \"\n\"Codes\"\t\"Description of variables used\"\n\"Example\"\t\"Example\"\n\"General
+        Information\"\t\"Data on survey (location, time, household)\"\n\"I. Women
+        Dietary Diversity\"\t\"Data on dietary diversity women\"\n\"I. Child Dietary
+        Diversity\"\t\"Data on dietary diversity child\"\n\"II Child Feeding Practices\"\t\"Data
+        on feeding practices child\"\n\"III. Food Security & Risk\"\t\"Data on food
+        security and risk management\"\n"
     headers:
       Access-Control-Allow-Headers:
       - Accept, Content-Type, X-Dataverse-Key
@@ -1121,15 +1169,15 @@ interactions:
       Content-disposition:
       - attachment; filename="Karnataka_DD%26FS_Data-1.tab"
       Date:
-      - Tue, 22 Jun 2021 15:16:09 GMT
+      - Wed, 09 Feb 2022 16:51:12 GMT
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=7m9lN9/l2OQedlOEs5v8TrhpR96/tok9P+B2oH3XNpKgUmw40QT8i8kjtquZ6lrXklvKPCfUalP0oWJfpqzk+yIzlw+IQi5BB/x8fyQmzr1mMsjNYCLUaPm+9XM7;
-        Expires=Tue, 29 Jun 2021 15:16:09 GMT; Path=/
-      - AWSALBCORS=7m9lN9/l2OQedlOEs5v8TrhpR96/tok9P+B2oH3XNpKgUmw40QT8i8kjtquZ6lrXklvKPCfUalP0oWJfpqzk+yIzlw+IQi5BB/x8fyQmzr1mMsjNYCLUaPm+9XM7;
-        Expires=Tue, 29 Jun 2021 15:16:09 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=44b038800631504a425138af9217; Path=/; Secure; HttpOnly
+      - AWSALB=SqoEAMf00e3mJu02VGTnzM1HL/cwB7VssscpgZIwfIojm03IagiG69oL8d9VbG3TmyHT+X/Y8ceVyN8mFrWPTKvzQkd/YQLVfwJ24SYXqEBkKiDj4pLHCyx4Cr0E;
+        Expires=Wed, 16 Feb 2022 16:51:12 GMT; Path=/
+      - AWSALBCORS=SqoEAMf00e3mJu02VGTnzM1HL/cwB7VssscpgZIwfIojm03IagiG69oL8d9VbG3TmyHT+X/Y8ceVyN8mFrWPTKvzQkd/YQLVfwJ24SYXqEBkKiDj4pLHCyx4Cr0E;
+        Expires=Wed, 16 Feb 2022 16:51:12 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=f656ad97738f498fe9152e547cf9; Path=/; Secure; HttpOnly
     status:
       code: 200
       message: OK
@@ -1143,7 +1191,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
     method: HEAD
     uri: https://dataverse.harvard.edu/api/access/datafile/3040230?format=original
   response:
@@ -1161,17 +1209,17 @@ interactions:
       Content-Type:
       - application/xml;charset=UTF-8
       Date:
-      - Tue, 22 Jun 2021 15:16:09 GMT
+      - Wed, 09 Feb 2022 16:51:13 GMT
       Location:
-      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/15d9aaf2757-ed846fe49d13.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272017-07-31.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210622T151609Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3599&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20210622%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=3bd033976719f99a64e63ce5246a8202bfa99434060afd47f3ca39671aafc53a
+      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/15d9aaf2757-ed846fe49d13.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272017-07-31.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220209T165113Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220209%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=22c63a8429a8c2497afb64f9aeefe3c70aaded04007215a04de536cc6fbcef03
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=2snTKLv6Ch8ZNRS117bglqpygKE/7lpSF+QG6M4BWMTMZ/xSb8TjEsCj3wBt7nHZ+e0jA1P04Gdd0Pv67ewixfs1kP1HdAXkZSc0qLOhWI4VnIN90I6YUtMg/+X5;
-        Expires=Tue, 29 Jun 2021 15:16:09 GMT; Path=/
-      - AWSALBCORS=2snTKLv6Ch8ZNRS117bglqpygKE/7lpSF+QG6M4BWMTMZ/xSb8TjEsCj3wBt7nHZ+e0jA1P04Gdd0Pv67ewixfs1kP1HdAXkZSc0qLOhWI4VnIN90I6YUtMg/+X5;
-        Expires=Tue, 29 Jun 2021 15:16:09 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=44b059355df094fc31cf9dfc6c3b; Path=/; Secure; HttpOnly
+      - AWSALB=FDTHy8U/GQUhZS89BhlfNdDuTYhhVdiCMsTL4i8hm5PPxVTJjm2B2tyq5zGdsHFWL2TWoZMWnTpQAgYburNwNctsrtoBSa2u5gAZda5qTJNIjm6P+gJCAwjA4S64;
+        Expires=Wed, 16 Feb 2022 16:51:13 GMT; Path=/
+      - AWSALBCORS=FDTHy8U/GQUhZS89BhlfNdDuTYhhVdiCMsTL4i8hm5PPxVTJjm2B2tyq5zGdsHFWL2TWoZMWnTpQAgYburNwNctsrtoBSa2u5gAZda5qTJNIjm6P+gJCAwjA4S64;
+        Expires=Wed, 16 Feb 2022 16:51:13 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=f656c2386a711a018d8b255fb615; Path=/; Secure; HttpOnly
     status:
       code: 303
       message: See Other
@@ -1185,9 +1233,9 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
     method: HEAD
-    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/15d9aaf2757-ed846fe49d13.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272017-07-31.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210622T151609Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3599&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20210622%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=3bd033976719f99a64e63ce5246a8202bfa99434060afd47f3ca39671aafc53a
+    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/15d9aaf2757-ed846fe49d13.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272017-07-31.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220209T165113Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220209%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=22c63a8429a8c2497afb64f9aeefe3c70aaded04007215a04de536cc6fbcef03
   response:
     body:
       string: ''
@@ -1195,13 +1243,13 @@ interactions:
       Content-Type:
       - application/xml
       Date:
-      - Tue, 22 Jun 2021 15:16:09 GMT
+      - Wed, 09 Feb 2022 16:51:13 GMT
       Server:
       - AmazonS3
       x-amz-id-2:
-      - jI1JlOfxvQum6E7Jmk5muWKmOXvg9xH5JFLzm6zGOajH53YE3o36a0XGTNZJrkCg/iW7W8DmxGI=
+      - ciGkp7WG2nuRgH3rWXy9E9c0O+7erj4n/btDyFZn0X/BaGomeoucIxCxm2UZZx0FBsrQxscanqs=
       x-amz-request-id:
-      - H8WYF9QP17CX7P3C
+      - G7T30CKMSWDA73RS
     status:
       code: 403
       message: Forbidden
@@ -1217,7 +1265,7 @@ interactions:
       Range:
       - bytes=0-100
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
     method: GET
     uri: https://dataverse.harvard.edu/api/access/datafile/3040230?format=original
   response:
@@ -1235,17 +1283,17 @@ interactions:
       Content-Length:
       - '0'
       Date:
-      - Tue, 22 Jun 2021 15:16:10 GMT
+      - Wed, 09 Feb 2022 16:51:13 GMT
       Location:
-      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/15d9aaf2757-ed846fe49d13.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272017-07-31.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210622T151610Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20210622%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=08db7a91c80b9556959ebdc0f500e7bb41609acc4c6544e02c8c1585a3753dfd
+      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/15d9aaf2757-ed846fe49d13.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272017-07-31.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220209T165113Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3599&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220209%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=44cff76721d775c25061993f1475d3f58a547a319ed2a601c448771d0e53ec04
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=CwNwaxK9CnOozv/wGYcWvLm0hMaSS6wXMsvEuiBKqq2wxO6k1PvnBDEpvxZmEnhZJXBijla3Z9TN8rI97bCJ0WHi4Nq0rZJc+u4yQSlk/oBx5EWoS8aSXgSytDvZ;
-        Expires=Tue, 29 Jun 2021 15:16:10 GMT; Path=/
-      - AWSALBCORS=CwNwaxK9CnOozv/wGYcWvLm0hMaSS6wXMsvEuiBKqq2wxO6k1PvnBDEpvxZmEnhZJXBijla3Z9TN8rI97bCJ0WHi4Nq0rZJc+u4yQSlk/oBx5EWoS8aSXgSytDvZ;
-        Expires=Tue, 29 Jun 2021 15:16:10 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=44b08e1b2c7396f5d1cd72a913db; Path=/; Secure; HttpOnly
+      - AWSALB=fOZkFBUwc4L5Q/ybia9ieRPtS2qyO8yNxJXAeSJrxMJ6Zfmsogubrj+/kcyhN3Q7hh45JuTYD5Ss0tq9KZkLea44o6bKJ/Kusv34vrQOYYQS5FlW2N7jFgv6byz4;
+        Expires=Wed, 16 Feb 2022 16:51:13 GMT; Path=/
+      - AWSALBCORS=fOZkFBUwc4L5Q/ybia9ieRPtS2qyO8yNxJXAeSJrxMJ6Zfmsogubrj+/kcyhN3Q7hh45JuTYD5Ss0tq9KZkLea44o6bKJ/Kusv34vrQOYYQS5FlW2N7jFgv6byz4;
+        Expires=Wed, 16 Feb 2022 16:51:13 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=f656e81cff5ea308f4606aadf8ab; Path=/; Secure; HttpOnly
     status:
       code: 303
       message: See Other
@@ -1261,9 +1309,9 @@ interactions:
       Range:
       - bytes=0-100
       User-Agent:
-      - python-requests/2.25.1
+      - python-requests/2.26.0
     method: GET
-    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/15d9aaf2757-ed846fe49d13.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272017-07-31.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210622T151610Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20210622%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=08db7a91c80b9556959ebdc0f500e7bb41609acc4c6544e02c8c1585a3753dfd
+    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/15d9aaf2757-ed846fe49d13.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272017-07-31.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220209T165113Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3599&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220209%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=44cff76721d775c25061993f1475d3f58a547a319ed2a601c448771d0e53ec04
   response:
     body:
       string: 'stars,language,updated,issues,size,forks,watchers,repo,created,description
@@ -1281,7 +1329,7 @@ interactions:
       Content-Type:
       - text/csv
       Date:
-      - Tue, 22 Jun 2021 15:16:12 GMT
+      - Wed, 09 Feb 2022 16:51:15 GMT
       ETag:
       - '"e7dd2f725941b978d45fed3f33ff640c"'
       Last-Modified:
@@ -1289,13 +1337,13 @@ interactions:
       Server:
       - AmazonS3
       x-amz-id-2:
-      - H0y2WpL5heyLWeutuU7BZ7EpQw/DBSFUXW3p0JRioXsK9a6C/mf/mvPQf7WshiNJTC2unYKCQIE=
+      - 5Y1dlhSX3rcGqkqEeaDI84miAVWNjCW4NNGdZJkk7lPt23oLgt2s754BbAQdJg8ylxUixfLxgXA=
       x-amz-meta-touched:
       - 'true'
       x-amz-replication-status:
       - COMPLETED
       x-amz-request-id:
-      - BE1D0BN548VWGHHM
+      - 7HQ5HGFY5CB34H05
       x-amz-version-id:
       - a21WUb4tKN1QOmLladm_DSqEFmWTanqm
     status:
@@ -1311,12 +1359,107 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.25.1
-    method: HEAD
+      - python-requests/2.26.0
+    method: GET
     uri: https://dataverse.harvard.edu/api/access/datafile/3040230
   response:
     body:
-      string: ''
+      string: "stars\tlanguage\tupdated\tissues\tsize\tforks\twatchers\trepo\tcreated\tdescription\n196\t\"Java\"\t2017-07-31\t692\t53468\t105\t196\t\"https://github.com/IQSS/dataverse\"\t2013-11-01\t\"A
+        data repository framework to share and publish research data.\"\n185\t\"PHP\"\t2017-07-31\t296\t186638\t95\t185\t\"https://github.com/openscholar/openscholar\"\t2011-03-04\t\"OpenScholar
+        project \"\n116\t\"JavaScript\"\t2016-02-05\t6\t3601\t16\t116\t\"https://github.com/HBRGTech/daisy\"\t2014-11-16\t\"daisy
+        is a vagrant and grunt-powered Pattern Lab, derivative work from hbr.org's
+        2014 redesign.\"\n94\t\"JavaScript\"\t2017-07-19\t155\t41680\t31\t94\t\"https://github.com/harvard-lil/perma\"\t2013-05-06\t\"Indelible
+        links\"\n82\t\"C\"\t2017-06-01\t1\t135\t2\t82\t\"https://github.com/HarvardPL/shill\"\t2014-10-04\t\"Scripting
+        with Least Privilege\"\n78\t\"Ruby\"\t2016-11-12\t7\t180\t11\t78\t\"https://github.com/berkmancenter/namae\"\t2012-05-21\t\"Namae
+        (\u540D\u524D) parses personal names and splits them into their component
+        parts.\"\n78\t\"JavaScript\"\t2017-06-16\t73\t182121\t23\t78\t\"https://github.com/cga-harvard/cga-worldmap\"\t2010-11-01\t\"Harvard
+        WorldMap is a heavily modified fork of GeoNode 1.x, soon to be migrated to
+        GeoNode 2.x.  WorldMap is being made available by Harvard's Center for Geographic
+        Analysis to lower the barrier for scholars and others who wish to explore,
+        visualize, edit, collaborate with, and publish geospatial information.\"\n75\t\"JavaScript\"\t2017-07-31\t294\t74956\t10\t75\t\"https://github.com/refinery-platform/refinery-platform\"\t2011-11-23\t\"The
+        Refinery Platform is a data management, analysis and visualization system
+        for bioinformatics and computational biology applications. The platforms consists
+        of three major components: a data repository with rich metadata capabilities,
+        a workflow engine based on the popular Galaxy system, and visualization tools
+        to support the exploration and interpretation of results at all stages of
+        the analysis process.\"\n62\t\"Perl\"\t2017-07-27\t54\t247679\t23\t62\t\"https://github.com/berkmancenter/mediacloud\"\t2013-06-26\t\"Media
+        Cloud is an open source, open data platform that allows researchers to answer
+        quantitative questions about the content of online media.\"\n52\t\"R\"\t2017-07-29\t24\t109429\t28\t52\t\"https://github.com/IQSS/Zelig\"\t2013-12-05\t\"A
+        statistical framework that serves as a common interface to a large range of
+        models\"\n44\t\"Ruby\"\t2017-07-06\t0\t6107\t16\t44\t\"https://github.com/berkmancenter/tagteam\"\t2011-07-12\t\"Enhanced
+        Social Tagging for Academic Communities\"\n38\t\"Java\"\t2017-07-06\t30\t499854\t36\t38\t\"https://github.com/harvard-lts/fits\"\t2013-03-02\t\"File
+        Information Tool Set\"\n37\t\"Ruby\"\t2017-07-31\t1\t17211\t33\t37\t\"https://github.com/berkmancenter/lumendatabase\"\t2012-04-16\t\"The
+        Lumen Database collects and analyzes legal complaints and requests for removal
+        of online materials.\"\n25\t\"JavaScript\"\t2017-07-10\t66\t2800\t16\t25\t\"https://github.com/cga-harvard/HHypermap\"\t2015-12-17\t\"HHypermap
+        (Harvard Hypermap) Registry is an application that manages OWS, Esri REST,
+        and other types of map service harvesting, and maintains uptime statistics
+        for services and layers. HHypermap Registry will publish to HHypermap Search
+        (based on Lucene) which provides a fast search and visualization environment
+        for spatio-temporal materials.\"\n23\t\"JavaScript\"\t2017-06-30\t32\t20092\t11\t23\t\"https://github.com/IQSS/TwoRavens\"\t2013-07-02\t\"A
+        web application for data exploration, statistical analysis, model construction
+        and meta analysis tools, that integrates with Zelig and Dataverse. \"\n21\t\"PHP\"\t2016-10-04\t5\t3001\t7\t21\t\"https://github.com/berkmancenter/amber_wordpress\"\t2014-02-11\t\"Amber
+        plugin for Wordpress\"\n19\t\"Python\"\t2015-08-05\t1\t628\t8\t19\t\"https://github.com/IQSS/redmine2github\"\t2014-07-01\t\"Scripts
+        to migrate redmine tickets to github issues\"\n18\t\"JavaScript\"\t2017-07-17\t17\t1794\t11\t18\t\"https://github.com/berkmancenter/dotplot\"\t2015-02-19\t\"Telling
+        a story through dots\"\n16\t\"Shell\"\t2017-07-24\t2\t89516\t5\t16\t\"https://github.com/fasrc/helmod\"\t2013-12-16\t\"Harvard
+        Extensions for Lmod deployment\"\n13\t\"Ruby\"\t2017-07-31\t71\t3894\t19\t13\t\"https://github.com/berkmancenter/bookanook\"\t2015-07-01\t\"\"\n11\t\"Python\"\t2017-05-23\t5\t80\t14\t11\t\"https://github.com/Harvard-University-iCommons/django-auth-lti\"\t2013-11-22\t\"\"\n9\t\"Python\"\t2017-03-27\t4\t2222\t3\t9\t\"https://github.com/penzance/canvas_python_sdk\"\t2014-06-18\t\"Canvas
+        Python SDK\"\n9\t\"HTML\"\t2017-05-26\t0\t16522\t4\t9\t\"https://github.com/cga-harvard/hhypermap-bop\"\t2016-05-31\t\"HHypermap
+        BOP -- Harvard Hypermap, Billion Object Platform (using Apache Solr)\"\n9\t\"JavaScript\"\t2017-05-17\t1\t8373\t15\t9\t\"https://github.com/berkmancenter/question_tool\"\t2015-06-15\t\"A
+        web application to propose and vote on questions on a particular subject.\"\n9\t\"\"\t2017-01-06\t2\t532\t2\t9\t\"https://github.com/berkmancenter/amber_drupal\"\t2014-02-11\t\"Amber
+        module for Drupal\"\n9\t\"JavaScript\"\t2017-07-31\t4\t26582\t9\t9\t\"https://github.com/cid-harvard/atlas-subnational-frontend\"\t2015-04-21\t\"\"\n7\t\"Java\"\t2017-06-30\t1\t71949\t1\t7\t\"https://github.com/harvard-library/librarycloud\"\t2014-04-07\t\"Harvard
+        University Library Cloud API\"\n7\t\"HTML\"\t2017-06-30\t0\t19557\t10\t7\t\"https://github.com/berkmancenter/internet_monitor\"\t2013-08-05\t\"The
+        Internet Monitor is a research project to evaluate, describe, and summarize
+        the means, mechanisms, and extent of Internet content controls and Internet
+        activity around the world.\"\n6\t\"HTML\"\t2017-07-09\t63\t32981\t8\t6\t\"https://github.com/IQSS/DataTaggingLibrary\"\t2013-08-22\t\"Language
+        tools for DataTags (Decision graph variant). Including the embeddable runtime
+        engine\"\n6\t\"HTML\"\t2016-10-04\t1\t1584\t4\t6\t\"https://github.com/berkmancenter/amber_common\"\t2014-05-09\t\"Common
+        code and documentation for the Amber project\"\n5\t\"JavaScript\"\t2016-11-14\t0\t1596\t2\t5\t\"https://github.com/berkmancenter/redmine_app_tracker\"\t2010-05-24\t\"Redmine
+        extension for tracking jobs, applicants, and job applications.\"\n4\t\"C\"\t2015-11-17\t2\t52\t1\t4\t\"https://github.com/berkmancenter/amber_apache\"\t2014-02-11\t\"Amber
+        module for Apache\"\n4\t\"Java\"\t2017-07-18\t0\t3751\t1\t4\t\"https://github.com/penzance/harvard-data-tools\"\t2016-02-09\t\"\"\n4\t\"JavaScript\"\t2017-07-07\t0\t6926\t1\t4\t\"https://github.com/harvard-library/metadata_server\"\t2015-02-11\t\"Django/Elasticsearch
+        IIIF Metadata server\"\n3\t\"JavaScript\"\t2016-10-31\t1\t2646\t4\t3\t\"https://github.com/berkmancenter/fair_use_tool\"\t2010-07-14\t\"Creative
+        Rights fair use tool for determining copyright usage.\"\n3\t\"JavaScript\"\t2016-12-09\t0\t332\t0\t3\t\"https://github.com/berkmancenter/tmulk\"\t2016-10-29\t\"Twitter
+        mass bulk download\"\n3\t\"C\"\t2017-03-16\t0\t52824\t1\t3\t\"https://github.com/berkmancenter/curarium\"\t2014-05-06\t\"The
+        Curarium is a collection of collections. It is a platform which leverages
+        the power of the crowd in order to annotate, curate, and augment works within
+        and beyond their respective collections, with the aim of constructing sharable,
+        media-rich stories and elaborate arguments about individual items as well
+        as groups of items in our corpora.\"\n3\t\"Java\"\t2016-09-15\t0\t108590\t5\t3\t\"https://github.com/harvard-lts/FITSservlet\"\t2015-06-22\t\"A
+        web application to expose FITS as a service.\"\n3\t\"C\"\t2015-08-14\t1\t543\t1\t3\t\"https://github.com/berkmancenter/amber_nginx\"\t2014-02-11\t\"Amber
+        module for Nginx\"\n3\t\"PHP\"\t2017-07-14\t0\t22392\t1\t3\t\"https://github.com/harvard-library/acorn\"\t2017-01-24\t\"A
+        COnservation Records Network\"\n2\t\"JavaScript\"\t2017-07-27\t0\t1576\t1\t2\t\"https://github.com/Harvard-University-iCommons/canvas_account_admin_tools\"\t2015-09-28\t\"\"\n2\t\"Python\"\t2017-07-28\t1\t81\t1\t2\t\"https://github.com/Harvard-Open-Data-Project/propublica-data\"\t2017-05-31\t\"Python
+        script that uses the Propublica API to retrieve data (in csv format) on any
+        list of organizations.\"\n2\t\"Ruby\"\t2014-09-02\t0\t711\t3\t2\t\"https://github.com/berkmancenter/hei\"\t2012-06-25\t\"A
+        tag heavy development project registry.\"\n2\t\"XSLT\"\t2016-01-14\t1\t75\t1\t2\t\"https://github.com/harvard-library/schematronium\"\t2015-07-28\t\"A
+        library for running schematrons over XML files\"\n2\t\"Ruby\"\t2014-08-11\t0\t295\t3\t2\t\"https://github.com/berkmancenter/brkmn\"\t2012-03-20\t\"The
+        dirt-simple URL shortener at brk.mn\"\n2\t\"JavaScript\"\t2017-07-13\t2\t1857\t3\t2\t\"https://github.com/harvard-library/aspace-import-excel\"\t2017-01-19\t\"Import
+        resources, archival objects, etc. into ArchivesSpace using Excel spreadsheet
+        files\"\n1\t\"Ruby\"\t2016-04-18\t4\t1628\t0\t1\t\"https://github.com/harvard-library/inscriptio\"\t2013-11-18\t\"An
+        app to help manage the reservation of carrels and other reservable library
+        resources\"\n1\t\"Ruby\"\t2017-02-17\t1\t1561\t2\t1\t\"https://github.com/harvard-library/archivesspace-checker\"\t2015-08-11\t\"A
+        small website for checking EADs against local standards via schematron\"\n1\t\"Ruby\"\t2017-05-11\t0\t552\t3\t1\t\"https://github.com/harvard-library/archivesspace-preprocessor\"\t2015-12-11\t\"Preprocessor
+        for EAD files to prepare them for ingest into Archivesspace\"\n1\t\"Ruby\"\t2017-06-14\t2\t7120\t1\t1\t\"https://github.com/harvard-library/ClassRequestTool\"\t2014-04-10\t\"An
+        application for scheduling class visits to archives and special collections.\"\n1\t\"Java\"\t2016-06-15\t3\t232\t2\t1\t\"https://github.com/IQSS/UNF\"\t2014-08-17\t\"Universal
+        Numerical Fingerprint\"\n1\t\"PHP\"\t2013-07-23\t0\t226\t1\t1\t\"https://github.com/berkmancenter/blog_network_stats\"\t2013-03-04\t\"A
+        wordpress plugin to aggregate data about blogs into a single table.\"\n1\t\"Ruby\"\t2017-06-24\t1\t181\t2\t1\t\"https://github.com/berkmancenter/feed-abstract\"\t2011-08-19\t\"RSS
+        Feed abstraction library using ruby standard lib classes.\"\n1\t\"PHP\"\t2017-07-26\t0\t97\t4\t1\t\"https://github.com/berkmancenter/category_subscriptions\"\t2011-04-05\t\"A
+        wordpress plugin that allows for per-user category subscriptions.\"\n1\t\"Ruby\"\t2017-07-31\t0\t84\t0\t1\t\"https://github.com/harvard-library/spotlight-oaipmh-resources\"\t2017-05-30\t\"An
+        OAI-PMH harvester plugin for Spotlight\"\n1\t\"HTML\"\t2017-07-21\t8\t102019\t1\t1\t\"https://github.com/farhat-lab/gentb-site\"\t2015-10-06\t\"The
+        genTB project, the Django site, variant calling and prediciton pipeline, and
+        mapping pipeline wiht hooks to two ravens\"\n1\t\"Ruby\"\t2016-11-16\t0\t82\t0\t1\t\"https://github.com/berkmancenter/classifurlr\"\t2016-05-11\t\"Given
+        request & response data, attempts to determine likelihood that page is available
+        vs. down or blocked.\"\n0\t\"Ruby\"\t2016-07-28\t0\t543\t0\t0\t\"https://github.com/harvard-library/linkomatic\"\t2015-01-12\t\"Automatically
+        adds NRS links to digitized records in EAD\"\n0\t\"Ruby\"\t2017-07-19\t1\t4162\t0\t0\t\"https://github.com/harvard-library/list_view\"\t2014-10-08\t\"A
+        tool for displaying ordered lists of links.\"\n0\t\"Ruby\"\t2016-07-21\t2\t453\t0\t0\t\"https://github.com/harvard-library/lts-lti-reserves\"\t2015-06-11\t\"The
+        Reserves Tool as seen/used via Canvas\"\n0\t\"Ruby\"\t2016-06-06\t0\t62655\t0\t0\t\"https://github.com/berkmancenter/eda\"\t2014-07-03\t\"Emily
+        Dickinson Archive platform\"\n0\t\"Python\"\t2017-03-15\t0\t9\t2\t0\t\"https://github.com/harvard-lil/lil-nudgebot\"\t2016-06-17\t\"\"\n0\t\"Ruby\"\t2016-12-02\t0\t9\t1\t0\t\"https://github.com/harvard-library/harvard-ead-importer\"\t2016-09-30\t\"ArchivesSpace
+        plugin overriding EAD Importer to implement specific fixes.\"\n0\t\"Ruby\"\t2017-07-31\t15\t34451\t3\t0\t\"https://github.com/harvard-lil/h2o\"\t2015-09-01\t\"\"\n0\t\"Ruby\"\t2014-10-09\t0\t1265\t0\t0\t\"https://github.com/harvard-library/geosearch_solr_prep\"\t2014-08-06\t\"geosearch_solr_prep\"\n0\t\"Python\"\t2017-07-05\t0\t26\t1\t0\t\"https://github.com/harvard-lil/perma-payments\"\t2017-06-07\t\"\"\n0\t\"Ruby\"\t2015-12-18\t0\t24\t0\t0\t\"https://github.com/harvard-library/devise_harvard_auth_proxy\"\t2014-05-01\t\"Devise
+        plugin to use the Harvard authentication proxy.\"\n0\t\"PHP\"\t2017-06-12\t0\t26\t0\t0\t\"https://github.com/DRSC-FG/gene2function\"\t2017-06-09\t\"\"\n0\t\"Ruby\"\t2017-07-04\t0\t17\t2\t0\t\"https://github.com/harvard-library/aspace-utils\"\t2016-08-19\t\"Bulk
+        ingest script for ArchivesSpace, analysis script that processes logs from
+        afforementioned.\"\n0\t\"\"\t2016-04-15\t0\t183\t0\t0\t\"https://github.com/onnela-lab/HX_python_for_research\"\t2016-04-13\t\"\"\n0\t\"Ruby\"\t2017-06-14\t0\t34\t0\t0\t\"https://github.com/harvard-library/aspace-linkomatic\"\t2017-02-21\t\"A
+        plugin to help automate the insertion of links to digitized records into Archives
+        Space.\"\n0\t\"Python\"\t2017-07-16\t0\t12278\t0\t0\t\"https://github.com/cbdb-project/crop_books_by_lines\"\t2017-03-06\t\"crop
+        books by lines or blanks\"\n0\t\"PHP\"\t2015-03-11\t0\t191\t1\t0\t\"https://github.com/berkmancenter/wiki-uturn\"\t2012-09-20\t\"Wiki
+        Reversion Tool\"\n0\t\"C++\"\t2017-07-03\t0\t347\t0\t0\t\"https://github.com/cbdb-project/reg-cpp\"\t2017-07-03\t\"regular
+        expression replacer\"\n"
     headers:
       Access-Control-Allow-Headers:
       - Accept, Content-Type, X-Dataverse-Key
@@ -1333,15 +1476,15 @@ interactions:
       Content-disposition:
       - attachment; filename="2017-07-31.tab"
       Date:
-      - Tue, 22 Jun 2021 15:16:11 GMT
+      - Wed, 09 Feb 2022 16:51:14 GMT
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=zAi3js0go+YxAxdeWhBnpicAMvVM/XPsFX/PICK7ucjVuCRGru1g3Nn1t9NMNYV2mdkf2yy6MfSwpQv8o89NsTfZvA2SMW/KFPcbtaP+iwS5sAKu2LPbb1aNz7Mj;
-        Expires=Tue, 29 Jun 2021 15:16:11 GMT; Path=/
-      - AWSALBCORS=zAi3js0go+YxAxdeWhBnpicAMvVM/XPsFX/PICK7ucjVuCRGru1g3Nn1t9NMNYV2mdkf2yy6MfSwpQv8o89NsTfZvA2SMW/KFPcbtaP+iwS5sAKu2LPbb1aNz7Mj;
-        Expires=Tue, 29 Jun 2021 15:16:11 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=44b0bf945cc6975f86f4d8eb6c14; Path=/; Secure; HttpOnly
+      - AWSALB=gNCexuqfLJXaRHoZ2Oem22DiUB+4kh2WKW4SFjxuJ3kJD21/GybwT0/RCPtyWBXmXPgcKgSQytPujw1jL/g1m/7XDW5Swv4kSYrhZiN9XjfNp1DoFgyjZ7ozXDuf;
+        Expires=Wed, 16 Feb 2022 16:51:14 GMT; Path=/
+      - AWSALBCORS=gNCexuqfLJXaRHoZ2Oem22DiUB+4kh2WKW4SFjxuJ3kJD21/GybwT0/RCPtyWBXmXPgcKgSQytPujw1jL/g1m/7XDW5Swv4kSYrhZiN9XjfNp1DoFgyjZ7ozXDuf;
+        Expires=Wed, 16 Feb 2022 16:51:14 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=f65714ce67e246f0e538d7bf0d04; Path=/; Secure; HttpOnly
     status:
       code: 200
       message: OK
