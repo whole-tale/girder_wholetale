@@ -187,7 +187,7 @@ class ManifestParser:
         dataIds += [
             obj["uri"]
             for obj in self.manifest["aggregates"]
-            if obj["uri"].startswith("http")
+            if obj["uri"].startswith("http") and "schema:isPartOf" not in obj
         ]
         return dataIds
 
