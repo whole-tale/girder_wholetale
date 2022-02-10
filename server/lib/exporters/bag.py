@@ -114,6 +114,11 @@ class BagTaleExporter(TaleExporter):
         # Update manifest with hashes
         self.append_aggergate_checksums()
 
+        # Update oxum with external data files
+        external_data_oxum = self.calculate_data_oxum()
+        oxum["num"] += external_data_oxum["num"]
+        oxum["size"] += external_data_oxum["size"]
+
         # Update manifest with filesizes and mimeTypes for workspace items
         self.append_aggregate_filesize_mimetypes()
 
@@ -184,3 +189,12 @@ class BagTaleExporter(TaleExporter):
             yield from self.zip_generator.addFile(payload, fname)
 
         yield self.zip_generator.footer()
+
+    def calculate_data_oxum(self):
+        oxum = {"num": 0, "size": 0}
+        for agg in self.manifest["aggregates"]:
+            if "bundledAs" not in agg:
+                continue
+            oxum["num"] += 1
+            oxum["size"] += int(agg["wt:size"])
+        return oxum
