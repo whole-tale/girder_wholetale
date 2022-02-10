@@ -1,4 +1,4 @@
-from hashlib import sha512, md5
+from hashlib import sha256, md5
 import json
 import magic
 import os
@@ -10,7 +10,7 @@ from ..license import WholeTaleLicense
 
 
 class HashFileStream:
-    """Generator that computes md5 and sha512 of data returned by it"""
+    """Generator that computes md5 and sha256 of data returned by it"""
 
     def __init__(self, gen):
         """
@@ -23,7 +23,7 @@ class HashFileStream:
             self.gen = gen
         self.state = {
             'md5': hash_state.serializeHex(md5()),
-            'sha512': hash_state.serializeHex(sha512()),
+            'sha256': hash_state.serializeHex(sha256()),
         }
 
     def __iter__(self):
@@ -42,8 +42,8 @@ class HashFileStream:
         return self
 
     @property
-    def sha512(self):
-        return hash_state.restoreHex(self.state['sha512'], 'sha512').hexdigest()
+    def sha256(self):
+        return hash_state.restoreHex(self.state['sha256'], 'sha256').hexdigest()
 
     @property
     def md5(self):
@@ -66,7 +66,7 @@ class TaleExporter:
         self.environment = environment
 
         if algs is None:
-            self.algs = ["md5", "sha512"]
+            self.algs = ["md5", "sha256"]
 
         zipname = os.path.basename(manifest["dct:hasVersion"]["@id"])
         self.zip_generator = ziputil.ZipGenerator(zipname)
