@@ -152,7 +152,11 @@ class TaleExporter:
         algs = {f"wt:{alg}" for alg in self.algs}
         for index, agg in enumerate(self.manifest["aggregates"]):
             if algs - set(agg.keys()) == algs:
-                req = requests.get(agg["uri"], allow_redirects=True, stream=True)
+                try:
+                    req = requests.get(agg["uri"], allow_redirects=True, stream=True)
+                except requests.exceptions.InvalidSchema:
+                    # globus...
+                    continue
                 md5sum = md5()
                 for chunk in req.iter_content(chunk_size=4096):
                     md5sum.update(chunk)
