@@ -62,6 +62,9 @@ add_python_test(integration
 add_python_test(repository
   PLUGIN wholetale
 )
+add_python_test(bdbag
+  PLUGIN wholetale
+)
 add_python_test(dataset
   PLUGIN wholetale
   EXTERNAL_DATA
