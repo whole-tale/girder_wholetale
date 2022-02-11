@@ -1,3 +1,4 @@
+import hashlib
 import json
 import re
 import os
@@ -34,7 +35,8 @@ def _query_dataverse(search_url):
         'mimeType': item['file_content_type'],
         'filesize': item['size_in_bytes'],
         'id': item['file_id'],
-        'doi': item.get('filePersistentId')  # https://github.com/IQSS/dataverse/issues/5339
+        'doi': item.get('filePersistentId'),  # https://github.com/IQSS/dataverse/issues/5339
+        "checksum": f"{item['checksum']['type'].lower()}:{item['checksum']['value']}",
     }]
     title = item['name']
     title_search = _QUOTES_REGEX.search(item['dataset_citation'])
@@ -48,15 +50,12 @@ def _query_dataverse(search_url):
 
 
 def _get_attrs_via_head(obj, url):
-    name = obj["filename"]
-    size = obj["filesize"]
-
     # start by regular HEAD, trick is it's gonna fail with 403
     # if the file is sitting on S3
     # see https://github.com/IQSS/dataverse/issues/5322
     req = requests.head(url, allow_redirects=True)
     if req.ok:
-        size = int(req.headers.get("Content-Length", size))
+        size = int(req.headers.get("Content-Length", obj["size"]))
     else:
         # Now the magic, since S3 accepts range request, we cheat the system
         # by requesting only 100 bytes to get the headers we want.
@@ -65,9 +64,10 @@ def _get_attrs_via_head(obj, url):
 
         if not req.ok or "Content-Range" not in req.headers:
             # oh well, I tried...
-            return name, size
+            return
         size = int(req.headers["Content-Range"].split("/")[-1])
 
+    obj["filesize"] = size
     # This is common to both HEAD and GET from above.
     content_disposition = req.headers.get("Content-Disposition")
     if content_disposition:
@@ -76,10 +76,29 @@ def _get_attrs_via_head(obj, url):
             _CNTDISPS_REGEX.match(content_disposition)
         ):
             if regex:
-                name = unquote(regex.groups()[0])
+                obj["filename"] = unquote(regex.groups()[0])
                 break
 
-    return name, size
+
+def _get_attrs_via_get(obj, url):
+    req = requests.get(url, allow_redirects=True, stream=True)
+    md5sum = hashlib.md5()
+    size = 0
+    for chunk in req.iter_content(chunk_size=4096):
+        md5sum.update(chunk)
+        size += len(chunk)
+    obj["checksum"] = f"md5:{md5sum.hexdigest()}"
+    obj["filesize"] = size
+    # This is common to both HEAD and GET from above.
+    content_disposition = req.headers.get("Content-Disposition")
+    if content_disposition:
+        for regex in (
+            _CNTDISP_REGEX.search(content_disposition),
+            _CNTDISPS_REGEX.match(content_disposition)
+        ):
+            if regex:
+                obj["filename"] = unquote(regex.groups()[0])
+                break
 
 
 class DataverseImportProvider(ImportProvider):
@@ -170,6 +189,7 @@ class DataverseImportProvider(ImportProvider):
         doi = '{protocol}:{authority}/{identifier}'.format(**data['data'])
         files = []
         for obj in data['data']['latestVersion']['files']:
+            checksum = obj["dataFile"]["checksum"]
             files.append({
                 'filename': obj['dataFile']['filename'],
                 'filesize': obj['dataFile']['filesize'],
@@ -177,6 +197,7 @@ class DataverseImportProvider(ImportProvider):
                 'id': obj['dataFile']['id'],
                 'doi': obj['dataFile']['persistentId'],
                 'directoryLabel': obj.get('directoryLabel', ''),
+                "checksum": f"{checksum['type'].lower()}:{checksum['value']}",
             })
 
         return title, files, doi
@@ -244,10 +265,11 @@ class DataverseImportProvider(ImportProvider):
                 url._replace(path='/api/access/datafile/' + fileId,
                              query=query)
             )
-            name, size = _get_attrs_via_head(obj, access_url)
-            obj['filesize'] = size
-            obj['filename'] = name
-            obj['url'] = access_url
+            if query == 'format=original':
+                _get_attrs_via_head(obj, access_url)
+            else:
+                _get_attrs_via_get(obj, access_url)
+            obj["url"] = access_url
             return obj
 
         for obj in files:
@@ -306,12 +328,14 @@ class DataverseImportProvider(ImportProvider):
         def _recurse_hierarchy(hierarchy):
             files = hierarchy.pop('+files+')
             for obj in files:
+                alg, checksum = obj["checksum"].split(":")
                 yield ImportItem(
                     ImportItem.FILE, obj['filename'],
                     size=obj['filesize'],
                     mimeType=obj.get('mimeType', 'application/octet-stream'),
                     url=obj['url'],
-                    identifier=obj.get('doi') or doi
+                    identifier=obj.get('doi') or doi,
+                    meta={"checksum": {alg: checksum}},
                 )
             for folder in hierarchy.keys():
                 yield ImportItem(ImportItem.FOLDER, name=folder)

@@ -252,6 +252,16 @@ class Manifest:
             aggregation['schema:isPartOf'] = parent_dataset_identifier
         return aggregation
 
+    @staticmethod
+    def _get_checksum(item_obj, file_obj):
+        try:
+            return f"sha512:{file_obj['sha512']}"
+        except KeyError:
+            if checksum := item_obj.get("meta", {}).get("checksum"):
+                for alg in ("md5", "sha512"):
+                    if alg in checksum:
+                        return f"{alg}:{checksum[alg]}"
+
     def add_tale_records(self):
         """
         Creates and adds file records to the internal manifest object for an entire Tale.
@@ -297,7 +307,7 @@ class Manifest:
                 bundle = self.create_bundle(obj["name"], None)
             record = self.create_aggregation_record(obj['uri'], bundle, obj['dataset_identifier'])
             record["wt:size"] = obj["size"]
-            record["wt:identifier"] = obj["wt:identifier"]
+            record.update({key: obj[key] for key in obj.keys() if key.startswith("wt:")})
             self.manifest['aggregates'].append(record)
 
         # Add records for files in each recorded_run
@@ -345,6 +355,16 @@ class Manifest:
             ext += self._expand_folder_into_items(subfolder, user, relpath=curpath)
         return ext
 
+    def _get_folder_uri(self, doc, provider, top_identifier):
+        is_root_folder = doc["meta"].get("identifier") == top_identifier
+        try:
+            if is_root_folder:
+                return top_identifier
+            else:
+                return provider.getURI(doc, self.user)
+        except NotImplementedError:
+            pass
+
     def _parse_dataSet(self, dataSet=None, relpath=''):
         """
         Get the basic info about the contents of `dataSet`
@@ -381,16 +401,9 @@ class Manifest:
                 }
 
                 if obj['_modelType'] == 'folder':
-                    is_root_folder = doc['meta'].get('identifier') == top_identifier
-                    try:
-                        if is_root_folder:
-                            uri = top_identifier
-                        else:
-                            uri = provider.getURI(doc, self.user)
-                    except NotImplementedError:
-                        uri = None
-
-                    if uri is None and self.expand_folders and not is_root_folder:
+                    uri = self._get_folder_uri(doc, provider, top_identifier)
+                    # if uri is None and self.expand_folders and not is_root_folder:
+                    if self.expand_folders:
                         external_objects += self._expand_folder_into_items(doc, self.user)
                         continue
 
@@ -409,6 +422,9 @@ class Manifest:
                         'uri': fileObj['linkUrl'],
                         'size': fileObj['size']
                     })
+                    if checksum := self._get_checksum(doc, fileObj):
+                        alg, value = checksum.split(":")
+                        ext_obj[f"wt:{alg}"] = value
                 external_objects.append(ext_obj)
             except (ValidationException, KeyError):
                 msg = 'While creating a manifest for Tale "{}" '.format(str(self.tale['_id']))

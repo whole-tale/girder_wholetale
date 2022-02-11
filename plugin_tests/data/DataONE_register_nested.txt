@@ -2,141 +2,241 @@ interactions:
 - request:
     body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.19.1]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2FS85%22&fl=identifier,formatType,title,size,formatId,fileName,documents&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2FS85%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
   response:
-    body: {string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2FS85\"","fl":"identifier,formatType,title,size,formatId,fileName,documents","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":3,"start":0,"docs":[{"identifier":"doi:10.18739/A2FS85","fileName":"science_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":5739,"title":"Soil
-        Moisture NIMS grid Barrow, Alaska 2012","documents":["resource_map_doi:10.18739/A2KH0M","urn:uuid:eb1dd498-260a-4f1a-aae9-feb504b5db23","doi:10.18739/A2FS85"]},{"identifier":"urn:uuid:eb1dd498-260a-4f1a-aae9-feb504b5db23","fileName":"SoilMoistNimsBrw2012.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":60928},{"identifier":"resource_map_doi:10.18739/A2KH0M","fileName":"resource_map_doi_10.18739/A2KH0M.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":5317}]}}
+    body:
+      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2FS85\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":3,"start":0,"docs":[{"identifier":"resource_map_doi:10.18739/A2KH0M","fileName":"resource_map_doi_10_18739_A2KH0M.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":5317,"checksum":"8bbf186c13e07b96d840db5ef298d608a718e53fa8d56bc70943f8db34d17687"},{"identifier":"doi:10.18739/A2FS85","fileName":"science_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":5739,"checksum":"a6626690824b1853c9ee3a30bec40655d94b3ff594b934786e6dc2414a4fb4b7","title":"Soil
+        Moisture NIMS grid Barrow, Alaska 2012","documents":["resource_map_doi:10.18739/A2KH0M","urn:uuid:eb1dd498-260a-4f1a-aae9-feb504b5db23","doi:10.18739/A2FS85"]},{"identifier":"urn:uuid:eb1dd498-260a-4f1a-aae9-feb504b5db23","fileName":"SoilMoistNimsBrw2012.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":60928,"checksum":"6969fa2b7a0b2d85fc49da866071c30323890c63c1f804dd98abe1178e024c8f"}]}}
 
-'}
+        '
     headers:
-      Access-Control-Allow-Credentials: ['true']
-      Access-Control-Allow-Headers: ['Authorization, Content-Type, Location, Content-Length,
-          x-annotator-auth-token']
-      Access-Control-Allow-Methods: ['POST, GET, OPTIONS, PUT, DELETE']
-      Access-Control-Allow-Origin: ['']
-      Access-Control-Expose-Headers: ['Content-Length, Content-Type, Location']
-      Connection: [Keep-Alive]
-      Content-Type: [application/json; charset=UTF-8]
-      Date: ['Mon, 17 Dec 2018 22:01:57 GMT']
-      Keep-Alive: ['timeout=5, max=100']
-      Server: [Apache/2.4.7 (Ubuntu)]
-      Transfer-Encoding: [chunked]
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Authorization, Content-Type, Location, Content-Length, x-annotator-auth-token,
+        Cache-Control
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE
+      Access-Control-Allow-Origin:
+      - ''
+      Access-Control-Expose-Headers:
+      - Content-Length, Content-Type, Location
+      Connection:
+      - Keep-Alive
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 09 Feb 2022 16:49:50 GMT
+      Keep-Alive:
+      - timeout=5, max=100
+      Server:
+      - Apache/2.4.52 (Ubuntu)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+    status:
+      code: 200
+      message: OK
 - request:
     body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.19.1]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2KH0M%22&fl=identifier,formatType,title,size,formatId,fileName,documents&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2KH0M%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
   response:
-    body: {string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2KH0M\"","fl":"identifier,formatType,title,size,formatId,fileName,documents","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":3,"start":0,"docs":[{"identifier":"resource_map_doi:10.18739/A2Q92J","fileName":"resource_map_doi_10.18739/A2Q92J.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":5317},{"identifier":"doi:10.18739/A2KH0M","fileName":"science_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":6702,"title":"Water
-        Table Depth (WTD) NIMS grid Atqasuk, Alaska 2012","documents":["resource_map_doi:10.18739/A2Q92J","doi:10.18739/A2KH0M","urn:uuid:c7294026-6d6e-479c-824e-8ceee995073c"]},{"identifier":"urn:uuid:c7294026-6d6e-479c-824e-8ceee995073c","fileName":"WtdNimsAtq2012.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":87040}]}}
+    body:
+      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2KH0M\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":3,"start":0,"docs":[{"identifier":"resource_map_doi:10.18739/A2Q92J","fileName":"resource_map_doi_10_18739_A2Q92J.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":5317,"checksum":"47dc6dff78c08ec39146d63e877d6264ed5903e278ec0b64cf83b144db878dfa"},{"identifier":"doi:10.18739/A2KH0M","fileName":"science_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":6702,"checksum":"3c606684e1f2cfc4507ebbfaf00fcdf64b95444341df086586bf58aab70201fe","title":"Water
+        Table Depth (WTD) NIMS grid Atqasuk, Alaska 2012","documents":["resource_map_doi:10.18739/A2Q92J","doi:10.18739/A2KH0M","urn:uuid:c7294026-6d6e-479c-824e-8ceee995073c"]},{"identifier":"urn:uuid:c7294026-6d6e-479c-824e-8ceee995073c","fileName":"WtdNimsAtq2012.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":87040,"checksum":"680c9bd848cb6564fca69b15abc80059c3cc30219c5234df475398dd53132b81"}]}}
 
-'}
+        '
     headers:
-      Access-Control-Allow-Credentials: ['true']
-      Access-Control-Allow-Headers: ['Authorization, Content-Type, Location, Content-Length,
-          x-annotator-auth-token']
-      Access-Control-Allow-Methods: ['POST, GET, OPTIONS, PUT, DELETE']
-      Access-Control-Allow-Origin: ['']
-      Access-Control-Expose-Headers: ['Content-Length, Content-Type, Location']
-      Connection: [Keep-Alive]
-      Content-Type: [application/json; charset=UTF-8]
-      Date: ['Mon, 17 Dec 2018 22:01:58 GMT']
-      Keep-Alive: ['timeout=5, max=100']
-      Server: [Apache/2.4.7 (Ubuntu)]
-      Transfer-Encoding: [chunked]
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Authorization, Content-Type, Location, Content-Length, x-annotator-auth-token,
+        Cache-Control
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE
+      Access-Control-Allow-Origin:
+      - ''
+      Access-Control-Expose-Headers:
+      - Content-Length, Content-Type, Location
+      Connection:
+      - Keep-Alive
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 09 Feb 2022 16:49:50 GMT
+      Keep-Alive:
+      - timeout=5, max=100
+      Server:
+      - Apache/2.4.52 (Ubuntu)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+    status:
+      code: 200
+      message: OK
 - request:
     body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.19.1]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2Q92J%22&fl=identifier,formatType,title,size,formatId,fileName,documents&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2Q92J%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
   response:
-    body: {string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2Q92J\"","fl":"identifier,formatType,title,size,formatId,fileName,documents","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":3,"start":0,"docs":[{"identifier":"urn:uuid:79218237-7290-4b03-965a-70b5dd467910","fileName":"WtdNimsBrw2012.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":106496},{"identifier":"doi:10.18739/A2Q92J","fileName":"science_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":6825,"title":"Water
-        Table Depth (WTD) NIMS grid Barrow, Alaska 2012","documents":["urn:uuid:79218237-7290-4b03-965a-70b5dd467910","resource_map_doi:10.18739/A2ZS8T","doi:10.18739/A2Q92J"]},{"identifier":"resource_map_doi:10.18739/A2ZS8T","fileName":"resource_map_doi_10.18739/A2ZS8T.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":5317}]}}
+    body:
+      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2Q92J\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":3,"start":0,"docs":[{"identifier":"resource_map_doi:10.18739/A2ZS8T","fileName":"resource_map_doi_10_18739_A2ZS8T.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":5317,"checksum":"fefa48f8f62b88d48ccb8a9aceedb0807bad671e1c3c362d685782ca546e0950"},{"identifier":"doi:10.18739/A2Q92J","fileName":"science_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":6825,"checksum":"06de824429b2b8e45a3f8330d6762acb2d594e81b79d82ef4553d77736ba2fc8","title":"Water
+        Table Depth (WTD) NIMS grid Barrow, Alaska 2012","documents":["urn:uuid:79218237-7290-4b03-965a-70b5dd467910","resource_map_doi:10.18739/A2ZS8T","doi:10.18739/A2Q92J"]},{"identifier":"urn:uuid:79218237-7290-4b03-965a-70b5dd467910","fileName":"WtdNimsBrw2012.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":106496,"checksum":"d94b0bc8baaa282dea3c5b7d8ae1cfee4896d506a0f3a6a62ca811afba6a783e"}]}}
 
-'}
+        '
     headers:
-      Access-Control-Allow-Credentials: ['true']
-      Access-Control-Allow-Headers: ['Authorization, Content-Type, Location, Content-Length,
-          x-annotator-auth-token']
-      Access-Control-Allow-Methods: ['POST, GET, OPTIONS, PUT, DELETE']
-      Access-Control-Allow-Origin: ['']
-      Access-Control-Expose-Headers: ['Content-Length, Content-Type, Location']
-      Connection: [Keep-Alive]
-      Content-Type: [application/json; charset=UTF-8]
-      Date: ['Mon, 17 Dec 2018 22:01:59 GMT']
-      Keep-Alive: ['timeout=5, max=100']
-      Server: [Apache/2.4.7 (Ubuntu)]
-      Transfer-Encoding: [chunked]
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Authorization, Content-Type, Location, Content-Length, x-annotator-auth-token,
+        Cache-Control
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE
+      Access-Control-Allow-Origin:
+      - ''
+      Access-Control-Expose-Headers:
+      - Content-Length, Content-Type, Location
+      Connection:
+      - Keep-Alive
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 09 Feb 2022 16:49:51 GMT
+      Keep-Alive:
+      - timeout=5, max=100
+      Server:
+      - Apache/2.4.52 (Ubuntu)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+    status:
+      code: 200
+      message: OK
 - request:
     body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.19.1]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2ZS8T%22&fl=identifier,formatType,title,size,formatId,fileName,documents&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2ZS8T%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
   response:
-    body: {string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2ZS8T\"","fl":"identifier,formatType,title,size,formatId,fileName,documents","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":3,"start":0,"docs":[{"identifier":"resource_map_doi:10.18739/A2V05T","fileName":"resource_map_doi_10.18739/A2V05T.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":4098},{"identifier":"doi:10.18739/A2ZS8T","fileName":"science_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":5652,"title":"Soil
-        Temperature ARCSS grid Atqasuk, Alaska 2012","documents":["resource_map_doi:10.18739/A2V05T","doi:10.18739/A2ZS8T","urn:uuid:e1317da8-ae3b-4755-a465-4b684d3d97f6"]},{"identifier":"urn:uuid:e1317da8-ae3b-4755-a465-4b684d3d97f6","fileName":"SoilTemperatureAtqArcssGrid2012.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":99328}]}}
+    body:
+      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2ZS8T\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":3,"start":0,"docs":[{"identifier":"resource_map_doi:10.18739/A2V05T","fileName":"resource_map_doi_10_18739_A2V05T.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":4098,"checksum":"589ca652afd03f1bc75064fc658cd5e5c9204e7d0817e8bce7465d6af9a50410"},{"identifier":"doi:10.18739/A2ZS8T","fileName":"science_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":5652,"checksum":"6809a118085bea4b1de25ff46eadda880ef9c2c4ce67c9f4cc4fdc91ac5b3671","title":"Soil
+        Temperature ARCSS grid Atqasuk, Alaska 2012","documents":["resource_map_doi:10.18739/A2V05T","doi:10.18739/A2ZS8T","urn:uuid:e1317da8-ae3b-4755-a465-4b684d3d97f6"]},{"identifier":"urn:uuid:e1317da8-ae3b-4755-a465-4b684d3d97f6","fileName":"SoilTemperatureAtqArcssGrid2012.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":99328,"checksum":"fdaf5128c06697e2a19c89c29d76a3632be41933f48f04f16e06e25a7949abbf"}]}}
 
-'}
+        '
     headers:
-      Access-Control-Allow-Credentials: ['true']
-      Access-Control-Allow-Headers: ['Authorization, Content-Type, Location, Content-Length,
-          x-annotator-auth-token']
-      Access-Control-Allow-Methods: ['POST, GET, OPTIONS, PUT, DELETE']
-      Access-Control-Allow-Origin: ['']
-      Access-Control-Expose-Headers: ['Content-Length, Content-Type, Location']
-      Connection: [Keep-Alive]
-      Content-Type: [application/json; charset=UTF-8]
-      Date: ['Mon, 17 Dec 2018 22:01:59 GMT']
-      Keep-Alive: ['timeout=5, max=100']
-      Server: [Apache/2.4.7 (Ubuntu)]
-      Transfer-Encoding: [chunked]
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Authorization, Content-Type, Location, Content-Length, x-annotator-auth-token,
+        Cache-Control
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE
+      Access-Control-Allow-Origin:
+      - ''
+      Access-Control-Expose-Headers:
+      - Content-Length, Content-Type, Location
+      Connection:
+      - Keep-Alive
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 09 Feb 2022 16:49:51 GMT
+      Keep-Alive:
+      - timeout=5, max=100
+      Server:
+      - Apache/2.4.52 (Ubuntu)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+    status:
+      code: 200
+      message: OK
 - request:
     body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.19.1]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2V05T%22&fl=identifier,formatType,title,size,formatId,fileName,documents&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2V05T%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
   response:
-    body: {string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2V05T\"","fl":"identifier,formatType,title,size,formatId,fileName,documents","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":2,"start":0,"docs":[{"identifier":"doi:10.18739/A2V05T","fileName":"science_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":5812,"title":"Soil
-        Temperature ARCSS grid Barrow, Alaska 2012","documents":["urn:uuid:53e8a6e6-8c81-4200-a187-445893c2b832","doi:10.18739/A2V05T"]},{"identifier":"urn:uuid:53e8a6e6-8c81-4200-a187-445893c2b832","fileName":"SoilTemperatureBrwArcssGrid2012.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":88576}]}}
+    body:
+      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2V05T\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":2,"start":0,"docs":[{"identifier":"doi:10.18739/A2V05T","fileName":"science_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":5812,"checksum":"4553351a3d135bd21acf60882da0f5f7c2e2bc41ea31d25ba3d42863f9040f5a","title":"Soil
+        Temperature ARCSS grid Barrow, Alaska 2012","documents":["urn:uuid:53e8a6e6-8c81-4200-a187-445893c2b832","doi:10.18739/A2V05T"]},{"identifier":"urn:uuid:53e8a6e6-8c81-4200-a187-445893c2b832","fileName":"SoilTemperatureBrwArcssGrid2012.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":88576,"checksum":"fbfda58b16ae0baf32a413d059361e48892a5776a0e04f02eabf85bc93d34142"}]}}
 
-'}
+        '
     headers:
-      Access-Control-Allow-Credentials: ['true']
-      Access-Control-Allow-Headers: ['Authorization, Content-Type, Location, Content-Length,
-          x-annotator-auth-token']
-      Access-Control-Allow-Methods: ['POST, GET, OPTIONS, PUT, DELETE']
-      Access-Control-Allow-Origin: ['']
-      Access-Control-Expose-Headers: ['Content-Length, Content-Type, Location']
-      Connection: [Keep-Alive]
-      Content-Type: [application/json; charset=UTF-8]
-      Date: ['Mon, 17 Dec 2018 22:02:00 GMT']
-      Keep-Alive: ['timeout=5, max=100']
-      Server: [Apache/2.4.7 (Ubuntu)]
-      Transfer-Encoding: [chunked]
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Authorization, Content-Type, Location, Content-Length, x-annotator-auth-token,
+        Cache-Control
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE
+      Access-Control-Allow-Origin:
+      - ''
+      Access-Control-Expose-Headers:
+      - Content-Length, Content-Type, Location
+      Connection:
+      - Keep-Alive
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 09 Feb 2022 16:49:52 GMT
+      Keep-Alive:
+      - timeout=5, max=100
+      Server:
+      - Apache/2.4.52 (Ubuntu)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+    status:
+      code: 200
+      message: OK
 version: 1

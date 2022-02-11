@@ -28,6 +28,7 @@ add_python_test(manifest
   PLUGIN wholetale
   EXTERNAL_DATA
   plugins/wholetale/manifest_mock_catalog.json
+  plugins/wholetale/reference_dataset.json
 )
 add_python_test(dataone_register
   PLUGIN wholetale
@@ -59,6 +60,9 @@ add_python_test(integration
   plugins/wholetale/dataverse_integration.txt
 )
 add_python_test(repository
+  PLUGIN wholetale
+)
+add_python_test(bdbag
   PLUGIN wholetale
 )
 add_python_test(dataset

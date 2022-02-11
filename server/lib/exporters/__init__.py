@@ -2,6 +2,7 @@ from hashlib import sha256, md5
 import json
 import magic
 import os
+import requests
 from girder.utility import hash_state, ziputil, JsonEncoder
 from girder.models.folder import Folder
 from girder.constants import AccessType
@@ -144,6 +145,22 @@ class TaleExporter:
             index = self._agg_index_by_uri(uri)
             if index is not None:
                 aggs[index]['wt:md5'] = chksum
+        self.verify_aggregate_checksums()
+
+    def verify_aggregate_checksums(self):
+        """Check if every aggregate has a proper checksum."""
+        algs = {f"wt:{alg}" for alg in self.algs}
+        for index, agg in enumerate(self.manifest["aggregates"]):
+            if algs - set(agg.keys()) == algs:
+                try:
+                    req = requests.get(agg["uri"], allow_redirects=True, stream=True)
+                except requests.exceptions.InvalidSchema:
+                    # globus...
+                    continue
+                md5sum = md5()
+                for chunk in req.iter_content(chunk_size=4096):
+                    md5sum.update(chunk)
+                self.manifest["aggregates"][index]["wt:md5"] = md5sum.hexdigest()
 
     def append_aggregate_filesize_mimetypes(self):
         """

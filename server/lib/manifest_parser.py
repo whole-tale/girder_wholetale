@@ -26,7 +26,42 @@ def rename_dc(data):
     }
 
 
+def fold_hierarchy_smart(objs):
+    # This only works because it takes into account what can be done with current UI and
+    # API easily. It's still possible to manually craft a Tale that will break this if
+    # you know how. If you happen to do that and after hours/days of debugging you'll
+    # end up here ask me for a refund...
+    reduced = []
+    processed = set()
+    for obj in objs:
+        obj_path = Path(obj["mountPath"])
+        if len(obj_path.parts) == 1:
+            reduced.append(obj)
+            continue
+        # Since it's '/<something>/... parts[0] is the unique thing we
+        # are looking for
+        key = obj_path.parts[0]
+        if key in processed:
+            continue
+        leaf_item = Item().load(obj["itemId"], force=True)
+        current = Folder().load(leaf_item["folderId"], force=True)
+        for _ in range(len(obj_path.parts[1:]) - 1):
+            current = Folder().load(current["parentId"], force=True)
+        reduced.append(
+            {
+                "itemId": str(current["_id"]),
+                "_modelType": "folder",
+                "mountPath": key,
+            }
+        )
+        processed.add(key)
+    return reduced
+
+
 def fold_hierarchy(objs):
+    # shortcut for expand_folder == True, which should be the majority
+    if {obj["_modelType"] for obj in objs} == {"item"}:
+        return fold_hierarchy_smart(objs)
     reduced = []
     covered_ids = set()
     reiterate = False
@@ -152,7 +187,7 @@ class ManifestParser:
         dataIds += [
             obj["uri"]
             for obj in self.manifest["aggregates"]
-            if obj["uri"].startswith("http")
+            if obj["uri"].startswith("http") and "schema:isPartOf" not in obj
         ]
         return dataIds
 
