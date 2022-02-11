@@ -1,7 +1,3 @@
-import urllib
-
-import requests
-from girder.exceptions import RestException
 from girder.models.setting import Setting
 from ...constants import PluginSettings, DEFAULT_DERIVA_SCOPE
 from ..verificator import Verificator
