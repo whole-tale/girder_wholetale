@@ -20,6 +20,6 @@ class DerivaVerificator(Verificator):
             scope = scope_map[self.resource_server]
             if 'otherTokens' in self.user:
                 for token in self.user['otherTokens']:
-                    if token['scope'] == scope:
+                    if token.get("scope") == scope:
                         return {'Authorization': 'Bearer ' + token['access_token']}
         return {}
