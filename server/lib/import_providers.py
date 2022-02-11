@@ -53,7 +53,7 @@ class ImportProvider:
         """Given a dataId import dataset as Tale"""
         raise NotImplementedError()
 
-    def proto_tale_from_datamap(self, dataMap: DataMap, asTale: bool) -> object:
+    def proto_tale_from_datamap(self, dataMap: DataMap, user: object, asTale: bool) -> object:
         if asTale:
             relation = "IsDerivedFrom"
         else:

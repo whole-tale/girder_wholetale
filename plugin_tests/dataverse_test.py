@@ -411,9 +411,9 @@ class DataverseHarversterTestCase(base.TestCase):
             "tale": False,
         }
 
-        tale = provider.proto_tale_from_datamap(datamap, False)
+        tale = provider.proto_tale_from_datamap(datamap, self.user, False)
         self.assertEqual(set(tale.keys()), {"title", "relatedIdentifiers", "category"})
-        tale = provider.proto_tale_from_datamap(datamap, True)
+        tale = provider.proto_tale_from_datamap(datamap, self.user, True)
         self.assertEqual(tale["authors"][0]["lastName"], "Tesler")
 
         datamap = {
@@ -430,7 +430,7 @@ class DataverseHarversterTestCase(base.TestCase):
             "size": 99504,
             "tale": False,
         }
-        tale = provider.proto_tale_from_datamap(datamap, True)
+        tale = provider.proto_tale_from_datamap(datamap, self.user, True)
         self.assertEqual(tale["authors"][0]["firstName"], "Pooran")
 
     def tearDown(self):
