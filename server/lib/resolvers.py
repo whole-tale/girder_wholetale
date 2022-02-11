@@ -1,3 +1,4 @@
+import json
 import re
 from .entity import Entity
 from typing import Optional
@@ -42,10 +43,16 @@ class Resolvers:
 
     def resolve(self, entity: Entity) -> Optional[Entity]:
         while True:
+            # try all resolvers; if any matches, repeat; if none matches, return last
+            no_match = True
             for resolver in self.resolvers:
                 result = resolver.resolve(entity)
-                if result is None:
-                    return entity
+                if result is not None:
+                    entity = result
+                    no_match = False
+                    break
+            if no_match:
+                return entity
 
 
 class ResolutionException(Exception):
@@ -84,3 +91,21 @@ class DOIResolver(Resolver):
 
         entity.setValue(resolved_url)
         entity['DOI'] = doi
+
+
+class MinidResolver(Resolver):
+    def resolve(self, entity: Entity) -> Optional[Entity]:
+        value = entity.getValue()
+        if value.startswith('https://identifiers.fair-research.org/'):
+            response = requests.get(value, headers={'Accept': 'application/json'})
+            response.raise_for_status()
+            data = json.loads(response.text)
+            entity.setValue(data['location'][0])
+            try:
+                entity['size'] = data['metadata']['length']
+                entity['name'] = data['metadata']['title']
+            except Exception:
+                pass
+            return entity
+        else:
+            return None

@@ -114,6 +114,25 @@ def validateZenodoExtraHosts(doc):
             raise ValidationException('Invalid URL in Zenodo extra hosts', 'value')
 
 
+@setting_utilities.validator(PluginSettings.DERIVA_EXPORT_URLS)
+def validateDerivaExportUrls(doc):
+    if not doc['value']:
+        doc['value'] = defaultDerivaExportUrls()
+    if not isinstance(doc['value'], list):
+        raise ValidationException('Deriva export URLs setting must be a list.', 'value')
+    for url in doc['value']:
+        if not validators.url(url):
+            raise ValidationException('Invalid URL in Deriva exportURLs', 'value')
+
+
+@setting_utilities.validator(PluginSettings.DERIVA_SCOPES)
+def validateDerivaScopes(doc):
+    if not doc['value']:
+        doc['value'] = defaultDerivaScopes()
+    if not isinstance(doc['value'], dict):
+        raise ValidationException('Deriva scopes must be a dict.', 'value')
+
+
 @setting_utilities.validator(PluginSettings.INSTANCE_CAP)
 def validateInstanceCap(doc):
     if not doc['value']:
@@ -151,6 +170,16 @@ def defaultDataverseExtraHosts():
 @setting_utilities.default(PluginSettings.ZENODO_EXTRA_HOSTS)
 def defaultZenodoExtraHosts():
     return SettingDefault.defaults[PluginSettings.ZENODO_EXTRA_HOSTS]
+
+
+@setting_utilities.default(PluginSettings.DERIVA_EXPORT_URLS)
+def defaultDerivaExportUrls():
+    return SettingDefault.defaults[PluginSettings.DERIVA_EXPORT_URLS]
+
+
+@setting_utilities.default(PluginSettings.DERIVA_SCOPES)
+def defaultDerivaScopes():
+    return SettingDefault.defaults[PluginSettings.DERIVA_SCOPES]
 
 
 @access.public(scope=TokenScope.DATA_READ)
