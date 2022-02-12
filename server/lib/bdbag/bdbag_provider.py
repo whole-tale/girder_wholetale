@@ -3,7 +3,6 @@ import tempfile
 import urllib
 import zipfile
 from typing import Dict, Optional, Generator
-from zipfile import Path
 
 import httpio
 
@@ -67,6 +66,7 @@ class _BagTree:
 class BDBagProvider(ImportProvider):
     def __init__(self, name: str = 'BDBag') -> None:
         super().__init__(name)
+        self.bag_meta = {}
 
     def matches(self, entity: Entity) -> bool:
         return str(entity.getValue()).endswith('.zip')
@@ -100,6 +100,7 @@ class BDBagProvider(ImportProvider):
 
                 dataset_name = subdirs[0].name
                 main = subdirs[0]
+                self._read_manifests(main)
                 root = _BagTree(dataset_name, is_dir=True)
 
                 # we traverse both fetch.txt and the bag to build a tree of all files, whether
@@ -117,6 +118,21 @@ class BDBagProvider(ImportProvider):
         finally:
             fp.close()
 
+    def _read_manifests(self, main: zipfile.Path) -> None:
+        for alg in ("md5", "sha1", "sha256", "sha512"):
+            manifest_path = main / f"manifest-{alg}.txt"
+            if not manifest_path.exists():
+                continue
+            with manifest_path.open() as fp:
+                for line in fp:
+                    chksum, path = line.split(maxsplit=1)
+                    path = path.strip()
+                    if path not in self.bag_meta:
+                        self.bag_meta[path] = {}
+                    if "checksum" not in self.bag_meta[path]:
+                        self.bag_meta[path]["checksum"] = {}
+                    self.bag_meta[path]["checksum"][alg] = chksum
+
     def _listFolder(self, branch: _BagTree, bag_path: zipfile.Path,
                     zip_url: str, tmp_dir: str) -> Generator[ImportItem, None, None]:
         assert branch.list is not None
@@ -126,13 +142,15 @@ class BDBagProvider(ImportProvider):
                 yield from self._listFolder(v, bag_path / k, zip_url, tmp_dir)
                 yield ImportItem(ImportItem.END_FOLDER)
             else:
+                bag_file_path: zipfile.Path = bag_path.joinpath(k)
+                zip_path = self._path_in_zip(bag_file_path)
+                bag_relative_path = zip_path.relative_to(*zip_path.parts[:1])
                 if v.url:
                     yield ImportItem(ImportItem.FILE, k, size=v.size,
-                                     mimeType='application/octet-stream', url=v.url)
+                                     mimeType='application/octet-stream', url=v.url,
+                                     meta=self.bag_meta.get(bag_relative_path.as_posix()))
                 else:
                     # import directly
-                    bag_file_path: Path = bag_path.joinpath(k)
-                    zip_path = self._path_in_zip(bag_file_path)
                     size = bag_file_path.root.getinfo(str(zip_path)).file_size  # type: ignore
 
                     # alternatively, we should maybe import the zip file and then refer to
@@ -145,10 +163,14 @@ class BDBagProvider(ImportProvider):
                     else:
                         url = zip_url + '?path=' + str(zip_path)
 
-                    yield ImportItem(ImportItem.FILE, k,
-                                     size=size,
-                                     mimeType='application/octet-stream',
-                                     url=url)
+                    yield ImportItem(
+                        ImportItem.FILE,
+                        k,
+                        size=size,
+                        mimeType='application/octet-stream',
+                        url=url,
+                        meta=self.bag_meta.get(bag_relative_path.as_posix())
+                    )
 
                     if extracted:
                         pathlib.Path(extracted).unlink()
