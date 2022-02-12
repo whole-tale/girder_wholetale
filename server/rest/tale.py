@@ -215,6 +215,8 @@ class Tale(Resource):
         .param('git', "If True, treat the url as a location of a git repo "
                "that should be imported as the Tale's workspace.",
                default=False, required=False, dataType='boolean')
+        .param("dsRootPath", "Path inside the imported dataset that should be treated"
+               "as root for dataSet generation.", default="", required=False)
         .jsonParam('lookupKwargs', 'Optional keyword arguments passed to '
                    'GET /repository/lookup', requireObject=True, required=False)
         .jsonParam('taleKwargs', 'Optional keyword arguments passed to POST /tale',
@@ -222,7 +224,17 @@ class Tale(Resource):
         .responseClass('tale')
         .errorResponse('You are not authorized to create tales.', 403)
     )
-    def createTaleFromUrl(self, imageId, url, spawn, asTale, git, lookupKwargs, taleKwargs):
+    def createTaleFromUrl(
+        self,
+        imageId,
+        url,
+        spawn,
+        asTale,
+        git,
+        dsRootPath,
+        lookupKwargs,
+        taleKwargs
+    ):
         user = self.getCurrentUser()
         if taleKwargs is None:
             taleKwargs = {}
@@ -324,10 +336,15 @@ class Tale(Resource):
                     _async=True,
                     module="girder.plugins.wholetale.tasks.import_binder",
                     args=(lookupKwargs,),
-                    kwargs={"taleId": tale["_id"], "spawn": spawn, "asTale": asTale},
+                    kwargs={
+                        "taleId": tale["_id"],
+                        "spawn": spawn,
+                        "asTale": asTale,
+                        "dsRootPath": dsRootPath,
+                    },
                     otherFields={
                         "taleId": tale["_id"],
-                        "wt_notification_id": str(notification["_id"])
+                        "wt_notification_id": str(notification["_id"]),
                     }
                 )
                 Job().scheduleJob(job)
