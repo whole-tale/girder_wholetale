@@ -112,7 +112,7 @@ class BDBagProvider(ImportProvider):
                 self._read_fetch_txt(root, main)
                 self._read_bag_dir(root, main)
 
-                yield ImportItem(ImportItem.FOLDER, name=dataset_name)
+                yield ImportItem(ImportItem.FOLDER, name=dataset_name, identifier=zip_url)
                 # make a new ZipFile for the same reason that mk_zip_path is necessary since
                 # iterdir() triggers the issue
                 yield from self._listFolder(root, main, zip_url, tmp_dir)
@@ -170,6 +170,11 @@ class BDBagProvider(ImportProvider):
                 meta = self.bag_meta.get(bag_relative_path.as_posix(), {})
                 mime_type = meta.get("mediatype", "application/octet-stream")
                 extracted = None
+                identifier = None
+                if "uri" in meta.get("bundledAs", {}):
+                    identifier = meta["bundledAs"].pop("uri")
+                    if not meta["bundledAs"]:
+                        del meta["bundledAs"]
                 if v.url:
                     size = v.size
                     url = v.url
@@ -190,6 +195,7 @@ class BDBagProvider(ImportProvider):
                     size=size,
                     mimeType=mime_type,
                     url=url,
+                    identifier=identifier,
                     meta=meta or None,
                 )
                 if extracted:
