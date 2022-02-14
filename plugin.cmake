@@ -79,5 +79,10 @@ add_python_test(notification PLUGIN wholetale)
 add_python_test(globus PLUGIN wholetale)
 add_python_test(sharing PLUGIN wholetale)
 add_python_test(verificator PLUGIN wholetale)
+add_python_test(deriva
+  PLUGIN wholetale
+  EXTERNAL_DATA
+  plugins/wholetale/Dataset_1-882P.zip
+)
 add_python_style_test(python_static_analysis_wholetale
                       "${PROJECT_SOURCE_DIR}/plugins/wholetale/server")
