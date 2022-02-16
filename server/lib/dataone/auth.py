@@ -7,6 +7,12 @@ class DataONEVerificator:
         self.key = key
         self.resource_server = resource_server
 
+    @property
+    def headers(self):
+        if self.key:
+            return {"Authorization": f"Bearer {self.key}"}
+        return {}
+
     def verify(self):
         try:
             jwt.PyJWT().decode(
