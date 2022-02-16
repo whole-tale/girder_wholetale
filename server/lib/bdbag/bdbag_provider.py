@@ -1,9 +1,10 @@
+import json
+import os
 import pathlib
 import tempfile
 import urllib
 import zipfile
 from typing import Dict, Optional, Generator
-from zipfile import Path
 
 import httpio
 
@@ -67,6 +68,7 @@ class _BagTree:
 class BDBagProvider(ImportProvider):
     def __init__(self, name: str = 'BDBag') -> None:
         super().__init__(name)
+        self.bag_meta = {}
 
     def matches(self, entity: Entity) -> bool:
         return str(entity.getValue()).endswith('.zip')
@@ -100,6 +102,7 @@ class BDBagProvider(ImportProvider):
 
                 dataset_name = subdirs[0].name
                 main = subdirs[0]
+                self._read_manifests(main)
                 root = _BagTree(dataset_name, is_dir=True)
 
                 # we traverse both fetch.txt and the bag to build a tree of all files, whether
@@ -109,13 +112,48 @@ class BDBagProvider(ImportProvider):
                 self._read_fetch_txt(root, main)
                 self._read_bag_dir(root, main)
 
-                yield ImportItem(ImportItem.FOLDER, name=dataset_name)
+                yield ImportItem(ImportItem.FOLDER, name=dataset_name, identifier=zip_url)
                 # make a new ZipFile for the same reason that mk_zip_path is necessary since
                 # iterdir() triggers the issue
                 yield from self._listFolder(root, main, zip_url, tmp_dir)
                 yield ImportItem(ImportItem.END_FOLDER)
         finally:
             fp.close()
+
+    def _read_manifests(self, main: zipfile.Path) -> None:
+        for alg in ("md5", "sha1", "sha256", "sha512"):
+            manifest_path = main / f"manifest-{alg}.txt"
+            if not manifest_path.exists():
+                continue
+            with manifest_path.open() as fp:
+                for line in fp:
+                    chksum, path = line.split(maxsplit=1)
+                    path = path.strip()
+                    if path not in self.bag_meta:
+                        self.bag_meta[path] = {}
+                    if "checksum" not in self.bag_meta[path]:
+                        self.bag_meta[path]["checksum"] = {}
+                    self.bag_meta[path]["checksum"][alg] = chksum
+        self._read_manifest_json(main)
+
+    def _read_manifest_json(self, main: zipfile.Path) -> None:
+        manifest_path = main / "metadata" / "manifest.json"
+        if not manifest_path.exists():
+            return
+        with manifest_path.open() as fp:
+            manifest = json.load(fp)
+        for agg in manifest["aggregates"]:
+            if "bundledAs" not in agg:
+                continue
+            # get asset path relative to root of the bag
+            if agg["uri"].startswith("../data"):
+                path = agg.pop("uri")[3:]
+            else:
+                folder = agg["bundledAs"].pop("folder")[3:]
+                path = os.path.join(folder, agg["bundledAs"].pop("filename"))
+            if path not in self.bag_meta:
+                self.bag_meta[path] = {}
+            self.bag_meta[path].update(agg)
 
     def _listFolder(self, branch: _BagTree, bag_path: zipfile.Path,
                     zip_url: str, tmp_dir: str) -> Generator[ImportItem, None, None]:
@@ -126,32 +164,42 @@ class BDBagProvider(ImportProvider):
                 yield from self._listFolder(v, bag_path / k, zip_url, tmp_dir)
                 yield ImportItem(ImportItem.END_FOLDER)
             else:
+                bag_file_path: zipfile.Path = bag_path.joinpath(k)
+                zip_path = self._path_in_zip(bag_file_path)
+                bag_relative_path = zip_path.relative_to(*zip_path.parts[:1])
+                meta = self.bag_meta.get(bag_relative_path.as_posix(), {})
+                mime_type = meta.get("mediatype", "application/octet-stream")
+                extracted = None
+                identifier = None
+                if "uri" in meta.get("bundledAs", {}):
+                    identifier = meta["bundledAs"].pop("uri")
+                    if not meta["bundledAs"]:
+                        del meta["bundledAs"]
                 if v.url:
-                    yield ImportItem(ImportItem.FILE, k, size=v.size,
-                                     mimeType='application/octet-stream', url=v.url)
+                    size = v.size
+                    url = v.url
                 else:
                     # import directly
-                    bag_file_path: Path = bag_path.joinpath(k)
-                    zip_path = self._path_in_zip(bag_file_path)
                     size = bag_file_path.root.getinfo(str(zip_path)).file_size  # type: ignore
-
                     # alternatively, we should maybe import the zip file and then refer to
                     # the file inside the zip using the same mechanism as for http(s) zips
-
-                    extracted = None
                     if zip_url.startswith('file://'):
                         extracted = bag_file_path.root.extract(str(zip_path), path=tmp_dir)
                         url = 'file://' + extracted
                     else:
                         url = zip_url + '?path=' + str(zip_path)
 
-                    yield ImportItem(ImportItem.FILE, k,
-                                     size=size,
-                                     mimeType='application/octet-stream',
-                                     url=url)
-
-                    if extracted:
-                        pathlib.Path(extracted).unlink()
+                yield ImportItem(
+                    ImportItem.FILE,
+                    k,
+                    size=size,
+                    mimeType=mime_type,
+                    url=url,
+                    identifier=identifier,
+                    meta=meta or None,
+                )
+                if extracted:
+                    pathlib.Path(extracted).unlink()
 
     def _read_fetch_txt(self, root: _BagTree, main: zipfile.Path) -> None:
         fetch_path = main / 'fetch.txt'
