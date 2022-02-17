@@ -476,11 +476,11 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2ND53%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2ND53%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2ND53\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":3,"start":0,"docs":[{"identifier":"doi:10.18739/A2ND53","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":16006,"checksum":"8fef7c934d4eda80417b60ab5939fe5010a4f6c2","title":"Thaw
-        depth in the ITEX plots at Barrow and Atqasuk, Alaska","documents":["doi:10.18739/A2ND53","urn:uuid:dc29f3cf-022a-4a33-9eed-8dc9ba6e0218","urn:uuid:428fcb96-03a9-42b3-81d1-2944ac686e55"]},{"identifier":"urn:uuid:dc29f3cf-022a-4a33-9eed-8dc9ba6e0218","fileName":"2015_Barrow_Atqasuk_ITEX_Thaw_v1.csv","formatId":"text/csv","formatType":"DATA","size":7770,"checksum":"b019de3fd6cac970991f9304f30afb41e1812945"},{"identifier":"urn:uuid:428fcb96-03a9-42b3-81d1-2944ac686e55","fileName":"1995-20XX_Barrow_Atqasuk_ITEX_Thaw_metadata-Copy.txt","formatId":"text/plain","formatType":"DATA","size":3971,"checksum":"903ab99dcdb9c30e232455f7a0278a93d9f561b9"}]}}
+      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2ND53\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":3,"start":0,"docs":[{"identifier":"doi:10.18739/A2ND53","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":16006,"checksum":"8fef7c934d4eda80417b60ab5939fe5010a4f6c2","checksumAlgorithm":"MD5","title":"Thaw
+        depth in the ITEX plots at Barrow and Atqasuk, Alaska","documents":["doi:10.18739/A2ND53","urn:uuid:dc29f3cf-022a-4a33-9eed-8dc9ba6e0218","urn:uuid:428fcb96-03a9-42b3-81d1-2944ac686e55"]},{"identifier":"urn:uuid:dc29f3cf-022a-4a33-9eed-8dc9ba6e0218","fileName":"2015_Barrow_Atqasuk_ITEX_Thaw_v1.csv","formatId":"text/csv","formatType":"DATA","size":7770,"checksum":"b019de3fd6cac970991f9304f30afb41e1812945","checksumAlgorithm":"MD5"},{"identifier":"urn:uuid:428fcb96-03a9-42b3-81d1-2944ac686e55","fileName":"1995-20XX_Barrow_Atqasuk_ITEX_Thaw_metadata-Copy.txt","formatId":"text/plain","formatType":"DATA","size":3971,"checksum":"903ab99dcdb9c30e232455f7a0278a93d9f561b9","checksumAlgorithm":"MD5"}]}}
 
         '
     headers:
@@ -667,11 +667,11 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2ND53%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2ND53%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":2,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2ND53\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":3,"start":0,"docs":[{"identifier":"doi:10.18739/A2ND53","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":16006,"checksum":"8fef7c934d4eda80417b60ab5939fe5010a4f6c2","title":"Thaw
-        depth in the ITEX plots at Barrow and Atqasuk, Alaska","documents":["doi:10.18739/A2ND53","urn:uuid:dc29f3cf-022a-4a33-9eed-8dc9ba6e0218","urn:uuid:428fcb96-03a9-42b3-81d1-2944ac686e55"]},{"identifier":"urn:uuid:dc29f3cf-022a-4a33-9eed-8dc9ba6e0218","fileName":"2015_Barrow_Atqasuk_ITEX_Thaw_v1.csv","formatId":"text/csv","formatType":"DATA","size":7770,"checksum":"b019de3fd6cac970991f9304f30afb41e1812945"},{"identifier":"urn:uuid:428fcb96-03a9-42b3-81d1-2944ac686e55","fileName":"1995-20XX_Barrow_Atqasuk_ITEX_Thaw_metadata-Copy.txt","formatId":"text/plain","formatType":"DATA","size":3971,"checksum":"903ab99dcdb9c30e232455f7a0278a93d9f561b9"}]}}
+      string: '{"responseHeader":{"status":0,"QTime":2,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2ND53\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":3,"start":0,"docs":[{"identifier":"doi:10.18739/A2ND53","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":16006,"checksum":"8fef7c934d4eda80417b60ab5939fe5010a4f6c2","checksumAlgorithm":"MD5","title":"Thaw
+        depth in the ITEX plots at Barrow and Atqasuk, Alaska","documents":["doi:10.18739/A2ND53","urn:uuid:dc29f3cf-022a-4a33-9eed-8dc9ba6e0218","urn:uuid:428fcb96-03a9-42b3-81d1-2944ac686e55"]},{"identifier":"urn:uuid:dc29f3cf-022a-4a33-9eed-8dc9ba6e0218","fileName":"2015_Barrow_Atqasuk_ITEX_Thaw_v1.csv","formatId":"text/csv","formatType":"DATA","size":7770,"checksum":"b019de3fd6cac970991f9304f30afb41e1812945","checksumAlgorithm":"MD5"},{"identifier":"urn:uuid:428fcb96-03a9-42b3-81d1-2944ac686e55","fileName":"1995-20XX_Barrow_Atqasuk_ITEX_Thaw_metadata-Copy.txt","formatId":"text/plain","formatType":"DATA","size":3971,"checksum":"903ab99dcdb9c30e232455f7a0278a93d9f561b9","checksumAlgorithm":"MD5"}]}}
 
         '
     headers:
