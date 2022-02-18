@@ -100,7 +100,7 @@ class DataOneImportProvider(ImportProvider):
                 url=fileObj["url"],
                 size=int(fileObj["size"]),
                 mimeType=fileObj["formatId"],
-                meta={"checksum": {"md5": fileObj["checksum"]}},
+                meta={"checksum": {fileObj["checksumAlgorithm"].lower(): fileObj["checksum"]}},
             )
 
         # Recurse and add child packages if any exist

@@ -19,7 +19,7 @@ interactions:
       CF-Cache-Status:
       - DYNAMIC
       CF-RAY:
-      - 6dae935e8ab029d8-ORD
+      - 6df29a5c9f932d01-ORD
       Connection:
       - keep-alive
       Content-Length:
@@ -27,13 +27,13 @@ interactions:
       Content-Type:
       - text/html;charset=utf-8
       Date:
-      - Wed, 09 Feb 2022 16:46:45 GMT
+      - Thu, 17 Feb 2022 22:55:23 GMT
       Expect-CT:
       - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
       NEL:
       - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=WAJw8Ty1lEFXmfeMD2ciu518nwhAC666iU4HIue%2F4gAGGemKljo31DXJ8ll2gRyBCGB9GKst7tE%2B9nZfkt5bzXAG5Bqyzji034qwyIDPjoGVMRRxM7K6AphDjqvLJMrd%2FrE9iR0%3D"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=%2Fk%2BDFZVMSRAIWAqfKdhpIMvgvbHlUFbdWdc2pUk5BWy4yf0cUF1TdAguAebKvH6pVEIjcOourxg6cgW%2Bz2Pb0dTANkO5kCkscRm8Ie%2F1zbaOeXmbRmMV1lz0Y01ulDgCZN5u25Q%3D"}],"group":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
       Strict-Transport-Security:
@@ -41,9 +41,11 @@ interactions:
       alt-svc:
       - h3=":443"; ma=86400, h3-29=":443"; ma=86400
       expires:
-      - Wed, 09 Feb 2022 17:38:20 GMT
+      - Thu, 17 Feb 2022 23:39:40 GMT
       location:
       - https://arcticdata.io/catalog/#view/doi:10.5065/D6862DM8
+      permissions-policy:
+      - interest-cohort=(),browsing-topics=()
       vary:
       - Accept
     status:
@@ -85,7 +87,7 @@ interactions:
       Content-Type:
       - text/html
       Date:
-      - Wed, 09 Feb 2022 16:46:46 GMT
+      - Thu, 17 Feb 2022 22:55:24 GMT
       ETag:
       - '"2882-5d7241dff9062-gzip"'
       Keep-Alive:
@@ -137,7 +139,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:46:46 GMT
+      - Thu, 17 Feb 2022 22:55:24 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -164,7 +166,7 @@ interactions:
     uri: https://cn.dataone.org/cn/v2/query/solr/?q=identifier:%22doi%3A10.5065%2FD6862DM8%22&fl=identifier,formatType,formatId,resourceMap&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":2,"params":{"q":"identifier:\"doi:10.5065/D6862DM8\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.5065/D6862DM8","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.5065/D6862DM8"]}]}}
+      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"identifier:\"doi:10.5065/D6862DM8\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.5065/D6862DM8","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.5065/D6862DM8"]}]}}
 
         '
     headers:
@@ -184,7 +186,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:46:47 GMT
+      - Thu, 17 Feb 2022 22:55:25 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -208,11 +210,11 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.5065%2FD6862DM8%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.5065%2FD6862DM8%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"resourceMap:\"resource_map_doi:10.5065/D6862DM8\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":17,"start":0,"docs":[{"identifier":"doi:10.5065/D6862DM8","fileName":"science_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":7841,"checksum":"cd7ad940be059a6880f059b728306c550521002f9dce3551acd7e4a9751f386f","title":"Humans
-        and Hydrology at High Latitudes: Water Use Information","documents":["urn:uuid:36f3673b-1f01-4eac-8d9e-7aff619edde6","doi:10.5065/D6862DM8","urn:uuid:75308ecc-cdc2-4ce0-a1b0-2cd829ce46c8","urn:uuid:62e1a8c5-406b-43f9-9234-1415277674cb","urn:uuid:b4831b1b-7472-4015-b795-836d01ad0592","urn:uuid:4b56f9ba-c654-4692-83b6-6c72968893f1","urn:uuid:051184f2-2ee1-44db-8b5b-7fdd5b96d96d","urn:uuid:01a53103-8db1-46b3-967c-b42acf69ae08","urn:uuid:bbec7da2-6789-4c5b-9736-f0db470cd0ad","urn:uuid:1938c259-3b7e-4937-b79f-e26067bdab01","urn:uuid:7f3d0f47-56db-4562-bdff-1182b78302ef","urn:uuid:9440d2bc-234c-4955-85d7-2b144c8b71bd","urn:uuid:03c24891-8fd4-4286-bfdf-cc6e6858a672","urn:uuid:80977cc2-1422-4369-804d-90a2e2109a92","urn:uuid:86ba12d0-82da-48bf-a73a-3e0cccf5455d","urn:uuid:92312ab7-ee0c-4874-ab4b-6944e1376265","urn:uuid:e0064b54-ee0e-42c1-891d-742bef38243a"]},{"identifier":"urn:uuid:36f3673b-1f01-4eac-8d9e-7aff619edde6","fileName":"estimated_use_of_water_in_US_2005.pdf","formatId":"application/pdf","formatType":"DATA","size":5011961,"checksum":"61b8802346ca19f51ecb18fe7cb2de4eacd43fd9794d6b3fb11cd89a50386722"},{"identifier":"urn:uuid:75308ecc-cdc2-4ce0-a1b0-2cd829ce46c8","fileName":"datadict2000.html","formatId":"text/html","formatType":"DATA","size":8784,"checksum":"5590346b4973427865895b46fa3d8397a4302bcbd55093f3fb2e0f6e11125404"},{"identifier":"urn:uuid:62e1a8c5-406b-43f9-9234-1415277674cb","fileName":"usco2000.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":1558016,"checksum":"73135613c7a1692fcc7635e1f0755b755ff82c2f435fa0ecb1e70c30ff391813"},{"identifier":"urn:uuid:b4831b1b-7472-4015-b795-836d01ad0592","fileName":"us85co.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":2680787,"checksum":"18dd801b8089741a8c14c3e59503dc5abcc27749acbe5c00fd5c5f51f3305af8"},{"identifier":"urn:uuid:4b56f9ba-c654-4692-83b6-6c72968893f1","fileName":"dictionary95.txt","formatId":"text/plain","formatType":"DATA","size":26803,"checksum":"61e7a9bd81826c6e4fe3a2840463ebc06cde702e6fe242805366453567646c1b"},{"identifier":"urn:uuid:051184f2-2ee1-44db-8b5b-7fdd5b96d96d","fileName":"datadict2005.html","formatId":"text/html","formatType":"DATA","size":13783,"checksum":"fa854e631a41e76413f92eafc947b4ccaea1366f7988c27c8f7257f655d9956f"},{"identifier":"urn:uuid:01a53103-8db1-46b3-967c-b42acf69ae08","fileName":"usco2005.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":6427136,"checksum":"2a26b9db3a2b5f32a2ffa53ccd729b8b8529a7b1a6c25d1fb7faa80d3a862e0a"},{"identifier":"urn:uuid:bbec7da2-6789-4c5b-9736-f0db470cd0ad","fileName":"wastewaterNWT.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":15360,"checksum":"f0297ff0d56c540fe2dd1b35166cb0c005a18e384b1f70c32b11e4f4532b8c5e"},{"identifier":"urn:uuid:1938c259-3b7e-4937-b79f-e26067bdab01","fileName":"withdrawal_ob_engl.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":45056,"checksum":"42322bf3c00e5f7485483cd175cf1b93fee06e5356f0893ee54bef098a5f2d25"},{"identifier":"urn:uuid:7f3d0f47-56db-4562-bdff-1182b78302ef","fileName":"readme.html","formatId":"text/html","formatType":"DATA","size":8087,"checksum":"e97b97dea735b1047cfc44b8a8ea73de0c9a527955fb7892d3b991b503cf9ba6"},{"identifier":"urn:uuid:9440d2bc-234c-4955-85d7-2b144c8b71bd","fileName":"us90co.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":2686433,"checksum":"7540d6d3c6c7967ad448aed19485af3dbe4acc2c58dd55e307843ffcff0dc95f"},{"identifier":"urn:uuid:03c24891-8fd4-4286-bfdf-cc6e6858a672","fileName":"first_nations_canada_water_and_wastewater_systems.pdf","formatId":"application/pdf","formatType":"DATA","size":373893,"checksum":"5abdfe84d4fc154e96abc8ed45212cf4b0aa69fd03ef5c584ad9629b7a471154"},{"identifier":"urn:uuid:80977cc2-1422-4369-804d-90a2e2109a92","fileName":"AK_counties_2000.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":53248,"checksum":"253c2b44fd9163b1567e3e2a891f52dc2e67c7c66c00126ab031eab20fa72afa"},{"identifier":"urn:uuid:86ba12d0-82da-48bf-a73a-3e0cccf5455d","fileName":"usco95.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":4139493,"checksum":"c311ce98661593fae72aa08bfe053faf76a97993b9b3540ab538bd7cebd98fae"},{"identifier":"urn:uuid:92312ab7-ee0c-4874-ab4b-6944e1376265","fileName":"estimated_use_of_water_in_US_2000.pdf","formatId":"application/pdf","formatType":"DATA","size":5775705,"checksum":"02d02bc67cb0eeef669ddbce0f5e3b328e7cc376af61a3c715ba57d01f963d98"},{"identifier":"urn:uuid:e0064b54-ee0e-42c1-891d-742bef38243a","fileName":"wudict.txt","formatId":"text/plain","formatType":"DATA","size":23909,"checksum":"aecb3acf2876dcc6a13e0e15317474275a4f2f1b7e0de80f7c3fb0865180142b"}]}}
+      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.5065/D6862DM8\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":17,"start":0,"docs":[{"identifier":"doi:10.5065/D6862DM8","fileName":"science_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":7841,"checksum":"cd7ad940be059a6880f059b728306c550521002f9dce3551acd7e4a9751f386f","checksumAlgorithm":"SHA256","title":"Humans
+        and Hydrology at High Latitudes: Water Use Information","documents":["urn:uuid:36f3673b-1f01-4eac-8d9e-7aff619edde6","doi:10.5065/D6862DM8","urn:uuid:75308ecc-cdc2-4ce0-a1b0-2cd829ce46c8","urn:uuid:62e1a8c5-406b-43f9-9234-1415277674cb","urn:uuid:b4831b1b-7472-4015-b795-836d01ad0592","urn:uuid:4b56f9ba-c654-4692-83b6-6c72968893f1","urn:uuid:051184f2-2ee1-44db-8b5b-7fdd5b96d96d","urn:uuid:01a53103-8db1-46b3-967c-b42acf69ae08","urn:uuid:bbec7da2-6789-4c5b-9736-f0db470cd0ad","urn:uuid:1938c259-3b7e-4937-b79f-e26067bdab01","urn:uuid:7f3d0f47-56db-4562-bdff-1182b78302ef","urn:uuid:9440d2bc-234c-4955-85d7-2b144c8b71bd","urn:uuid:03c24891-8fd4-4286-bfdf-cc6e6858a672","urn:uuid:80977cc2-1422-4369-804d-90a2e2109a92","urn:uuid:86ba12d0-82da-48bf-a73a-3e0cccf5455d","urn:uuid:92312ab7-ee0c-4874-ab4b-6944e1376265","urn:uuid:e0064b54-ee0e-42c1-891d-742bef38243a"]},{"identifier":"urn:uuid:36f3673b-1f01-4eac-8d9e-7aff619edde6","fileName":"estimated_use_of_water_in_US_2005.pdf","formatId":"application/pdf","formatType":"DATA","size":5011961,"checksum":"61b8802346ca19f51ecb18fe7cb2de4eacd43fd9794d6b3fb11cd89a50386722","checksumAlgorithm":"SHA256"},{"identifier":"urn:uuid:75308ecc-cdc2-4ce0-a1b0-2cd829ce46c8","fileName":"datadict2000.html","formatId":"text/html","formatType":"DATA","size":8784,"checksum":"5590346b4973427865895b46fa3d8397a4302bcbd55093f3fb2e0f6e11125404","checksumAlgorithm":"SHA256"},{"identifier":"urn:uuid:62e1a8c5-406b-43f9-9234-1415277674cb","fileName":"usco2000.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":1558016,"checksum":"73135613c7a1692fcc7635e1f0755b755ff82c2f435fa0ecb1e70c30ff391813","checksumAlgorithm":"SHA256"},{"identifier":"urn:uuid:b4831b1b-7472-4015-b795-836d01ad0592","fileName":"us85co.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":2680787,"checksum":"18dd801b8089741a8c14c3e59503dc5abcc27749acbe5c00fd5c5f51f3305af8","checksumAlgorithm":"SHA256"},{"identifier":"urn:uuid:4b56f9ba-c654-4692-83b6-6c72968893f1","fileName":"dictionary95.txt","formatId":"text/plain","formatType":"DATA","size":26803,"checksum":"61e7a9bd81826c6e4fe3a2840463ebc06cde702e6fe242805366453567646c1b","checksumAlgorithm":"SHA256"},{"identifier":"urn:uuid:051184f2-2ee1-44db-8b5b-7fdd5b96d96d","fileName":"datadict2005.html","formatId":"text/html","formatType":"DATA","size":13783,"checksum":"fa854e631a41e76413f92eafc947b4ccaea1366f7988c27c8f7257f655d9956f","checksumAlgorithm":"SHA256"},{"identifier":"urn:uuid:01a53103-8db1-46b3-967c-b42acf69ae08","fileName":"usco2005.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":6427136,"checksum":"2a26b9db3a2b5f32a2ffa53ccd729b8b8529a7b1a6c25d1fb7faa80d3a862e0a","checksumAlgorithm":"SHA256"},{"identifier":"urn:uuid:bbec7da2-6789-4c5b-9736-f0db470cd0ad","fileName":"wastewaterNWT.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":15360,"checksum":"f0297ff0d56c540fe2dd1b35166cb0c005a18e384b1f70c32b11e4f4532b8c5e","checksumAlgorithm":"SHA256"},{"identifier":"urn:uuid:1938c259-3b7e-4937-b79f-e26067bdab01","fileName":"withdrawal_ob_engl.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":45056,"checksum":"42322bf3c00e5f7485483cd175cf1b93fee06e5356f0893ee54bef098a5f2d25","checksumAlgorithm":"SHA256"},{"identifier":"urn:uuid:7f3d0f47-56db-4562-bdff-1182b78302ef","fileName":"readme.html","formatId":"text/html","formatType":"DATA","size":8087,"checksum":"e97b97dea735b1047cfc44b8a8ea73de0c9a527955fb7892d3b991b503cf9ba6","checksumAlgorithm":"SHA256"},{"identifier":"urn:uuid:9440d2bc-234c-4955-85d7-2b144c8b71bd","fileName":"us90co.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":2686433,"checksum":"7540d6d3c6c7967ad448aed19485af3dbe4acc2c58dd55e307843ffcff0dc95f","checksumAlgorithm":"SHA256"},{"identifier":"urn:uuid:03c24891-8fd4-4286-bfdf-cc6e6858a672","fileName":"first_nations_canada_water_and_wastewater_systems.pdf","formatId":"application/pdf","formatType":"DATA","size":373893,"checksum":"5abdfe84d4fc154e96abc8ed45212cf4b0aa69fd03ef5c584ad9629b7a471154","checksumAlgorithm":"SHA256"},{"identifier":"urn:uuid:80977cc2-1422-4369-804d-90a2e2109a92","fileName":"AK_counties_2000.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":53248,"checksum":"253c2b44fd9163b1567e3e2a891f52dc2e67c7c66c00126ab031eab20fa72afa","checksumAlgorithm":"SHA256"},{"identifier":"urn:uuid:86ba12d0-82da-48bf-a73a-3e0cccf5455d","fileName":"usco95.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":4139493,"checksum":"c311ce98661593fae72aa08bfe053faf76a97993b9b3540ab538bd7cebd98fae","checksumAlgorithm":"SHA256"},{"identifier":"urn:uuid:92312ab7-ee0c-4874-ab4b-6944e1376265","fileName":"estimated_use_of_water_in_US_2000.pdf","formatId":"application/pdf","formatType":"DATA","size":5775705,"checksum":"02d02bc67cb0eeef669ddbce0f5e3b328e7cc376af61a3c715ba57d01f963d98","checksumAlgorithm":"SHA256"},{"identifier":"urn:uuid:e0064b54-ee0e-42c1-891d-742bef38243a","fileName":"wudict.txt","formatId":"text/plain","formatType":"DATA","size":23909,"checksum":"aecb3acf2876dcc6a13e0e15317474275a4f2f1b7e0de80f7c3fb0865180142b","checksumAlgorithm":"SHA256"}]}}
 
         '
     headers:
@@ -232,7 +234,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:46:47 GMT
+      - Thu, 17 Feb 2022 22:55:25 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
