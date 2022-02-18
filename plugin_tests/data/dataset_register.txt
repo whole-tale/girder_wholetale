@@ -11,11 +11,11 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.5065%2FD6862DM8%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.5065%2FD6862DM8%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":15,"params":{"q":"resourceMap:\"resource_map_doi:10.5065/D6862DM8\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":17,"start":0,"docs":[{"identifier":"doi:10.5065/D6862DM8","fileName":"science_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":7841,"checksum":"cd7ad940be059a6880f059b728306c550521002f9dce3551acd7e4a9751f386f","title":"Humans
-        and Hydrology at High Latitudes: Water Use Information","documents":["urn:uuid:36f3673b-1f01-4eac-8d9e-7aff619edde6","doi:10.5065/D6862DM8","urn:uuid:75308ecc-cdc2-4ce0-a1b0-2cd829ce46c8","urn:uuid:62e1a8c5-406b-43f9-9234-1415277674cb","urn:uuid:b4831b1b-7472-4015-b795-836d01ad0592","urn:uuid:4b56f9ba-c654-4692-83b6-6c72968893f1","urn:uuid:051184f2-2ee1-44db-8b5b-7fdd5b96d96d","urn:uuid:01a53103-8db1-46b3-967c-b42acf69ae08","urn:uuid:bbec7da2-6789-4c5b-9736-f0db470cd0ad","urn:uuid:1938c259-3b7e-4937-b79f-e26067bdab01","urn:uuid:7f3d0f47-56db-4562-bdff-1182b78302ef","urn:uuid:9440d2bc-234c-4955-85d7-2b144c8b71bd","urn:uuid:03c24891-8fd4-4286-bfdf-cc6e6858a672","urn:uuid:80977cc2-1422-4369-804d-90a2e2109a92","urn:uuid:86ba12d0-82da-48bf-a73a-3e0cccf5455d","urn:uuid:92312ab7-ee0c-4874-ab4b-6944e1376265","urn:uuid:e0064b54-ee0e-42c1-891d-742bef38243a"]},{"identifier":"urn:uuid:36f3673b-1f01-4eac-8d9e-7aff619edde6","fileName":"estimated_use_of_water_in_US_2005.pdf","formatId":"application/pdf","formatType":"DATA","size":5011961,"checksum":"61b8802346ca19f51ecb18fe7cb2de4eacd43fd9794d6b3fb11cd89a50386722"},{"identifier":"urn:uuid:75308ecc-cdc2-4ce0-a1b0-2cd829ce46c8","fileName":"datadict2000.html","formatId":"text/html","formatType":"DATA","size":8784,"checksum":"5590346b4973427865895b46fa3d8397a4302bcbd55093f3fb2e0f6e11125404"},{"identifier":"urn:uuid:62e1a8c5-406b-43f9-9234-1415277674cb","fileName":"usco2000.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":1558016,"checksum":"73135613c7a1692fcc7635e1f0755b755ff82c2f435fa0ecb1e70c30ff391813"},{"identifier":"urn:uuid:b4831b1b-7472-4015-b795-836d01ad0592","fileName":"us85co.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":2680787,"checksum":"18dd801b8089741a8c14c3e59503dc5abcc27749acbe5c00fd5c5f51f3305af8"},{"identifier":"urn:uuid:4b56f9ba-c654-4692-83b6-6c72968893f1","fileName":"dictionary95.txt","formatId":"text/plain","formatType":"DATA","size":26803,"checksum":"61e7a9bd81826c6e4fe3a2840463ebc06cde702e6fe242805366453567646c1b"},{"identifier":"urn:uuid:051184f2-2ee1-44db-8b5b-7fdd5b96d96d","fileName":"datadict2005.html","formatId":"text/html","formatType":"DATA","size":13783,"checksum":"fa854e631a41e76413f92eafc947b4ccaea1366f7988c27c8f7257f655d9956f"},{"identifier":"urn:uuid:01a53103-8db1-46b3-967c-b42acf69ae08","fileName":"usco2005.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":6427136,"checksum":"2a26b9db3a2b5f32a2ffa53ccd729b8b8529a7b1a6c25d1fb7faa80d3a862e0a"},{"identifier":"urn:uuid:bbec7da2-6789-4c5b-9736-f0db470cd0ad","fileName":"wastewaterNWT.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":15360,"checksum":"f0297ff0d56c540fe2dd1b35166cb0c005a18e384b1f70c32b11e4f4532b8c5e"},{"identifier":"urn:uuid:1938c259-3b7e-4937-b79f-e26067bdab01","fileName":"withdrawal_ob_engl.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":45056,"checksum":"42322bf3c00e5f7485483cd175cf1b93fee06e5356f0893ee54bef098a5f2d25"},{"identifier":"urn:uuid:7f3d0f47-56db-4562-bdff-1182b78302ef","fileName":"readme.html","formatId":"text/html","formatType":"DATA","size":8087,"checksum":"e97b97dea735b1047cfc44b8a8ea73de0c9a527955fb7892d3b991b503cf9ba6"},{"identifier":"urn:uuid:9440d2bc-234c-4955-85d7-2b144c8b71bd","fileName":"us90co.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":2686433,"checksum":"7540d6d3c6c7967ad448aed19485af3dbe4acc2c58dd55e307843ffcff0dc95f"},{"identifier":"urn:uuid:03c24891-8fd4-4286-bfdf-cc6e6858a672","fileName":"first_nations_canada_water_and_wastewater_systems.pdf","formatId":"application/pdf","formatType":"DATA","size":373893,"checksum":"5abdfe84d4fc154e96abc8ed45212cf4b0aa69fd03ef5c584ad9629b7a471154"},{"identifier":"urn:uuid:80977cc2-1422-4369-804d-90a2e2109a92","fileName":"AK_counties_2000.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":53248,"checksum":"253c2b44fd9163b1567e3e2a891f52dc2e67c7c66c00126ab031eab20fa72afa"},{"identifier":"urn:uuid:86ba12d0-82da-48bf-a73a-3e0cccf5455d","fileName":"usco95.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":4139493,"checksum":"c311ce98661593fae72aa08bfe053faf76a97993b9b3540ab538bd7cebd98fae"},{"identifier":"urn:uuid:92312ab7-ee0c-4874-ab4b-6944e1376265","fileName":"estimated_use_of_water_in_US_2000.pdf","formatId":"application/pdf","formatType":"DATA","size":5775705,"checksum":"02d02bc67cb0eeef669ddbce0f5e3b328e7cc376af61a3c715ba57d01f963d98"},{"identifier":"urn:uuid:e0064b54-ee0e-42c1-891d-742bef38243a","fileName":"wudict.txt","formatId":"text/plain","formatType":"DATA","size":23909,"checksum":"aecb3acf2876dcc6a13e0e15317474275a4f2f1b7e0de80f7c3fb0865180142b"}]}}
+      string: '{"responseHeader":{"status":0,"QTime":6,"params":{"q":"resourceMap:\"resource_map_doi:10.5065/D6862DM8\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":17,"start":0,"docs":[{"identifier":"doi:10.5065/D6862DM8","fileName":"science_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":7841,"checksum":"cd7ad940be059a6880f059b728306c550521002f9dce3551acd7e4a9751f386f","checksumAlgorithm":"SHA256","title":"Humans
+        and Hydrology at High Latitudes: Water Use Information","documents":["urn:uuid:36f3673b-1f01-4eac-8d9e-7aff619edde6","doi:10.5065/D6862DM8","urn:uuid:75308ecc-cdc2-4ce0-a1b0-2cd829ce46c8","urn:uuid:62e1a8c5-406b-43f9-9234-1415277674cb","urn:uuid:b4831b1b-7472-4015-b795-836d01ad0592","urn:uuid:4b56f9ba-c654-4692-83b6-6c72968893f1","urn:uuid:051184f2-2ee1-44db-8b5b-7fdd5b96d96d","urn:uuid:01a53103-8db1-46b3-967c-b42acf69ae08","urn:uuid:bbec7da2-6789-4c5b-9736-f0db470cd0ad","urn:uuid:1938c259-3b7e-4937-b79f-e26067bdab01","urn:uuid:7f3d0f47-56db-4562-bdff-1182b78302ef","urn:uuid:9440d2bc-234c-4955-85d7-2b144c8b71bd","urn:uuid:03c24891-8fd4-4286-bfdf-cc6e6858a672","urn:uuid:80977cc2-1422-4369-804d-90a2e2109a92","urn:uuid:86ba12d0-82da-48bf-a73a-3e0cccf5455d","urn:uuid:92312ab7-ee0c-4874-ab4b-6944e1376265","urn:uuid:e0064b54-ee0e-42c1-891d-742bef38243a"]},{"identifier":"urn:uuid:36f3673b-1f01-4eac-8d9e-7aff619edde6","fileName":"estimated_use_of_water_in_US_2005.pdf","formatId":"application/pdf","formatType":"DATA","size":5011961,"checksum":"61b8802346ca19f51ecb18fe7cb2de4eacd43fd9794d6b3fb11cd89a50386722","checksumAlgorithm":"SHA256"},{"identifier":"urn:uuid:75308ecc-cdc2-4ce0-a1b0-2cd829ce46c8","fileName":"datadict2000.html","formatId":"text/html","formatType":"DATA","size":8784,"checksum":"5590346b4973427865895b46fa3d8397a4302bcbd55093f3fb2e0f6e11125404","checksumAlgorithm":"SHA256"},{"identifier":"urn:uuid:62e1a8c5-406b-43f9-9234-1415277674cb","fileName":"usco2000.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":1558016,"checksum":"73135613c7a1692fcc7635e1f0755b755ff82c2f435fa0ecb1e70c30ff391813","checksumAlgorithm":"SHA256"},{"identifier":"urn:uuid:b4831b1b-7472-4015-b795-836d01ad0592","fileName":"us85co.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":2680787,"checksum":"18dd801b8089741a8c14c3e59503dc5abcc27749acbe5c00fd5c5f51f3305af8","checksumAlgorithm":"SHA256"},{"identifier":"urn:uuid:4b56f9ba-c654-4692-83b6-6c72968893f1","fileName":"dictionary95.txt","formatId":"text/plain","formatType":"DATA","size":26803,"checksum":"61e7a9bd81826c6e4fe3a2840463ebc06cde702e6fe242805366453567646c1b","checksumAlgorithm":"SHA256"},{"identifier":"urn:uuid:051184f2-2ee1-44db-8b5b-7fdd5b96d96d","fileName":"datadict2005.html","formatId":"text/html","formatType":"DATA","size":13783,"checksum":"fa854e631a41e76413f92eafc947b4ccaea1366f7988c27c8f7257f655d9956f","checksumAlgorithm":"SHA256"},{"identifier":"urn:uuid:01a53103-8db1-46b3-967c-b42acf69ae08","fileName":"usco2005.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":6427136,"checksum":"2a26b9db3a2b5f32a2ffa53ccd729b8b8529a7b1a6c25d1fb7faa80d3a862e0a","checksumAlgorithm":"SHA256"},{"identifier":"urn:uuid:bbec7da2-6789-4c5b-9736-f0db470cd0ad","fileName":"wastewaterNWT.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":15360,"checksum":"f0297ff0d56c540fe2dd1b35166cb0c005a18e384b1f70c32b11e4f4532b8c5e","checksumAlgorithm":"SHA256"},{"identifier":"urn:uuid:1938c259-3b7e-4937-b79f-e26067bdab01","fileName":"withdrawal_ob_engl.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":45056,"checksum":"42322bf3c00e5f7485483cd175cf1b93fee06e5356f0893ee54bef098a5f2d25","checksumAlgorithm":"SHA256"},{"identifier":"urn:uuid:7f3d0f47-56db-4562-bdff-1182b78302ef","fileName":"readme.html","formatId":"text/html","formatType":"DATA","size":8087,"checksum":"e97b97dea735b1047cfc44b8a8ea73de0c9a527955fb7892d3b991b503cf9ba6","checksumAlgorithm":"SHA256"},{"identifier":"urn:uuid:9440d2bc-234c-4955-85d7-2b144c8b71bd","fileName":"us90co.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":2686433,"checksum":"7540d6d3c6c7967ad448aed19485af3dbe4acc2c58dd55e307843ffcff0dc95f","checksumAlgorithm":"SHA256"},{"identifier":"urn:uuid:03c24891-8fd4-4286-bfdf-cc6e6858a672","fileName":"first_nations_canada_water_and_wastewater_systems.pdf","formatId":"application/pdf","formatType":"DATA","size":373893,"checksum":"5abdfe84d4fc154e96abc8ed45212cf4b0aa69fd03ef5c584ad9629b7a471154","checksumAlgorithm":"SHA256"},{"identifier":"urn:uuid:80977cc2-1422-4369-804d-90a2e2109a92","fileName":"AK_counties_2000.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":53248,"checksum":"253c2b44fd9163b1567e3e2a891f52dc2e67c7c66c00126ab031eab20fa72afa","checksumAlgorithm":"SHA256"},{"identifier":"urn:uuid:86ba12d0-82da-48bf-a73a-3e0cccf5455d","fileName":"usco95.xls","formatId":"application/vnd.ms-excel","formatType":"DATA","size":4139493,"checksum":"c311ce98661593fae72aa08bfe053faf76a97993b9b3540ab538bd7cebd98fae","checksumAlgorithm":"SHA256"},{"identifier":"urn:uuid:92312ab7-ee0c-4874-ab4b-6944e1376265","fileName":"estimated_use_of_water_in_US_2000.pdf","formatId":"application/pdf","formatType":"DATA","size":5775705,"checksum":"02d02bc67cb0eeef669ddbce0f5e3b328e7cc376af61a3c715ba57d01f963d98","checksumAlgorithm":"SHA256"},{"identifier":"urn:uuid:e0064b54-ee0e-42c1-891d-742bef38243a","fileName":"wudict.txt","formatId":"text/plain","formatType":"DATA","size":23909,"checksum":"aecb3acf2876dcc6a13e0e15317474275a4f2f1b7e0de80f7c3fb0865180142b","checksumAlgorithm":"SHA256"}]}}
 
         '
     headers:
@@ -35,7 +35,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Fri, 11 Feb 2022 18:53:52 GMT
+      - Thu, 17 Feb 2022 22:56:44 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -75,7 +75,7 @@ interactions:
       Content-Type:
       - application/octet-stream
       Date:
-      - Fri, 11 Feb 2022 18:53:53 GMT
+      - Thu, 17 Feb 2022 22:56:45 GMT
       Etag:
       - '"da39a3ee5e6b4b0d3255bfef95601890afd80709"'
       Referrer-Policy:
@@ -139,15 +139,15 @@ interactions:
       Content-Type:
       - application/json;charset=UTF-8
       Date:
-      - Fri, 11 Feb 2022 18:53:53 GMT
+      - Thu, 17 Feb 2022 22:56:45 GMT
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=zx4Ud2cFVKOWLT3kJVhL5/8E3i9w9O2fkK02qmy3aM7D1rKmTPO3gYm43tMXFKYp/sH8lPdOSAQuMm2ndTG+R5Q4SUi0BkvqwwBXar1Ej1NJAsUtzE5cPYYD5bjR;
-        Expires=Fri, 18 Feb 2022 18:53:53 GMT; Path=/
-      - AWSALBCORS=zx4Ud2cFVKOWLT3kJVhL5/8E3i9w9O2fkK02qmy3aM7D1rKmTPO3gYm43tMXFKYp/sH8lPdOSAQuMm2ndTG+R5Q4SUi0BkvqwwBXar1Ej1NJAsUtzE5cPYYD5bjR;
-        Expires=Fri, 18 Feb 2022 18:53:53 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=a22737136d870e9bddb354d3d9f1; Path=/; Secure; HttpOnly
+      - AWSALB=+i16Ekj2EyjYw8/fE/cLy8ih0HnUjuBMqnd343fc1Pnk78KRKBIU5bXUOUKL4Zvpptq8H86Mtv1Wr6z+y6ulXKtn6+3xKP4q7up5t+IJSNebM+GHk42UuBVrSWwS;
+        Expires=Thu, 24 Feb 2022 22:56:45 GMT; Path=/
+      - AWSALBCORS=+i16Ekj2EyjYw8/fE/cLy8ih0HnUjuBMqnd343fc1Pnk78KRKBIU5bXUOUKL4Zvpptq8H86Mtv1Wr6z+y6ulXKtn6+3xKP4q7up5t+IJSNebM+GHk42UuBVrSWwS;
+        Expires=Thu, 24 Feb 2022 22:56:45 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=9e6f5b76b4f795c64749d419b6ba; Path=/; Secure; HttpOnly
       Transfer-Encoding:
       - chunked
     status:
@@ -181,17 +181,17 @@ interactions:
       Content-Type:
       - application/xml;charset=UTF-8
       Date:
-      - Fri, 11 Feb 2022 18:53:54 GMT
+      - Thu, 17 Feb 2022 22:56:46 GMT
       Location:
-      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/16927bc8774-400f3e10b3fe.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272019-02-25.tsv&response-content-type=text%2Ftsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T185354Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=562b5663cdcee46276d94b3da9ab9181dc66110fda6b3828f8e44d0adcb99081
+      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/16927bc8774-400f3e10b3fe.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272019-02-25.tsv&response-content-type=text%2Ftsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220217T225646Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220217%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=3ddd86e018e87581f413b830071ff385c28ea600fe042dc4b220b46961ed2ddd
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=+s/qbpDM7KXIzboaeDUv82fozXNUrmBCvTe7ZFQn7oS3xhg3TSUlGdVtNjiD0gPyvcZBTpAPRaC4Sk0el3xVQNhGLg4mEySNtECVgU8i05roGEg2xD+IcZ1V7idY;
-        Expires=Fri, 18 Feb 2022 18:53:54 GMT; Path=/
-      - AWSALBCORS=+s/qbpDM7KXIzboaeDUv82fozXNUrmBCvTe7ZFQn7oS3xhg3TSUlGdVtNjiD0gPyvcZBTpAPRaC4Sk0el3xVQNhGLg4mEySNtECVgU8i05roGEg2xD+IcZ1V7idY;
-        Expires=Fri, 18 Feb 2022 18:53:54 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=a2276637c3c5a947ec8e6d4ed4ec; Path=/; Secure; HttpOnly
+      - AWSALB=tIRPSJYWbUTASFwZ5ZugIhTHiPdknXp7KwxWqcyGWUgdFgS2rHjSho5uTFkxj8hbyhQuOVO8UtCkOZ9U26VvIKGAp9m3OIv2lKVTRAKuiGQzP0NFsN9Vhbv4/tXf;
+        Expires=Thu, 24 Feb 2022 22:56:46 GMT; Path=/
+      - AWSALBCORS=tIRPSJYWbUTASFwZ5ZugIhTHiPdknXp7KwxWqcyGWUgdFgS2rHjSho5uTFkxj8hbyhQuOVO8UtCkOZ9U26VvIKGAp9m3OIv2lKVTRAKuiGQzP0NFsN9Vhbv4/tXf;
+        Expires=Thu, 24 Feb 2022 22:56:46 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=9e6f86bb68e62368ad79acf5c6ac; Path=/; Secure; HttpOnly
     status:
       code: 303
       message: See Other
@@ -207,7 +207,7 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: HEAD
-    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/16927bc8774-400f3e10b3fe.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272019-02-25.tsv&response-content-type=text%2Ftsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T185354Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=562b5663cdcee46276d94b3da9ab9181dc66110fda6b3828f8e44d0adcb99081
+    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/16927bc8774-400f3e10b3fe.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272019-02-25.tsv&response-content-type=text%2Ftsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220217T225646Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220217%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=3ddd86e018e87581f413b830071ff385c28ea600fe042dc4b220b46961ed2ddd
   response:
     body:
       string: ''
@@ -215,13 +215,13 @@ interactions:
       Content-Type:
       - application/xml
       Date:
-      - Fri, 11 Feb 2022 18:53:53 GMT
+      - Thu, 17 Feb 2022 22:56:46 GMT
       Server:
       - AmazonS3
       x-amz-id-2:
-      - 4PF88YCQnjAJiRQpc5gyie8TmM3tPiUt6HJQwUfFBhXlkAWb/hI7eb8DIG6S8R8W4K3GMknmJy0=
+      - 5qnbYrIfWxmvFlOh+ASB1QLRMVQN1oDlXsQzgbLOHSt4mdGYhML57wKzp7apBCbb7v2vK1u6kHA=
       x-amz-request-id:
-      - Y2R7S67Y0WMEPNXF
+      - 5M6XJK6WD2KEVKD9
     status:
       code: 403
       message: Forbidden
@@ -255,17 +255,17 @@ interactions:
       Content-Length:
       - '0'
       Date:
-      - Fri, 11 Feb 2022 18:53:54 GMT
+      - Thu, 17 Feb 2022 22:56:46 GMT
       Location:
-      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/16927bc8774-400f3e10b3fe.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272019-02-25.tsv&response-content-type=text%2Ftsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T185354Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3599&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=66583ed234818919c3a63a986f6305d0fa9ffc6fa0014f7c42206b9a71edef8a
+      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/16927bc8774-400f3e10b3fe.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272019-02-25.tsv&response-content-type=text%2Ftsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220217T225646Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220217%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=3ddd86e018e87581f413b830071ff385c28ea600fe042dc4b220b46961ed2ddd
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=xg1e0xiGsBMa9/V5743zO083jTql+7xnzsx+M0FLH67t4qYGeb3VgJdSAyqmRhWoEHXR6suG7J6gGEs/IHcMChPxte4VxOkykyceUcye2I2BHfHyLx3wa4TS/5wS;
-        Expires=Fri, 18 Feb 2022 18:53:54 GMT; Path=/
-      - AWSALBCORS=xg1e0xiGsBMa9/V5743zO083jTql+7xnzsx+M0FLH67t4qYGeb3VgJdSAyqmRhWoEHXR6suG7J6gGEs/IHcMChPxte4VxOkykyceUcye2I2BHfHyLx3wa4TS/5wS;
-        Expires=Fri, 18 Feb 2022 18:53:54 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=a22785b0730b7b7243cb12062cf8; Path=/; Secure; HttpOnly
+      - AWSALB=w/Ye9AJHkddm8XUpkOD7Pvfndp2Fh9VyzQtG97hP0gFd2C0fZaxbpG1NH8zzF5elNjazYsjM7CBHLOdAs+GLrQGj0pMPhCZwcm/oN25IfDkWwFB2PNB1XWZoMsLl;
+        Expires=Thu, 24 Feb 2022 22:56:46 GMT; Path=/
+      - AWSALBCORS=w/Ye9AJHkddm8XUpkOD7Pvfndp2Fh9VyzQtG97hP0gFd2C0fZaxbpG1NH8zzF5elNjazYsjM7CBHLOdAs+GLrQGj0pMPhCZwcm/oN25IfDkWwFB2PNB1XWZoMsLl;
+        Expires=Thu, 24 Feb 2022 22:56:46 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=9e6fabca1a7d792ec88bbc8db327; Path=/; Secure; HttpOnly
     status:
       code: 303
       message: See Other
@@ -283,7 +283,7 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/16927bc8774-400f3e10b3fe.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272019-02-25.tsv&response-content-type=text%2Ftsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T185354Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3599&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=66583ed234818919c3a63a986f6305d0fa9ffc6fa0014f7c42206b9a71edef8a
+    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/16927bc8774-400f3e10b3fe.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272019-02-25.tsv&response-content-type=text%2Ftsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220217T225646Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220217%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=3ddd86e018e87581f413b830071ff385c28ea600fe042dc4b220b46961ed2ddd
   response:
     body:
       string: "stars\tlanguage\tupdated\tissues\tsize\tforks\twatchers\trepo\tcreated\tdescription\n385\tJava\t2019-02-25\t895\t75"
@@ -299,7 +299,7 @@ interactions:
       Content-Type:
       - text/tsv
       Date:
-      - Fri, 11 Feb 2022 18:53:56 GMT
+      - Thu, 17 Feb 2022 22:56:48 GMT
       ETag:
       - '"9bd94d028049c9a53bca9bb19d4fb57e"'
       Last-Modified:
@@ -307,11 +307,11 @@ interactions:
       Server:
       - AmazonS3
       x-amz-id-2:
-      - W8O3N7IIJfpujtkC8lQDBDCoT/KN4a9KxUn8ecG7XOCWzhgelUhoR2bUdGILPLv+YG1PkrdWQqA=
+      - Vh0xhBGRv3e90msfoGYb1K+kHD+Dc7r8bYgBzRWMEwcRqPO90QWlX6nS8J/LkoN1eMwNbh3hVj0=
       x-amz-replication-status:
       - COMPLETED
       x-amz-request-id:
-      - P90WZKDZ64960DGP
+      - V7EJA8V221QAA3RR
       x-amz-version-id:
       - G4HV36EgT0ykSYXJz5lkF6OjXDYS7_pD
     status:
@@ -345,17 +345,17 @@ interactions:
       Content-Type:
       - application/xml;charset=UTF-8
       Date:
-      - Fri, 11 Feb 2022 18:53:55 GMT
+      - Thu, 17 Feb 2022 22:56:47 GMT
       Location:
-      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/16927bc8774-400f3e10b3fe.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272019-02-25.tsv&response-content-type=text%2Ftsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T185355Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=27f6d905091954504ee4f4ca7305b411bfb5e0d4936acc8847009728a9e25c7e
+      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/16927bc8774-400f3e10b3fe.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272019-02-25.tsv&response-content-type=text%2Ftsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220217T225647Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220217%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=2929f275c57d6a7751119587772cd51aba555695815670f45602f7400bb5cb4c
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=Oe7P7pBsWlkyZhZJ/lWvMcgJUzepyxvxqlduAnMtdsTIUrJ2Op069S3IVvkzpNTeYtFAmEyFDdDyT3MuOMcS2Sl7UUfGj/uNCNPY1IgSjaBHbqjKfBjywCuYJEFb;
-        Expires=Fri, 18 Feb 2022 18:53:55 GMT; Path=/
-      - AWSALBCORS=Oe7P7pBsWlkyZhZJ/lWvMcgJUzepyxvxqlduAnMtdsTIUrJ2Op069S3IVvkzpNTeYtFAmEyFDdDyT3MuOMcS2Sl7UUfGj/uNCNPY1IgSjaBHbqjKfBjywCuYJEFb;
-        Expires=Fri, 18 Feb 2022 18:53:55 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=a227ac3b1ae84bf562d12e876dad; Path=/; Secure; HttpOnly
+      - AWSALB=HgeK3cFlJF2iAWTw0nmuTJ5cRpnDJOKBSkz7n9REZkbunNMvFpK7VVKd+N9mqHHu5IRdvGoeMq4IB3SFHZuLR+0wwv+LCjFaIBbu4hPXvVdhi356+5f/bi5D8Hia;
+        Expires=Thu, 24 Feb 2022 22:56:47 GMT; Path=/
+      - AWSALBCORS=HgeK3cFlJF2iAWTw0nmuTJ5cRpnDJOKBSkz7n9REZkbunNMvFpK7VVKd+N9mqHHu5IRdvGoeMq4IB3SFHZuLR+0wwv+LCjFaIBbu4hPXvVdhi356+5f/bi5D8Hia;
+        Expires=Thu, 24 Feb 2022 22:56:47 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=9e6fdd7377f8794f16e41e20a760; Path=/; Secure; HttpOnly
     status:
       code: 303
       message: See Other
@@ -371,7 +371,7 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: HEAD
-    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/16927bc8774-400f3e10b3fe.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272019-02-25.tsv&response-content-type=text%2Ftsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T185355Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=27f6d905091954504ee4f4ca7305b411bfb5e0d4936acc8847009728a9e25c7e
+    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/16927bc8774-400f3e10b3fe.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272019-02-25.tsv&response-content-type=text%2Ftsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220217T225647Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220217%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=2929f275c57d6a7751119587772cd51aba555695815670f45602f7400bb5cb4c
   response:
     body:
       string: ''
@@ -379,13 +379,13 @@ interactions:
       Content-Type:
       - application/xml
       Date:
-      - Fri, 11 Feb 2022 18:53:55 GMT
+      - Thu, 17 Feb 2022 22:56:47 GMT
       Server:
       - AmazonS3
       x-amz-id-2:
-      - Jaws7x1Qom4ntYv/75ZN/QvqCnMDxQcp6o64EfLATw42WN+pSULjgcU2lvtgCZsYZXb6ENoZcBk=
+      - bMaxUb5J+gepOeZF/xiewOUKk0/prPubbGtOLaGJ73z11td6Oz/f+4EH5mERb14mSSyaYqpeXHc=
       x-amz-request-id:
-      - P90XGF6V9EZP7555
+      - V7ES04Y8TDBX34ZM
     status:
       code: 403
       message: Forbidden
@@ -419,17 +419,17 @@ interactions:
       Content-Length:
       - '0'
       Date:
-      - Fri, 11 Feb 2022 18:53:55 GMT
+      - Thu, 17 Feb 2022 22:56:48 GMT
       Location:
-      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/16927bc8774-400f3e10b3fe.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272019-02-25.tsv&response-content-type=text%2Ftsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T185355Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=27f6d905091954504ee4f4ca7305b411bfb5e0d4936acc8847009728a9e25c7e
+      - https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/16927bc8774-400f3e10b3fe.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272019-02-25.tsv&response-content-type=text%2Ftsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220217T225648Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220217%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=75b490be3be3a184593fce0e1938e7d44cea6e9227db1b8383b402b2ac2d3f90
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=JO9LsY9gLSnZDq2qPn+ldNV5PCDv8CxOQHlGla/hbSbSc0Qb1pSy4peDvHthLa9fnYOewesxWPGtyhKV1F004MGtTCJGwG46ncUrfRWJ4xYCuRIuiU2pQk1AoOGU;
-        Expires=Fri, 18 Feb 2022 18:53:55 GMT; Path=/
-      - AWSALBCORS=JO9LsY9gLSnZDq2qPn+ldNV5PCDv8CxOQHlGla/hbSbSc0Qb1pSy4peDvHthLa9fnYOewesxWPGtyhKV1F004MGtTCJGwG46ncUrfRWJ4xYCuRIuiU2pQk1AoOGU;
-        Expires=Fri, 18 Feb 2022 18:53:55 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=a227cb6aca4e0c0ee95ff313d80d; Path=/; Secure; HttpOnly
+      - AWSALB=rTqx6M1xHP9ZqYeqwUlraPFB0Ql+sYeDF4e3b81Muk8moVFqWjmm2uJJtX+XTRew0WAMKGAKlvy4Wh1I255HabnfOdxFc0D6cI0gQoMCkt79wBDZYxEvqRMjiAfW;
+        Expires=Thu, 24 Feb 2022 22:56:48 GMT; Path=/
+      - AWSALBCORS=rTqx6M1xHP9ZqYeqwUlraPFB0Ql+sYeDF4e3b81Muk8moVFqWjmm2uJJtX+XTRew0WAMKGAKlvy4Wh1I255HabnfOdxFc0D6cI0gQoMCkt79wBDZYxEvqRMjiAfW;
+        Expires=Thu, 24 Feb 2022 22:56:48 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=9e7003d8ab646f865eb6e47d92a0; Path=/; Secure; HttpOnly
     status:
       code: 303
       message: See Other
@@ -447,7 +447,7 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/16927bc8774-400f3e10b3fe.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272019-02-25.tsv&response-content-type=text%2Ftsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220211T185355Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=27f6d905091954504ee4f4ca7305b411bfb5e0d4936acc8847009728a9e25c7e
+    uri: https://dvn-cloud.s3.amazonaws.com/10.7910/DVN/TJCLKP/16927bc8774-400f3e10b3fe.orig?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272019-02-25.tsv&response-content-type=text%2Ftsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220217T225648Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAIEJ3NV7UYCSRJC7A%2F20220217%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=75b490be3be3a184593fce0e1938e7d44cea6e9227db1b8383b402b2ac2d3f90
   response:
     body:
       string: "stars\tlanguage\tupdated\tissues\tsize\tforks\twatchers\trepo\tcreated\tdescription\n385\tJava\t2019-02-25\t895\t75"
@@ -463,7 +463,7 @@ interactions:
       Content-Type:
       - text/tsv
       Date:
-      - Fri, 11 Feb 2022 18:53:57 GMT
+      - Thu, 17 Feb 2022 22:56:49 GMT
       ETag:
       - '"9bd94d028049c9a53bca9bb19d4fb57e"'
       Last-Modified:
@@ -471,11 +471,11 @@ interactions:
       Server:
       - AmazonS3
       x-amz-id-2:
-      - CZxdvADoT/eNQXgsmhYh6s+ecXU1FMlMA2NAflVajeqgCTeWAk0ccLCwNhdMttw/fzUR6MGSo/Y=
+      - hP2hkBBoeFxNHpJN5Nn32Kat7Zdit8RPdXaxIcrFeo59aMUE1WfJntyCt/n/hKXkSb7J5knIEVM=
       x-amz-replication-status:
       - COMPLETED
       x-amz-request-id:
-      - 35G3GDA0D81Z9S64
+      - R1JZTNB2Q386R2HH
       x-amz-version-id:
       - G4HV36EgT0ykSYXJz5lkF6OjXDYS7_pD
     status:
@@ -639,15 +639,15 @@ interactions:
       Content-disposition:
       - attachment; filename="2019-02-25.tab"
       Date:
-      - Fri, 11 Feb 2022 18:53:56 GMT
+      - Thu, 17 Feb 2022 22:56:48 GMT
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=IFRcWYhYfEvIhPgNPjiJL2FN7iUWdin/pjtz3bHXJgk1pFuN+G2VovLI0jLmHkjl2ZCVS48Ap25Abq97CXds9go2Jg8+zWEaDHUncOWZSiNwkvAj2RyMfddomGkC;
-        Expires=Fri, 18 Feb 2022 18:53:56 GMT; Path=/
-      - AWSALBCORS=IFRcWYhYfEvIhPgNPjiJL2FN7iUWdin/pjtz3bHXJgk1pFuN+G2VovLI0jLmHkjl2ZCVS48Ap25Abq97CXds9go2Jg8+zWEaDHUncOWZSiNwkvAj2RyMfddomGkC;
-        Expires=Fri, 18 Feb 2022 18:53:56 GMT; Path=/; SameSite=None; Secure
-      - JSESSIONID=a227f26f4a4a803243cc644b4cab; Path=/; Secure; HttpOnly
+      - AWSALB=Fm4QBcBvN+D2e3dhXYqtnTuNjq5x5pek2rMJD+VlXy62mGDNU4Lubg/mK6+kj2q2NHnk3h+n93uGoPWRzyi65lghv/cnBMKJgNIpu+jg1QpAmxewX9oRg2i+RujL;
+        Expires=Thu, 24 Feb 2022 22:56:48 GMT; Path=/
+      - AWSALBCORS=Fm4QBcBvN+D2e3dhXYqtnTuNjq5x5pek2rMJD+VlXy62mGDNU4Lubg/mK6+kj2q2NHnk3h+n93uGoPWRzyi65lghv/cnBMKJgNIpu+jg1QpAmxewX9oRg2i+RujL;
+        Expires=Thu, 24 Feb 2022 22:56:48 GMT; Path=/; SameSite=None; Secure
+      - JSESSIONID=9e70277a2b8886f32401d92973a6; Path=/; Secure; HttpOnly
     status:
       code: 200
       message: OK
@@ -677,7 +677,7 @@ interactions:
       Content-Type:
       - text/html
       Date:
-      - Fri, 11 Feb 2022 18:53:57 GMT
+      - Thu, 17 Feb 2022 22:56:50 GMT
       ETag:
       - '"2870-5d7246fe0257d"'
       Keep-Alive:

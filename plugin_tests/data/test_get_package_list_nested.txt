@@ -14,7 +14,7 @@ interactions:
     uri: https://cn.dataone.org/cn/v2/query/solr/?q=identifier:%22urn%3Auuid%3A6f5533ab-6508-4ac7-82a3-1df88ed4580e%22&fl=identifier,formatType,formatId,resourceMap&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":385,"params":{"q":"identifier:\"urn:uuid:6f5533ab-6508-4ac7-82a3-1df88ed4580e\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"urn:uuid:6f5533ab-6508-4ac7-82a3-1df88ed4580e","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_urn:uuid:ec4f122b-876f-4e33-818c-2c91e7a2488f"]}]}}
+      string: '{"responseHeader":{"status":0,"QTime":137,"params":{"q":"identifier:\"urn:uuid:6f5533ab-6508-4ac7-82a3-1df88ed4580e\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"urn:uuid:6f5533ab-6508-4ac7-82a3-1df88ed4580e","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_urn:uuid:ec4f122b-876f-4e33-818c-2c91e7a2488f"]}]}}
 
         '
     headers:
@@ -34,7 +34,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:40 GMT
+      - Thu, 17 Feb 2022 22:56:24 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -58,12 +58,12 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_urn%3Auuid%3Aec4f122b-876f-4e33-818c-2c91e7a2488f%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_urn%3Auuid%3Aec4f122b-876f-4e33-818c-2c91e7a2488f%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_urn:uuid:ec4f122b-876f-4e33-818c-2c91e7a2488f\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":8,"start":0,"docs":[{"identifier":"resource_map_urn:uuid:dab72bc5-7f7a-4aa3-98e4-0eeb17ccca94","fileName":"resource_map_urn_uuid_dab72bc5_7f7a_4aa3_98e4_0eeb17ccca94.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":11087,"checksum":"73b74869adc5e4af79165e5e2059b63fd375c6bf"},{"identifier":"urn:uuid:6f5533ab-6508-4ac7-82a3-1df88ed4580e","fileName":"science_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":8940,"checksum":"16916a11612cd837dd1b3de60d1076e5479ad19c","title":"Temperature
+      string: '{"responseHeader":{"status":0,"QTime":31,"params":{"q":"resourceMap:\"resource_map_urn:uuid:ec4f122b-876f-4e33-818c-2c91e7a2488f\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":8,"start":0,"docs":[{"identifier":"resource_map_urn:uuid:dab72bc5-7f7a-4aa3-98e4-0eeb17ccca94","fileName":"resource_map_urn_uuid_dab72bc5_7f7a_4aa3_98e4_0eeb17ccca94.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":11087,"checksum":"73b74869adc5e4af79165e5e2059b63fd375c6bf","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:6f5533ab-6508-4ac7-82a3-1df88ed4580e","fileName":"science_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":8940,"checksum":"16916a11612cd837dd1b3de60d1076e5479ad19c","checksumAlgorithm":"SHA1","title":"Temperature
         and bio-geochemical data from Toolik Lake, Lake N2, Lake E1, Lake E5, and
-        Lake E6, North Slope, Alaska","documents":["resource_map_urn:uuid:dab72bc5-7f7a-4aa3-98e4-0eeb17ccca94","urn:uuid:6f5533ab-6508-4ac7-82a3-1df88ed4580e","resource_map_urn:uuid:d720d3d0-34bc-4d36-9b27-e6589c3a961b","resource_map_urn:uuid:9d06a11b-7c9a-4f83-a87b-df93c11d3f7e","resource_map_urn:uuid:c5d13183-0e4f-4008-9492-b53b2cd40a26","resource_map_urn:uuid:fabf29dc-574c-4cd3-b6b7-9abc3788b179","resource_map_urn:uuid:8c4cb5f6-9b11-4975-9668-c875dc4bbc2a","resource_map_urn:uuid:799b7a86-cb1c-497c-a05a-d73492915cad"]},{"identifier":"resource_map_urn:uuid:c5d13183-0e4f-4008-9492-b53b2cd40a26","fileName":"resource_map_urn_uuid_c5d13183_0e4f_4008_9492_b53b2cd40a26.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":11087,"checksum":"515abea40d4110d4aef5e61f2756e91b732e3d2f"},{"identifier":"resource_map_urn:uuid:d720d3d0-34bc-4d36-9b27-e6589c3a961b","fileName":"resource_map_urn_uuid_d720d3d0_34bc_4d36_9b27_e6589c3a961b.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":9374,"checksum":"8435ad819e43d1367b482fcd6811e42c9cc0db37"},{"identifier":"resource_map_urn:uuid:fabf29dc-574c-4cd3-b6b7-9abc3788b179","fileName":"resource_map_urn_uuid_fabf29dc_574c_4cd3_b6b7_9abc3788b179.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":9374,"checksum":"8f760fc7bb8e09fcc756f95a25a3876748f9054e"},{"identifier":"resource_map_urn:uuid:8c4cb5f6-9b11-4975-9668-c875dc4bbc2a","fileName":"resource_map_urn_uuid_8c4cb5f6_9b11_4975_9668_c875dc4bbc2a.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":9374,"checksum":"0ff2fbee9009dc30711eeb2c99c8bdf9c7f7db0d"},{"identifier":"resource_map_urn:uuid:9d06a11b-7c9a-4f83-a87b-df93c11d3f7e","fileName":"resource_map_urn_uuid_9d06a11b_7c9a_4f83_a87b_df93c11d3f7e.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":9374,"checksum":"a039dbd6d4eed6e8515e0dd9252bb663eed91a1a"},{"identifier":"resource_map_urn:uuid:799b7a86-cb1c-497c-a05a-d73492915cad","fileName":"resource_map_urn_uuid_799b7a86_cb1c_497c_a05a_d73492915cad.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":9374,"checksum":"ca7a6d04923f5220346f5a04087702ee4f069e01"}]}}
+        Lake E6, North Slope, Alaska","documents":["resource_map_urn:uuid:dab72bc5-7f7a-4aa3-98e4-0eeb17ccca94","urn:uuid:6f5533ab-6508-4ac7-82a3-1df88ed4580e","resource_map_urn:uuid:d720d3d0-34bc-4d36-9b27-e6589c3a961b","resource_map_urn:uuid:9d06a11b-7c9a-4f83-a87b-df93c11d3f7e","resource_map_urn:uuid:c5d13183-0e4f-4008-9492-b53b2cd40a26","resource_map_urn:uuid:fabf29dc-574c-4cd3-b6b7-9abc3788b179","resource_map_urn:uuid:8c4cb5f6-9b11-4975-9668-c875dc4bbc2a","resource_map_urn:uuid:799b7a86-cb1c-497c-a05a-d73492915cad"]},{"identifier":"resource_map_urn:uuid:c5d13183-0e4f-4008-9492-b53b2cd40a26","fileName":"resource_map_urn_uuid_c5d13183_0e4f_4008_9492_b53b2cd40a26.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":11087,"checksum":"515abea40d4110d4aef5e61f2756e91b732e3d2f","checksumAlgorithm":"SHA1"},{"identifier":"resource_map_urn:uuid:d720d3d0-34bc-4d36-9b27-e6589c3a961b","fileName":"resource_map_urn_uuid_d720d3d0_34bc_4d36_9b27_e6589c3a961b.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":9374,"checksum":"8435ad819e43d1367b482fcd6811e42c9cc0db37","checksumAlgorithm":"SHA1"},{"identifier":"resource_map_urn:uuid:fabf29dc-574c-4cd3-b6b7-9abc3788b179","fileName":"resource_map_urn_uuid_fabf29dc_574c_4cd3_b6b7_9abc3788b179.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":9374,"checksum":"8f760fc7bb8e09fcc756f95a25a3876748f9054e","checksumAlgorithm":"SHA1"},{"identifier":"resource_map_urn:uuid:8c4cb5f6-9b11-4975-9668-c875dc4bbc2a","fileName":"resource_map_urn_uuid_8c4cb5f6_9b11_4975_9668_c875dc4bbc2a.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":9374,"checksum":"0ff2fbee9009dc30711eeb2c99c8bdf9c7f7db0d","checksumAlgorithm":"SHA1"},{"identifier":"resource_map_urn:uuid:9d06a11b-7c9a-4f83-a87b-df93c11d3f7e","fileName":"resource_map_urn_uuid_9d06a11b_7c9a_4f83_a87b_df93c11d3f7e.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":9374,"checksum":"a039dbd6d4eed6e8515e0dd9252bb663eed91a1a","checksumAlgorithm":"SHA1"},{"identifier":"resource_map_urn:uuid:799b7a86-cb1c-497c-a05a-d73492915cad","fileName":"resource_map_urn_uuid_799b7a86_cb1c_497c_a05a_d73492915cad.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":9374,"checksum":"ca7a6d04923f5220346f5a04087702ee4f069e01","checksumAlgorithm":"SHA1"}]}}
 
         '
     headers:
@@ -83,7 +83,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:41 GMT
+      - Thu, 17 Feb 2022 22:56:25 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -130,7 +130,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:41 GMT
+      - Thu, 17 Feb 2022 22:56:25 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -154,12 +154,12 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_urn%3Auuid%3Adab72bc5-7f7a-4aa3-98e4-0eeb17ccca94%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_urn%3Auuid%3Adab72bc5-7f7a-4aa3-98e4-0eeb17ccca94%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":5,"params":{"q":"resourceMap:\"resource_map_urn:uuid:dab72bc5-7f7a-4aa3-98e4-0eeb17ccca94\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":6,"start":0,"docs":[{"identifier":"urn:uuid:dab72bc5-7f7a-4aa3-98e4-0eeb17ccca94","fileName":"science_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":26873,"checksum":"8afb3953a283f08a3e512a856bdcd3d4dcf9d4e8","title":"Carbon
+      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"resourceMap:\"resource_map_urn:uuid:dab72bc5-7f7a-4aa3-98e4-0eeb17ccca94\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":6,"start":0,"docs":[{"identifier":"urn:uuid:dab72bc5-7f7a-4aa3-98e4-0eeb17ccca94","fileName":"science_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":26873,"checksum":"8afb3953a283f08a3e512a856bdcd3d4dcf9d4e8","checksumAlgorithm":"SHA1","title":"Carbon
         Dioxide and Methane profiles from Toolik Lake, Lake N2, Lake E1, Lake E5,
-        and Lake E6, North Slope, Alaska, 2012-2016","documents":["urn:uuid:fca4711c-eb6e-4a4f-bdfe-8b4c369e3d4c","urn:uuid:5576d6e7-3f85-46a1-9671-246fb2b89564","urn:uuid:24ba4fbe-6230-46be-a675-3b42b5b90a9a","urn:uuid:6bbb39a3-d5f5-4dbc-b1fe-9afba4294ee4","urn:uuid:e9795c28-e094-4e54-bc61-a931f3420460","urn:uuid:dab72bc5-7f7a-4aa3-98e4-0eeb17ccca94"]},{"identifier":"urn:uuid:fca4711c-eb6e-4a4f-bdfe-8b4c369e3d4c","fileName":"N2_lake_dissolved_gases_2012_2016.csv","formatId":"text/csv","formatType":"DATA","size":4141,"checksum":"9d8b5ccdae239548a60020fd8bc21320"},{"identifier":"urn:uuid:5576d6e7-3f85-46a1-9671-246fb2b89564","fileName":"E6_lake_dissolved_gases_2012_2016.csv","formatId":"text/csv","formatType":"DATA","size":1769,"checksum":"aa089bbd58f93c31860b473c537f0e60"},{"identifier":"urn:uuid:24ba4fbe-6230-46be-a675-3b42b5b90a9a","fileName":"toolik_lake_dissolved_gases_2012_2016.csv","formatId":"text/csv","formatType":"DATA","size":9447,"checksum":"7cd1b68635744e168adbabf1c340df09"},{"identifier":"urn:uuid:6bbb39a3-d5f5-4dbc-b1fe-9afba4294ee4","fileName":"E1_lake_dissolved_gases_2012_2016.csv","formatId":"text/csv","formatType":"DATA","size":4990,"checksum":"69cceead0ee0693bb7fb91d7ff99a773"},{"identifier":"urn:uuid:e9795c28-e094-4e54-bc61-a931f3420460","fileName":"E5_lake_dissolved_gases_2012_2016.csv","formatId":"text/csv","formatType":"DATA","size":4388,"checksum":"3d4e11c94bb52c73bc73ed6b182cbb45"}]}}
+        and Lake E6, North Slope, Alaska, 2012-2016","documents":["urn:uuid:fca4711c-eb6e-4a4f-bdfe-8b4c369e3d4c","urn:uuid:5576d6e7-3f85-46a1-9671-246fb2b89564","urn:uuid:24ba4fbe-6230-46be-a675-3b42b5b90a9a","urn:uuid:6bbb39a3-d5f5-4dbc-b1fe-9afba4294ee4","urn:uuid:e9795c28-e094-4e54-bc61-a931f3420460","urn:uuid:dab72bc5-7f7a-4aa3-98e4-0eeb17ccca94"]},{"identifier":"urn:uuid:fca4711c-eb6e-4a4f-bdfe-8b4c369e3d4c","fileName":"N2_lake_dissolved_gases_2012_2016.csv","formatId":"text/csv","formatType":"DATA","size":4141,"checksum":"9d8b5ccdae239548a60020fd8bc21320","checksumAlgorithm":"MD5"},{"identifier":"urn:uuid:5576d6e7-3f85-46a1-9671-246fb2b89564","fileName":"E6_lake_dissolved_gases_2012_2016.csv","formatId":"text/csv","formatType":"DATA","size":1769,"checksum":"aa089bbd58f93c31860b473c537f0e60","checksumAlgorithm":"MD5"},{"identifier":"urn:uuid:24ba4fbe-6230-46be-a675-3b42b5b90a9a","fileName":"toolik_lake_dissolved_gases_2012_2016.csv","formatId":"text/csv","formatType":"DATA","size":9447,"checksum":"7cd1b68635744e168adbabf1c340df09","checksumAlgorithm":"MD5"},{"identifier":"urn:uuid:6bbb39a3-d5f5-4dbc-b1fe-9afba4294ee4","fileName":"E1_lake_dissolved_gases_2012_2016.csv","formatId":"text/csv","formatType":"DATA","size":4990,"checksum":"69cceead0ee0693bb7fb91d7ff99a773","checksumAlgorithm":"MD5"},{"identifier":"urn:uuid:e9795c28-e094-4e54-bc61-a931f3420460","fileName":"E5_lake_dissolved_gases_2012_2016.csv","formatId":"text/csv","formatType":"DATA","size":4388,"checksum":"3d4e11c94bb52c73bc73ed6b182cbb45","checksumAlgorithm":"MD5"}]}}
 
         '
     headers:
@@ -179,7 +179,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:42 GMT
+      - Thu, 17 Feb 2022 22:56:26 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -206,7 +206,7 @@ interactions:
     uri: https://cn.dataone.org/cn/v2/query/solr/?q=identifier:%22resource_map_urn%3Auuid%3Ac5d13183-0e4f-4008-9492-b53b2cd40a26%22&fl=identifier,formatType,formatId,resourceMap&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":43,"params":{"q":"identifier:\"resource_map_urn:uuid:c5d13183-0e4f-4008-9492-b53b2cd40a26\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"resource_map_urn:uuid:c5d13183-0e4f-4008-9492-b53b2cd40a26","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","resourceMap":["resource_map_urn:uuid:431105b1-52ee-4324-9182-11e59e2b6efe","resource_map_urn:uuid:ec4f122b-876f-4e33-818c-2c91e7a2488f"]}]}}
+      string: '{"responseHeader":{"status":0,"QTime":5,"params":{"q":"identifier:\"resource_map_urn:uuid:c5d13183-0e4f-4008-9492-b53b2cd40a26\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"resource_map_urn:uuid:c5d13183-0e4f-4008-9492-b53b2cd40a26","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","resourceMap":["resource_map_urn:uuid:431105b1-52ee-4324-9182-11e59e2b6efe","resource_map_urn:uuid:ec4f122b-876f-4e33-818c-2c91e7a2488f"]}]}}
 
         '
     headers:
@@ -226,7 +226,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:42 GMT
+      - Thu, 17 Feb 2022 22:56:26 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -250,12 +250,12 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_urn%3Auuid%3Ac5d13183-0e4f-4008-9492-b53b2cd40a26%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_urn%3Auuid%3Ac5d13183-0e4f-4008-9492-b53b2cd40a26%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_urn:uuid:c5d13183-0e4f-4008-9492-b53b2cd40a26\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":6,"start":0,"docs":[{"identifier":"urn:uuid:c5d13183-0e4f-4008-9492-b53b2cd40a26","fileName":"science_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":35150,"checksum":"f40ff20f640e7a528eda8be2b3b7c1afd101a0ff","title":"Temperature
+      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_urn:uuid:c5d13183-0e4f-4008-9492-b53b2cd40a26\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":6,"start":0,"docs":[{"identifier":"urn:uuid:c5d13183-0e4f-4008-9492-b53b2cd40a26","fileName":"science_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":35150,"checksum":"f40ff20f640e7a528eda8be2b3b7c1afd101a0ff","checksumAlgorithm":"SHA1","title":"Temperature
         and bio-geochemical profiles from Toolik Lake, Lake N2, Lake E1, Lake E5,
-        and Lake E6, North Slope, Alaska, 2012-2016","documents":["urn:uuid:49fc8dcc-5a03-49a3-a148-c11c03b4d709","urn:uuid:9c383d4e-d671-4ebb-9b03-1c868156d803","urn:uuid:207f7199-c8a8-41ef-b313-76df28557ccc","urn:uuid:c5d13183-0e4f-4008-9492-b53b2cd40a26","urn:uuid:639eecc5-857a-4649-a73b-000b15e56fb4","urn:uuid:556280b3-781d-4c43-b4ca-b93008f38226"]},{"identifier":"urn:uuid:49fc8dcc-5a03-49a3-a148-c11c03b4d709","fileName":"E5_lake_physchem_2012_2016.csv","formatId":"text/csv","formatType":"DATA","size":14367,"checksum":"7639fd8c8f719051450fb2b538e09ceb"},{"identifier":"urn:uuid:9c383d4e-d671-4ebb-9b03-1c868156d803","fileName":"N2_lake_physchem_2012_2016.csv","formatId":"text/csv","formatType":"DATA","size":9978,"checksum":"e61f46d4ec952d276fce88f6ebdf5c98"},{"identifier":"urn:uuid:207f7199-c8a8-41ef-b313-76df28557ccc","fileName":"toolik_lake_physchem_2012_2016.csv","formatId":"text/csv","formatType":"DATA","size":32570,"checksum":"076b127c27eca0fbb507f08efdab9428"},{"identifier":"urn:uuid:639eecc5-857a-4649-a73b-000b15e56fb4","fileName":"E1_lake_physchem_2012_2016.csv","formatId":"text/csv","formatType":"DATA","size":14970,"checksum":"fb2a29980930c919bc131b1168c307ff"},{"identifier":"urn:uuid:556280b3-781d-4c43-b4ca-b93008f38226","fileName":"E6_lake_physchem_2012_2016.csv","formatId":"text/csv","formatType":"DATA","size":4422,"checksum":"9297e9a6d6b73b451cbe69d1cc66c48b"}]}}
+        and Lake E6, North Slope, Alaska, 2012-2016","documents":["urn:uuid:49fc8dcc-5a03-49a3-a148-c11c03b4d709","urn:uuid:9c383d4e-d671-4ebb-9b03-1c868156d803","urn:uuid:207f7199-c8a8-41ef-b313-76df28557ccc","urn:uuid:c5d13183-0e4f-4008-9492-b53b2cd40a26","urn:uuid:639eecc5-857a-4649-a73b-000b15e56fb4","urn:uuid:556280b3-781d-4c43-b4ca-b93008f38226"]},{"identifier":"urn:uuid:49fc8dcc-5a03-49a3-a148-c11c03b4d709","fileName":"E5_lake_physchem_2012_2016.csv","formatId":"text/csv","formatType":"DATA","size":14367,"checksum":"7639fd8c8f719051450fb2b538e09ceb","checksumAlgorithm":"MD5"},{"identifier":"urn:uuid:9c383d4e-d671-4ebb-9b03-1c868156d803","fileName":"N2_lake_physchem_2012_2016.csv","formatId":"text/csv","formatType":"DATA","size":9978,"checksum":"e61f46d4ec952d276fce88f6ebdf5c98","checksumAlgorithm":"MD5"},{"identifier":"urn:uuid:207f7199-c8a8-41ef-b313-76df28557ccc","fileName":"toolik_lake_physchem_2012_2016.csv","formatId":"text/csv","formatType":"DATA","size":32570,"checksum":"076b127c27eca0fbb507f08efdab9428","checksumAlgorithm":"MD5"},{"identifier":"urn:uuid:639eecc5-857a-4649-a73b-000b15e56fb4","fileName":"E1_lake_physchem_2012_2016.csv","formatId":"text/csv","formatType":"DATA","size":14970,"checksum":"fb2a29980930c919bc131b1168c307ff","checksumAlgorithm":"MD5"},{"identifier":"urn:uuid:556280b3-781d-4c43-b4ca-b93008f38226","fileName":"E6_lake_physchem_2012_2016.csv","formatId":"text/csv","formatType":"DATA","size":4422,"checksum":"9297e9a6d6b73b451cbe69d1cc66c48b","checksumAlgorithm":"MD5"}]}}
 
         '
     headers:
@@ -275,7 +275,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:43 GMT
+      - Thu, 17 Feb 2022 22:56:27 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -302,7 +302,7 @@ interactions:
     uri: https://cn.dataone.org/cn/v2/query/solr/?q=identifier:%22resource_map_urn%3Auuid%3Ad720d3d0-34bc-4d36-9b27-e6589c3a961b%22&fl=identifier,formatType,formatId,resourceMap&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"identifier:\"resource_map_urn:uuid:d720d3d0-34bc-4d36-9b27-e6589c3a961b\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"resource_map_urn:uuid:d720d3d0-34bc-4d36-9b27-e6589c3a961b","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","resourceMap":["resource_map_urn:uuid:431105b1-52ee-4324-9182-11e59e2b6efe","resource_map_urn:uuid:ec4f122b-876f-4e33-818c-2c91e7a2488f"]}]}}
+      string: '{"responseHeader":{"status":0,"QTime":62,"params":{"q":"identifier:\"resource_map_urn:uuid:d720d3d0-34bc-4d36-9b27-e6589c3a961b\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"resource_map_urn:uuid:d720d3d0-34bc-4d36-9b27-e6589c3a961b","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","resourceMap":["resource_map_urn:uuid:431105b1-52ee-4324-9182-11e59e2b6efe","resource_map_urn:uuid:ec4f122b-876f-4e33-818c-2c91e7a2488f"]}]}}
 
         '
     headers:
@@ -322,7 +322,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:44 GMT
+      - Thu, 17 Feb 2022 22:56:27 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -346,12 +346,12 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_urn%3Auuid%3Ad720d3d0-34bc-4d36-9b27-e6589c3a961b%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_urn%3Auuid%3Ad720d3d0-34bc-4d36-9b27-e6589c3a961b%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_urn:uuid:d720d3d0-34bc-4d36-9b27-e6589c3a961b\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":5,"start":0,"docs":[{"identifier":"urn:uuid:d720d3d0-34bc-4d36-9b27-e6589c3a961b","fileName":"E5_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":8502,"checksum":"9f0b49df9cb333ca4f72047e57c234084cbb04c9","title":"Time
+      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_urn:uuid:d720d3d0-34bc-4d36-9b27-e6589c3a961b\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":5,"start":0,"docs":[{"identifier":"urn:uuid:d720d3d0-34bc-4d36-9b27-e6589c3a961b","fileName":"E5_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":8502,"checksum":"9f0b49df9cb333ca4f72047e57c234084cbb04c9","checksumAlgorithm":"SHA1","title":"Time
         series of water temperature, specific conductance, and oxygen from Lake E5,
-        North Slope, Alaska","documents":["resource_map_doi:10.18739/A22W0R","urn:uuid:d720d3d0-34bc-4d36-9b27-e6589c3a961b","resource_map_doi:10.18739/A2BC5Z","resource_map_doi:10.18739/A26K2N","resource_map_doi:10.18739/A2G287"]},{"identifier":"resource_map_doi:10.18739/A22W0R","fileName":"resource_map_doi_10_18739_A22W0R.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":6182,"checksum":"8298c4f5dc1f7171d876b83ddf7834d657e814df"},{"identifier":"resource_map_doi:10.18739/A2BC5Z","fileName":"resource_map_doi_10_18739_A2BC5Z.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":8776,"checksum":"26889239070e0a29c0e05a6338dc4b2cfe72bb50"},{"identifier":"resource_map_doi:10.18739/A2G287","fileName":"resource_map_doi_10_18739_A2G287.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":8776,"checksum":"40061fd659d5e1afd18b3b276360dcedc97c2af2"},{"identifier":"resource_map_doi:10.18739/A26K2N","fileName":"resource_map_doi_10_18739_A26K2N.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":8776,"checksum":"d8507a4c05b235c4e0418c6c322e677b52ae58ac"}]}}
+        North Slope, Alaska","documents":["resource_map_doi:10.18739/A22W0R","urn:uuid:d720d3d0-34bc-4d36-9b27-e6589c3a961b","resource_map_doi:10.18739/A2BC5Z","resource_map_doi:10.18739/A26K2N","resource_map_doi:10.18739/A2G287"]},{"identifier":"resource_map_doi:10.18739/A22W0R","fileName":"resource_map_doi_10_18739_A22W0R.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":6182,"checksum":"8298c4f5dc1f7171d876b83ddf7834d657e814df","checksumAlgorithm":"SHA1"},{"identifier":"resource_map_doi:10.18739/A2BC5Z","fileName":"resource_map_doi_10_18739_A2BC5Z.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":8776,"checksum":"26889239070e0a29c0e05a6338dc4b2cfe72bb50","checksumAlgorithm":"SHA1"},{"identifier":"resource_map_doi:10.18739/A2G287","fileName":"resource_map_doi_10_18739_A2G287.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":8776,"checksum":"40061fd659d5e1afd18b3b276360dcedc97c2af2","checksumAlgorithm":"SHA1"},{"identifier":"resource_map_doi:10.18739/A26K2N","fileName":"resource_map_doi_10_18739_A26K2N.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":8776,"checksum":"d8507a4c05b235c4e0418c6c322e677b52ae58ac","checksumAlgorithm":"SHA1"}]}}
 
         '
     headers:
@@ -371,7 +371,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:44 GMT
+      - Thu, 17 Feb 2022 22:56:28 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -398,7 +398,7 @@ interactions:
     uri: https://cn.dataone.org/cn/v2/query/solr/?q=identifier:%22doi%3A10.18739%2FA22W0R%22&fl=identifier,formatType,formatId,resourceMap&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"identifier:\"doi:10.18739/A22W0R\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A22W0R","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.18739/A22W0R"]}]}}
+      string: '{"responseHeader":{"status":0,"QTime":5,"params":{"q":"identifier:\"doi:10.18739/A22W0R\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A22W0R","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.18739/A22W0R"]}]}}
 
         '
     headers:
@@ -418,7 +418,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:45 GMT
+      - Thu, 17 Feb 2022 22:56:29 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -442,12 +442,12 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA22W0R%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA22W0R%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A22W0R\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":3,"start":0,"docs":[{"identifier":"doi:10.18739/A22W0R","fileName":"E5_2013metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":31522,"checksum":"599724b1820528954c5127b1d6c8991f6fdc1ea9","title":"Time
+      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A22W0R\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":3,"start":0,"docs":[{"identifier":"doi:10.18739/A22W0R","fileName":"E5_2013metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":31522,"checksum":"599724b1820528954c5127b1d6c8991f6fdc1ea9","checksumAlgorithm":"SHA1","title":"Time
         series of water temperature, specific conductance, and oxygen from Lake E5,
-        North Slope, Alaska, 2012-2013","documents":["doi:10.18739/A22W0R","urn:uuid:50a17fbf-2739-45ea-970a-f5d1a60fb20a","urn:uuid:9f4a0258-dae2-4bf3-857d-bd65704a1b03"]},{"identifier":"urn:uuid:50a17fbf-2739-45ea-970a-f5d1a60fb20a","fileName":"2013_summer_E5_temperature.csv","formatId":"text/csv","formatType":"DATA","size":3622122,"checksum":"adb37a480217b4eb396eacad1eab5ba3b1766a3d"},{"identifier":"urn:uuid:9f4a0258-dae2-4bf3-857d-bd65704a1b03","fileName":"2012_2013_winter_E5_temperature.csv","formatId":"text/csv","formatType":"DATA","size":6959182,"checksum":"3451a4d56b444a4448c8841aec8258abcd035af0"}]}}
+        North Slope, Alaska, 2012-2013","documents":["doi:10.18739/A22W0R","urn:uuid:50a17fbf-2739-45ea-970a-f5d1a60fb20a","urn:uuid:9f4a0258-dae2-4bf3-857d-bd65704a1b03"]},{"identifier":"urn:uuid:50a17fbf-2739-45ea-970a-f5d1a60fb20a","fileName":"2013_summer_E5_temperature.csv","formatId":"text/csv","formatType":"DATA","size":3622122,"checksum":"adb37a480217b4eb396eacad1eab5ba3b1766a3d","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:9f4a0258-dae2-4bf3-857d-bd65704a1b03","fileName":"2012_2013_winter_E5_temperature.csv","formatId":"text/csv","formatType":"DATA","size":6959182,"checksum":"3451a4d56b444a4448c8841aec8258abcd035af0","checksumAlgorithm":"SHA1"}]}}
 
         '
     headers:
@@ -467,7 +467,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:45 GMT
+      - Thu, 17 Feb 2022 22:56:29 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -494,7 +494,7 @@ interactions:
     uri: https://cn.dataone.org/cn/v2/query/solr/?q=identifier:%22doi%3A10.18739%2FA2BC5Z%22&fl=identifier,formatType,formatId,resourceMap&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":5,"params":{"q":"identifier:\"doi:10.18739/A2BC5Z\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2BC5Z","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.18739/A2BC5Z"]}]}}
+      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"identifier:\"doi:10.18739/A2BC5Z\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2BC5Z","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.18739/A2BC5Z"]}]}}
 
         '
     headers:
@@ -514,7 +514,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:46 GMT
+      - Thu, 17 Feb 2022 22:56:30 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -538,12 +538,12 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2BC5Z%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2BC5Z%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2BC5Z\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":5,"start":0,"docs":[{"identifier":"doi:10.18739/A2BC5Z","fileName":"E5_2015metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":38791,"checksum":"6cb8ef51eb0ece66325ff87e8f1e0010e2dcf8cd","title":"Time
+      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2BC5Z\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":5,"start":0,"docs":[{"identifier":"doi:10.18739/A2BC5Z","fileName":"E5_2015metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":38791,"checksum":"6cb8ef51eb0ece66325ff87e8f1e0010e2dcf8cd","checksumAlgorithm":"SHA1","title":"Time
         series of water temperature, specific conductance, and oxygen from Lake E5,
-        North Slope, Alaska, 2014-2015","documents":["urn:uuid:79ef7020-4fe7-4c58-96ee-1e4e5b987bf1","urn:uuid:784fa863-365a-467f-a971-c6770045c21e","doi:10.18739/A2BC5Z","urn:uuid:005e2d00-ffa7-4c36-993d-b26f2ab72fb1","urn:uuid:fb6cc63f-e818-4e22-bd89-b2eb3747cd9b"]},{"identifier":"urn:uuid:79ef7020-4fe7-4c58-96ee-1e4e5b987bf1","fileName":"2015_summer_E5_temperature.csv","formatId":"text/csv","formatType":"DATA","size":3697500,"checksum":"5636fef8862bf331347fc1c9d8a098917cf0b414"},{"identifier":"urn:uuid:784fa863-365a-467f-a971-c6770045c21e","fileName":"2014_2015_winter_E5_temperature.csv","formatId":"text/csv","formatType":"DATA","size":11630685,"checksum":"cbfb04968b1d5230fe6f43c26e187ea87993fa3c"},{"identifier":"urn:uuid:005e2d00-ffa7-4c36-993d-b26f2ab72fb1","fileName":"2014_2015_winter_E5_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":1775633,"checksum":"3227bde927050473acca20b5534acfe35e891da1"},{"identifier":"urn:uuid:fb6cc63f-e818-4e22-bd89-b2eb3747cd9b","fileName":"2014_2015_winter_E5_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":483867,"checksum":"d71a47d3e058909d83e2692a58d7d49648e38744"}]}}
+        North Slope, Alaska, 2014-2015","documents":["urn:uuid:79ef7020-4fe7-4c58-96ee-1e4e5b987bf1","urn:uuid:784fa863-365a-467f-a971-c6770045c21e","doi:10.18739/A2BC5Z","urn:uuid:005e2d00-ffa7-4c36-993d-b26f2ab72fb1","urn:uuid:fb6cc63f-e818-4e22-bd89-b2eb3747cd9b"]},{"identifier":"urn:uuid:79ef7020-4fe7-4c58-96ee-1e4e5b987bf1","fileName":"2015_summer_E5_temperature.csv","formatId":"text/csv","formatType":"DATA","size":3697500,"checksum":"5636fef8862bf331347fc1c9d8a098917cf0b414","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:784fa863-365a-467f-a971-c6770045c21e","fileName":"2014_2015_winter_E5_temperature.csv","formatId":"text/csv","formatType":"DATA","size":11630685,"checksum":"cbfb04968b1d5230fe6f43c26e187ea87993fa3c","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:005e2d00-ffa7-4c36-993d-b26f2ab72fb1","fileName":"2014_2015_winter_E5_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":1775633,"checksum":"3227bde927050473acca20b5534acfe35e891da1","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:fb6cc63f-e818-4e22-bd89-b2eb3747cd9b","fileName":"2014_2015_winter_E5_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":483867,"checksum":"d71a47d3e058909d83e2692a58d7d49648e38744","checksumAlgorithm":"SHA1"}]}}
 
         '
     headers:
@@ -563,7 +563,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:46 GMT
+      - Thu, 17 Feb 2022 22:56:30 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -610,7 +610,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:47 GMT
+      - Thu, 17 Feb 2022 22:56:30 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -634,12 +634,12 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2G287%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2G287%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2G287\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":5,"start":0,"docs":[{"identifier":"doi:10.18739/A2G287","fileName":"E5_2016metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":39461,"checksum":"0841f4e07888afc77de945b09808f1888418c6dd","title":"Time
+      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2G287\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":5,"start":0,"docs":[{"identifier":"doi:10.18739/A2G287","fileName":"E5_2016metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":39461,"checksum":"0841f4e07888afc77de945b09808f1888418c6dd","checksumAlgorithm":"SHA1","title":"Time
         series of water temperature, specific conductance, and oxygen from Lake E5,
-        North Slope, Alaska, 2015-2016","documents":["urn:uuid:e9ed7bcf-09b1-433b-be83-e785cba3415e","urn:uuid:40e919f6-40a3-4e43-a8cd-ff2673521073","urn:uuid:c3705341-2035-402a-a26d-b017b48a75b9","doi:10.18739/A2G287","urn:uuid:3466b4c0-ea49-443b-a6fd-e96443564323"]},{"identifier":"urn:uuid:e9ed7bcf-09b1-433b-be83-e785cba3415e","fileName":"2015_2016_winter_E5_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":522118,"checksum":"608475578c6ecf34cd7ddbc8565ccbfa68daa534"},{"identifier":"urn:uuid:40e919f6-40a3-4e43-a8cd-ff2673521073","fileName":"2016_summer_E5_temperature.csv","formatId":"text/csv","formatType":"DATA","size":2889371,"checksum":"063c0c24ea4d05b3dbadd4bb0edbb6e6a0ac7137"},{"identifier":"urn:uuid:c3705341-2035-402a-a26d-b017b48a75b9","fileName":"2015_2016_winter_E5_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":1865414,"checksum":"5370dbb7e36cc4b73787cba883f05e0f7407cc7e"},{"identifier":"urn:uuid:3466b4c0-ea49-443b-a6fd-e96443564323","fileName":"2015_2016_winter_E5_temperature.csv","formatId":"text/csv","formatType":"DATA","size":12259272,"checksum":"05005ef0480be71aeea7ebdebcd2cbd6bcaa5010"}]}}
+        North Slope, Alaska, 2015-2016","documents":["urn:uuid:e9ed7bcf-09b1-433b-be83-e785cba3415e","urn:uuid:40e919f6-40a3-4e43-a8cd-ff2673521073","urn:uuid:c3705341-2035-402a-a26d-b017b48a75b9","doi:10.18739/A2G287","urn:uuid:3466b4c0-ea49-443b-a6fd-e96443564323"]},{"identifier":"urn:uuid:e9ed7bcf-09b1-433b-be83-e785cba3415e","fileName":"2015_2016_winter_E5_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":522118,"checksum":"608475578c6ecf34cd7ddbc8565ccbfa68daa534","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:40e919f6-40a3-4e43-a8cd-ff2673521073","fileName":"2016_summer_E5_temperature.csv","formatId":"text/csv","formatType":"DATA","size":2889371,"checksum":"063c0c24ea4d05b3dbadd4bb0edbb6e6a0ac7137","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:c3705341-2035-402a-a26d-b017b48a75b9","fileName":"2015_2016_winter_E5_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":1865414,"checksum":"5370dbb7e36cc4b73787cba883f05e0f7407cc7e","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:3466b4c0-ea49-443b-a6fd-e96443564323","fileName":"2015_2016_winter_E5_temperature.csv","formatId":"text/csv","formatType":"DATA","size":12259272,"checksum":"05005ef0480be71aeea7ebdebcd2cbd6bcaa5010","checksumAlgorithm":"SHA1"}]}}
 
         '
     headers:
@@ -659,7 +659,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:47 GMT
+      - Thu, 17 Feb 2022 22:56:31 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -686,7 +686,7 @@ interactions:
     uri: https://cn.dataone.org/cn/v2/query/solr/?q=identifier:%22doi%3A10.18739%2FA26K2N%22&fl=identifier,formatType,formatId,resourceMap&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"identifier:\"doi:10.18739/A26K2N\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A26K2N","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.18739/A26K2N"]}]}}
+      string: '{"responseHeader":{"status":0,"QTime":6,"params":{"q":"identifier:\"doi:10.18739/A26K2N\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A26K2N","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.18739/A26K2N"]}]}}
 
         '
     headers:
@@ -706,7 +706,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:48 GMT
+      - Thu, 17 Feb 2022 22:56:31 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -730,12 +730,12 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA26K2N%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA26K2N%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A26K2N\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":5,"start":0,"docs":[{"identifier":"doi:10.18739/A26K2N","fileName":"E5_2014metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":39491,"checksum":"29f7a706dad351d31184ee9b301a94e447b9216a","title":"Time
+      string: '{"responseHeader":{"status":0,"QTime":5,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A26K2N\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":5,"start":0,"docs":[{"identifier":"doi:10.18739/A26K2N","fileName":"E5_2014metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":39491,"checksum":"29f7a706dad351d31184ee9b301a94e447b9216a","checksumAlgorithm":"SHA1","title":"Time
         series of water temperature, specific conductance, and oxygen from Lake E5,
-        North Slope, Alaska, 2013-2014","documents":["urn:uuid:6ce71af2-4deb-43d8-ad9d-c045f913855b","urn:uuid:d6f2ad00-70be-4359-a656-bc3cb5a76b1b","doi:10.18739/A26K2N","urn:uuid:39bc0782-b56d-4943-929d-af90b63579ad","urn:uuid:8d8e38e6-cea0-4048-b628-c748e0c7f0d0"]},{"identifier":"urn:uuid:6ce71af2-4deb-43d8-ad9d-c045f913855b","fileName":"2013_2014_winter_E5_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":467919,"checksum":"10ba0c391a7e318e221fda177505a10412b0df33"},{"identifier":"urn:uuid:d6f2ad00-70be-4359-a656-bc3cb5a76b1b","fileName":"2014_summer_E5_temperature.csv","formatId":"text/csv","formatType":"DATA","size":3239402,"checksum":"7ed91f499184dba36c4c903869c12d96e0cb61f1"},{"identifier":"urn:uuid:39bc0782-b56d-4943-929d-af90b63579ad","fileName":"2013_2014_winter_E5_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":1395110,"checksum":"c475d9e83161311469c8b831771886bee7cd722c"},{"identifier":"urn:uuid:8d8e38e6-cea0-4048-b628-c748e0c7f0d0","fileName":"2013_2014_winter_E5_temperature.csv","formatId":"text/csv","formatType":"DATA","size":11365382,"checksum":"d43f039f3e806143d71916d8dabe30638f4c6244"}]}}
+        North Slope, Alaska, 2013-2014","documents":["urn:uuid:6ce71af2-4deb-43d8-ad9d-c045f913855b","urn:uuid:d6f2ad00-70be-4359-a656-bc3cb5a76b1b","doi:10.18739/A26K2N","urn:uuid:39bc0782-b56d-4943-929d-af90b63579ad","urn:uuid:8d8e38e6-cea0-4048-b628-c748e0c7f0d0"]},{"identifier":"urn:uuid:6ce71af2-4deb-43d8-ad9d-c045f913855b","fileName":"2013_2014_winter_E5_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":467919,"checksum":"10ba0c391a7e318e221fda177505a10412b0df33","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:d6f2ad00-70be-4359-a656-bc3cb5a76b1b","fileName":"2014_summer_E5_temperature.csv","formatId":"text/csv","formatType":"DATA","size":3239402,"checksum":"7ed91f499184dba36c4c903869c12d96e0cb61f1","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:39bc0782-b56d-4943-929d-af90b63579ad","fileName":"2013_2014_winter_E5_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":1395110,"checksum":"c475d9e83161311469c8b831771886bee7cd722c","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:8d8e38e6-cea0-4048-b628-c748e0c7f0d0","fileName":"2013_2014_winter_E5_temperature.csv","formatId":"text/csv","formatType":"DATA","size":11365382,"checksum":"d43f039f3e806143d71916d8dabe30638f4c6244","checksumAlgorithm":"SHA1"}]}}
 
         '
     headers:
@@ -755,7 +755,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:48 GMT
+      - Thu, 17 Feb 2022 22:56:32 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -782,7 +782,7 @@ interactions:
     uri: https://cn.dataone.org/cn/v2/query/solr/?q=identifier:%22resource_map_urn%3Auuid%3Afabf29dc-574c-4cd3-b6b7-9abc3788b179%22&fl=identifier,formatType,formatId,resourceMap&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":52,"params":{"q":"identifier:\"resource_map_urn:uuid:fabf29dc-574c-4cd3-b6b7-9abc3788b179\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"resource_map_urn:uuid:fabf29dc-574c-4cd3-b6b7-9abc3788b179","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","resourceMap":["resource_map_urn:uuid:431105b1-52ee-4324-9182-11e59e2b6efe","resource_map_urn:uuid:ec4f122b-876f-4e33-818c-2c91e7a2488f"]}]}}
+      string: '{"responseHeader":{"status":0,"QTime":35,"params":{"q":"identifier:\"resource_map_urn:uuid:fabf29dc-574c-4cd3-b6b7-9abc3788b179\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"resource_map_urn:uuid:fabf29dc-574c-4cd3-b6b7-9abc3788b179","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","resourceMap":["resource_map_urn:uuid:431105b1-52ee-4324-9182-11e59e2b6efe","resource_map_urn:uuid:ec4f122b-876f-4e33-818c-2c91e7a2488f"]}]}}
 
         '
     headers:
@@ -802,7 +802,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:49 GMT
+      - Thu, 17 Feb 2022 22:56:32 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -826,12 +826,12 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_urn%3Auuid%3Afabf29dc-574c-4cd3-b6b7-9abc3788b179%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_urn%3Auuid%3Afabf29dc-574c-4cd3-b6b7-9abc3788b179%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_urn:uuid:fabf29dc-574c-4cd3-b6b7-9abc3788b179\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":5,"start":0,"docs":[{"identifier":"urn:uuid:fabf29dc-574c-4cd3-b6b7-9abc3788b179","fileName":"N2_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":8502,"checksum":"58645e7a21b9314eb41471358137369d71a4e135","title":"Time
+      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_urn:uuid:fabf29dc-574c-4cd3-b6b7-9abc3788b179\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":5,"start":0,"docs":[{"identifier":"urn:uuid:fabf29dc-574c-4cd3-b6b7-9abc3788b179","fileName":"N2_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":8502,"checksum":"58645e7a21b9314eb41471358137369d71a4e135","checksumAlgorithm":"SHA1","title":"Time
         series of water temperature, specific conductance, and oxygen from Lake N2,
-        North Slope, Alaska","documents":["resource_map_doi:10.18739/A2C86M","urn:uuid:fabf29dc-574c-4cd3-b6b7-9abc3788b179","resource_map_doi:10.18739/A2H28J","resource_map_doi:10.18739/A27K3B","resource_map_doi:10.18739/A23W02"]},{"identifier":"resource_map_doi:10.18739/A2C86M","fileName":"resource_map_doi_10_18739_A2C86M.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":7479,"checksum":"4aa876539d85a930067aad493a8cbf8feb198570"},{"identifier":"resource_map_doi:10.18739/A2H28J","fileName":"resource_map_doi_10_18739_A2H28J.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":10073,"checksum":"3478c744994f75dff8774fd522b3d4fa593ae6ef"},{"identifier":"resource_map_doi:10.18739/A27K3B","fileName":"resource_map_doi_10_18739_A27K3B.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":8776,"checksum":"c696a4306814e1554c63cbe37c0f2fa1b0b198db"},{"identifier":"resource_map_doi:10.18739/A23W02","fileName":"resource_map_doi_10_18739_A23W02.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":10073,"checksum":"bb1e3d7e471e189f14762670531d0a95121b426d"}]}}
+        North Slope, Alaska","documents":["resource_map_doi:10.18739/A2C86M","urn:uuid:fabf29dc-574c-4cd3-b6b7-9abc3788b179","resource_map_doi:10.18739/A2H28J","resource_map_doi:10.18739/A27K3B","resource_map_doi:10.18739/A23W02"]},{"identifier":"resource_map_doi:10.18739/A2C86M","fileName":"resource_map_doi_10_18739_A2C86M.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":7479,"checksum":"4aa876539d85a930067aad493a8cbf8feb198570","checksumAlgorithm":"SHA1"},{"identifier":"resource_map_doi:10.18739/A2H28J","fileName":"resource_map_doi_10_18739_A2H28J.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":10073,"checksum":"3478c744994f75dff8774fd522b3d4fa593ae6ef","checksumAlgorithm":"SHA1"},{"identifier":"resource_map_doi:10.18739/A27K3B","fileName":"resource_map_doi_10_18739_A27K3B.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":8776,"checksum":"c696a4306814e1554c63cbe37c0f2fa1b0b198db","checksumAlgorithm":"SHA1"},{"identifier":"resource_map_doi:10.18739/A23W02","fileName":"resource_map_doi_10_18739_A23W02.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":10073,"checksum":"bb1e3d7e471e189f14762670531d0a95121b426d","checksumAlgorithm":"SHA1"}]}}
 
         '
     headers:
@@ -851,7 +851,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:49 GMT
+      - Thu, 17 Feb 2022 22:56:33 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -878,7 +878,7 @@ interactions:
     uri: https://cn.dataone.org/cn/v2/query/solr/?q=identifier:%22doi%3A10.18739%2FA2C86M%22&fl=identifier,formatType,formatId,resourceMap&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":5,"params":{"q":"identifier:\"doi:10.18739/A2C86M\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2C86M","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.18739/A2C86M"]}]}}
+      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"identifier:\"doi:10.18739/A2C86M\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2C86M","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.18739/A2C86M"]}]}}
 
         '
     headers:
@@ -898,7 +898,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:50 GMT
+      - Thu, 17 Feb 2022 22:56:33 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -922,12 +922,12 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2C86M%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2C86M%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2C86M\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":4,"start":0,"docs":[{"identifier":"doi:10.18739/A2C86M","fileName":"N2_2016metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":27618,"checksum":"68d68e9d44c8ff63650ff62e6da3c4719e19c281","title":"Time
+      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2C86M\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":4,"start":0,"docs":[{"identifier":"doi:10.18739/A2C86M","fileName":"N2_2016metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":27618,"checksum":"68d68e9d44c8ff63650ff62e6da3c4719e19c281","checksumAlgorithm":"SHA1","title":"Time
         series of water temperature, specific conductance, and oxygen from Lake N2,
-        North Slope, Alaska, 2015-2016","documents":["urn:uuid:49b91560-6677-4a63-a090-0d0a72074423","urn:uuid:b34d202d-84b8-47c7-ab26-17440034e972","doi:10.18739/A2C86M","urn:uuid:b081764e-0e12-4687-a0bd-5b055c915a52"]},{"identifier":"urn:uuid:49b91560-6677-4a63-a090-0d0a72074423","fileName":"2015_2016_winter_N2_temperature.csv","formatId":"text/csv","formatType":"DATA","size":9175080,"checksum":"fb76077dc714398b3e51d67da41150a24e79cd96"},{"identifier":"urn:uuid:b34d202d-84b8-47c7-ab26-17440034e972","fileName":"2015_2016_winter_N2_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":669063,"checksum":"50a24513daf82163306f5682c4f18eb725850014"},{"identifier":"urn:uuid:b081764e-0e12-4687-a0bd-5b055c915a52","fileName":"2015_2016_winter_N2_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":2274196,"checksum":"ed5a98dde9ebe3a4a961e0a0e69085d22e3232e8"}]}}
+        North Slope, Alaska, 2015-2016","documents":["urn:uuid:49b91560-6677-4a63-a090-0d0a72074423","urn:uuid:b34d202d-84b8-47c7-ab26-17440034e972","doi:10.18739/A2C86M","urn:uuid:b081764e-0e12-4687-a0bd-5b055c915a52"]},{"identifier":"urn:uuid:49b91560-6677-4a63-a090-0d0a72074423","fileName":"2015_2016_winter_N2_temperature.csv","formatId":"text/csv","formatType":"DATA","size":9175080,"checksum":"fb76077dc714398b3e51d67da41150a24e79cd96","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:b34d202d-84b8-47c7-ab26-17440034e972","fileName":"2015_2016_winter_N2_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":669063,"checksum":"50a24513daf82163306f5682c4f18eb725850014","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:b081764e-0e12-4687-a0bd-5b055c915a52","fileName":"2015_2016_winter_N2_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":2274196,"checksum":"ed5a98dde9ebe3a4a961e0a0e69085d22e3232e8","checksumAlgorithm":"SHA1"}]}}
 
         '
     headers:
@@ -947,7 +947,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:50 GMT
+      - Thu, 17 Feb 2022 22:56:34 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -994,7 +994,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:51 GMT
+      - Thu, 17 Feb 2022 22:56:35 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -1018,12 +1018,12 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2H28J%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2H28J%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2H28J\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":6,"start":0,"docs":[{"identifier":"doi:10.18739/A2H28J","fileName":"N2_2013metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":38906,"checksum":"424ea8933b85fe46b0e4802dc4059d2d1da5d938","title":"Time
+      string: '{"responseHeader":{"status":0,"QTime":35,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2H28J\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":6,"start":0,"docs":[{"identifier":"doi:10.18739/A2H28J","fileName":"N2_2013metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":38906,"checksum":"424ea8933b85fe46b0e4802dc4059d2d1da5d938","checksumAlgorithm":"SHA1","title":"Time
         series of water temperature, specific conductance, and oxygen from Lake N2,
-        North Slope, Alaska, 2012-2013","documents":["doi:10.18739/A2H28J","urn:uuid:4bb9e442-d2c9-49a7-85a3-1f91f202ff0f","urn:uuid:512aa14f-4e80-41fa-9da7-66af91121769","urn:uuid:9eb988c5-efec-4969-a251-fec3cea05960","urn:uuid:eb08eae3-825a-4705-b1fd-787f831d15b1","urn:uuid:962fdbb6-52b0-4836-a182-2fe33e664145"]},{"identifier":"urn:uuid:4bb9e442-d2c9-49a7-85a3-1f91f202ff0f","fileName":"2013_summer_N2_temperature.csv","formatId":"text/csv","formatType":"DATA","size":3236585,"checksum":"c65916dd4970a338802677ea3860b20aec85072f"},{"identifier":"urn:uuid:512aa14f-4e80-41fa-9da7-66af91121769","fileName":"2013_summer_N2_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":98037,"checksum":"170ad3e8fa88ed91c5476d6403b8bbb80eb6a3d8"},{"identifier":"urn:uuid:9eb988c5-efec-4969-a251-fec3cea05960","fileName":"2012_2013_winter_N2_temperature.csv","formatId":"text/csv","formatType":"DATA","size":7884365,"checksum":"b014c99213f3b4afaaf0ecd97573aba53fb91f99"},{"identifier":"urn:uuid:eb08eae3-825a-4705-b1fd-787f831d15b1","fileName":"2012_2013_winter_N2_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":660777,"checksum":"33ab82fe3e08de9240c99d82453fa54cdbec5626"},{"identifier":"urn:uuid:962fdbb6-52b0-4836-a182-2fe33e664145","fileName":"2012_2013_winter_N2_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":1342424,"checksum":"9c90aae40e87c8f4a62dda69f2d1787a059ccaa3"}]}}
+        North Slope, Alaska, 2012-2013","documents":["doi:10.18739/A2H28J","urn:uuid:4bb9e442-d2c9-49a7-85a3-1f91f202ff0f","urn:uuid:512aa14f-4e80-41fa-9da7-66af91121769","urn:uuid:9eb988c5-efec-4969-a251-fec3cea05960","urn:uuid:eb08eae3-825a-4705-b1fd-787f831d15b1","urn:uuid:962fdbb6-52b0-4836-a182-2fe33e664145"]},{"identifier":"urn:uuid:4bb9e442-d2c9-49a7-85a3-1f91f202ff0f","fileName":"2013_summer_N2_temperature.csv","formatId":"text/csv","formatType":"DATA","size":3236585,"checksum":"c65916dd4970a338802677ea3860b20aec85072f","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:512aa14f-4e80-41fa-9da7-66af91121769","fileName":"2013_summer_N2_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":98037,"checksum":"170ad3e8fa88ed91c5476d6403b8bbb80eb6a3d8","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:9eb988c5-efec-4969-a251-fec3cea05960","fileName":"2012_2013_winter_N2_temperature.csv","formatId":"text/csv","formatType":"DATA","size":7884365,"checksum":"b014c99213f3b4afaaf0ecd97573aba53fb91f99","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:eb08eae3-825a-4705-b1fd-787f831d15b1","fileName":"2012_2013_winter_N2_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":660777,"checksum":"33ab82fe3e08de9240c99d82453fa54cdbec5626","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:962fdbb6-52b0-4836-a182-2fe33e664145","fileName":"2012_2013_winter_N2_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":1342424,"checksum":"9c90aae40e87c8f4a62dda69f2d1787a059ccaa3","checksumAlgorithm":"SHA1"}]}}
 
         '
     headers:
@@ -1043,7 +1043,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:52 GMT
+      - Thu, 17 Feb 2022 22:56:35 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -1070,7 +1070,7 @@ interactions:
     uri: https://cn.dataone.org/cn/v2/query/solr/?q=identifier:%22doi%3A10.18739%2FA27K3B%22&fl=identifier,formatType,formatId,resourceMap&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"identifier:\"doi:10.18739/A27K3B\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A27K3B","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.18739/A27K3B"]}]}}
+      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"identifier:\"doi:10.18739/A27K3B\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A27K3B","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.18739/A27K3B"]}]}}
 
         '
     headers:
@@ -1090,7 +1090,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:52 GMT
+      - Thu, 17 Feb 2022 22:56:36 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -1114,12 +1114,12 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA27K3B%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA27K3B%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A27K3B\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":5,"start":0,"docs":[{"identifier":"doi:10.18739/A27K3B","fileName":"N2_2015metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":38880,"checksum":"0c6b886002a274721368ead7ec804ce6cf8fae11","title":"Time
+      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A27K3B\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":5,"start":0,"docs":[{"identifier":"doi:10.18739/A27K3B","fileName":"N2_2015metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":38880,"checksum":"0c6b886002a274721368ead7ec804ce6cf8fae11","checksumAlgorithm":"SHA1","title":"Time
         series of water temperature, specific conductance, and oxygen from Lake N2,
-        North Slope, Alaska, 2014-2015","documents":["urn:uuid:c9fde2ea-cca0-431d-b0ff-84b93edfd78c","doi:10.18739/A27K3B","urn:uuid:25a90f3d-f0d9-4a24-8f1a-3288e398f0f0","urn:uuid:f745841f-1c85-4d28-b2a6-14a083db8224","urn:uuid:df23ddc4-1c81-4386-9d77-705b93788d97"]},{"identifier":"urn:uuid:c9fde2ea-cca0-431d-b0ff-84b93edfd78c","fileName":"2014_2015_winter_N2_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":764082,"checksum":"cc61366702b62cdbc87693b21a0d976384ac05d5"},{"identifier":"urn:uuid:25a90f3d-f0d9-4a24-8f1a-3288e398f0f0","fileName":"2014_2015_winter_N2_temperature.csv","formatId":"text/csv","formatType":"DATA","size":8186731,"checksum":"6e5d70c2912c15db9d0905d7677d70100c33a0fc"},{"identifier":"urn:uuid:f745841f-1c85-4d28-b2a6-14a083db8224","fileName":"2014_2015_winter_N2_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":2041484,"checksum":"e4ed353b375ecc082cabc6a6bc37dcf1960c780c"},{"identifier":"urn:uuid:df23ddc4-1c81-4386-9d77-705b93788d97","fileName":"2015_summer_N2_temperature.csv","formatId":"text/csv","formatType":"DATA","size":3959476,"checksum":"1e7486cb82ef2b7b6ee187e947169e14847a8cb4"}]}}
+        North Slope, Alaska, 2014-2015","documents":["urn:uuid:c9fde2ea-cca0-431d-b0ff-84b93edfd78c","doi:10.18739/A27K3B","urn:uuid:25a90f3d-f0d9-4a24-8f1a-3288e398f0f0","urn:uuid:f745841f-1c85-4d28-b2a6-14a083db8224","urn:uuid:df23ddc4-1c81-4386-9d77-705b93788d97"]},{"identifier":"urn:uuid:c9fde2ea-cca0-431d-b0ff-84b93edfd78c","fileName":"2014_2015_winter_N2_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":764082,"checksum":"cc61366702b62cdbc87693b21a0d976384ac05d5","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:25a90f3d-f0d9-4a24-8f1a-3288e398f0f0","fileName":"2014_2015_winter_N2_temperature.csv","formatId":"text/csv","formatType":"DATA","size":8186731,"checksum":"6e5d70c2912c15db9d0905d7677d70100c33a0fc","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:f745841f-1c85-4d28-b2a6-14a083db8224","fileName":"2014_2015_winter_N2_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":2041484,"checksum":"e4ed353b375ecc082cabc6a6bc37dcf1960c780c","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:df23ddc4-1c81-4386-9d77-705b93788d97","fileName":"2015_summer_N2_temperature.csv","formatId":"text/csv","formatType":"DATA","size":3959476,"checksum":"1e7486cb82ef2b7b6ee187e947169e14847a8cb4","checksumAlgorithm":"SHA1"}]}}
 
         '
     headers:
@@ -1139,7 +1139,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:53 GMT
+      - Thu, 17 Feb 2022 22:56:36 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -1186,7 +1186,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:53 GMT
+      - Thu, 17 Feb 2022 22:56:37 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -1210,12 +1210,12 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA23W02%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA23W02%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A23W02\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":6,"start":0,"docs":[{"identifier":"doi:10.18739/A23W02","fileName":"N2_2014metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":42453,"checksum":"f7c1212997168aa780bef05c26268e86005d5ada","title":"Time
+      string: '{"responseHeader":{"status":0,"QTime":6,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A23W02\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":6,"start":0,"docs":[{"identifier":"doi:10.18739/A23W02","fileName":"N2_2014metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":42453,"checksum":"f7c1212997168aa780bef05c26268e86005d5ada","checksumAlgorithm":"SHA1","title":"Time
         series of water temperature, specific conductance, and oxygen from Lake N2,
-        North Slope, Alaska, 2013-2014","documents":["urn:uuid:6c2d697e-bd0f-4449-9bf4-c76f191bc417","urn:uuid:bdd04c25-73f9-4d17-bc91-3c38bf05d561","doi:10.18739/A23W02","urn:uuid:62451306-55f6-4392-a548-5e57edff2ccc","urn:uuid:0e648447-b685-4a8d-b2d1-9143c799509f","urn:uuid:76770fec-8b7e-43b9-8b50-821bd042af95"]},{"identifier":"urn:uuid:6c2d697e-bd0f-4449-9bf4-c76f191bc417","fileName":"2013_2014_winter_N2_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":805573,"checksum":"9fd522397d85bda454d01da14dd55352301ad4b9"},{"identifier":"urn:uuid:bdd04c25-73f9-4d17-bc91-3c38bf05d561","fileName":"2014_summer_N2_temperature.csv","formatId":"text/csv","formatType":"DATA","size":3985764,"checksum":"21bd934c2079ebd69ef386a5aa092a44c5af2ab2"},{"identifier":"urn:uuid:62451306-55f6-4392-a548-5e57edff2ccc","fileName":"2013_2014_winter_N2_temperature.csv","formatId":"text/csv","formatType":"DATA","size":8799847,"checksum":"cc3364e8b73e37b7667c146d0ab4fc54ab1e73c0"},{"identifier":"urn:uuid:0e648447-b685-4a8d-b2d1-9143c799509f","fileName":"2013_2014_winter_N2_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":2199099,"checksum":"1dba4ba9056414a1ae94d9f7681f14e0642d9c66"},{"identifier":"urn:uuid:76770fec-8b7e-43b9-8b50-821bd042af95","fileName":"2014_summer_N2_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":109399,"checksum":"27c32a7104c34bb01694abc2a2882b1925135bfc"}]}}
+        North Slope, Alaska, 2013-2014","documents":["urn:uuid:6c2d697e-bd0f-4449-9bf4-c76f191bc417","urn:uuid:bdd04c25-73f9-4d17-bc91-3c38bf05d561","doi:10.18739/A23W02","urn:uuid:62451306-55f6-4392-a548-5e57edff2ccc","urn:uuid:0e648447-b685-4a8d-b2d1-9143c799509f","urn:uuid:76770fec-8b7e-43b9-8b50-821bd042af95"]},{"identifier":"urn:uuid:6c2d697e-bd0f-4449-9bf4-c76f191bc417","fileName":"2013_2014_winter_N2_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":805573,"checksum":"9fd522397d85bda454d01da14dd55352301ad4b9","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:bdd04c25-73f9-4d17-bc91-3c38bf05d561","fileName":"2014_summer_N2_temperature.csv","formatId":"text/csv","formatType":"DATA","size":3985764,"checksum":"21bd934c2079ebd69ef386a5aa092a44c5af2ab2","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:62451306-55f6-4392-a548-5e57edff2ccc","fileName":"2013_2014_winter_N2_temperature.csv","formatId":"text/csv","formatType":"DATA","size":8799847,"checksum":"cc3364e8b73e37b7667c146d0ab4fc54ab1e73c0","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:0e648447-b685-4a8d-b2d1-9143c799509f","fileName":"2013_2014_winter_N2_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":2199099,"checksum":"1dba4ba9056414a1ae94d9f7681f14e0642d9c66","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:76770fec-8b7e-43b9-8b50-821bd042af95","fileName":"2014_summer_N2_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":109399,"checksum":"27c32a7104c34bb01694abc2a2882b1925135bfc","checksumAlgorithm":"SHA1"}]}}
 
         '
     headers:
@@ -1235,7 +1235,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:54 GMT
+      - Thu, 17 Feb 2022 22:56:37 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -1262,7 +1262,7 @@ interactions:
     uri: https://cn.dataone.org/cn/v2/query/solr/?q=identifier:%22resource_map_urn%3Auuid%3A8c4cb5f6-9b11-4975-9668-c875dc4bbc2a%22&fl=identifier,formatType,formatId,resourceMap&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":84,"params":{"q":"identifier:\"resource_map_urn:uuid:8c4cb5f6-9b11-4975-9668-c875dc4bbc2a\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"resource_map_urn:uuid:8c4cb5f6-9b11-4975-9668-c875dc4bbc2a","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","resourceMap":["resource_map_urn:uuid:431105b1-52ee-4324-9182-11e59e2b6efe","resource_map_urn:uuid:ec4f122b-876f-4e33-818c-2c91e7a2488f"]}]}}
+      string: '{"responseHeader":{"status":0,"QTime":55,"params":{"q":"identifier:\"resource_map_urn:uuid:8c4cb5f6-9b11-4975-9668-c875dc4bbc2a\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"resource_map_urn:uuid:8c4cb5f6-9b11-4975-9668-c875dc4bbc2a","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","resourceMap":["resource_map_urn:uuid:431105b1-52ee-4324-9182-11e59e2b6efe","resource_map_urn:uuid:ec4f122b-876f-4e33-818c-2c91e7a2488f"]}]}}
 
         '
     headers:
@@ -1282,7 +1282,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:54 GMT
+      - Thu, 17 Feb 2022 22:56:38 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -1306,12 +1306,12 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_urn%3Auuid%3A8c4cb5f6-9b11-4975-9668-c875dc4bbc2a%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_urn%3Auuid%3A8c4cb5f6-9b11-4975-9668-c875dc4bbc2a%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_urn:uuid:8c4cb5f6-9b11-4975-9668-c875dc4bbc2a\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":5,"start":0,"docs":[{"identifier":"resource_map_doi:10.18739/A2JW1G","fileName":"resource_map_doi_10_18739_A2JW1G.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":8776,"checksum":"de0ba9a404e75852021dcf87f41fbff343772cdd"},{"identifier":"urn:uuid:8c4cb5f6-9b11-4975-9668-c875dc4bbc2a","fileName":"E6_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":8502,"checksum":"8f91e5448e2a5b9c023a037c6d84c7ec5fa5dc9e","title":"Time
+      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"resourceMap:\"resource_map_urn:uuid:8c4cb5f6-9b11-4975-9668-c875dc4bbc2a\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":5,"start":0,"docs":[{"identifier":"resource_map_doi:10.18739/A2JW1G","fileName":"resource_map_doi_10_18739_A2JW1G.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":8776,"checksum":"de0ba9a404e75852021dcf87f41fbff343772cdd","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:8c4cb5f6-9b11-4975-9668-c875dc4bbc2a","fileName":"E6_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":8502,"checksum":"8f91e5448e2a5b9c023a037c6d84c7ec5fa5dc9e","checksumAlgorithm":"SHA1","title":"Time
         series of water temperature, specific conductance, and oxygen from Lake E6,
-        North Slope, Alaska","documents":["resource_map_doi:10.18739/A2TC59","resource_map_doi:10.18739/A2Z577","resource_map_doi:10.18739/A2JW1G","resource_map_doi:10.18739/A2PK3C","urn:uuid:8c4cb5f6-9b11-4975-9668-c875dc4bbc2a"]},{"identifier":"resource_map_doi:10.18739/A2PK3C","fileName":"resource_map_doi_10_18739_A2PK3C.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":8776,"checksum":"6452715031e8dc11ff54a1d80bdb319cfa3db0ca"},{"identifier":"resource_map_doi:10.18739/A2TC59","fileName":"resource_map_doi_10_18739_A2TC59.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":6182,"checksum":"4632f30186500935ebcebc02af0d795badfd061b"},{"identifier":"resource_map_doi:10.18739/A2Z577","fileName":"resource_map_doi_10_18739_A2Z577.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":8776,"checksum":"773c1f613a72571593fefb06845c08761ea89e06"}]}}
+        North Slope, Alaska","documents":["resource_map_doi:10.18739/A2TC59","resource_map_doi:10.18739/A2Z577","resource_map_doi:10.18739/A2JW1G","resource_map_doi:10.18739/A2PK3C","urn:uuid:8c4cb5f6-9b11-4975-9668-c875dc4bbc2a"]},{"identifier":"resource_map_doi:10.18739/A2PK3C","fileName":"resource_map_doi_10_18739_A2PK3C.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":8776,"checksum":"6452715031e8dc11ff54a1d80bdb319cfa3db0ca","checksumAlgorithm":"SHA1"},{"identifier":"resource_map_doi:10.18739/A2TC59","fileName":"resource_map_doi_10_18739_A2TC59.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":6182,"checksum":"4632f30186500935ebcebc02af0d795badfd061b","checksumAlgorithm":"SHA1"},{"identifier":"resource_map_doi:10.18739/A2Z577","fileName":"resource_map_doi_10_18739_A2Z577.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":8776,"checksum":"773c1f613a72571593fefb06845c08761ea89e06","checksumAlgorithm":"SHA1"}]}}
 
         '
     headers:
@@ -1331,7 +1331,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:55 GMT
+      - Thu, 17 Feb 2022 22:56:38 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -1358,7 +1358,7 @@ interactions:
     uri: https://cn.dataone.org/cn/v2/query/solr/?q=identifier:%22doi%3A10.18739%2FA2JW1G%22&fl=identifier,formatType,formatId,resourceMap&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"identifier:\"doi:10.18739/A2JW1G\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2JW1G","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.18739/A2JW1G"]}]}}
+      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"identifier:\"doi:10.18739/A2JW1G\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2JW1G","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.18739/A2JW1G"]}]}}
 
         '
     headers:
@@ -1378,7 +1378,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:55 GMT
+      - Thu, 17 Feb 2022 22:56:39 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -1402,12 +1402,12 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2JW1G%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2JW1G%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2JW1G\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":5,"start":0,"docs":[{"identifier":"doi:10.18739/A2JW1G","fileName":"E6_2015metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":34381,"checksum":"c044000832748b2113d14183b6dc0aad0ff6c6b6","title":"Time
+      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2JW1G\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":5,"start":0,"docs":[{"identifier":"doi:10.18739/A2JW1G","fileName":"E6_2015metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":34381,"checksum":"c044000832748b2113d14183b6dc0aad0ff6c6b6","checksumAlgorithm":"SHA1","title":"Time
         series of water temperature, specific conductance, and oxygen from Lake E6,
-        North Slope, Alaska, 2014-2015","documents":["urn:uuid:0d6d5a8e-aee9-4e97-9bb0-670d1a3a27eb","urn:uuid:137f1358-db67-48c7-970b-697f0540825a","urn:uuid:9b92cef6-e401-4902-8f9b-5c03e92ee174","urn:uuid:18e9fdec-94ca-49a3-9615-ca247de56cda","doi:10.18739/A2JW1G"]},{"identifier":"urn:uuid:137f1358-db67-48c7-970b-697f0540825a","fileName":"2014_2015_winter_E6_temperature.csv","formatId":"text/csv","formatType":"DATA","size":7001630,"checksum":"d3fa2f4251c2e5d31b19fff8c785fa54d5b22ca2"},{"identifier":"urn:uuid:0d6d5a8e-aee9-4e97-9bb0-670d1a3a27eb","fileName":"2014_2015_winter_E6_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":798736,"checksum":"9ebf19205d2061485e0ea14505c4212fde0593f4"},{"identifier":"urn:uuid:9b92cef6-e401-4902-8f9b-5c03e92ee174","fileName":"2015_summer_E6_temperature.csv","formatId":"text/csv","formatType":"DATA","size":2599637,"checksum":"1007fc995f128d6235e33455fc164d5ced75de70"},{"identifier":"urn:uuid:18e9fdec-94ca-49a3-9615-ca247de56cda","fileName":"2014_2015_winter_E6_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":294911,"checksum":"f7f2ff82f735c8f66d9ff1b7bd9efe755630dd50"}]}}
+        North Slope, Alaska, 2014-2015","documents":["urn:uuid:0d6d5a8e-aee9-4e97-9bb0-670d1a3a27eb","urn:uuid:137f1358-db67-48c7-970b-697f0540825a","urn:uuid:9b92cef6-e401-4902-8f9b-5c03e92ee174","urn:uuid:18e9fdec-94ca-49a3-9615-ca247de56cda","doi:10.18739/A2JW1G"]},{"identifier":"urn:uuid:137f1358-db67-48c7-970b-697f0540825a","fileName":"2014_2015_winter_E6_temperature.csv","formatId":"text/csv","formatType":"DATA","size":7001630,"checksum":"d3fa2f4251c2e5d31b19fff8c785fa54d5b22ca2","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:0d6d5a8e-aee9-4e97-9bb0-670d1a3a27eb","fileName":"2014_2015_winter_E6_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":798736,"checksum":"9ebf19205d2061485e0ea14505c4212fde0593f4","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:9b92cef6-e401-4902-8f9b-5c03e92ee174","fileName":"2015_summer_E6_temperature.csv","formatId":"text/csv","formatType":"DATA","size":2599637,"checksum":"1007fc995f128d6235e33455fc164d5ced75de70","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:18e9fdec-94ca-49a3-9615-ca247de56cda","fileName":"2014_2015_winter_E6_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":294911,"checksum":"f7f2ff82f735c8f66d9ff1b7bd9efe755630dd50","checksumAlgorithm":"SHA1"}]}}
 
         '
     headers:
@@ -1427,7 +1427,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:56 GMT
+      - Thu, 17 Feb 2022 22:56:39 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -1454,7 +1454,7 @@ interactions:
     uri: https://cn.dataone.org/cn/v2/query/solr/?q=identifier:%22doi%3A10.18739%2FA2PK3C%22&fl=identifier,formatType,formatId,resourceMap&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":5,"params":{"q":"identifier:\"doi:10.18739/A2PK3C\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2PK3C","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.18739/A2PK3C"]}]}}
+      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"identifier:\"doi:10.18739/A2PK3C\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2PK3C","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.18739/A2PK3C"]}]}}
 
         '
     headers:
@@ -1474,7 +1474,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:56 GMT
+      - Thu, 17 Feb 2022 22:56:40 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -1498,12 +1498,12 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2PK3C%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2PK3C%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2PK3C\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":5,"start":0,"docs":[{"identifier":"doi:10.18739/A2PK3C","fileName":"E6_2016metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":32344,"checksum":"590b744d60bbeb048f047e05468dbd5c2ed28b02","title":"Time
+      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2PK3C\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":5,"start":0,"docs":[{"identifier":"doi:10.18739/A2PK3C","fileName":"E6_2016metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":32344,"checksum":"590b744d60bbeb048f047e05468dbd5c2ed28b02","checksumAlgorithm":"SHA1","title":"Time
         series of water temperature, specific conductance, and oxygen from Lake E6,
-        North Slope, Alaska, 2015-2016","documents":["urn:uuid:c160536c-80d7-4db1-9973-f2b222fa9634","urn:uuid:35b7bd04-50a1-44d9-b7b3-e704cf2bfc0b","doi:10.18739/A2PK3C","urn:uuid:84ce5e6b-7206-444d-a8e6-98d9c5279644","urn:uuid:6b59982f-9f9a-4769-a12a-eb56b8966e5c"]},{"identifier":"urn:uuid:c160536c-80d7-4db1-9973-f2b222fa9634","fileName":"2016_summer_E6_temperature.csv","formatId":"text/csv","formatType":"DATA","size":1925158,"checksum":"94a6a5a7dc97eaff8043371ab44a8ab2808bdbb9"},{"identifier":"urn:uuid:35b7bd04-50a1-44d9-b7b3-e704cf2bfc0b","fileName":"2015_2016_winter_E6_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":1197456,"checksum":"ab5903cd3172836db38ce13b9d011edebd9b9753"},{"identifier":"urn:uuid:84ce5e6b-7206-444d-a8e6-98d9c5279644","fileName":"2015_2016_winter_E6_temperature.csv","formatId":"text/csv","formatType":"DATA","size":6833526,"checksum":"6a7e1b2019796e48be8904a226e3124f4a9f018d"},{"identifier":"urn:uuid:6b59982f-9f9a-4769-a12a-eb56b8966e5c","fileName":"2015_2016_winter_E6_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":503972,"checksum":"4a47b33e4d4aff2c2b79bf0e77dfb5f8dc26f3de"}]}}
+        North Slope, Alaska, 2015-2016","documents":["urn:uuid:c160536c-80d7-4db1-9973-f2b222fa9634","urn:uuid:35b7bd04-50a1-44d9-b7b3-e704cf2bfc0b","doi:10.18739/A2PK3C","urn:uuid:84ce5e6b-7206-444d-a8e6-98d9c5279644","urn:uuid:6b59982f-9f9a-4769-a12a-eb56b8966e5c"]},{"identifier":"urn:uuid:c160536c-80d7-4db1-9973-f2b222fa9634","fileName":"2016_summer_E6_temperature.csv","formatId":"text/csv","formatType":"DATA","size":1925158,"checksum":"94a6a5a7dc97eaff8043371ab44a8ab2808bdbb9","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:35b7bd04-50a1-44d9-b7b3-e704cf2bfc0b","fileName":"2015_2016_winter_E6_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":1197456,"checksum":"ab5903cd3172836db38ce13b9d011edebd9b9753","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:84ce5e6b-7206-444d-a8e6-98d9c5279644","fileName":"2015_2016_winter_E6_temperature.csv","formatId":"text/csv","formatType":"DATA","size":6833526,"checksum":"6a7e1b2019796e48be8904a226e3124f4a9f018d","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:6b59982f-9f9a-4769-a12a-eb56b8966e5c","fileName":"2015_2016_winter_E6_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":503972,"checksum":"4a47b33e4d4aff2c2b79bf0e77dfb5f8dc26f3de","checksumAlgorithm":"SHA1"}]}}
 
         '
     headers:
@@ -1523,7 +1523,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:57 GMT
+      - Thu, 17 Feb 2022 22:56:40 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -1570,7 +1570,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:57 GMT
+      - Thu, 17 Feb 2022 22:56:41 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -1594,12 +1594,12 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2TC59%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2TC59%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2TC59\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":3,"start":0,"docs":[{"identifier":"doi:10.18739/A2TC59","fileName":"E6_2013metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":26487,"checksum":"e1bfa94d35627c8636c474c118553eb7b0811ba5","title":"Time
+      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2TC59\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":3,"start":0,"docs":[{"identifier":"doi:10.18739/A2TC59","fileName":"E6_2013metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":26487,"checksum":"e1bfa94d35627c8636c474c118553eb7b0811ba5","checksumAlgorithm":"SHA1","title":"Time
         series of water temperature, specific conductance, and oxygen from Lake E6,
-        North Slope, Alaska, 2012-2013","documents":["doi:10.18739/A2TC59","urn:uuid:b440e41f-0647-41eb-a071-de92bcba818b","urn:uuid:0bf1c4b3-53ba-4a30-82a5-f713155eb5aa"]},{"identifier":"urn:uuid:b440e41f-0647-41eb-a071-de92bcba818b","fileName":"2013_summer_E6_temperature.csv","formatId":"text/csv","formatType":"DATA","size":1809400,"checksum":"bdb953fb3420896d4c9d1699aa9411a4a5d8c637"},{"identifier":"urn:uuid:0bf1c4b3-53ba-4a30-82a5-f713155eb5aa","fileName":"2012_2013_winter_E6_temperature.csv","formatId":"text/csv","formatType":"DATA","size":10530736,"checksum":"e6e4ca55727c73e8c986b9c35a9d86b14d93a3ed"}]}}
+        North Slope, Alaska, 2012-2013","documents":["doi:10.18739/A2TC59","urn:uuid:b440e41f-0647-41eb-a071-de92bcba818b","urn:uuid:0bf1c4b3-53ba-4a30-82a5-f713155eb5aa"]},{"identifier":"urn:uuid:b440e41f-0647-41eb-a071-de92bcba818b","fileName":"2013_summer_E6_temperature.csv","formatId":"text/csv","formatType":"DATA","size":1809400,"checksum":"bdb953fb3420896d4c9d1699aa9411a4a5d8c637","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:0bf1c4b3-53ba-4a30-82a5-f713155eb5aa","fileName":"2012_2013_winter_E6_temperature.csv","formatId":"text/csv","formatType":"DATA","size":10530736,"checksum":"e6e4ca55727c73e8c986b9c35a9d86b14d93a3ed","checksumAlgorithm":"SHA1"}]}}
 
         '
     headers:
@@ -1619,7 +1619,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:58 GMT
+      - Thu, 17 Feb 2022 22:56:41 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -1666,7 +1666,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:58 GMT
+      - Thu, 17 Feb 2022 22:56:42 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -1690,12 +1690,12 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2Z577%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2Z577%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2Z577\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":5,"start":0,"docs":[{"identifier":"doi:10.18739/A2Z577","fileName":"E6_2014metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":33677,"checksum":"7032f4d37b494c719c9a0ec83172a1dc08d67951","title":"Time
+      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2Z577\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":5,"start":0,"docs":[{"identifier":"doi:10.18739/A2Z577","fileName":"E6_2014metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":33677,"checksum":"7032f4d37b494c719c9a0ec83172a1dc08d67951","checksumAlgorithm":"SHA1","title":"Time
         series of water temperature, specific conductance, and oxygen from Lake E6,
-        North Slope, Alaska, 2013-2014","documents":["urn:uuid:bc1384cc-9fd7-46ff-8083-293ea9f6cf96","urn:uuid:45846689-fcee-46ba-a406-7b3111df6be7","urn:uuid:1dad74ea-15e6-4c48-8201-9c16a13a79f6","doi:10.18739/A2Z577","urn:uuid:96b95e50-a665-42a2-af92-0647514154b1"]},{"identifier":"urn:uuid:bc1384cc-9fd7-46ff-8083-293ea9f6cf96","fileName":"2013_2014_winter_E6_temperature.csv","formatId":"text/csv","formatType":"DATA","size":7576278,"checksum":"2460bd6f3bdd30ef8f6ce618a86a186195651d3c"},{"identifier":"urn:uuid:45846689-fcee-46ba-a406-7b3111df6be7","fileName":"2013_2014_winter_E6_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":311796,"checksum":"e7a4d14fa9ec6fc08899405326f94ef8737fff61"},{"identifier":"urn:uuid:1dad74ea-15e6-4c48-8201-9c16a13a79f6","fileName":"2014_summer_E6_temperature.csv","formatId":"text/csv","formatType":"DATA","size":2563014,"checksum":"32f2c33dab67a13528684b45f93a076f31d0b471"},{"identifier":"urn:uuid:96b95e50-a665-42a2-af92-0647514154b1","fileName":"2013_2014_winter_E6_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":891254,"checksum":"eef3d10109c478e49f18e6357d9f7eeb041978d6"}]}}
+        North Slope, Alaska, 2013-2014","documents":["urn:uuid:bc1384cc-9fd7-46ff-8083-293ea9f6cf96","urn:uuid:45846689-fcee-46ba-a406-7b3111df6be7","urn:uuid:1dad74ea-15e6-4c48-8201-9c16a13a79f6","doi:10.18739/A2Z577","urn:uuid:96b95e50-a665-42a2-af92-0647514154b1"]},{"identifier":"urn:uuid:bc1384cc-9fd7-46ff-8083-293ea9f6cf96","fileName":"2013_2014_winter_E6_temperature.csv","formatId":"text/csv","formatType":"DATA","size":7576278,"checksum":"2460bd6f3bdd30ef8f6ce618a86a186195651d3c","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:45846689-fcee-46ba-a406-7b3111df6be7","fileName":"2013_2014_winter_E6_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":311796,"checksum":"e7a4d14fa9ec6fc08899405326f94ef8737fff61","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:1dad74ea-15e6-4c48-8201-9c16a13a79f6","fileName":"2014_summer_E6_temperature.csv","formatId":"text/csv","formatType":"DATA","size":2563014,"checksum":"32f2c33dab67a13528684b45f93a076f31d0b471","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:96b95e50-a665-42a2-af92-0647514154b1","fileName":"2013_2014_winter_E6_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":891254,"checksum":"eef3d10109c478e49f18e6357d9f7eeb041978d6","checksumAlgorithm":"SHA1"}]}}
 
         '
     headers:
@@ -1715,7 +1715,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:59 GMT
+      - Thu, 17 Feb 2022 22:56:42 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -1742,7 +1742,7 @@ interactions:
     uri: https://cn.dataone.org/cn/v2/query/solr/?q=identifier:%22resource_map_urn%3Auuid%3A9d06a11b-7c9a-4f83-a87b-df93c11d3f7e%22&fl=identifier,formatType,formatId,resourceMap&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"identifier:\"resource_map_urn:uuid:9d06a11b-7c9a-4f83-a87b-df93c11d3f7e\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"resource_map_urn:uuid:9d06a11b-7c9a-4f83-a87b-df93c11d3f7e","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","resourceMap":["resource_map_urn:uuid:431105b1-52ee-4324-9182-11e59e2b6efe","resource_map_urn:uuid:ec4f122b-876f-4e33-818c-2c91e7a2488f"]}]}}
+      string: '{"responseHeader":{"status":0,"QTime":6,"params":{"q":"identifier:\"resource_map_urn:uuid:9d06a11b-7c9a-4f83-a87b-df93c11d3f7e\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"resource_map_urn:uuid:9d06a11b-7c9a-4f83-a87b-df93c11d3f7e","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","resourceMap":["resource_map_urn:uuid:431105b1-52ee-4324-9182-11e59e2b6efe","resource_map_urn:uuid:ec4f122b-876f-4e33-818c-2c91e7a2488f"]}]}}
 
         '
     headers:
@@ -1762,7 +1762,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:48:59 GMT
+      - Thu, 17 Feb 2022 22:56:43 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -1786,12 +1786,12 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_urn%3Auuid%3A9d06a11b-7c9a-4f83-a87b-df93c11d3f7e%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_urn%3Auuid%3A9d06a11b-7c9a-4f83-a87b-df93c11d3f7e%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"resourceMap:\"resource_map_urn:uuid:9d06a11b-7c9a-4f83-a87b-df93c11d3f7e\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":5,"start":0,"docs":[{"identifier":"resource_map_doi:10.18739/A2F299","fileName":"resource_map_doi_10_18739_A2F299.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":10073,"checksum":"0398b959969fe4bd0c7c986c52074737c164d38d"},{"identifier":"urn:uuid:9d06a11b-7c9a-4f83-a87b-df93c11d3f7e","fileName":"toolik_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":8506,"checksum":"6134e06ab39e51ed37911d4e6f6425697d028269","title":"Time
+      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_urn:uuid:9d06a11b-7c9a-4f83-a87b-df93c11d3f7e\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":5,"start":0,"docs":[{"identifier":"resource_map_doi:10.18739/A2F299","fileName":"resource_map_doi_10_18739_A2F299.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":10073,"checksum":"0398b959969fe4bd0c7c986c52074737c164d38d","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:9d06a11b-7c9a-4f83-a87b-df93c11d3f7e","fileName":"toolik_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":8506,"checksum":"6134e06ab39e51ed37911d4e6f6425697d028269","checksumAlgorithm":"SHA1","title":"Time
         series of water temperature, specific conductance, and oxygen from Toolik
-        Lake, North Slope, Alaska","documents":["urn:uuid:9d06a11b-7c9a-4f83-a87b-df93c11d3f7e","resource_map_doi:10.18739/A28K3N","resource_map_doi:10.18739/A2D86X","resource_map_doi:10.18739/A24S0B","resource_map_doi:10.18739/A2F299"]},{"identifier":"resource_map_doi:10.18739/A28K3N","fileName":"resource_map_doi_10_18739_A28K3N.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":7479,"checksum":"9d7911f890c1cce36e1e95dbe815804230186edc"},{"identifier":"resource_map_doi:10.18739/A2D86X","fileName":"resource_map_doi_10_18739_A2D86X.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":8776,"checksum":"41f86aea7a8170f28ecb2676b2ec7ac75f90f3e4"},{"identifier":"resource_map_doi:10.18739/A24S0B","fileName":"resource_map_doi_10_18739_A24S0B.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":11370,"checksum":"4fc6a95c5ffc3661ee0e357de4e141cbcd167c40"}]}}
+        Lake, North Slope, Alaska","documents":["urn:uuid:9d06a11b-7c9a-4f83-a87b-df93c11d3f7e","resource_map_doi:10.18739/A28K3N","resource_map_doi:10.18739/A2D86X","resource_map_doi:10.18739/A24S0B","resource_map_doi:10.18739/A2F299"]},{"identifier":"resource_map_doi:10.18739/A28K3N","fileName":"resource_map_doi_10_18739_A28K3N.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":7479,"checksum":"9d7911f890c1cce36e1e95dbe815804230186edc","checksumAlgorithm":"SHA1"},{"identifier":"resource_map_doi:10.18739/A2D86X","fileName":"resource_map_doi_10_18739_A2D86X.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":8776,"checksum":"41f86aea7a8170f28ecb2676b2ec7ac75f90f3e4","checksumAlgorithm":"SHA1"},{"identifier":"resource_map_doi:10.18739/A24S0B","fileName":"resource_map_doi_10_18739_A24S0B.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":11370,"checksum":"4fc6a95c5ffc3661ee0e357de4e141cbcd167c40","checksumAlgorithm":"SHA1"}]}}
 
         '
     headers:
@@ -1811,7 +1811,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:49:00 GMT
+      - Thu, 17 Feb 2022 22:56:43 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -1838,7 +1838,7 @@ interactions:
     uri: https://cn.dataone.org/cn/v2/query/solr/?q=identifier:%22doi%3A10.18739%2FA2F299%22&fl=identifier,formatType,formatId,resourceMap&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":6,"params":{"q":"identifier:\"doi:10.18739/A2F299\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2F299","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.18739/A2F299"]}]}}
+      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"identifier:\"doi:10.18739/A2F299\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2F299","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.18739/A2F299"]}]}}
 
         '
     headers:
@@ -1858,7 +1858,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:49:01 GMT
+      - Thu, 17 Feb 2022 22:56:44 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -1882,12 +1882,12 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2F299%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2F299%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":5,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2F299\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":6,"start":0,"docs":[{"identifier":"doi:10.18739/A2F299","fileName":"toolik_2016metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":62748,"checksum":"c776f32007fae1a9819a815ed85644c8cf13edca","title":"Time
+      string: '{"responseHeader":{"status":0,"QTime":5,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2F299\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":6,"start":0,"docs":[{"identifier":"doi:10.18739/A2F299","fileName":"toolik_2016metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":62748,"checksum":"c776f32007fae1a9819a815ed85644c8cf13edca","checksumAlgorithm":"SHA1","title":"Time
         series of water temperature, specific conductance, and oxygen from Toolik
-        Lake, North Slope, Alaska, 2015-2016","documents":["doi:10.18739/A2F299","urn:uuid:bd0652ad-f6fe-4bcc-9b98-84e45fba205e","urn:uuid:9f38e678-b5c5-480d-b33e-50bbd94225f5","urn:uuid:c60403bb-226c-4330-bcb8-c9024560a9e0","urn:uuid:a82f1d5c-13b4-4df0-829f-ea0c0d782b29","urn:uuid:11986ca1-5560-48ac-b8f9-0469ce561946"]},{"identifier":"urn:uuid:bd0652ad-f6fe-4bcc-9b98-84e45fba205e","fileName":"2015_2016_winter_toolik_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":1508161,"checksum":"227fc5412f986706d9ca91afd6cc468791fce8f2"},{"identifier":"urn:uuid:9f38e678-b5c5-480d-b33e-50bbd94225f5","fileName":"2016_summer_toolik_temperature.csv","formatId":"text/csv","formatType":"DATA","size":6424024,"checksum":"48414be54ba71f3a4e0ad1d606669468b69cdb74"},{"identifier":"urn:uuid:c60403bb-226c-4330-bcb8-c9024560a9e0","fileName":"2015_2016_winter_toolik_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":3195361,"checksum":"275559f8f86a4392108a313f97ec26df7fa0e7c7"},{"identifier":"urn:uuid:a82f1d5c-13b4-4df0-829f-ea0c0d782b29","fileName":"2016_summer_toolik_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":278700,"checksum":"b4de0ac179a1f54e54de79daaa253a2c67474de5"},{"identifier":"urn:uuid:11986ca1-5560-48ac-b8f9-0469ce561946","fileName":"2015_2016_winter_toolik_temperature.csv","formatId":"text/csv","formatType":"DATA","size":20143003,"checksum":"e63ce1f4ed659615cfa7c5913f6910d036b2b824"}]}}
+        Lake, North Slope, Alaska, 2015-2016","documents":["doi:10.18739/A2F299","urn:uuid:bd0652ad-f6fe-4bcc-9b98-84e45fba205e","urn:uuid:9f38e678-b5c5-480d-b33e-50bbd94225f5","urn:uuid:c60403bb-226c-4330-bcb8-c9024560a9e0","urn:uuid:a82f1d5c-13b4-4df0-829f-ea0c0d782b29","urn:uuid:11986ca1-5560-48ac-b8f9-0469ce561946"]},{"identifier":"urn:uuid:bd0652ad-f6fe-4bcc-9b98-84e45fba205e","fileName":"2015_2016_winter_toolik_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":1508161,"checksum":"227fc5412f986706d9ca91afd6cc468791fce8f2","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:9f38e678-b5c5-480d-b33e-50bbd94225f5","fileName":"2016_summer_toolik_temperature.csv","formatId":"text/csv","formatType":"DATA","size":6424024,"checksum":"48414be54ba71f3a4e0ad1d606669468b69cdb74","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:c60403bb-226c-4330-bcb8-c9024560a9e0","fileName":"2015_2016_winter_toolik_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":3195361,"checksum":"275559f8f86a4392108a313f97ec26df7fa0e7c7","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:a82f1d5c-13b4-4df0-829f-ea0c0d782b29","fileName":"2016_summer_toolik_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":278700,"checksum":"b4de0ac179a1f54e54de79daaa253a2c67474de5","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:11986ca1-5560-48ac-b8f9-0469ce561946","fileName":"2015_2016_winter_toolik_temperature.csv","formatId":"text/csv","formatType":"DATA","size":20143003,"checksum":"e63ce1f4ed659615cfa7c5913f6910d036b2b824","checksumAlgorithm":"SHA1"}]}}
 
         '
     headers:
@@ -1907,7 +1907,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:49:01 GMT
+      - Thu, 17 Feb 2022 22:56:45 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -1954,7 +1954,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:49:02 GMT
+      - Thu, 17 Feb 2022 22:56:45 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -1978,12 +1978,12 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA28K3N%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA28K3N%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A28K3N\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":4,"start":0,"docs":[{"identifier":"doi:10.18739/A28K3N","fileName":"toolik_2013metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":48909,"checksum":"03590ee2dcce44c847e7637c981ff4bb048ceac0","title":"Time
+      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A28K3N\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":4,"start":0,"docs":[{"identifier":"doi:10.18739/A28K3N","fileName":"toolik_2013metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":48909,"checksum":"03590ee2dcce44c847e7637c981ff4bb048ceac0","checksumAlgorithm":"SHA1","title":"Time
         series of water temperature, specific conductance, and oxygen from Toolik
-        Lake, North Slope, Alaska, 2012-2013","documents":["urn:uuid:77294e60-f8a9-4b97-a0e9-3501599da8e5","urn:uuid:19168eaa-1c0b-456d-ac23-f533e51842d6","urn:uuid:aceb8942-0501-4b14-b425-6884549e76e2","doi:10.18739/A28K3N"]},{"identifier":"urn:uuid:77294e60-f8a9-4b97-a0e9-3501599da8e5","fileName":"2013_summer_toolik_temperature.csv","formatId":"text/csv","formatType":"DATA","size":6875617,"checksum":"0cd21d8a1f9b62dde6d06ac1b8767688d3cb03f0"},{"identifier":"urn:uuid:19168eaa-1c0b-456d-ac23-f533e51842d6","fileName":"2012_2013_winter_toolik_temperature.csv","formatId":"text/csv","formatType":"DATA","size":19536076,"checksum":"e60895a6499b2e076f859522a30178575730ea48"},{"identifier":"urn:uuid:aceb8942-0501-4b14-b425-6884549e76e2","fileName":"2012_2013_winter_toolik_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":689738,"checksum":"be3a74c397a4c5d38ef6d1e104d7d76798c558fe"}]}}
+        Lake, North Slope, Alaska, 2012-2013","documents":["urn:uuid:77294e60-f8a9-4b97-a0e9-3501599da8e5","urn:uuid:19168eaa-1c0b-456d-ac23-f533e51842d6","urn:uuid:aceb8942-0501-4b14-b425-6884549e76e2","doi:10.18739/A28K3N"]},{"identifier":"urn:uuid:77294e60-f8a9-4b97-a0e9-3501599da8e5","fileName":"2013_summer_toolik_temperature.csv","formatId":"text/csv","formatType":"DATA","size":6875617,"checksum":"0cd21d8a1f9b62dde6d06ac1b8767688d3cb03f0","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:19168eaa-1c0b-456d-ac23-f533e51842d6","fileName":"2012_2013_winter_toolik_temperature.csv","formatId":"text/csv","formatType":"DATA","size":19536076,"checksum":"e60895a6499b2e076f859522a30178575730ea48","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:aceb8942-0501-4b14-b425-6884549e76e2","fileName":"2012_2013_winter_toolik_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":689738,"checksum":"be3a74c397a4c5d38ef6d1e104d7d76798c558fe","checksumAlgorithm":"SHA1"}]}}
 
         '
     headers:
@@ -2003,7 +2003,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:49:02 GMT
+      - Thu, 17 Feb 2022 22:56:46 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -2050,7 +2050,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:49:03 GMT
+      - Thu, 17 Feb 2022 22:56:46 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -2074,12 +2074,12 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2D86X%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2D86X%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2D86X\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":5,"start":0,"docs":[{"identifier":"doi:10.18739/A2D86X","fileName":"toolik_2014metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":56269,"checksum":"deaa8902fb8f62b85757c3488985257d67305943","title":"Time
+      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2D86X\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":5,"start":0,"docs":[{"identifier":"doi:10.18739/A2D86X","fileName":"toolik_2014metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":56269,"checksum":"deaa8902fb8f62b85757c3488985257d67305943","checksumAlgorithm":"SHA1","title":"Time
         series of water temperature, specific conductance, and oxygen from Toolik
-        Lake, North Slope, Alaska, 2013-2014","documents":["urn:uuid:55e5158e-4105-49b1-aca8-2a0b4c529415","urn:uuid:e9d22455-0dec-49e3-8818-b04a6b55fe23","urn:uuid:957b08b1-12b4-4d02-8888-65dff1dc16d8","urn:uuid:34653602-3a03-4ee1-afdf-76d56247e1e9","doi:10.18739/A2D86X"]},{"identifier":"urn:uuid:55e5158e-4105-49b1-aca8-2a0b4c529415","fileName":"2013_2014_winter_toolik_temperature.csv","formatId":"text/csv","formatType":"DATA","size":16557796,"checksum":"f9eae5c7650db230e45c81deca638434f1284aae"},{"identifier":"urn:uuid:e9d22455-0dec-49e3-8818-b04a6b55fe23","fileName":"2013_2014_winter_toolik_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":3065075,"checksum":"e8344d4064922efe86643847cb920355a090a8ee"},{"identifier":"urn:uuid:957b08b1-12b4-4d02-8888-65dff1dc16d8","fileName":"2014_summer_toolik_temperature.csv","formatId":"text/csv","formatType":"DATA","size":8152742,"checksum":"71feae04bacbcbd93d382c6e371d90ce3df910c4"},{"identifier":"urn:uuid:34653602-3a03-4ee1-afdf-76d56247e1e9","fileName":"2013_2014_winter_toolik_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":1143165,"checksum":"2c617dfed4bd0c63110e36c8351b360d40ef3928"}]}}
+        Lake, North Slope, Alaska, 2013-2014","documents":["urn:uuid:55e5158e-4105-49b1-aca8-2a0b4c529415","urn:uuid:e9d22455-0dec-49e3-8818-b04a6b55fe23","urn:uuid:957b08b1-12b4-4d02-8888-65dff1dc16d8","urn:uuid:34653602-3a03-4ee1-afdf-76d56247e1e9","doi:10.18739/A2D86X"]},{"identifier":"urn:uuid:55e5158e-4105-49b1-aca8-2a0b4c529415","fileName":"2013_2014_winter_toolik_temperature.csv","formatId":"text/csv","formatType":"DATA","size":16557796,"checksum":"f9eae5c7650db230e45c81deca638434f1284aae","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:e9d22455-0dec-49e3-8818-b04a6b55fe23","fileName":"2013_2014_winter_toolik_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":3065075,"checksum":"e8344d4064922efe86643847cb920355a090a8ee","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:957b08b1-12b4-4d02-8888-65dff1dc16d8","fileName":"2014_summer_toolik_temperature.csv","formatId":"text/csv","formatType":"DATA","size":8152742,"checksum":"71feae04bacbcbd93d382c6e371d90ce3df910c4","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:34653602-3a03-4ee1-afdf-76d56247e1e9","fileName":"2013_2014_winter_toolik_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":1143165,"checksum":"2c617dfed4bd0c63110e36c8351b360d40ef3928","checksumAlgorithm":"SHA1"}]}}
 
         '
     headers:
@@ -2099,7 +2099,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:49:03 GMT
+      - Thu, 17 Feb 2022 22:56:47 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -2146,7 +2146,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:49:04 GMT
+      - Thu, 17 Feb 2022 22:56:47 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -2170,12 +2170,12 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA24S0B%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA24S0B%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A24S0B\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":7,"start":0,"docs":[{"identifier":"doi:10.18739/A24S0B","fileName":"toolik_2015metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":65009,"checksum":"0e3e72dbf80d6ecfbafc2e536e0f79cb8f5b4273","title":"Time
+      string: '{"responseHeader":{"status":0,"QTime":5,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A24S0B\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":7,"start":0,"docs":[{"identifier":"doi:10.18739/A24S0B","fileName":"toolik_2015metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":65009,"checksum":"0e3e72dbf80d6ecfbafc2e536e0f79cb8f5b4273","checksumAlgorithm":"SHA1","title":"Time
         series of water temperature, specific conductance, and oxygen from Toolik
-        Lake, North Slope, Alaska, 2014-2015","documents":["urn:uuid:a5ac2b21-45bd-437f-a16b-adbc657b59b3","urn:uuid:dc761000-8e3f-4fc7-bd61-b05292f8ecda","urn:uuid:f4b70f62-e4d0-471e-838b-a221130f6b16","urn:uuid:b52abc55-3f19-478c-ab1f-ddd1fe5078a1","doi:10.18739/A24S0B","urn:uuid:2cfe4b84-4acd-4102-abaa-9edf3cd56cd7","urn:uuid:97c08ad2-b11f-4577-b28a-18a19d2a2da6"]},{"identifier":"urn:uuid:a5ac2b21-45bd-437f-a16b-adbc657b59b3","fileName":"2014_2015_winter_toolik_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":2938042,"checksum":"4905af11a9818dfec06b4351f05ef1ac46dc95b2"},{"identifier":"urn:uuid:dc761000-8e3f-4fc7-bd61-b05292f8ecda","fileName":"2015_summer_toolik_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":326729,"checksum":"205d98418364cd49d6b48b1180038f9a54483c48"},{"identifier":"urn:uuid:f4b70f62-e4d0-471e-838b-a221130f6b16","fileName":"2015_summer_toolik_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":422900,"checksum":"9155ce6e26452a82d78d48b1829bc53e4c8a3a67"},{"identifier":"urn:uuid:b52abc55-3f19-478c-ab1f-ddd1fe5078a1","fileName":"2014_2015_winter_toolik_temperature.csv","formatId":"text/csv","formatType":"DATA","size":17568419,"checksum":"3ad9cfc5b5f5dd6a38a6736f8d8764cb6e26a4c0"},{"identifier":"urn:uuid:2cfe4b84-4acd-4102-abaa-9edf3cd56cd7","fileName":"2015_summer_toolik_temperature.csv","formatId":"text/csv","formatType":"DATA","size":7388577,"checksum":"7bf78f8ea106c896adcde3cc3d59725025320209"},{"identifier":"urn:uuid:97c08ad2-b11f-4577-b28a-18a19d2a2da6","fileName":"2014_2015_winter_toolik_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":944978,"checksum":"1402123edf295dde171f6b492fff7a081f14213d"}]}}
+        Lake, North Slope, Alaska, 2014-2015","documents":["urn:uuid:a5ac2b21-45bd-437f-a16b-adbc657b59b3","urn:uuid:dc761000-8e3f-4fc7-bd61-b05292f8ecda","urn:uuid:f4b70f62-e4d0-471e-838b-a221130f6b16","urn:uuid:b52abc55-3f19-478c-ab1f-ddd1fe5078a1","doi:10.18739/A24S0B","urn:uuid:2cfe4b84-4acd-4102-abaa-9edf3cd56cd7","urn:uuid:97c08ad2-b11f-4577-b28a-18a19d2a2da6"]},{"identifier":"urn:uuid:a5ac2b21-45bd-437f-a16b-adbc657b59b3","fileName":"2014_2015_winter_toolik_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":2938042,"checksum":"4905af11a9818dfec06b4351f05ef1ac46dc95b2","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:dc761000-8e3f-4fc7-bd61-b05292f8ecda","fileName":"2015_summer_toolik_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":326729,"checksum":"205d98418364cd49d6b48b1180038f9a54483c48","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:f4b70f62-e4d0-471e-838b-a221130f6b16","fileName":"2015_summer_toolik_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":422900,"checksum":"9155ce6e26452a82d78d48b1829bc53e4c8a3a67","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:b52abc55-3f19-478c-ab1f-ddd1fe5078a1","fileName":"2014_2015_winter_toolik_temperature.csv","formatId":"text/csv","formatType":"DATA","size":17568419,"checksum":"3ad9cfc5b5f5dd6a38a6736f8d8764cb6e26a4c0","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:2cfe4b84-4acd-4102-abaa-9edf3cd56cd7","fileName":"2015_summer_toolik_temperature.csv","formatId":"text/csv","formatType":"DATA","size":7388577,"checksum":"7bf78f8ea106c896adcde3cc3d59725025320209","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:97c08ad2-b11f-4577-b28a-18a19d2a2da6","fileName":"2014_2015_winter_toolik_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":944978,"checksum":"1402123edf295dde171f6b492fff7a081f14213d","checksumAlgorithm":"SHA1"}]}}
 
         '
     headers:
@@ -2195,7 +2195,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:49:04 GMT
+      - Thu, 17 Feb 2022 22:56:48 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -2222,7 +2222,7 @@ interactions:
     uri: https://cn.dataone.org/cn/v2/query/solr/?q=identifier:%22resource_map_urn%3Auuid%3A799b7a86-cb1c-497c-a05a-d73492915cad%22&fl=identifier,formatType,formatId,resourceMap&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"identifier:\"resource_map_urn:uuid:799b7a86-cb1c-497c-a05a-d73492915cad\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"resource_map_urn:uuid:799b7a86-cb1c-497c-a05a-d73492915cad","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","resourceMap":["resource_map_urn:uuid:431105b1-52ee-4324-9182-11e59e2b6efe","resource_map_urn:uuid:ec4f122b-876f-4e33-818c-2c91e7a2488f"]}]}}
+      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"identifier:\"resource_map_urn:uuid:799b7a86-cb1c-497c-a05a-d73492915cad\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"resource_map_urn:uuid:799b7a86-cb1c-497c-a05a-d73492915cad","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","resourceMap":["resource_map_urn:uuid:431105b1-52ee-4324-9182-11e59e2b6efe","resource_map_urn:uuid:ec4f122b-876f-4e33-818c-2c91e7a2488f"]}]}}
 
         '
     headers:
@@ -2242,7 +2242,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:49:05 GMT
+      - Thu, 17 Feb 2022 22:56:48 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -2266,12 +2266,12 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_urn%3Auuid%3A799b7a86-cb1c-497c-a05a-d73492915cad%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_urn%3Auuid%3A799b7a86-cb1c-497c-a05a-d73492915cad%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_urn:uuid:799b7a86-cb1c-497c-a05a-d73492915cad\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":5,"start":0,"docs":[{"identifier":"urn:uuid:799b7a86-cb1c-497c-a05a-d73492915cad","fileName":"E1_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":8498,"checksum":"19bd03fa3c6fa4a3ba65329447152de79c0d256a","title":"Time
+      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_urn:uuid:799b7a86-cb1c-497c-a05a-d73492915cad\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":5,"start":0,"docs":[{"identifier":"urn:uuid:799b7a86-cb1c-497c-a05a-d73492915cad","fileName":"E1_metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":8498,"checksum":"19bd03fa3c6fa4a3ba65329447152de79c0d256a","checksumAlgorithm":"SHA1","title":"Time
         series of water temperature, specific conductance, and oxygen from Lake E1,
-        North Slope, Alaska","documents":["resource_map_doi:10.18739/A2028W","resource_map_doi:10.18739/A2QK29","urn:uuid:799b7a86-cb1c-497c-a05a-d73492915cad","resource_map_doi:10.18739/A2KS1R","resource_map_doi:10.18739/A2VC5M"]},{"identifier":"resource_map_doi:10.18739/A2028W","fileName":"resource_map_doi_10_18739_A2028W.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":7479,"checksum":"246852da360852717d919b1285368b36ef010a4b"},{"identifier":"resource_map_doi:10.18739/A2QK29","fileName":"resource_map_doi_10_18739_A2QK29.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":10073,"checksum":"2f02065de8b8091d8596229f4378edf9cddbe2b3"},{"identifier":"resource_map_doi:10.18739/A2KS1R","fileName":"resource_map_doi_10_18739_A2KS1R.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":6182,"checksum":"41ec22a3a3d12b665c8f64f537df0c69e48f2dd0"},{"identifier":"resource_map_doi:10.18739/A2VC5M","fileName":"resource_map_doi_10_18739_A2VC5M.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":10073,"checksum":"f356b42685bfea8dafadbaf26e12f6d93a27210c"}]}}
+        North Slope, Alaska","documents":["resource_map_doi:10.18739/A2028W","resource_map_doi:10.18739/A2QK29","urn:uuid:799b7a86-cb1c-497c-a05a-d73492915cad","resource_map_doi:10.18739/A2KS1R","resource_map_doi:10.18739/A2VC5M"]},{"identifier":"resource_map_doi:10.18739/A2028W","fileName":"resource_map_doi_10_18739_A2028W.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":7479,"checksum":"246852da360852717d919b1285368b36ef010a4b","checksumAlgorithm":"SHA1"},{"identifier":"resource_map_doi:10.18739/A2QK29","fileName":"resource_map_doi_10_18739_A2QK29.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":10073,"checksum":"2f02065de8b8091d8596229f4378edf9cddbe2b3","checksumAlgorithm":"SHA1"},{"identifier":"resource_map_doi:10.18739/A2KS1R","fileName":"resource_map_doi_10_18739_A2KS1R.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":6182,"checksum":"41ec22a3a3d12b665c8f64f537df0c69e48f2dd0","checksumAlgorithm":"SHA1"},{"identifier":"resource_map_doi:10.18739/A2VC5M","fileName":"resource_map_doi_10_18739_A2VC5M.rdf.xml","formatId":"http://www.openarchives.org/ore/terms","formatType":"RESOURCE","size":10073,"checksum":"f356b42685bfea8dafadbaf26e12f6d93a27210c","checksumAlgorithm":"SHA1"}]}}
 
         '
     headers:
@@ -2291,7 +2291,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:49:05 GMT
+      - Thu, 17 Feb 2022 22:56:49 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -2338,7 +2338,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:49:06 GMT
+      - Thu, 17 Feb 2022 22:56:49 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -2362,12 +2362,12 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2028W%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2028W%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2028W\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":4,"start":0,"docs":[{"identifier":"doi:10.18739/A2028W","fileName":"E1_2016metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":26819,"checksum":"a66d2c03b4ca10ea7786d946a061c580ac23752b","title":"Time
+      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2028W\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":4,"start":0,"docs":[{"identifier":"doi:10.18739/A2028W","fileName":"E1_2016metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":26819,"checksum":"a66d2c03b4ca10ea7786d946a061c580ac23752b","checksumAlgorithm":"SHA1","title":"Time
         series of water temperature, specific conductance and oxygen from Lake E1,
-        North Slope, Alaska, 2015-2016","documents":["urn:uuid:65753f42-5204-40f7-92b8-b0fab9cf0b35","urn:uuid:ccc96cc5-3abc-479a-ae78-a0e12995c983","urn:uuid:8cbdadcc-b227-47a4-8fba-e3f01810bdff","doi:10.18739/A2028W"]},{"identifier":"urn:uuid:8cbdadcc-b227-47a4-8fba-e3f01810bdff","fileName":"2015_2016_winter_E1_temperature.csv","formatId":"text/csv","formatType":"DATA","size":11166136,"checksum":"e5c551e71bd94da3c2d8f82aa3774770df87b316"},{"identifier":"urn:uuid:65753f42-5204-40f7-92b8-b0fab9cf0b35","fileName":"2015_2016_winter_E1_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":500013,"checksum":"691be355adbc5f45a21c37d69625a29c699d2867"},{"identifier":"urn:uuid:ccc96cc5-3abc-479a-ae78-a0e12995c983","fileName":"2015_2016_winter_E1_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":1396269,"checksum":"1fdc9baa4466cf491fa29b0c7f59dcedfbde5d18"}]}}
+        North Slope, Alaska, 2015-2016","documents":["urn:uuid:65753f42-5204-40f7-92b8-b0fab9cf0b35","urn:uuid:ccc96cc5-3abc-479a-ae78-a0e12995c983","urn:uuid:8cbdadcc-b227-47a4-8fba-e3f01810bdff","doi:10.18739/A2028W"]},{"identifier":"urn:uuid:8cbdadcc-b227-47a4-8fba-e3f01810bdff","fileName":"2015_2016_winter_E1_temperature.csv","formatId":"text/csv","formatType":"DATA","size":11166136,"checksum":"e5c551e71bd94da3c2d8f82aa3774770df87b316","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:65753f42-5204-40f7-92b8-b0fab9cf0b35","fileName":"2015_2016_winter_E1_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":500013,"checksum":"691be355adbc5f45a21c37d69625a29c699d2867","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:ccc96cc5-3abc-479a-ae78-a0e12995c983","fileName":"2015_2016_winter_E1_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":1396269,"checksum":"1fdc9baa4466cf491fa29b0c7f59dcedfbde5d18","checksumAlgorithm":"SHA1"}]}}
 
         '
     headers:
@@ -2387,7 +2387,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:49:07 GMT
+      - Thu, 17 Feb 2022 22:56:50 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -2434,7 +2434,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:49:07 GMT
+      - Thu, 17 Feb 2022 22:56:50 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -2458,12 +2458,12 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2QK29%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2QK29%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2QK29\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":6,"start":0,"docs":[{"identifier":"doi:10.18739/A2QK29","fileName":"E1_2014metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":47376,"checksum":"60b6aee0782f171c7860b5ae6aa53e8633d5ec5d","title":"Time
+      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2QK29\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":6,"start":0,"docs":[{"identifier":"doi:10.18739/A2QK29","fileName":"E1_2014metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":47376,"checksum":"60b6aee0782f171c7860b5ae6aa53e8633d5ec5d","checksumAlgorithm":"SHA1","title":"Time
         series of water temperature, specific conductance and oxygen from Lake E1,
-        North Slope, Alaska, 2013-2014","documents":["urn:uuid:ab4187ad-e57f-41d3-99d5-7d8f2675afee","urn:uuid:ee208b8d-ea33-4f72-938f-24a39282a119","urn:uuid:dd8bd4f8-2d3e-4243-aabf-265cc4facf40","doi:10.18739/A2QK29","urn:uuid:af794e84-d119-4be9-8601-3e62c6b49b1e","urn:uuid:75f216f7-294d-4032-a05c-06680688b1de"]},{"identifier":"urn:uuid:ab4187ad-e57f-41d3-99d5-7d8f2675afee","fileName":"2013_2014_winter_E1_temperature.csv","formatId":"text/csv","formatType":"DATA","size":12183564,"checksum":"3eacb1096f86992da177c044a0d1e47c08e9dfa8"},{"identifier":"urn:uuid:ee208b8d-ea33-4f72-938f-24a39282a119","fileName":"2013_2014_winter_E1_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":450249,"checksum":"5ddd73173ec2cca46723e44766d55d419d7edda7"},{"identifier":"urn:uuid:dd8bd4f8-2d3e-4243-aabf-265cc4facf40","fileName":"2014_summer_E1_temperature.csv","formatId":"text/csv","formatType":"DATA","size":4790928,"checksum":"b718bcc4e894e151f3892e7f18122cf5c532b1ec"},{"identifier":"urn:uuid:af794e84-d119-4be9-8601-3e62c6b49b1e","fileName":"2014_summer_E1_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":162291,"checksum":"12a45f9ad313c62e421add5cd631859989aa3ed2"},{"identifier":"urn:uuid:75f216f7-294d-4032-a05c-06680688b1de","fileName":"2013_2014_winter_E1_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":2131042,"checksum":"fba76834d7cfb2a1145edabec5e35253f4837a6f"}]}}
+        North Slope, Alaska, 2013-2014","documents":["urn:uuid:ab4187ad-e57f-41d3-99d5-7d8f2675afee","urn:uuid:ee208b8d-ea33-4f72-938f-24a39282a119","urn:uuid:dd8bd4f8-2d3e-4243-aabf-265cc4facf40","doi:10.18739/A2QK29","urn:uuid:af794e84-d119-4be9-8601-3e62c6b49b1e","urn:uuid:75f216f7-294d-4032-a05c-06680688b1de"]},{"identifier":"urn:uuid:ab4187ad-e57f-41d3-99d5-7d8f2675afee","fileName":"2013_2014_winter_E1_temperature.csv","formatId":"text/csv","formatType":"DATA","size":12183564,"checksum":"3eacb1096f86992da177c044a0d1e47c08e9dfa8","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:ee208b8d-ea33-4f72-938f-24a39282a119","fileName":"2013_2014_winter_E1_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":450249,"checksum":"5ddd73173ec2cca46723e44766d55d419d7edda7","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:dd8bd4f8-2d3e-4243-aabf-265cc4facf40","fileName":"2014_summer_E1_temperature.csv","formatId":"text/csv","formatType":"DATA","size":4790928,"checksum":"b718bcc4e894e151f3892e7f18122cf5c532b1ec","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:af794e84-d119-4be9-8601-3e62c6b49b1e","fileName":"2014_summer_E1_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":162291,"checksum":"12a45f9ad313c62e421add5cd631859989aa3ed2","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:75f216f7-294d-4032-a05c-06680688b1de","fileName":"2013_2014_winter_E1_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":2131042,"checksum":"fba76834d7cfb2a1145edabec5e35253f4837a6f","checksumAlgorithm":"SHA1"}]}}
 
         '
     headers:
@@ -2483,7 +2483,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:49:08 GMT
+      - Thu, 17 Feb 2022 22:56:51 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -2510,7 +2510,7 @@ interactions:
     uri: https://cn.dataone.org/cn/v2/query/solr/?q=identifier:%22doi%3A10.18739%2FA2KS1R%22&fl=identifier,formatType,formatId,resourceMap&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"identifier:\"doi:10.18739/A2KS1R\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2KS1R","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.18739/A2KS1R"]}]}}
+      string: '{"responseHeader":{"status":0,"QTime":5,"params":{"q":"identifier:\"doi:10.18739/A2KS1R\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2KS1R","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.18739/A2KS1R"]}]}}
 
         '
     headers:
@@ -2530,7 +2530,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:49:08 GMT
+      - Thu, 17 Feb 2022 22:56:51 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -2554,12 +2554,12 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2KS1R%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2KS1R%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2KS1R\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":3,"start":0,"docs":[{"identifier":"doi:10.18739/A2KS1R","fileName":"E1_2013metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":32211,"checksum":"a02aedae1a3359dedd92ab1298a80791a23076e0","title":"Time
+      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2KS1R\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":3,"start":0,"docs":[{"identifier":"doi:10.18739/A2KS1R","fileName":"E1_2013metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":32211,"checksum":"a02aedae1a3359dedd92ab1298a80791a23076e0","checksumAlgorithm":"SHA1","title":"Time
         series of water temperature, specific conductance and oxygen from Lake E1,
-        North Slope, Alaska, 2012-2013","documents":["urn:uuid:fa913a0f-7d09-48af-8325-bfb0426dcc73","doi:10.18739/A2KS1R","urn:uuid:3f658463-2af4-4ee2-8304-4f2edf83650b"]},{"identifier":"urn:uuid:fa913a0f-7d09-48af-8325-bfb0426dcc73","fileName":"2013_summer_E1_temperature.csv","formatId":"text/csv","formatType":"DATA","size":3782958,"checksum":"ed0576ed7d89a8d606a74c8adc593e3422c5c184"},{"identifier":"urn:uuid:3f658463-2af4-4ee2-8304-4f2edf83650b","fileName":"2012_2013_winter_E1_temperature.csv","formatId":"text/csv","formatType":"DATA","size":11118770,"checksum":"2e6247dc7bee110c0ba66ff6af8126011a5c07f2"}]}}
+        North Slope, Alaska, 2012-2013","documents":["urn:uuid:fa913a0f-7d09-48af-8325-bfb0426dcc73","doi:10.18739/A2KS1R","urn:uuid:3f658463-2af4-4ee2-8304-4f2edf83650b"]},{"identifier":"urn:uuid:fa913a0f-7d09-48af-8325-bfb0426dcc73","fileName":"2013_summer_E1_temperature.csv","formatId":"text/csv","formatType":"DATA","size":3782958,"checksum":"ed0576ed7d89a8d606a74c8adc593e3422c5c184","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:3f658463-2af4-4ee2-8304-4f2edf83650b","fileName":"2012_2013_winter_E1_temperature.csv","formatId":"text/csv","formatType":"DATA","size":11118770,"checksum":"2e6247dc7bee110c0ba66ff6af8126011a5c07f2","checksumAlgorithm":"SHA1"}]}}
 
         '
     headers:
@@ -2579,7 +2579,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:49:09 GMT
+      - Thu, 17 Feb 2022 22:56:52 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -2606,7 +2606,7 @@ interactions:
     uri: https://cn.dataone.org/cn/v2/query/solr/?q=identifier:%22doi%3A10.18739%2FA2VC5M%22&fl=identifier,formatType,formatId,resourceMap&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":4,"params":{"q":"identifier:\"doi:10.18739/A2VC5M\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2VC5M","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.18739/A2VC5M"]}]}}
+      string: '{"responseHeader":{"status":0,"QTime":6,"params":{"q":"identifier:\"doi:10.18739/A2VC5M\"","fl":"identifier,formatType,formatId,resourceMap","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":1,"start":0,"docs":[{"identifier":"doi:10.18739/A2VC5M","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","resourceMap":["resource_map_doi:10.18739/A2VC5M"]}]}}
 
         '
     headers:
@@ -2626,7 +2626,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:49:09 GMT
+      - Thu, 17 Feb 2022 22:56:52 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
@@ -2650,12 +2650,12 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2VC5M%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum&rows=1000&start=0&wt=json
+    uri: https://cn.dataone.org/cn/v2/query/solr/?q=resourceMap:%22resource_map_doi%3A10.18739%2FA2VC5M%22&fl=identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm&rows=1000&start=0&wt=json
   response:
     body:
-      string: '{"responseHeader":{"status":0,"QTime":5,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2VC5M\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":6,"start":0,"docs":[{"identifier":"doi:10.18739/A2VC5M","fileName":"E1_2015metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":45972,"checksum":"844d9c81a2043765324aa7ef6e6494fea2562a04","title":"Time
+      string: '{"responseHeader":{"status":0,"QTime":3,"params":{"q":"resourceMap:\"resource_map_doi:10.18739/A2VC5M\"","fl":"identifier,formatType,title,size,formatId,fileName,documents,checksum,checksumAlgorithm","start":"0","rows":"1000","wt":"json"}},"response":{"numFound":6,"start":0,"docs":[{"identifier":"doi:10.18739/A2VC5M","fileName":"E1_2015metadata.xml","formatId":"eml://ecoinformatics.org/eml-2.1.1","formatType":"METADATA","size":45972,"checksum":"844d9c81a2043765324aa7ef6e6494fea2562a04","checksumAlgorithm":"SHA1","title":"Time
         series of water temperature, specific conductance and oxygen from Lake E1,
-        North Slope, Alaska, 2014-2015","documents":["urn:uuid:decdc717-897c-4540-a7bb-edbc3988280f","doi:10.18739/A2VC5M","urn:uuid:80d6518d-be44-4136-84eb-20d8db71f445","urn:uuid:b84ef5f5-8f74-4ce8-a4a5-c307cb231c35","urn:uuid:95709f18-1f7e-41bb-a7ff-caef22891ca2","urn:uuid:0f4b4d12-01ea-4821-9ce1-607985a7f039"]},{"identifier":"urn:uuid:decdc717-897c-4540-a7bb-edbc3988280f","fileName":"2014_2015_winter_E1_temperature.csv","formatId":"text/csv","formatType":"DATA","size":9679469,"checksum":"7de5dc6ccbaa249dc0b21aa7bfbbe578e646d269"},{"identifier":"urn:uuid:80d6518d-be44-4136-84eb-20d8db71f445","fileName":"2015_summer_E1_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":183913,"checksum":"9eafa74fae26a4c2bf8bbcfdc962b768223fe62e"},{"identifier":"urn:uuid:b84ef5f5-8f74-4ce8-a4a5-c307cb231c35","fileName":"2014_2015_winter_E1_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":1603002,"checksum":"f652231af5eeccb3e575dc36cf17137e8b160394"},{"identifier":"urn:uuid:95709f18-1f7e-41bb-a7ff-caef22891ca2","fileName":"2014_2015_winter_E1_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":586667,"checksum":"a7c97b6a95003ce6e5eee272c988c0d71fd5fa11"},{"identifier":"urn:uuid:0f4b4d12-01ea-4821-9ce1-607985a7f039","fileName":"2015_summer_E1_temperature.csv","formatId":"text/csv","formatType":"DATA","size":5687791,"checksum":"273781448547a2d6c1407572575fd6b4dded9aa4"}]}}
+        North Slope, Alaska, 2014-2015","documents":["urn:uuid:decdc717-897c-4540-a7bb-edbc3988280f","doi:10.18739/A2VC5M","urn:uuid:80d6518d-be44-4136-84eb-20d8db71f445","urn:uuid:b84ef5f5-8f74-4ce8-a4a5-c307cb231c35","urn:uuid:95709f18-1f7e-41bb-a7ff-caef22891ca2","urn:uuid:0f4b4d12-01ea-4821-9ce1-607985a7f039"]},{"identifier":"urn:uuid:decdc717-897c-4540-a7bb-edbc3988280f","fileName":"2014_2015_winter_E1_temperature.csv","formatId":"text/csv","formatType":"DATA","size":9679469,"checksum":"7de5dc6ccbaa249dc0b21aa7bfbbe578e646d269","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:80d6518d-be44-4136-84eb-20d8db71f445","fileName":"2015_summer_E1_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":183913,"checksum":"9eafa74fae26a4c2bf8bbcfdc962b768223fe62e","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:b84ef5f5-8f74-4ce8-a4a5-c307cb231c35","fileName":"2014_2015_winter_E1_dissoxy.csv","formatId":"text/csv","formatType":"DATA","size":1603002,"checksum":"f652231af5eeccb3e575dc36cf17137e8b160394","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:95709f18-1f7e-41bb-a7ff-caef22891ca2","fileName":"2014_2015_winter_E1_spconductance.csv","formatId":"text/csv","formatType":"DATA","size":586667,"checksum":"a7c97b6a95003ce6e5eee272c988c0d71fd5fa11","checksumAlgorithm":"SHA1"},{"identifier":"urn:uuid:0f4b4d12-01ea-4821-9ce1-607985a7f039","fileName":"2015_summer_E1_temperature.csv","formatId":"text/csv","formatType":"DATA","size":5687791,"checksum":"273781448547a2d6c1407572575fd6b4dded9aa4","checksumAlgorithm":"SHA1"}]}}
 
         '
     headers:
@@ -2675,7 +2675,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Wed, 09 Feb 2022 16:49:10 GMT
+      - Thu, 17 Feb 2022 22:56:53 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
