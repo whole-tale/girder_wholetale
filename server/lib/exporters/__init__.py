@@ -66,7 +66,7 @@ class TaleExporter:
         self.environment = environment
 
         if algs is None:
-            self.algs = ["md5", "sha256"]
+            self.algs = ["md5", "sha1", "sha256"]
 
         zipname = os.path.basename(manifest["dct:hasVersion"]["@id"])
         self.zip_generator = ziputil.ZipGenerator(zipname)
@@ -127,8 +127,9 @@ class TaleExporter:
         hash_file_stream = HashFileStream(func)
         for data in self.zip_generator.addFile(hash_file_stream, zip_path):
             yield data
-        for alg in self.algs:
-            self.state[alg].append((zip_path, getattr(hash_file_stream, alg)))
+        # MD5 is the only required alg in profile. See Manifests-Required in
+        # https://raw.githubusercontent.com/fair-research/bdbag/master/profiles/bdbag-ro-profile.json
+        self.state['md5'].append((zip_path, getattr(hash_file_stream, 'md5')))
 
     def _agg_index_by_uri(self, uri):
         aggs = self.manifest["aggregates"]

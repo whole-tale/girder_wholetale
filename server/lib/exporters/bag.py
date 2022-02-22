@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from hashlib import sha256, md5
+from hashlib import sha1, sha256, md5
 import os
 from urllib.parse import unquote
 from . import TaleExporter
@@ -162,7 +162,7 @@ class BagTaleExporter(TaleExporter):
                     pass
             return dump
 
-        tagmanifest = dict(md5="", sha256="")
+        tagmanifest = dict(md5="", sha1="", sha256="")
         for payload, fname in (
             (lambda: top_readme, 'README.md'),
             (lambda: run_file, 'run-local.sh'),
@@ -170,12 +170,16 @@ class BagTaleExporter(TaleExporter):
             (lambda: bag_info, 'bag-info.txt'),
             (lambda: fetch_file, 'fetch.txt'),
             (lambda: dump_checksums('md5'), 'manifest-md5.txt'),
+            (lambda: dump_checksums('sha1'), 'manifest-sha1.txt'),
             (lambda: dump_checksums('sha256'), 'manifest-sha256.txt'),
             (lambda: self.formated_dump(self.environment, indent=4), 'metadata/environment.json'),
             (lambda: self.formated_dump(self.manifest, indent=4), 'metadata/manifest.json'),
         ):
             tagmanifest['md5'] += "{} {}\n".format(
                 md5(payload().encode()).hexdigest(), fname
+            )
+            tagmanifest['sha1'] += "{} {}\n".format(
+                sha1(payload().encode()).hexdigest(), fname
             )
             tagmanifest['sha256'] += "{} {}\n".format(
                 sha256(payload().encode()).hexdigest(), fname
@@ -184,6 +188,7 @@ class BagTaleExporter(TaleExporter):
 
         for payload, fname in (
             (lambda: tagmanifest['md5'], 'tagmanifest-md5.txt'),
+            (lambda: tagmanifest['sha1'], 'tagmanifest-sha1.txt'),
             (lambda: tagmanifest['sha256'], 'tagmanifest-sha256.txt'),
         ):
             yield from self.zip_generator.addFile(payload, fname)
