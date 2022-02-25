@@ -311,7 +311,27 @@ class ZenodoHarversterTestCase(base.TestCase):
                 "doi:10.5281/zenodo.3463499",
             )
 
-    def test_analyze_in_wt(self):
+    def test_import_binder(self):
+        resp = self.request(
+            path="/integration/zenodo",
+            method="GET",
+            user=self.user,
+            params={
+                "record_id": "5092301",
+                "resource_server": "zenodo.org",
+            },
+            isJson=False,
+        )
+
+        self.assertTrue("Location" in resp.headers)
+        location = urlparse(resp.headers["Location"])
+        self.assertEqual(location.netloc, "dashboard.wholetale.org")
+        qs = parse_qs(location.query)
+        self.assertTrue(qs["asTale"][0])
+        self.assertTrue(qs["name"][0].startswith("antonninkov/ISSI2021"))
+        self.assertEqual(qs["uri"], ["https://zenodo.org/record/5092301"])
+
+    def test_import_tale(self):
         from girder.plugins.wholetale.models.tale import Tale
         from girder.plugins.oauth.constants import PluginSettings as OAuthSettings
 

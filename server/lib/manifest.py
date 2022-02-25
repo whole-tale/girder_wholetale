@@ -4,6 +4,7 @@ from urllib.parse import quote
 
 from girder import logger
 from girder.models.folder import Folder
+from girder.models.user import User
 from girder.utility import JsonEncoder
 from girder.utility.model_importer import ModelImporter
 from girder.exceptions import ValidationException
@@ -65,6 +66,7 @@ class Manifest:
         self.add_dataset_records()
         self.add_license_record()
         self.add_version_info()
+        self.add_run_info()
 
     publishers = {
         "DataONE":
@@ -118,6 +120,7 @@ class Manifest:
             "schema:schemaVersion": self.tale["format"],
             "aggregates": list(),
             "wt:usesDataset": list(),
+            "wt:hasRecordedRuns": list(),
         }
 
     def add_tale_creator(self):
@@ -249,6 +252,16 @@ class Manifest:
             aggregation['schema:isPartOf'] = parent_dataset_identifier
         return aggregation
 
+    @staticmethod
+    def _get_checksum(item_obj, file_obj):
+        try:
+            return f"sha512:{file_obj['sha512']}"
+        except KeyError:
+            if checksum := item_obj.get("meta", {}).get("checksum"):
+                for alg in ("md5", "sha512"):
+                    if alg in checksum:
+                        return f"{alg}:{checksum[alg]}"
+
     def add_tale_records(self):
         """
         Creates and adds file records to the internal manifest object for an entire Tale.
@@ -294,8 +307,28 @@ class Manifest:
                 bundle = self.create_bundle(obj["name"], None)
             record = self.create_aggregation_record(obj['uri'], bundle, obj['dataset_identifier'])
             record["wt:size"] = obj["size"]
-            record["wt:identifier"] = obj["wt:identifier"]
+            record.update({key: obj[key] for key in obj.keys() if key.startswith("wt:")})
             self.manifest['aggregates'].append(record)
+
+        # Add records for files in each recorded_run
+        for run in Folder().find({'parentId': self.tale['runsRootId'], 'parentCollection': 'folder',
+                                  'runVersionId': self.version['_id']}):
+            run_rootpath = run["fsPath"]
+            if not run_rootpath.endswith("/"):
+                run_rootpath += "/"
+            run_rootpath += "/workspace/"
+
+            for curdir, _, files in os.walk(run_rootpath):
+                for fname in files:
+                    rfile = os.path.join(curdir, fname).replace(run_rootpath, run['name'] + "/")
+                    rinfo = {
+                        'uri': './runs/' + rfile,
+                        'wt:isPartOfRun': (
+                            "https://data.wholetale.org/api/v1/"
+                            f"folder/{run['_id']}"
+                        )
+                    }
+                    self.manifest['aggregates'].append(rinfo)
 
     def _expand_folder_into_items(self, folder, user, relpath=''):
         """
@@ -321,6 +354,16 @@ class Manifest:
         ):
             ext += self._expand_folder_into_items(subfolder, user, relpath=curpath)
         return ext
+
+    def _get_folder_uri(self, doc, provider, top_identifier):
+        is_root_folder = doc["meta"].get("identifier") == top_identifier
+        try:
+            if is_root_folder:
+                return top_identifier
+            else:
+                return provider.getURI(doc, self.user)
+        except NotImplementedError:
+            pass
 
     def _parse_dataSet(self, dataSet=None, relpath=''):
         """
@@ -358,16 +401,9 @@ class Manifest:
                 }
 
                 if obj['_modelType'] == 'folder':
-                    is_root_folder = doc['meta'].get('identifier') == top_identifier
-                    try:
-                        if is_root_folder:
-                            uri = top_identifier
-                        else:
-                            uri = provider.getURI(doc, self.user)
-                    except NotImplementedError:
-                        uri = None
-
-                    if uri is None and self.expand_folders and not is_root_folder:
+                    uri = self._get_folder_uri(doc, provider, top_identifier)
+                    # if uri is None and self.expand_folders and not is_root_folder:
+                    if self.expand_folders:
                         external_objects += self._expand_folder_into_items(doc, self.user)
                         continue
 
@@ -386,6 +422,9 @@ class Manifest:
                         'uri': fileObj['linkUrl'],
                         'size': fileObj['size']
                     })
+                    if checksum := self._get_checksum(doc, fileObj):
+                        alg, value = checksum.split(":")
+                        ext_obj[f"wt:{alg}"] = value
                 external_objects.append(ext_obj)
             except (ValidationException, KeyError):
                 msg = 'While creating a manifest for Tale "{}" '.format(str(self.tale['_id']))
@@ -441,7 +480,8 @@ class Manifest:
             ),
             "@type": "wt:TaleVersion",
             "schema:name": self.version["name"],
-            "schema:dateModified": self.version["created"],  # FIXME: should it be updated?
+            "schema:dateCreated": self.version["created"],
+            "schema:dateModified": self.version["updated"],
             "schema:creator": {
                 "@id": f"mailto:{user['email']}",
                 "@type": "schema:Person",
@@ -450,6 +490,32 @@ class Manifest:
                 "schema:email": user["email"],
             },
         }
+
+    def add_run_info(self):
+        """Adds recorded run metadata."""
+
+        for run in Folder().find({'parentId': self.tale['runsRootId'], 'parentCollection': 'folder',
+                                  'runVersionId': self.version['_id']}):
+            creator = User().load(run["creatorId"], force=True)
+            run = {
+                "@id": (
+                    "https://data.wholetale.org/api/v1/"
+                    f"folder/{run['_id']}"
+                ),
+                "@type": "wt:RecordedRun",
+                "schema:name": run["name"],
+                "schema:dateCreated": run["created"],
+                "schema:dateModified": run["updated"],
+                "wt:runStatus": run["runStatus"],
+                "schema:creator": {
+                    "@id": f"mailto:{creator['email']}",
+                    "@type": "schema:Person",
+                    "schema:givenName": creator["firstName"],
+                    "schema:familyName": creator["lastName"],
+                    "schema:email": creator["email"],
+                }
+            }
+            self.manifest['wt:hasRecordedRuns'].append(run)
 
     def dump_manifest(self, **kwargs):
         return json.dumps(
@@ -464,8 +530,11 @@ class Manifest:
         image = self.imageModel.load(
             self.tale["imageId"], user=self.user, level=AccessType.READ
         )
+        # Filter, but keep in mind it removes extra keywords, so we need to add
+        # extra stuff like 'taleConfig' afterwards.
+        image = self.imageModel.filter(image, self.user)
         image["taleConfig"] = self.tale.get("config", {})
-        return self.imageModel.filter(image, self.user)
+        return image
 
     def dump_environment(self, **kwargs):
         return json.dumps(

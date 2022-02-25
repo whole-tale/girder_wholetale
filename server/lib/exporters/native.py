@@ -10,9 +10,9 @@ class NativeTaleExporter(TaleExporter):
         }
 
         # Add files from the workspace
-        for fullpath, relpath in self.list_workspace():
+        for fullpath, relpath in self.list_files():
             yield from self.dump_and_checksum(
-                self.bytes_from_file(fullpath), 'workspace/' + relpath
+                self.bytes_from_file(fullpath), relpath
             )
 
         # Compute checksums for extra files
@@ -24,7 +24,7 @@ class NativeTaleExporter(TaleExporter):
         self.append_aggergate_checksums()
 
         # Update manifest with filesizes and mimeTypes
-        self.append_aggregate_filesize_mimetypes('./workspace/')
+        self.append_aggregate_filesize_mimetypes()
 
         # Update manifest with filesizes and mimeTypes for extra items
         self.append_extras_filesize_mimetypes(extra_files)

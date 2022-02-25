@@ -1,20 +1,24 @@
-import mock
-import os
 import json
+import os
 import shutil
 import tarfile
 import tempfile
 import time
-import vcr
 import zipfile
-from webdavfs.webdavfs import WebDAVFS
-from fs.osfs import OSFS
+from datetime import datetime
+
+import mock
+import vcr
+from bson import ObjectId
 from fs.copy import copy_fs
-from tests import base
+from fs.osfs import OSFS
 from girder import config
 from girder.models.token import Token
-from datetime import datetime
-from .tests_helpers import get_events, event_types
+from girder.utility.path import lookUpPath
+from tests import base
+from webdavfs.webdavfs import WebDAVFS
+
+from .tests_helpers import event_types, get_events
 
 DATA_PATH = os.path.join(
     os.path.dirname(os.environ["GIRDER_TEST_DATA_PREFIX"]),
@@ -54,8 +58,8 @@ def setUpModule():
 
     global JobStatus, Tale, ImageStatus
     from girder.plugins.jobs.constants import JobStatus
-    from girder.plugins.wholetale.models.tale import Tale
     from girder.plugins.wholetale.constants import ImageStatus
+    from girder.plugins.wholetale.models.tale import Tale
 
 
 def tearDownModule():
@@ -180,7 +184,7 @@ class ImportTaleTestCase(base.TestCase):
             job = Job().findOne({"type": "wholetale.import_binder"})
             self.assertEqual(json.loads(job["kwargs"])["taleId"]["$oid"], tale["_id"])
 
-            for i in range(600):
+            for _ in range(600):
                 if job["status"] in {JobStatus.SUCCESS, JobStatus.ERROR}:
                     break
                 time.sleep(0.1)
@@ -214,14 +218,15 @@ class ImportTaleTestCase(base.TestCase):
                 "wt_tale_created",
                 "wt_import_started",
                 "wt_tale_updated",
-                "wt_import_completed"
+                "wt_import_completed",
             },
-            event_types(events, {"taleId": str(tale["_id"])})
+            event_types(events, {"taleId": str(tale["_id"])}),
         )
         self.model("image", "wholetale").remove(image)
 
     def testTaleImportBinder(self):
         since = datetime.utcnow().isoformat()
+
         def before_record_cb(request):
             if request.host == "localhost":
                 return None
@@ -242,27 +247,7 @@ class ImportTaleTestCase(base.TestCase):
                 ),
             )
 
-            from girder.plugins.wholetale.constants import (
-                PluginSettings,
-                InstanceStatus,
-            )
-
-            resp = self.request(
-                "/system/setting",
-                user=self.admin,
-                method="PUT",
-                params={
-                    "list": json.dumps(
-                        [
-                            {
-                                "key": PluginSettings.DATAVERSE_URL,
-                                "value": "https://dev2.dataverse.org",
-                            }
-                        ]
-                    )
-                },
-            )
-            self.assertStatusOk(resp)
+            from girder.plugins.wholetale.constants import InstanceStatus
 
             class fakeInstance(object):
                 _id = "123456789"
@@ -283,8 +268,8 @@ class ImportTaleTestCase(base.TestCase):
                     user=self.user,
                     params={
                         "url": (
-                            "https://dev2.dataverse.org/dataset.xhtml?"
-                            "persistentId=doi:10.5072/FK2/NYNHAM"
+                            "https://dataverse.harvard.edu/dataset.xhtml?"
+                            "persistentId=doi:10.7910/DVN/HOLVXA"
                         ),
                         "spawn": True,
                         "imageId": self.image["_id"],
@@ -298,9 +283,11 @@ class ImportTaleTestCase(base.TestCase):
                 from girder.plugins.jobs.models.job import Job
 
                 job = Job().findOne({"type": "wholetale.import_binder"})
-                self.assertEqual(json.loads(job["kwargs"])["taleId"]["$oid"], tale["_id"])
+                self.assertEqual(
+                    json.loads(job["kwargs"])["taleId"]["$oid"], tale["_id"]
+                )
 
-                for i in range(600):
+                for _ in range(600):
                     if job["status"] in {JobStatus.SUCCESS, JobStatus.ERROR}:
                         break
                     time.sleep(0.1)
@@ -317,13 +304,9 @@ class ImportTaleTestCase(base.TestCase):
         self.assertEqual(
             sorted([_["name"] for _ in resp.json]),
             [
-                "README.md",
-                "apt.txt",
-                "index.ipynb",
-                "install.R",
-                "runtime.txt",
-                "superuser_graph-monthly.ipynb",
-                "superuser_graph.ipynb",
+                "requirements.txt",
+                "rnr-report-wordcloud.ipynb",
+                "rnr.txt",
             ],
         )
 
@@ -331,12 +314,8 @@ class ImportTaleTestCase(base.TestCase):
         time.sleep(1)
         events = get_events(self, since)
         self.assertEqual(
-            {
-                "wt_tale_created",
-                "wt_import_started",
-                "wt_import_completed"
-            },
-            event_types(events, {"taleId": str(tale["_id"])})
+            {"wt_tale_created", "wt_import_started", "wt_import_completed"},
+            event_types(events, {"taleId": str(tale["_id"])}),
         )
         self.model("image", "wholetale").remove(image)
 
@@ -356,41 +335,118 @@ class ImportTaleTestCase(base.TestCase):
         )
 
         since = datetime.utcnow().isoformat()
-        with mock.patch("fs.copy.copy_fs") as mock_copy:
-            with open(
-                os.path.join(DATA_PATH, "604126f45f6bb2c4c997e967.zip"), "rb"
-            ) as fp:
-                resp = self.request(
-                    path="/tale/import",
-                    method="POST",
-                    user=self.user,
-                    type="application/zip",
-                    body=fp.read(),
-                )
-
-            self.assertStatusOk(resp)
-            tale = resp.json
-
-            from girder.plugins.jobs.models.job import Job
-
-            job = Job().findOne({"type": "wholetale.import_tale"})
-            self.assertEqual(
-                json.loads(job["kwargs"])["taleId"]["$oid"], tale["_id"]
+        with open(
+            os.path.join(DATA_PATH, "604126f45f6bb2c4c997e967.zip"), "rb"
+        ) as fp:
+            resp = self.request(
+                path="/tale/import",
+                method="POST",
+                user=self.user,
+                type="application/zip",
+                body=fp.read(),
             )
-            for i in range(600):
-                if job["status"] in {JobStatus.SUCCESS, JobStatus.ERROR}:
-                    break
-                time.sleep(0.1)
-                job = Job().load(job["_id"], force=True)
-            self.assertEqual(job["status"], JobStatus.SUCCESS)
-        mock_copy.assert_called_once()
+
+        self.assertStatusOk(resp)
+        tale = resp.json
+
+        from girder.plugins.jobs.models.job import Job
+
+        job = Job().findOne(
+            {"type": "wholetale.import_tale", "taleId": ObjectId(tale["_id"])}
+        )
+        self.assertEqual(
+            json.loads(job["kwargs"])["taleId"]["$oid"], tale["_id"]
+        )
+        for _ in range(600):
+            if job["status"] in {JobStatus.SUCCESS, JobStatus.ERROR}:
+                break
+            time.sleep(0.1)
+            job = Job().load(job["_id"], force=True)
+        self.assertEqual(job["status"], JobStatus.SUCCESS)
         # TODO: make it more extensive...
         tale = Tale().findOne({"title": "Water Tale"})
         self.assertTrue(tale is not None)
         self.assertEqual(
             [(obj["_modelType"], obj["mountPath"]) for obj in tale["dataSet"]],
-            [("item", "usco2005.xls")]
+            [("item", "usco2005.xls")],
         )
+
+        events = get_events(self, since)
+        self.assertEqual(
+            {
+                "wt_tale_created",
+                "wt_import_started",
+                "wt_tale_updated",
+                "wt_import_completed",
+            },
+            event_types(events, {"taleId": str(tale["_id"])}),
+        )
+        self.model("image", "wholetale").remove(image)
+
+    @vcr.use_cassette(os.path.join(DATA_PATH, "tale_import_rrzip.txt"))
+    def testTaleImportZipWithRuns(self):
+        image = self.model("image", "wholetale").createImage(
+            name="Jupyter Notebook",
+            creator=self.user,
+            public=True,
+            config=dict(
+                template="base.tpl",
+                buildpack="PythonBuildPack",
+                user="someUser",
+                port=8888,
+                urlPath="",
+            ),
+        )
+
+        since = datetime.utcnow().isoformat()
+        with open(
+            os.path.join(DATA_PATH, "61f18414fdfd5791fbb61b7b.zip"), "rb"
+        ) as fp:
+            resp = self.request(
+                path="/tale/import",
+                method="POST",
+                user=self.user,
+                type="application/zip",
+                body=fp.read(),
+            )
+
+        self.assertStatusOk(resp)
+        tale = resp.json
+
+        from girder.plugins.jobs.models.job import Job
+
+        job = Job().findOne({"type": "wholetale.import_tale"})
+        self.assertEqual(
+            json.loads(job["kwargs"])["taleId"]["$oid"], tale["_id"]
+        )
+        for _ in range(600):
+            if job["status"] in {JobStatus.SUCCESS, JobStatus.ERROR}:
+                break
+            time.sleep(0.1)
+            job = Job().load(job["_id"], force=True)
+        self.assertEqual(job["status"], JobStatus.SUCCESS)
+        # TODO: make it more extensive...
+        tale = Tale().load(tale["_id"], force=True)
+        self.assertEqual(tale["status"], 1)
+        resp = self.request(
+            path="/version",
+            method="GET",
+            user=self.user,
+            params={"taleId": tale["_id"]}
+        )
+        self.assertStatusOk(resp)
+        self.assertEqual(len(resp.json), 1)
+
+        resp = self.request(
+            path="/run",
+            method="GET",
+            user=self.user,
+            params={"taleId": tale["_id"]}
+        )
+        self.assertStatusOk(resp)
+        runs = resp.json
+        self.assertEqual(len(runs), 3)
+        self.assertEqual([_["runStatus"] for _ in runs], [4, 3, 3])
 
         events = get_events(self, since)
         self.assertEqual(
@@ -440,6 +496,130 @@ class ImportTaleTestCase(base.TestCase):
 
         shutil.rmtree(tmpdir)
         Tale().remove(tale)
+
+    def test_bdbag_import(self):
+        with open(
+            os.path.join(DATA_PATH, "Reporter_Cell_Line_14-3QDC.zip"), "rb"
+        ) as fp:
+            resp = self.request(
+                path="/dataset/importBag",
+                method="POST",
+                user=self.user,
+                type="application/zip",
+                body=fp.read(),
+            )
+
+            self.assertStatusOk(resp)
+            job = resp.json
+
+            from girder.plugins.jobs.models.job import Job
+
+            for _ in range(600):
+                if job["status"] in {JobStatus.SUCCESS, JobStatus.ERROR}:
+                    break
+                time.sleep(0.1)
+                job = Job().load(job["_id"], force=True)
+            self.assertEqual(job["status"], JobStatus.SUCCESS)
+
+        base = (
+            "/collection/WholeTale Catalog/WholeTale Catalog/Reporter_Cell_Line_14-3QDC"
+        )
+        obj = lookUpPath(os.path.join(base, "fetch.txt"))
+        self.assertEqual(obj["model"], "item")
+        self.assertEqual(obj["document"]["size"], 416)
+        obj = lookUpPath(os.path.join(base, "data"))
+        self.assertEqual(obj["model"], "folder")
+        self.assertEqual(obj["document"]["size"], 2720)
+
+    def test_dsRootPath(self):
+        from girder.plugins.jobs.models.job import Job
+
+        image = self.model("image", "wholetale").createImage(
+            name="Jupyter Classic",
+            creator=self.user,
+            public=True,
+            config=dict(
+                template="base.tpl",
+                buildpack="PythonBuildPack",
+                user="someUser",
+                port=8888,
+                urlPath="",
+            ),
+        )
+
+        def before_record_cb(request):
+            if request.host == "localhost":
+                return None
+            return request
+
+        def import_request(ds_root="", asTale=True):
+            resp = self.request(
+                path="/tale/import",
+                method="POST",
+                user=self.user,
+                params={
+                    "url": (
+                        "https://dataverse.harvard.edu/dataset.xhtml?"
+                        "persistentId=doi:10.7910/DVN/5WTSUZ"
+                    ),
+                    "spawn": False,
+                    "imageId": self.image["_id"],
+                    "asTale": asTale,
+                    "dsRootPath": ds_root,
+                },
+            )
+            self.assertStatusOk(resp)
+            tale = resp.json
+            job = Job().findOne(
+                {"type": "wholetale.import_binder", "taleId": ObjectId(tale["_id"])}
+            )
+            self.assertEqual(json.loads(job["kwargs"])["taleId"]["$oid"], tale["_id"])
+
+            for _ in range(600):
+                if job["status"] in {JobStatus.SUCCESS, JobStatus.ERROR}:
+                    break
+                time.sleep(0.1)
+                job = Job().load(job["_id"], force=True)
+            self.assertEqual(job["status"], JobStatus.SUCCESS)
+            return tale
+
+        my_vcr = vcr.VCR(before_record_request=before_record_cb)
+        with my_vcr.use_cassette(os.path.join(DATA_PATH, "tale_import_dsRootPath.txt")):
+            tale = import_request(ds_root="", asTale=False)
+
+        tale = Tale().load(tale["_id"], force=True)
+        self.assertEqual(
+            {_["mountPath"] for _ in tale["dataSet"]},
+            {
+                (
+                    "Replication Data for Anchor Management A Field Experiment to "
+                    "Encourage Families to Meet Critical Program Deadlines"
+                )
+            },
+        )
+        Tale().remove(tale)
+
+        with my_vcr.use_cassette(os.path.join(DATA_PATH, "tale_import_dsRootPath.txt")):
+            tale = import_request(ds_root="/", asTale=False)
+
+        tale = Tale().load(tale["_id"], force=True)
+        self.assertEqual(
+            {_["mountPath"] for _ in tale["dataSet"]},
+            {"00-README.md", "DHS-TANFRecertification-Public"},
+        )
+        Tale().remove(tale)
+
+        with my_vcr.use_cassette(os.path.join(DATA_PATH, "tale_import_dsRootPath.txt")):
+            tale = import_request(
+                ds_root="/DHS-TANFRecertification-Public/data", asTale=False
+            )
+        tale = Tale().load(tale["_id"], force=True)
+        self.assertEqual(
+            {_["mountPath"] for _ in tale["dataSet"]},
+            {"df_replication_anonymized.csv", "df_replication_anonymized.tab"},
+        )
+        Tale().remove(tale)
+        self.model("image", "wholetale").remove(image)
 
     def tearDown(self):
         self.model("user").remove(self.user)

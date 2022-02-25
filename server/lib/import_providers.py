@@ -1,3 +1,5 @@
+import textwrap
+
 from girder.utility.model_importer import ModelImporter
 
 from .entity import Entity
@@ -51,6 +53,28 @@ class ImportProvider:
         """Given a dataId import dataset as Tale"""
         raise NotImplementedError()
 
+    def proto_tale_from_datamap(self, dataMap: DataMap, user: object, asTale: bool) -> object:
+        if asTale:
+            relation = "IsDerivedFrom"
+        else:
+            relation = "Cites"
+
+        related_id = [
+            {
+                "relation": relation,
+                "identifier": dataMap["doi"] or dataMap["dataId"]
+            }
+        ]
+
+        long_name = dataMap["name"]
+        long_name = long_name.replace('-', ' ').replace('_', ' ')
+        shortened_name = textwrap.shorten(text=long_name, width=30)
+        return {
+            "relatedIdentifiers": related_id,
+            "title": f"A Tale for \"{shortened_name}\"",
+            "category": "science",
+        }
+
     def register(self, parent: object, parentType: str, progress, user, dataMap: DataMap,
                  base_url: str = None):
         stack = [(parent, parentType)]
@@ -99,11 +123,17 @@ class ImportProvider:
             meta.update(item.meta)
         gitem = self.itemModel.setMetadata(gitem, meta)
 
-        # girder does not allow anything else than http and https. So we need a better
-        # mechanism here to communicate relevant information to WTDM
-        self.fileModel.createLinkFile(item.name, url=item.url, parent=gitem, parentType='item',
-                                      creator=user, size=item.size, mimeType=item.mimeType,
-                                      reuseExisting=True)
+        if item.url and item.url.startswith('file://'):
+            with open(item.url[len('file://'):], 'rb') as f:
+                ModelImporter.model('upload').uploadFromFile(f, item.size, item.name, parent=gitem,
+                                                             parentType='item', user=user,
+                                                             mimeType=item.mimeType)
+        else:
+            # girder does not allow anything else than http and https. So we need a better
+            # mechanism here to communicate relevant information to WTDM
+            self.fileModel.createLinkFile(item.name, url=item.url, parent=gitem, parentType='item',
+                                          creator=user, size=item.size, mimeType=item.mimeType,
+                                          reuseExisting=True)
         return (gitem, 'item')
 
     def _listRecursive(self, user, pid: str, name: str, base_url: str = None, progress=None):

@@ -17,6 +17,7 @@ import shutil
 from tests import base
 
 from .tests_helpers import mockOtherRequest, get_events
+from girder.constants import AccessType
 from girder.models.item import Item
 from girder.exceptions import ValidationException
 from girder.models.folder import Folder
@@ -262,8 +263,6 @@ class TaleTestCase(base.TestCase):
             )
             self.assertStatusOk(resp)
             tale_admin_image = resp.json
-
-        from girder.constants import AccessType
 
         # Retrieve access control list for the newly created tale
         resp = self.request(
@@ -527,7 +526,7 @@ class TaleTestCase(base.TestCase):
         self.assertEqual(resp.json['imageId'], str(image['_id']))
         self.assertEqual(resp.json['title'], title)
         self.assertEqual(resp.json['description'], description)
-        self.assertEqual(resp.json['config'], {})
+        self.assertEqual(resp.json['config'], config)
         self.assertEqual(resp.json['public'], public)
         self.assertEqual(resp.json['publishInfo'][0]['pid'], 'published_pid')
         self.assertEqual(resp.json['publishInfo'][0]['uri'], 'published_url')
@@ -566,8 +565,6 @@ class TaleTestCase(base.TestCase):
         self.assertStatus(resp, 200)
 
     def testExport(self):
-        from server.lib.license import WholeTaleLicense
-
         resp = self.request(
             path='/tale', method='POST', user=self.user,
             type='application/json',
@@ -730,7 +727,7 @@ class TaleTestCase(base.TestCase):
             # self.assertEqual(tale['imageInfo']['status'], ImageStatus.INVALID)
 
     def testTaleNotifications(self):
-        since = datetime.now().isoformat()
+        since = datetime.utcnow().isoformat()
         with httmock.HTTMock(mockOtherRequest):
             # Create a new tale from a user image
             resp = self.request(
@@ -772,7 +769,7 @@ class TaleTestCase(base.TestCase):
                     'name': '%s %s' % (self.admin['firstName'], self.admin['lastName'])
                 }],
             "groups": []}
-        since = datetime.now().isoformat()
+        since = datetime.utcnow().isoformat()
 
         resp = self.request(
             path='/tale/%s/access' % tale['_id'], method='PUT',
@@ -786,7 +783,7 @@ class TaleTestCase(base.TestCase):
         self.assertEqual(events[0]['data']['affectedResourceIds']['taleId'], tale['_id'])
 
         # Update tale, confirm notifications
-        since = datetime.now().isoformat()
+        since = datetime.utcnow().isoformat()
         resp = self.request(
             path='/tale/{}'.format(str(tale['_id'])),
             method='PUT',
@@ -823,7 +820,7 @@ class TaleTestCase(base.TestCase):
                     "name": "%s %s" % (self.user['firstName'], self.user['lastName'])
                 }],
             "groups": []}
-        since = datetime.now().isoformat()
+        since = datetime.utcnow().isoformat()
 
         resp = self.request(
             path='/tale/%s/access' % tale['_id'], method='PUT',
@@ -843,7 +840,7 @@ class TaleTestCase(base.TestCase):
         self.assertStatusOk(resp)
 
         # Delete tale, test notification
-        since = datetime.now().isoformat()
+        since = datetime.utcnow().isoformat()
         resp = self.request(
             path='/tale/{_id}'.format(**tale), method='DELETE',
             user=self.admin)
@@ -1050,7 +1047,7 @@ class TaleWithWorkspaceTestCase(base.TestCase):
 
         copied_file_path = re.sub(workspace['name'], new_tale['_id'], fullPath)
         job = Job().findOne({'type': 'wholetale.copy_workspace'})
-        for _ in range(10):
+        for _ in range(100):
             job = Job().load(job['_id'], force=True)
             if job['status'] == JobStatus.SUCCESS:
                 break
@@ -1110,6 +1107,70 @@ class TaleWithWorkspaceTestCase(base.TestCase):
         self.model('tale', 'wholetale').remove(tale)
         self.model('collection').remove(self.data_collection)
 
+    def testExportBagWithRun(self):
+        tale = self._create_water_tale()
+
+        resp = self.request(
+            path="/version",
+            method="POST",
+            user=self.user,
+            params={"name": "version1", "taleId": tale["_id"]},
+        )
+        self.assertStatusOk(resp)
+        version = resp.json
+
+        resp = self.request(
+            path="/run",
+            method="POST",
+            user=self.user,
+            params={"versionId": version["_id"], "name": "run1"},
+        )
+        self.assertStatusOk(resp)
+        run = resp.json
+
+        # Set status to COMPLETED
+        resp = self.request(
+            path=f"/run/{run['_id']}/status",
+            method="PATCH",
+            user=self.user,
+            params={"status": 3},
+        )
+        self.assertStatusOk(resp)
+
+        resp = self.request(
+            path=f"/tale/{tale['_id']}/export", method='GET',
+            params={'taleFormat': 'bagit', 'versionId': run['runVersionId']},
+            isJson=False, user=self.user)
+        dirpath = tempfile.mkdtemp()
+        bag_file = os.path.join(dirpath, resp.headers["Content-Disposition"].split('"')[1])
+        with open(bag_file, 'wb') as fp:
+            for content in resp.body:
+                fp.write(content)
+        temp_path = bdb.extract_bag(bag_file, temp=True)
+        try:
+            bdb.validate_bag_structure(temp_path)
+        except bagit.BagValidationError:
+            # Results in UnexpectedRemoteFile because DataONE provides incompatible
+            # Results in error [UnexpectedRemoteFile] data/data/usco2000.xls exists in
+            # fetch.txt but is not in manifest. Ensure that any remote file references
+            # from fetch.txt are also present in the manifest..."
+            # This is because DataONE provides incompatible hashes in metadata for remote
+            # files and we do not recalculate them on export.
+            pass
+
+        self.assertTrue(os.path.exists(
+                        os.path.join(temp_path,
+                                     "data/runs/run1/wt_quickstart.ipynb")))
+
+        with open(os.path.join(temp_path, "metadata/manifest.json"), 'r') as f:
+            m = json.loads(f.read())
+            items = [i for i in m["aggregates"] if i["uri"] == "./runs/run1/wt_quickstart.ipynb"]
+            self.assertTrue(len(items) == 1)
+            self.assertTrue(m["dct:hasVersion"]["schema:name"] == "version1")
+            self.assertTrue(m["wt:hasRecordedRuns"][0]["schema:name"] == "run1")
+
+        shutil.rmtree(dirpath)
+
     def test_tale_defaults(self):
         tale = Tale().createTale(
             self.image,
@@ -1137,6 +1198,77 @@ class TaleWithWorkspaceTestCase(base.TestCase):
             else:
                 self.assertEqual(tale[key], restored_tale[key])
         Tale().remove(tale)
+
+    def test_relinquish(self):
+        resp = self.request(
+            path='/tale', method='POST', user=self.admin,
+            type='application/json',
+            body=json.dumps({
+                'imageId': str(self.image['_id']),
+                'dataSet': []
+            })
+        )
+        self.assertStatusOk(resp)
+        tale = resp.json
+
+        # get ACL
+        resp = self.request(
+            path=f"/tale/{tale['_id']}/access", method="GET", user=self.admin,
+        )
+        self.assertStatusOk(resp)
+        acls = resp.json
+
+        # add user
+        user_acl = {
+            "flags": [],
+            "id": str(self.user["_id"]),
+            "level": AccessType.READ,
+            "login": self.user["login"],
+            "name": f"{self.user['firstName']} {self.user['lastName']}"
+        }
+        acls["users"].append(user_acl)
+        resp = self.request(
+            path=f"/tale/{tale['_id']}/access", method="PUT", user=self.admin,
+            params={"access": json.dumps(acls)}
+        )
+
+        resp = self.request(
+            path=f"/tale/{tale['_id']}", method="GET", user=self.user,
+        )
+        self.assertStatusOk(resp)
+        self.assertEqual(resp.json["_accessLevel"], AccessType.READ)
+
+        # I want to hack it!
+        resp = self.request(
+            path=f"/tale/{tale['_id']}/relinquish", method="PUT", user=self.user,
+            exception=True, params={"level": AccessType.WRITE},
+        )
+        self.assertStatus(resp, 403)
+
+        # I want to do a noop
+        resp = self.request(
+            path=f"/tale/{tale['_id']}/relinquish", method="PUT", user=self.user,
+            exception=True, params={"level": AccessType.READ},
+        )
+        self.assertStatusOk(resp)
+
+        # I don't want it!
+        resp = self.request(
+            path=f"/tale/{tale['_id']}/relinquish", method="PUT", user=self.user,
+            isJson=False,
+        )
+        self.assertStatus(resp, 204)
+
+        resp = self.request(
+            path=f"/tale/{tale['_id']}", method="GET", user=self.user,
+        )
+        self.assertStatus(resp, 403)
+
+        # Drop it
+        resp = self.request(
+            path=f"/tale/{tale['_id']}", method="DELETE", user=self.admin,
+        )
+        self.assertStatusOk(resp)
 
     def tearDown(self):
         self.model('user').remove(self.user)

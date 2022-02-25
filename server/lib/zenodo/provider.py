@@ -15,6 +15,7 @@ from ..import_item import ImportItem
 from ..entity import Entity
 from ... import constants
 from ...models.tale import Tale
+from . import ZenodoNotATaleError
 
 
 class ZenodoImportProvider(ImportProvider):
@@ -87,9 +88,7 @@ class ZenodoImportProvider(ImportProvider):
             return Tale().load(existing_tale_id["_id"], user=user)
 
         if not self._is_tale(record):
-            raise ValueError(
-                "{} doesn't look like a Tale.".format(record["links"]["record_html"])
-            )
+            raise ZenodoNotATaleError(record)
 
         file_ref = record["files"][0]
         if file_ref["type"] != "zip":
@@ -183,6 +182,7 @@ class ZenodoImportProvider(ImportProvider):
                     "name": file_obj["key"].rsplit("/", maxsplit=1)[-1],
                     "url": file_obj["links"]["self"],
                     "mimeType": "application/octet-stream",
+                    "checksum": file_obj["checksum"],
                 }
             )
         return hierarchy
@@ -195,12 +195,14 @@ class ZenodoImportProvider(ImportProvider):
         def _recurse_hierarchy(hierarchy):
             files = hierarchy.pop("+files+")
             for obj in files:
+                alg, checksum = obj["checksum"].split(":")
                 yield ImportItem(
                     ImportItem.FILE,
                     obj["name"],
                     size=obj["size"],
                     mimeType=obj["mimeType"],
                     url=obj["url"],
+                    meta={"checksum": {alg: checksum}},
                 )
             for folder in hierarchy.keys():
                 yield ImportItem(ImportItem.FOLDER, name=folder)

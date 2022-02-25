@@ -548,7 +548,7 @@ class InstanceTestCase(base.TestCase):
         self.assertEqual(job['status'], JobStatus.INACTIVE)
         Job().updateJob(job, log='job queued', status=JobStatus.QUEUED)
         Job().updateJob(job, log='job running', status=JobStatus.RUNNING)
-        since = datetime.now().isoformat()
+        since = datetime.utcnow().isoformat()
         Job().updateJob(job, log='job failed', status=JobStatus.ERROR)
         instance = Instance().load(instance['_id'], force=True)
         self.assertEqual(instance['status'], InstanceStatus.ERROR)

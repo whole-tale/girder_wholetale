@@ -3,9 +3,15 @@ from girder.exceptions import RestException
 
 
 class DataONEVerificator:
-    def __init__(self, resource_server, key):
+    def __init__(self, resource_server=None, key=None, url=None, user=None):
         self.key = key
         self.resource_server = resource_server
+
+    @property
+    def headers(self):
+        if self.key:
+            return {"Authorization": f"Bearer {self.key}"}
+        return {}
 
     def verify(self):
         try:

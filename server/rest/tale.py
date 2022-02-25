@@ -4,7 +4,6 @@ import cherrypy
 import json
 import os
 import pathlib
-import textwrap
 from urllib.parse import urlparse
 from girder import events
 from girder.api import access
@@ -16,6 +15,7 @@ from girder.api.rest import Resource, filtermodel, RestException,\
 
 from girder.constants import AccessType, SortDir, TokenScope
 from girder.models.folder import Folder
+from girder.models.user import User
 from girder.models.token import Token
 from girder.models.setting import Setting
 from girder.plugins.jobs.models.job import Job
@@ -26,6 +26,7 @@ from girder.plugins.jobs.constants import JobStatus
 from ..schema.tale import taleModel as taleSchema
 from ..models.tale import Tale as taleModel
 from ..models.image import Image as imageModel
+from ..models.instance import Instance
 from ..lib import pids_to_entities, IMPORT_PROVIDERS
 from ..lib.dataone import DataONELocations  # TODO: get rid of it
 from ..lib.manifest import Manifest
@@ -63,6 +64,7 @@ class Tale(Resource):
         self.route('GET', (':id', 'manifest'), self.generateManifest)
         self.route('PUT', (':id', 'build'), self.buildImage)
         self.route('PUT', (':id', 'publish'), self.publishTale)
+        self.route('PUT', (':id', 'relinquish'), self.relinquishTaleAccess)
 
     @access.public
     @filtermodel(model='tale', plugin='wholetale')
@@ -146,9 +148,6 @@ class Tale(Resource):
                 new_imageId, user=self.getCurrentUser(),
                 level=AccessType.READ, exc=True)
             taleObj["imageId"] = image["_id"]
-            taleObj["config"] = {}  # Has to be reset, after image change
-            if "config" in tale:
-                tale.pop("config")
             tale["icon"] = image["icon"]  # Has to be consistent...
 
         for keyword in self._model.modifiableFields:
@@ -177,12 +176,23 @@ class Tale(Resource):
     @autoDescribeRoute(
         Description('Delete an existing tale.')
         .modelParam('id', model='tale', plugin='wholetale', level=AccessType.ADMIN)
+        .param("force", "If instances for the Tale exist, they will be shutdown",
+               default=False, required=False, dataType="boolean")
         .errorResponse('ID was invalid.')
         .errorResponse('Admin access was denied for the tale.', 403)
+        .errorResponse("This Tale has running Instances.", 409)
     )
-    def deleteTale(self, tale):
+    def deleteTale(self, tale, force):
+        instances = Instance().find({"taleId": tale["_id"]})
+        if instances.count() > 0 and not force:
+            raise RestException("This Tale has running Instances.", 409)
+
+        # Shutdown any running Instance
+        for instance in instances:
+            instance_creator = User().load(instance["creatorId"], force=True)
+            Instance().deleteInstance(instance, instance_creator)
         self._model.remove(tale)
-        users = [str(user['id']) for user in tale['access']['users']]
+        users = [str(user["id"]) for user in tale["access"]["users"]]
         notify_event(users, "wt_tale_removed", {"taleId": str(tale["_id"])})
 
     @access.user
@@ -205,6 +215,8 @@ class Tale(Resource):
         .param('git', "If True, treat the url as a location of a git repo "
                "that should be imported as the Tale's workspace.",
                default=False, required=False, dataType='boolean')
+        .param("dsRootPath", "Path inside the imported dataset that should be treated"
+               "as root for dataSet generation.", default="", required=False)
         .jsonParam('lookupKwargs', 'Optional keyword arguments passed to '
                    'GET /repository/lookup', requireObject=True, required=False)
         .jsonParam('taleKwargs', 'Optional keyword arguments passed to POST /tale',
@@ -212,7 +224,17 @@ class Tale(Resource):
         .responseClass('tale')
         .errorResponse('You are not authorized to create tales.', 403)
     )
-    def createTaleFromUrl(self, imageId, url, spawn, asTale, git, lookupKwargs, taleKwargs):
+    def createTaleFromUrl(
+        self,
+        imageId,
+        url,
+        spawn,
+        asTale,
+        git,
+        dsRootPath,
+        lookupKwargs,
+        taleKwargs
+    ):
         user = self.getCurrentUser()
         if taleKwargs is None:
             taleKwargs = {}
@@ -241,42 +263,36 @@ class Tale(Resource):
                     base_url=lookupKwargs.get("base_url", DataONELocations.prod_cn),
                     lookup=True
                 )[0]
+                provider = IMPORT_PROVIDERS.providerMap[dataMap["repository"]]
+
                 if dataMap["tale"]:  # url points to a published Tale
-                    provider = IMPORT_PROVIDERS.providerMap[dataMap["repository"]]
-                    tale = provider.import_tale(dataMap["dataId"], user)
-                    return tale
+                    return provider.import_tale(dataMap["dataId"], user)
 
-                if asTale:
-                    relation = "IsDerivedFrom"
-                else:
-                    relation = "Cites"
-                related_id = [
-                    {
-                        "relation": relation,
-                        "identifier": dataMap["doi"] or dataMap["dataId"]
-                    }
-                ]
-
-                if "title" not in taleKwargs:
-                    long_name = dataMap["name"]
-                    long_name = long_name.replace('-', ' ').replace('_', ' ')
-                    shortened_name = textwrap.shorten(text=long_name, width=30)
-                    taleKwargs["title"] = f"A Tale for \"{shortened_name}\""
+                proto_tale = provider.proto_tale_from_datamap(dataMap, user, asTale)
             else:
-                related_id = [{"relation": "IsSupplementTo", "identifier": url}]
-                if "title" not in taleKwargs:
-                    git_url = urlparse(url)
-                    if git_url.netloc == "github.com":
-                        name = "/".join(pathlib.Path(git_url.path).parts[1:3])
-                        taleKwargs["title"] = f"A Tale for \"gh:{name}\""
-                    else:
-                        taleKwargs["title"] = f"A Tale for \"{url}\""
+                git_url = urlparse(url)
+                if git_url.netloc == "github.com":
+                    name = "/".join(pathlib.Path(git_url.path).parts[1:3])
+                    title = f"A Tale for \"gh:{name}\""
+                else:
+                    title = f"A Tale for \"{url}\""
+                proto_tale = {
+                    "category": "science",
+                    "relatedIdentifiers": [{"relation": "IsSupplementTo", "identifier": url}],
+                    "title": title,
+                }
 
-            all_related_ids = related_id + taleKwargs.get("relatedIdentifiers", [])
+            if "title" in taleKwargs and "title" in proto_tale:
+                proto_tale.pop("title")
+
+            all_related_ids = proto_tale.pop("relatedIdentifiers") + \
+                taleKwargs.get("relatedIdentifiers", [])
             taleKwargs["relatedIdentifiers"] = [
                 json.loads(rel_id)
                 for rel_id in {json.dumps(_, sort_keys=True) for _ in all_related_ids}
             ]
+
+            taleKwargs.update(proto_tale)
 
             if not (imageId or url):
                 msg = (
@@ -295,7 +311,6 @@ class Tale(Resource):
                 image,
                 [],
                 creator=user,
-                category="science",
                 save=True,
                 public=False,
                 status=TaleStatus.PREPARING,
@@ -321,10 +336,15 @@ class Tale(Resource):
                     _async=True,
                     module="girder.plugins.wholetale.tasks.import_binder",
                     args=(lookupKwargs,),
-                    kwargs={"taleId": tale["_id"], "spawn": spawn, "asTale": asTale},
+                    kwargs={
+                        "taleId": tale["_id"],
+                        "spawn": spawn,
+                        "asTale": asTale,
+                        "dsRootPath": dsRootPath,
+                    },
                     otherFields={
                         "taleId": tale["_id"],
-                        "wt_notification_id": str(notification["_id"])
+                        "wt_notification_id": str(notification["_id"]),
                     }
                 )
                 Job().scheduleJob(job)
@@ -397,13 +417,73 @@ class Tale(Resource):
                    required=False)
         .param('public', 'Whether the tale should be publicly visible.', dataType='boolean',
                required=False)
+        .param("force", "If instances for the Tale exist, they will be shutdown",
+               default=False, required=False, dataType="boolean")
         .errorResponse('ID was invalid.')
         .errorResponse('Admin access was denied for the tale.', 403)
+        .errorResponse("This Tale has running Instances.", 409)
     )
-    def updateTaleAccess(self, tale, access, publicFlags, public):
+    def updateTaleAccess(self, tale, access, publicFlags, public, force):
         user = self.getCurrentUser()
+        orig_access = tale["access"]
+        tale = self._model.setAccessList(
+            tale, access, save=False, user=user, setPublic=public, publicFlags=publicFlags)
+
+        instances_to_kill = []
+        for instance in Instance().find({"taleId": tale["_id"]}):
+            creator = User().load(instance["creatorId"], force=True)
+            if not self._model.hasAccess(tale, user=creator, level=AccessType.WRITE):
+                instances_to_kill.append((instance, creator))
+
+        if instances_to_kill and not force:
+            raise RestException("This Tale has running Instances.", 409)
+
+        for instance, creator in instances_to_kill:
+            Instance().deleteInstance(instance, creator)
+
+        tale["access"] = orig_access  # For notifications
         return self._model.setAccessList(
             tale, access, save=True, user=user, setPublic=public, publicFlags=publicFlags)
+
+    @access.user(scope=TokenScope.DATA_READ)
+    @autoDescribeRoute(
+        Description('Remove or decrease the level of user access to a tale.')
+        .modelParam('id', model='tale', plugin='wholetale', level=AccessType.READ)
+        .param(
+            "level", "New access level. Must be lower than current.",
+            enum=[AccessType.WRITE, AccessType.READ, AccessType.NONE],
+            default=AccessType.NONE,
+            dataType="integer",
+        )
+        .param("force", "If instances for the Tale exist, they will be shutdown",
+               default=False, required=False, dataType="boolean")
+        .errorResponse("No content (Tale access level set to NONE)", 204)
+        .errorResponse("ID was invalid.")
+        .errorResponse("Access was denied for the tale.", 403)
+        .errorResponse("Request to increase access level was denied.", 403)
+        .errorResponse("This Tale has running Instances.", 409)
+    )
+    def relinquishTaleAccess(self, tale, level, force):
+        user = self.getCurrentUser()
+        if level > self._model.filter(tale, user)["_accessLevel"]:
+            raise RestException("Request to increase access level was denied.", 403)
+
+        updated_tale = self._model.setUserAccess(tale, user, level, save=False)
+        instances_to_kill = []
+        for instance in Instance().find({"taleId": tale["_id"], "creatorId": user["_id"]}):
+            if not self._model.hasAccess(updated_tale, user=user, level=AccessType.WRITE):
+                instances_to_kill.append(instance)
+
+        if len(instances_to_kill) > 0 and not force:
+            raise RestException("This Tale has running Instances.", 409)
+
+        for instance in instances_to_kill:
+            Instance().deleteInstance(instance, user)
+        tale = self._model.setUserAccess(tale, user, level, save=True)
+
+        if level > AccessType.NONE:
+            return self._model.filter(tale, user)
+        cherrypy.response.status = 204
 
     @staticmethod
     def _get_version(user, tale, versionId):
@@ -438,9 +518,12 @@ class Tale(Resource):
     def exportTale(self, tale, taleFormat, versionId):
         user = self.getCurrentUser()
         version = self._get_version(user, tale, versionId)
-        workspace_path = os.path.join(version["fsPath"], "workspace")
-        with open(os.path.join(version["fsPath"], "manifest.json"), "r") as fp:
-            manifest = json.load(fp)
+
+        # Get the manifest for the version, which may contain recorded run information
+        manifest_doc = Manifest(
+            tale, self.getCurrentUser(), expand_folders=True, versionId=version["_id"]
+        )
+
         with open(os.path.join(version["fsPath"], "environment.json"), "r") as fp:
             environment = json.load(fp)
 
@@ -449,7 +532,7 @@ class Tale(Resource):
         elif taleFormat == 'native':
             export_func = NativeTaleExporter
 
-        exporter = export_func(manifest, environment, workspace_path)
+        exporter = export_func(user, manifest_doc.manifest, environment)
         setResponseHeader('Content-Type', 'application/zip')
         setContentDisposition(f"{version['_id']}.zip")
         return exporter.stream

@@ -268,7 +268,7 @@ def get_documents(package_pid, base_url):
 
     result = query(q='resourceMap:"{}"'.format(esc(package_pid)),
                    fields=["identifier", "formatType", "title", "size", "formatId",
-                           "fileName", "documents"],
+                           "fileName", "documents", "checksum", "checksumAlgorithm"],
                    base_url=base_url)
 
     if 'response' not in result or 'docs' not in result['response']:

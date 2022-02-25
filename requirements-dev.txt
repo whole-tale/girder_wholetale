@@ -1,3 +1,4 @@
 # dependencies for tests
 vcrpy
 bdbag
+responses

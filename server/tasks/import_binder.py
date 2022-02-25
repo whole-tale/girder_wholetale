@@ -3,6 +3,7 @@
 
 import json
 import os
+import pathlib
 import stat
 import sys
 import time
@@ -20,7 +21,7 @@ from fs.permissions import Permissions
 from fs.tarfs import ReadTarFS
 from fs.zipfs import ReadZipFS
 from girder import events
-from girderfs.core import WtDmsGirderFS
+from girderfs.dms import WtDmsGirderFS
 from girder_client import GirderClient
 from girder.constants import AccessType
 from girder.models.folder import Folder
@@ -69,6 +70,30 @@ def sanitize_binder(root):
             sanitize_binder(root)
 
 
+def folder_to_dataSet(resource, user):
+    # Create a dataset with the content of root ds folder,
+    # so that it looks nicely and it's easy to copy to workspace later on
+    data_set = [
+        {
+            "itemId": str(folder["_id"]),
+            "mountPath": folder["name"],
+            "_modelType": "folder",
+        }
+        for folder in Folder().childFolders(
+            parentType="folder", parent=resource, user=user
+        )
+    ]
+    data_set += [
+        {
+            "itemId": str(item["_id"]),
+            "mountPath": item["name"],
+            "_modelType": "item",
+        }
+        for item in Folder().childItems(resource)
+    ]
+    return data_set
+
+
 def run(job):
     jobModel = Job()
     jobModel.updateJob(job, status=JobStatus.RUNNING)
@@ -78,6 +103,7 @@ def run(job):
     tale = Tale().load(job["kwargs"]["taleId"], user=user)
     spawn = job["kwargs"]["spawn"]
     asTale = job["kwargs"]["asTale"]
+    dataset_root_path = job["kwargs"].get("dsRootPath", "/")
     token = Token().createToken(user=user, days=0.5)
     wt_notification = Notification().load(job["wt_notification_id"])
 
@@ -119,39 +145,23 @@ def run(job):
             resource = Folder().load(imported_data[0], user=user, level=AccessType.READ)
             resourceType = "folder"
 
-        data_set = [
-            {
-                "itemId": imported_data[0],
-                "mountPath": resource["name"],
-                "_modelType": resourceType,
-            }
-        ]
+        dataset_root_path = pathlib.Path(dataset_root_path)
+        if dataset_root_path.is_absolute() and resourceType == "folder":
+            # the minimum is '/' which we interpret as inside the imported_data root
+            # and we skip parts[0]
+            for name in dataset_root_path.parts[1:]:
+                resource = Folder().findOne({"parentId": resource["_id"], "name": name})
+            data_set = folder_to_dataSet(resource, user)
+        else:
+            data_set = [
+                {
+                    "itemId": str(resource["_id"]),
+                    "mountPath": resource["name"],
+                    "_modelType": resourceType,
+                }
+            ]
 
         if asTale:
-            if resourceType == "folder":
-                # Create a dataset with the content of root ds folder,
-                # so that it looks nicely and it's easy to copy to workspace later on
-                workspace_data_set = [
-                    {
-                        "itemId": folder["_id"],
-                        "mountPath": folder["name"],
-                        "_modelType": "folder ",
-                    }
-                    for folder in Folder().childFolders(
-                        parentType="folder", parent=resource, user=user
-                    )
-                ]
-                workspace_data_set += [
-                    {
-                        "itemId": item["_id"],
-                        "mountPath": item["name"],
-                        "_modelType": "item",
-                    }
-                    for item in Folder().childItems(resource)
-                ]
-            else:
-                workspace_data_set = data_set
-
             # 2. Create a session
             # TODO: yay circular dependencies! IMHO we really should merge
             # wholetale and wt_data_manager plugins...
@@ -159,7 +169,7 @@ def run(job):
 
             # Session is created so that we can easily copy files to workspace,
             # without worrying about how to handler transfers. DMS will do that for us <3
-            session = Session().createSession(user, dataSet=workspace_data_set)
+            session = Session().createSession(user, dataSet=data_set)
 
             # 3. Copy data to the workspace using WebDAVFS
             progressCurrent += 1

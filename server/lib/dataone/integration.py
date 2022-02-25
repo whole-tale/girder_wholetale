@@ -68,7 +68,7 @@ def dataoneDataImport(self, uri, title, environment, api, apiToken, force):
     dashboard_url = os.environ.get('DASHBOARD_URL', 'https://dashboard.wholetale.org')
     location = urlunparse(
         urlparse(dashboard_url)._replace(
-            path='/browse',
+            path='/mine',
             query=urlencode(query))
     )
     setResponseHeader('Location', location)

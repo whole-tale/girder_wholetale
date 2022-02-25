@@ -27,7 +27,7 @@ class GlobusImportProvider(ImportProvider):
         self.clients = Clients()
 
     def create_regex(self):
-        return re.compile(r'^https://.*petrel.*/mdf/detail.*')
+        return re.compile(r'^https://.*anl.gov/mdf/detail.*')
 
     def lookup(self, entity: Entity) -> DataMap:
         endpoint, path, doi, title = self._extractMeta(entity.getValue())
@@ -65,7 +65,10 @@ class GlobusImportProvider(ImportProvider):
         globus_url = urlparse(globus_uri)
         identifier = deep_get(globus_meta, f"{meta_prefix}.dc.identifier.identifier")
         identifier_type = deep_get(globus_meta, f"{meta_prefix}.dc.identifier.identifierType")
-        doi = f"{identifier_type.lower()}:{identifier}"
+        if ":" in identifier:
+            doi = identifier
+        else:
+            doi = f"{identifier_type.lower()}:{identifier}"
         title = deep_get(globus_meta, f"{meta_prefix}.dc.titles.0.title")
         return globus_url.netloc, globus_url.path, doi, title
 
@@ -94,7 +97,7 @@ class GlobusImportProvider(ImportProvider):
 
     def _listRecursive(self, user, pid: str, name: str, base_url: str = None, progress=None):
         endpoint, path, doi, title = self._extractMeta(pid)
-        yield ImportItem(ImportItem.FOLDER, name=title, identifier='doi:' + doi)
+        yield ImportItem(ImportItem.FOLDER, name=title, identifier=doi)
         tc = self.clients.getUserTransferClient(user)
         yield from self._listRecursive2(tc, endpoint, path, progress)
         yield ImportItem(ImportItem.END_FOLDER)

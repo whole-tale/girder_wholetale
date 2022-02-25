@@ -16,8 +16,12 @@ add_python_test(import
   PLUGIN wholetale
   EXTERNAL_DATA
   plugins/wholetale/604126f45f6bb2c4c997e967.zip
+  plugins/wholetale/61f18414fdfd5791fbb61b7b.zip
+  plugins/wholetale/Reporter_Cell_Line_14-3QDC.zip
   plugins/wholetale/tale_import_binder.txt
   plugins/wholetale/tale_import_zip.txt
+  plugins/wholetale/tale_import_dsRootPath.txt
+  plugins/wholetale/tale_import_rrzip.txt
 )
 add_python_test(import_failures PLUGIN wholetale)
 add_python_test(instance PLUGIN wholetale)
@@ -27,6 +31,7 @@ add_python_test(manifest
   PLUGIN wholetale
   EXTERNAL_DATA
   plugins/wholetale/manifest_mock_catalog.json
+  plugins/wholetale/reference_dataset.json
 )
 add_python_test(dataone_register
   PLUGIN wholetale
@@ -60,6 +65,9 @@ add_python_test(integration
 add_python_test(repository
   PLUGIN wholetale
 )
+add_python_test(bdbag
+  PLUGIN wholetale
+)
 add_python_test(dataset
   PLUGIN wholetale
   EXTERNAL_DATA
@@ -69,5 +77,12 @@ add_python_test(git PLUGIN wholetale)
 add_python_test(publish PLUGIN wholetale)
 add_python_test(notification PLUGIN wholetale)
 add_python_test(globus PLUGIN wholetale)
+add_python_test(sharing PLUGIN wholetale)
+add_python_test(verificator PLUGIN wholetale)
+add_python_test(deriva
+  PLUGIN wholetale
+  EXTERNAL_DATA
+  plugins/wholetale/Dataset_1-882P.zip
+)
 add_python_style_test(python_static_analysis_wholetale
                       "${PROJECT_SOURCE_DIR}/plugins/wholetale/server")

@@ -336,7 +336,7 @@ class Account(Resource):
         except KeyError:
             raise RestException('Unknown provider "%s".' % provider)
 
-        Verificators[provider](resource_server, key).verify()
+        Verificators[provider](resource_server=resource_server, key=key).verify()
 
         user_tokens = user.get("otherTokens", [])
         for i, user_token in enumerate(user_tokens):

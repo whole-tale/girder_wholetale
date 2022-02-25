@@ -18,6 +18,7 @@ DATA_PATH = os.path.join(
 def setUpModule():
     base.enabledPlugins.append('wholetale')
     base.enabledPlugins.append('wt_home_dir')
+    base.enabledPlugins.append('wt_versioning')
     base.startServer()
 
 
@@ -390,6 +391,47 @@ class DataverseHarversterTestCase(base.TestCase):
 
         Tale().remove(tale)
         Image().remove(image)
+
+    def testProtoTale(self):
+        from server.lib.dataverse.provider import DataverseImportProvider
+        provider = DataverseImportProvider()
+
+        datamap = {
+            "dataId": (
+                "https://dataverse.harvard.edu/dataset.xhtml?"
+                "persistentId=doi:10.7910/DVN/26721"
+            ),
+            "doi": "doi:10.7910/DVN/26721",
+            "name": (
+                "Replication data for: Priming Predispositions "
+                "and Changing Policy Positions"
+            ),
+            "repository": "Dataverse",
+            "size": 44382520,
+            "tale": False,
+        }
+
+        tale = provider.proto_tale_from_datamap(datamap, self.user, False)
+        self.assertEqual(set(tale.keys()), {"title", "relatedIdentifiers", "category"})
+        tale = provider.proto_tale_from_datamap(datamap, self.user, True)
+        self.assertEqual(tale["authors"][0]["lastName"], "Tesler")
+
+        datamap = {
+            "dataId": (
+                "http://dataverse.icrisat.org/dataset.xhtml?"
+                "persistentId=doi:10.21421/D2/TCCVS7"
+            ),
+            "doi": "doi:10.21421/D2/TCCVS7",
+            "name": (
+                "Phenotypic evaluation data of International Chickpea "
+                "Varietal Trials (ICVTs) – Desi for Year 2016-17"
+            ),
+            "repository": "Dataverse",
+            "size": 99504,
+            "tale": False,
+        }
+        tale = provider.proto_tale_from_datamap(datamap, self.user, True)
+        self.assertEqual(tale["authors"][0]["firstName"], "Pooran")
 
     def tearDown(self):
         self.model('user').remove(self.user)
