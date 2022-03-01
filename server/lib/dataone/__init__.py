@@ -13,10 +13,9 @@ class DataONELocations:
     # Development member node
     dev_mn = "https://dev.nceas.ucsb.edu/knb/d1/mn/v2"
     # Development coordinating node
-    dev_cn = "https://cn-stage-2.test.dataone.org/cn/v2"
+    dev_cn = "https://cn-stage.test.dataone.org/cn/v2"
 
 
 addProvider(type("DataONEDev", (FakeDataONE,), {}))
 addProvider(type("DataONEProd", (FakeDataONE,), {}))
 addProvider(type("DataONEStage", (FakeDataONE,), {}))
-addProvider(type("DataONEStage2", (FakeDataONE,), {}))

@@ -55,7 +55,6 @@ Verificators = {
     "dataoneprod": DataONEVerificator,
     "dataonedev": DataONEVerificator,
     "dataonestage": DataONEVerificator,
-    "dataonestage2": DataONEVerificator,
     "deriva": DerivaVerificator
 }
 

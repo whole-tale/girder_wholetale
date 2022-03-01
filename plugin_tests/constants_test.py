@@ -25,4 +25,4 @@ class TestDataONEUtils(base.TestCase):
 
         self.assertEqual(DataONELocations.prod_cn, 'https://cn.dataone.org/cn/v2')
         self.assertEqual(DataONELocations.dev_mn, 'https://dev.nceas.ucsb.edu/knb/d1/mn/v2')
-        self.assertEqual(DataONELocations.dev_cn, 'https://cn-stage-2.test.dataone.org/cn/v2')
+        self.assertEqual(DataONELocations.dev_cn, 'https://cn-stage.test.dataone.org/cn/v2')

@@ -5,7 +5,7 @@ from girder.api.rest import getApiUrl
 from girder.plugins.oauth.providers.base import ProviderBase
 
 # Because, why would they keep up to date list of CNs and deployments?
-D1_ENV_DICT["stage2"] = dict(base_url="https://cn-stage-2.test.dataone.org/cn")
+D1_ENV_DICT["stage"] = dict(base_url="https://cn-stage.test.dataone.org/cn")
 
 
 class FakeDataONE(ProviderBase):
