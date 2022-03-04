@@ -83,7 +83,7 @@ class RepositoryTestCase(base.TestCase):
             {
                 "provider": "dataone",
                 "access_token": "dataone_token",
-                "resource_server": "cn-stage-2.test.dataone.org",
+                "resource_server": "cn-stage.test.dataone.org",
                 "token_type": "dataone",
             }
         ]
