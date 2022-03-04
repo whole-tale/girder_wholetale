@@ -266,7 +266,7 @@ class Tale(Resource):
                 provider = IMPORT_PROVIDERS.providerMap[dataMap["repository"]]
 
                 if dataMap["tale"]:  # url points to a published Tale
-                    return provider.import_tale(dataMap["dataId"], user)
+                    return provider.import_tale(dataMap, user)
 
                 proto_tale = provider.proto_tale_from_datamap(dataMap, user, asTale)
             else:
