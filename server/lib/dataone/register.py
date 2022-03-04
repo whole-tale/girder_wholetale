@@ -258,7 +258,8 @@ def D1_lookup(path, base_url):
 
     return DataMap(package_pid, total_size, name=metadata.get('title', 'no title'),
                    doi=metadata.get('identifier', 'no DOI'),
-                   repository='DataONE', tale=is_tale)
+                   repository='DataONE', tale=is_tale,
+                   base_url=base_url)
 
 
 def get_documents(package_pid, base_url):
