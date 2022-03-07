@@ -138,7 +138,7 @@ class DataOneImportProvider(ImportProvider):
             return Tale().load(existing_tale_id["_id"], user=user)
 
         if not data_map.tale:
-            raise DataONENotATaleError(data_map)
+            raise DataONENotATaleError(data_map.dataId, data_map.base_url)
 
         docs = get_documents(data_map.dataId, data_map.base_url)
         for doc in docs:
