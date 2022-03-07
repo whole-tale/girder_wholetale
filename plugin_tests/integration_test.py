@@ -146,12 +146,53 @@ class IntegrationTestCase(base.TestCase):
                 parse_qs(urlparse(resp.headers["Location"]).query), response
             )
 
-    def testDataoneIntegration(self):
+    @vcr.use_cassette(os.path.join(DATA_PATH, "dataone_integration.txt"))
+    def testDataoneTaleIntegration(self):
+        from girder.plugins.wholetale.models.image import Image
+
+        # Tale case
+        image = Image().createImage(name="JupyterLab", creator=self.user, public=True)
+        resp = self.request(
+            "/integration/dataone",
+            method="GET",
+            user=self.user,
+            params={
+                "uri": "urn:uuid:f57b69fe-7001-41d3-80af-87d6a4d77870",
+                "api": "https://dev.nceas.ucsb.edu/knb/d1/mn/v2",
+            },
+            isJson=False,
+        )
+
+        self.assertStatus(resp, 303)
+        path = urlparse(resp.headers["Location"]).path
+        self.assertTrue(path.startswith("/run/"))
+        tale_id = path.split("/")[-1]
+
+        resp = self.request(f"/tale/{tale_id}", method="GET", user=self.user)
+        self.assertStatusOk(resp)
+        tale = resp.json
+        gold = [
+            {
+                "date": "2022-03-07T14:47:33.486Z",
+                "pid": "doi:10.5072/FK2SF2W48V",
+                "repository": "DataONE",
+                "repository_id": "urn:uuid:f57b69fe-7001-41d3-80af-87d6a4d77870",
+                "uri": "https://cn.dataone.org/cn/v2/resolve/doi%3A10.5072%2FFK2SF2W48V",
+            }
+        ]
+        self.assertEqual(gold, tale["publishInfo"])
+        Image().remove(image)
+
+    def testDataoneNonTaleIntegration(self):
+        from girder.plugins.wholetale.lib.dataone import DataONENotATaleError
         from girder.plugins.wholetale.lib.data_map import DataMap
 
         class fakeProvider:
             def lookup(self, entity):
-                return DataMap("urn:uuid:12345.6789", 0)
+                return DataMap("urn:uuid:12345.6789", 0, base_url="https://some.dataone.cn/")
+
+            def import_tale(self, data_map, user, force=False):
+                raise DataONENotATaleError(data_map)
 
         with mock.patch(
             "girder.plugins.wholetale.lib.dataone.integration.DataOneImportProvider",
@@ -166,6 +207,7 @@ class IntegrationTestCase(base.TestCase):
                     "title": "dataset title",
                     "environment": "rstudio",
                 },
+                isJson=False,
             )
 
         self.assertStatus(resp, 303)

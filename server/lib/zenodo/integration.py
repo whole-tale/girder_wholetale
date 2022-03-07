@@ -10,6 +10,7 @@ from girder.api.rest import boundHandler, RestException
 
 from . import ZenodoNotATaleError
 from .. import IMPORT_PROVIDERS
+from ..data_map import DataMap
 from ..integration_utils import autologin
 
 
@@ -59,7 +60,8 @@ def zenodoDataImport(self, doi, record_id, resource_server, environment, force):
     url = "https://{}/record/{}".format(resource_server, record_id)
     provider = IMPORT_PROVIDERS.providerMap["Zenodo"]
     try:
-        tale = provider.import_tale(url, user, force=force)
+        data_map = DataMap(url, -1)  # mock DatMmap to pass url
+        tale = provider.import_tale(data_map, user, force=force)
         location = urlunparse(
             urlparse(dashboard_url)._replace(
                 path="/run/{}".format(tale["_id"]),

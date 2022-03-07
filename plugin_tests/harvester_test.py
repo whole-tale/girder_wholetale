@@ -1,5 +1,4 @@
 import base64
-import httmock
 import json
 import mock
 import operator
@@ -7,7 +6,6 @@ import os
 import six
 import vcr
 from tests import base
-from girder.api.rest import RestException
 
 
 DATA_PATH = os.path.join(
@@ -146,6 +144,7 @@ class DataONEHarversterTestCase(base.TestCase):
         self.assertEqual(
             dataMap, [
                 {
+                    'base_url': 'https://cn.dataone.org/cn/v2',
                     'dataId': 'resource_map_doi:10.18739/A2ND53',
                     'doi': 'doi:10.18739/A2ND53',
                     'name': 'Thaw depth in the ITEX plots at Barrow and Atqasuk, Alaska',

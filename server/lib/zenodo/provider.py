@@ -74,8 +74,9 @@ class ZenodoImportProvider(ImportProvider):
     def _get_doi_from_record(record):
         return "doi:" + record["doi"]
 
-    def import_tale(self, dataId, user, force=False):
+    def import_tale(self, data_map, user, force=False):
         # dataId in this case == record["links"]["record_html"]
+        dataId = data_map.dataId
         record = self._get_record(dataId)
         existing_tale_id = Tale().findOne(
             query={
