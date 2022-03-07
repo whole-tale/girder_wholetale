@@ -67,7 +67,15 @@ def dataoneDataImport(self, uri, title, environment, api, apiToken, force):
             )
         )
     except DataONENotATaleError:
-        query = {"uri": uri, "asTale": True, "name": title, "environment": environment, "api": api}
+        query = dict()
+        query['uri'] = uri
+        if title:
+            query['name'] = title
+        if environment:
+            query['environment'] = environment
+        if api:
+            query['api'] = api
+
         location = urlunparse(
             urlparse(dashboard_url)._replace(path="/mine", query=urlencode(query))
         )
