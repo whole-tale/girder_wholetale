@@ -57,7 +57,7 @@ def dataoneDataImport(self, uri, title, environment, api, apiToken, force):
         redirect_if_tale_exists(user, self.getCurrentToken(), doi)
 
     dashboard_url = os.environ.get("DASHBOARD_URL", "https://dashboard.wholetale.org")
-    entity = Entity(uri, user)
+
     try:
         tale = DataOneImportProvider().import_tale(data_map, user, force=force)
         location = urlunparse(

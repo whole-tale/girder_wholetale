@@ -20,17 +20,15 @@ class DataONENotATaleError(Exception):
     """Exception raised if DataONE record is not a Tale.
 
     Attributes:
-        pid - identifier of the record.
-        base_url - CN url used to query the record.
+        data_map - DataMap of the record.
 
     """
 
     def __init__(
-        self, pid, base_url, message="DataONE package ({}) is not a Tale (CN: {})"
+        self, data_map, message="DataONE package ({}) is not a Tale (CN: {})"
     ):
-        self.pid = pid
-        self.base_url = base_url
-        self.message = message.format(self.pid, self.base_url)
+        self.data_map = data_map
+        self.message = message.format(self.data_map.dataId, self.data_map.base_url)
         super().__init__(self.message)
 
 

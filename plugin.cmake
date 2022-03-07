@@ -61,6 +61,7 @@ add_python_test(integration
   PLUGIN wholetale
   EXTERNAL_DATA
   plugins/wholetale/dataverse_integration.txt
+  plugins/wholetale/dataone_integration.txt
 )
 add_python_test(repository
   PLUGIN wholetale
