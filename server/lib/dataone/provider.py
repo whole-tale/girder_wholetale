@@ -130,23 +130,23 @@ class DataOneImportProvider(ImportProvider):
         existing_tale_id = Tale().findOne(
             query={
                 "creatorId": user["_id"],
-                "publishInfo.pid": {"$eq": data_map["doi"]},
+                "publishInfo.pid": {"$eq": data_map.doi},
             },
             fields={"_id"},
         )
         if existing_tale_id and not force:
             return Tale().load(existing_tale_id["_id"], user=user)
 
-        if not data_map["tale"]:
+        if not data_map.tale:
             raise DataONENotATaleError(data_map)
 
-        docs = get_documents(data_map["dataId"], data_map["base_url"])
+        docs = get_documents(data_map.dataId, data_map.base_url)
         for doc in docs:
             if doc.get("formatType") == "METADATA":
                 metadata = doc
             elif doc.get("formatType") == "DATA":
                 zipfile = doc
-        file_url = f"{data_map['base_url']}/object/{zipfile['identifier']}"
+        file_url = f"{data_map.base_url}/object/{zipfile['identifier']}"
 
         def stream_zipfile(chunk_size):
             with urlopen(file_url) as src:
@@ -161,12 +161,12 @@ class DataOneImportProvider(ImportProvider):
                 "pid": metadata["identifier"],
                 "uri": metadata["dataUrl"],  # NOTE: it's wrong for test data
                 "date": metadata["dateUploaded"],  # convert to date?
-                "repository_id": data_map["dataId"],
+                "repository_id": data_map.dataId,
                 "repository": "DataONE",
             }
         ]
         relatedIdentifiers = [
-            {"relation": "IsDerivedFrom", "identifier": data_map["doi"]}
+            {"relation": "IsDerivedFrom", "identifier": data_map.doi}
         ]
         return Tale().createTaleFromStream(
             stream_zipfile,

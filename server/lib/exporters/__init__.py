@@ -129,7 +129,7 @@ class TaleExporter:
             yield data
         # MD5 is the only required alg in profile. See Manifests-Required in
         # https://raw.githubusercontent.com/fair-research/bdbag/master/profiles/bdbag-ro-profile.json
-        self.state['md5'].append((zip_path, getattr(hash_file_stream, 'md5')))
+        self.state['md5'].append((zip_path, hash_file_stream.md5))
 
     def _agg_index_by_uri(self, uri):
         aggs = self.manifest["aggregates"]
