@@ -184,19 +184,14 @@ class IntegrationTestCase(base.TestCase):
         Image().remove(image)
 
     def testDataoneNonTaleIntegration(self):
-        from girder.plugins.wholetale.lib.dataone import DataONENotATaleError
         from girder.plugins.wholetale.lib.data_map import DataMap
 
-        class fakeProvider:
-            def lookup(self, entity):
-                return DataMap("urn:uuid:12345.6789", 0, base_url="https://some.dataone.cn/")
-
-            def import_tale(self, data_map, user, force=False):
-                raise DataONENotATaleError(data_map)
+        def lookup(entity):
+            return DataMap("urn:uuid:12345.6789", 0, base_url="https://some.dataone.cn/")
 
         with mock.patch(
-            "girder.plugins.wholetale.lib.dataone.integration.DataOneImportProvider",
-            fakeProvider,
+            "girder.plugins.wholetale.lib.dataone.integration.DataOneImportProvider.lookup",
+            side_effect=lookup,
         ):
             resp = self.request(
                 "/integration/dataone",
@@ -206,6 +201,7 @@ class IntegrationTestCase(base.TestCase):
                     "uri": "urn:uuid:12345.6789",
                     "title": "dataset title",
                     "environment": "rstudio",
+                    "api": "https://some.dataone.cn/",
                 },
                 isJson=False,
             )
@@ -215,6 +211,7 @@ class IntegrationTestCase(base.TestCase):
         self.assertEqual(query["name"][0], "dataset title")
         self.assertEqual(query["uri"][0], "urn:uuid:12345.6789")
         self.assertEqual(query["environment"][0], "rstudio")
+        self.assertEqual(query["api"][0], "https://some.dataone.cn/")
 
     def testAutoLogin(self):
         from girder.plugins.oauth.constants import PluginSettings as OAuthSettings
