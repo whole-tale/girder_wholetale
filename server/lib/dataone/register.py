@@ -248,16 +248,18 @@ def D1_lookup(path, base_url):
     if not docs:
         raise RestException('Failed to find any documents in the provided package')
     # Filter the Solr result by TYPE so we can construct the package
-    metadata = [doc for doc in docs if doc.get('formatType') == 'METADATA']
+    metadata = next((doc for doc in docs if doc.get('formatType') == 'METADATA'), None)
     if not metadata:
         raise RestException('No metadata found.')
 
     # Compute package size (sum of 'size' values)
     total_size = sum([int(doc.get('size', 0)) for doc in docs])
+    is_tale = "Tale" in metadata.get("keywords", [])
 
-    return DataMap(package_pid, total_size, name=metadata[0].get('title', 'no title'),
-                   doi=metadata[0].get('identifier', 'no DOI'),
-                   repository='DataONE')
+    return DataMap(package_pid, total_size, name=metadata.get('title', 'no title'),
+                   doi=metadata.get('identifier', 'no DOI'),
+                   repository='DataONE', tale=is_tale,
+                   base_url=base_url)
 
 
 def get_documents(package_pid, base_url):
@@ -268,7 +270,8 @@ def get_documents(package_pid, base_url):
 
     result = query(q='resourceMap:"{}"'.format(esc(package_pid)),
                    fields=["identifier", "formatType", "title", "size", "formatId",
-                           "fileName", "documents", "checksum", "checksumAlgorithm"],
+                           "fileName", "documents", "checksum", "checksumAlgorithm",
+                           "keywords", "dataUrl", "dateUploaded"],
                    base_url=base_url)
 
     if 'response' not in result or 'docs' not in result['response']:

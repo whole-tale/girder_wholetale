@@ -104,7 +104,7 @@ class SettingDefault:
             {
                 "name": "dataone",
                 "targets": [
-                    "cn-stage-2.test.dataone.org",
+                    "cn-stage.test.dataone.org",
                     "cn.dataone.org",
                 ]
             },

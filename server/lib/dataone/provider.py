@@ -1,14 +1,17 @@
+from urllib.request import urlopen
+
 from girder import logger
 from girder.api.rest import RestException
 from girder.constants import AccessType
 from girder.models.folder import Folder
 
-from . import DataONELocations
+from . import DataONELocations, DataONENotATaleError
 from ..import_providers import ImportProvider
 from ..data_map import DataMap
 from ..file_map import FileMap
 from ..import_item import ImportItem
 from ..entity import Entity
+from ...models.tale import Tale
 from .register import \
     D1_lookup, \
     extract_metadata_docs, \
@@ -122,3 +125,52 @@ class DataOneImportProvider(ImportProvider):
         """
         for d in docs:
             d['url'] = "{}/{}/{}".format(base_url, 'resolve', d['identifier'])
+
+    def import_tale(self, data_map, user, force=False):
+        existing_tale_id = Tale().findOne(
+            query={
+                "creatorId": user["_id"],
+                "publishInfo.pid": {"$eq": data_map.doi},
+            },
+            fields={"_id"},
+        )
+        if existing_tale_id and not force:
+            return Tale().load(existing_tale_id["_id"], user=user)
+
+        if not data_map.tale:
+            raise DataONENotATaleError(data_map)
+
+        docs = get_documents(data_map.dataId, data_map.base_url)
+        for doc in docs:
+            if doc.get("formatType") == "METADATA":
+                metadata = doc
+            elif doc.get("formatType") == "DATA":
+                zipfile = doc
+        file_url = f"{data_map.base_url}/object/{zipfile['identifier']}"
+
+        def stream_zipfile(chunk_size):
+            with urlopen(file_url) as src:
+                while True:
+                    data = src.read(chunk_size)
+                    if not data:
+                        break
+                    yield data
+
+        publishInfo = [
+            {
+                "pid": metadata["identifier"],
+                "uri": metadata["dataUrl"],  # NOTE: it's wrong for test data
+                "date": metadata["dateUploaded"],  # convert to date?
+                "repository_id": data_map.dataId,
+                "repository": "DataONE",
+            }
+        ]
+        relatedIdentifiers = [
+            {"relation": "IsDerivedFrom", "identifier": data_map.doi}
+        ]
+        return Tale().createTaleFromStream(
+            stream_zipfile,
+            user=user,
+            publishInfo=publishInfo,
+            relatedIdentifiers=relatedIdentifiers,
+        )

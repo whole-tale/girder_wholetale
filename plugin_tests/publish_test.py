@@ -127,7 +127,7 @@ class PublishTestCase(base.TestCase):
             token = {
                 "access_token": "dataone_token",
                 "provider": "dataone",
-                "resource_server": "cn-stage-2.dataone.org",
+                "resource_server": "cn-stage.dataone.org",
                 "token_type": "apikey",
             }
             self.user["otherTokens"] = [token]

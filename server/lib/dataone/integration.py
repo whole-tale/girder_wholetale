@@ -5,9 +5,10 @@ import cherrypy
 from urllib.parse import urlparse, urlunparse, urlencode
 from girder.api import access
 from girder.api.describe import Description, autoDescribeRoute
-from girder.api.rest import setResponseHeader, boundHandler
+from girder.api.rest import boundHandler
+from girder.exceptions import RestException
 
-from . import DataONELocations
+from . import DataONELocations, DataONENotATaleError
 from .provider import DataOneImportProvider
 from ..integration_utils import autologin, redirect_if_tale_exists
 from ..entity import Entity
@@ -55,21 +56,32 @@ def dataoneDataImport(self, uri, title, environment, api, apiToken, force):
     if not force:
         redirect_if_tale_exists(user, self.getCurrentToken(), doi)
 
-    query = dict()
-    query['uri'] = uri
-    if title:
-        query['name'] = title
-    if environment:
-        query['environment'] = environment
-    if api:
-        query['api'] = api
+    dashboard_url = os.environ.get("DASHBOARD_URL", "https://dashboard.wholetale.org")
 
-    # TODO: Make base url a plugin setting, defaulting to dashboard.<domain>
-    dashboard_url = os.environ.get('DASHBOARD_URL', 'https://dashboard.wholetale.org')
-    location = urlunparse(
-        urlparse(dashboard_url)._replace(
-            path='/mine',
-            query=urlencode(query))
-    )
-    setResponseHeader('Location', location)
-    cherrypy.response.status = 303
+    try:
+        tale = DataOneImportProvider().import_tale(data_map, user, force=force)
+        location = urlunparse(
+            urlparse(dashboard_url)._replace(
+                path="/run/{}".format(tale["_id"]),
+                query="token={}".format(self.getCurrentToken()["_id"]),
+            )
+        )
+    except DataONENotATaleError:
+        query = dict()
+        query['uri'] = uri
+        if title:
+            query['name'] = title
+        if environment:
+            query['environment'] = environment
+        if api:
+            query['api'] = api
+
+        location = urlunparse(
+            urlparse(dashboard_url)._replace(path="/mine", query=urlencode(query))
+        )
+    except Exception as exc:
+        raise RestException(
+            f"Failed to import Tale. Server returned: '{str(exc)}'"
+        )
+
+    raise cherrypy.HTTPRedirect(location)
