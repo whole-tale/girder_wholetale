@@ -138,7 +138,7 @@ class ManifestParser:
         ]
         new_context += [
             {_NEW_DATACITE_KEY: "http://datacite.org/schema/kernel-4"},
-            {"wt": "https://vocabularies.wholetale.org/wt/1.0/wt#"},
+            {"wt": "https://vocabularies.wholetale.org/wt/1.1/wt#"},
             {"@base": f"arcp://uid,{self.manifest['wt:identifier']}/data/"},
         ]
         self.manifest["@context"] = new_context
