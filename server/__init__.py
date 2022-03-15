@@ -19,6 +19,7 @@ from girder.constants import AccessType, TokenScope
 from girder.exceptions import GirderException
 from girder.models.model_base import ValidationException
 from girder.models.notification import Notification, ProgressState
+from girder.models.setting import Setting
 from girder.models.user import User
 from girder.plugins.jobs.constants import JobStatus
 from girder.plugins.jobs.models.job import Job as JobModel
@@ -494,6 +495,9 @@ def store_other_globus_tokens(event):
 
 
 def load(info):
+    from girder.plugins.oauth.providers.globus import Globus
+    deriva_scopes = Setting().get(PluginSettings.DERIVA_SCOPES)
+    Globus.addScopes(list(deriva_scopes.values()))
     info['apiRoot'].wholetale = wholeTale()
     info['apiRoot'].instance = Instance()
     tale = Tale()

@@ -1,11 +1,6 @@
 from girder.models.setting import Setting
-from ...constants import PluginSettings, DEFAULT_DERIVA_SCOPE
+from ...constants import PluginSettings
 from ..verificator import Verificator
-
-from girder.plugins.oauth.providers.globus import Globus
-
-
-Globus.addScopes([DEFAULT_DERIVA_SCOPE])
 
 
 class DerivaVerificator(Verificator):
