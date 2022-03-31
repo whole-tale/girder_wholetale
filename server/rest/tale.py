@@ -616,12 +616,17 @@ class Tale(Resource):
     @autoDescribeRoute(
         Description('Copy a tale.')
         .modelParam('id', model='tale', plugin='wholetale', level=AccessType.READ)
+        .param(
+            "versionId", "The specific Tale version that should be restored after",
+            required=False,
+            default=None
+        )
         .responseClass('tale')
         .errorResponse('ID was invalid.')
         .errorResponse('You are not authorized to copy this tale.', 403)
     )
     @filtermodel(model='tale', plugin='wholetale')
-    def copyTale(self, tale):
+    def copyTale(self, tale, versionId):
         user = self.getCurrentUser()
         image = self.model('image', 'wholetale').load(
             tale['imageId'], user=user, level=AccessType.READ, exc=True)
@@ -647,7 +652,7 @@ class Tale(Resource):
             title='Copy "{title}" workspace'.format(**tale), user=user,
             type='wholetale.copy_workspace', public=False, _async=True,
             module='girder.plugins.wholetale.tasks.copy_workspace',
-            args=(tale, new_tale),
+            args=(tale, new_tale, versionId),
         )
         Job().scheduleJob(job)
         return new_tale
