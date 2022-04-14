@@ -20,7 +20,8 @@ def run(job):
     jobModel = Job()
     jobModel.updateJob(job, status=JobStatus.RUNNING)
 
-    old_tale, new_tale, _ = job["args"]
+    old_tale = job["args"][0]
+    new_tale = job["args"][1]
     user = User().load(new_tale["creatorId"], force=True)
 
     try:

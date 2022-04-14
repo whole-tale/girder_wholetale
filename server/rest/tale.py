@@ -621,12 +621,16 @@ class Tale(Resource):
             required=False,
             default=None
         )
+        .param(
+            "shallow", "Only copy the current state, or if versionId is set, the given version",
+            required=False, default=False, dataType="boolean"
+        )
         .responseClass('tale')
         .errorResponse('ID was invalid.')
         .errorResponse('You are not authorized to copy this tale.', 403)
     )
     @filtermodel(model='tale', plugin='wholetale')
-    def copyTale(self, tale, versionId):
+    def copyTale(self, tale, versionId, shallow):
         user = self.getCurrentUser()
         image = self.model('image', 'wholetale').load(
             tale['imageId'], user=user, level=AccessType.READ, exc=True)
@@ -652,7 +656,7 @@ class Tale(Resource):
             title='Copy "{title}" workspace'.format(**tale), user=user,
             type='wholetale.copy_workspace', public=False, _async=True,
             module='girder.plugins.wholetale.tasks.copy_workspace',
-            args=(tale, new_tale, versionId),
+            args=(tale, new_tale, versionId, shallow),
         )
         Job().scheduleJob(job)
         return new_tale
