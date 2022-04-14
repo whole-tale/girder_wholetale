@@ -482,7 +482,7 @@ def store_other_globus_tokens(event):
     globus_token = event.info["token"]
     user = event.info["user"]
     user_tokens = user.get("otherTokens", [])
-    for token in globus_token["other_tokens"]:
+    for token in globus_token.get("other_tokens", []):
         for i, user_token in enumerate(user_tokens):
             if user_token["resource_server"] == token["resource_server"]:
                 user_tokens[i].update(token)
