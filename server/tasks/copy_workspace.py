@@ -20,7 +20,8 @@ def run(job):
     jobModel = Job()
     jobModel.updateJob(job, status=JobStatus.RUNNING)
 
-    old_tale, new_tale = job["args"]
+    old_tale = job["args"][0]
+    new_tale = job["args"][1]
     user = User().load(new_tale["creatorId"], force=True)
 
     try:
@@ -34,11 +35,15 @@ def run(job):
             Path(workspace["fsPath"]),
             dirs_exist_ok=True,
         )
-        events.trigger("wholetale.tale.copied", (old_tale, new_tale))
-        Tale().update({"_id": new_tale["_id"]}, update={"$set": {"status": TaleStatus.READY}})
+        events.trigger("wholetale.tale.copied", job["args"])
+        Tale().update(
+            {"_id": new_tale["_id"]}, update={"$set": {"status": TaleStatus.READY}}
+        )
         jobModel.updateJob(job, status=JobStatus.SUCCESS, log="Copying finished")
     except Exception:
-        Tale().update({"_id": new_tale["_id"]}, update={"$set": {"status": TaleStatus.ERROR}})
+        Tale().update(
+            {"_id": new_tale["_id"]}, update={"$set": {"status": TaleStatus.ERROR}}
+        )
         t, val, tb = sys.exc_info()
         log = "%s: %s\n%s" % (t.__name__, repr(val), traceback.extract_tb(tb))
         jobModel.updateJob(job, status=JobStatus.ERROR, log=log)

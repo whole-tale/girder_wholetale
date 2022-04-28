@@ -140,7 +140,8 @@ def run(job):
                 copy_fs(OSFS(orig_run_dir), OSFS(dest_run_dir))
             run["updated"] = parseTimestamp(run_obj["schema:dateModified"])
             run["created"] = parseTimestamp(run_obj["schema:dateCreated"])
-            run_resource._setStatus(run, int(run_obj["wt:runStatus"]))  # calls save()
+            # vv calls save()
+            run_resource.setStatus(id=run["_id"], status=int(run_obj["wt:runStatus"]), params={})
 
         # Tale is ready to be built
         Tale().update(
