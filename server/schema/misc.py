@@ -158,9 +158,13 @@ containerConfigSchema = {
             "items": {
                 "type": "string",
                 "description": "Environment variable, in the form KEY=val",
+                "pattern": "^[^=]+=.*$",
             },
         },
-        "memLimit": {"type": "string"},
+        "memLimit": {
+            "type": "string",
+            "pattern": "^(\d+)([kmg]?b?)$",
+        },
         "port": {
             "type": "integer",
             "description": (
@@ -174,6 +178,7 @@ containerConfigSchema = {
         },
         "targetMount": {
             "type": "string",
+            "pattern": "^/.*$",
             "description": ("Path where the Whole Tale filesystem " "will be mounted"),
         },
         "urlPath": {
@@ -183,6 +188,7 @@ containerConfigSchema = {
             ),
         },
     },
+    "additionalProperties": False,
 }
 
 containerInfoSchema = {
