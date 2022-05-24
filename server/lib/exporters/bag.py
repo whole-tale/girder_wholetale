@@ -23,7 +23,7 @@ run_tpl = r"""#!/bin/sh
 docker run  \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -v "`pwd`/data/workspace:/WholeTale/workspace" \
-  -v "`pwd`/metadata/environment.json:/WholeTale/workspace/.wholetale/environment.json" \
+  -v "`pwd`/metadata/environment.json:/WholeTale/workspace/environment.json" \
   --privileged=true \
   -e DOCKER_HOST=unix:///var/run/docker.sock \
   {repo2docker} \
