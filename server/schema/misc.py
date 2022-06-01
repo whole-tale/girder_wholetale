@@ -163,7 +163,7 @@ containerConfigSchema = {
         },
         "memLimit": {
             "type": "string",
-            "pattern": "^(\d+)([kmg]?b?)$",
+            "pattern": r"^(\d+)([kmg]?b?)$",
         },
         "port": {
             "type": "integer",
