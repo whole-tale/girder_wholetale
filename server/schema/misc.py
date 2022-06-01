@@ -152,6 +152,13 @@ containerConfigSchema = {
             "description": "Command to run when the container starts",
         },
         "cpuShares": {"type": "string"},
+        "csp": {
+            "type": "string",
+            "description": (
+                "Content Security Policy set on the container. Defaults to: "
+                " \"frame-ancestors 'self' <dashboard_url>\""
+            ),
+        },
         "environment": {
             "type": "array",
             "description": "List of environment variables passed to a container",
