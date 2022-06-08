@@ -376,12 +376,11 @@ class DataverseImportProvider(ImportProvider):
                         lastName, firstName = raw_author.split(",", 1)
                     else:
                         firstName, lastName = raw_author.split(" ", 1)
-                    if (
-                        "authorIdentifierScheme" in author
-                        and author["authorIdentifierScheme"]["value"] == "ORCID"  # noqa
-                    ):
+                    try:
+                        if author["authorIdentifierScheme"]["value"] != "ORCID":
+                            raise ValueError
                         orcid = author["authorIdentifier"]["value"]
-                    else:
+                    except (KeyError, ValueError):
                         orcid = "0000-0000-0000-0000"
                     authors.append(
                         dict(
