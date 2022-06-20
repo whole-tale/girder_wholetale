@@ -24,14 +24,14 @@ def _text(o: object) -> str:
     raise ValueError('Don\'t know how to convert object of type "%s" to string' % type(o))
 
 
-class _BagTree:
+class _FileTree:
     def __init__(self, name: str, is_dir: bool = False, url: Optional[str] = None,
                  size: int = -1):
         self.name = name
         self._is_dir = is_dir
         self.size = size
         if is_dir:
-            self.list = {}  # type: Optional[Dict[str, _BagTree]]
+            self.list = {}  # type: Optional[Dict[str, _FileTree]]
             self.url = None
         else:
             self.list = None
@@ -54,10 +54,10 @@ class _BagTree:
             # leaf
             if name in self.list:
                 raise ValueError('Duplicate entry: {}'.format(orig_path))
-            self.list[name] = _BagTree(name, url=url, size=size)
+            self.list[name] = _FileTree(name, url=url, size=size)
         else:
             if name not in self.list:
-                self.list[name] = _BagTree(name, is_dir=True)
+                self.list[name] = _FileTree(name, is_dir=True)
             dir = self.list[name]
             if not dir.is_dir():
                 raise ValueError('Attempted to add a file where a directory '
@@ -103,7 +103,7 @@ class BDBagProvider(ImportProvider):
                 dataset_name = subdirs[0].name
                 main = subdirs[0]
                 self._read_manifests(main)
-                root = _BagTree(dataset_name, is_dir=True)
+                root = _FileTree(dataset_name, is_dir=True)
 
                 # we traverse both fetch.txt and the bag to build a tree of all files, whether
                 # external or internal to the bag since it's not quite clear that one can traverse
@@ -155,7 +155,7 @@ class BDBagProvider(ImportProvider):
                 self.bag_meta[path] = {}
             self.bag_meta[path].update(agg)
 
-    def _listFolder(self, branch: _BagTree, bag_path: zipfile.Path,
+    def _listFolder(self, branch: _FileTree, bag_path: zipfile.Path,
                     zip_url: str, tmp_dir: str) -> Generator[ImportItem, None, None]:
         assert branch.list is not None
         for k, v in branch.list.items():
@@ -201,7 +201,7 @@ class BDBagProvider(ImportProvider):
                 if extracted:
                     pathlib.Path(extracted).unlink()
 
-    def _read_fetch_txt(self, root: _BagTree, main: zipfile.Path) -> None:
+    def _read_fetch_txt(self, root: _FileTree, main: zipfile.Path) -> None:
         fetch_path = main / 'fetch.txt'
         if fetch_path.exists():
             with fetch_path.open() as f:
@@ -210,7 +210,7 @@ class BDBagProvider(ImportProvider):
                     self._parse_fetch_line(root, line.strip())
                     line = _text(f.readline())
 
-    def _parse_fetch_line(self, root: _BagTree, line: str) -> None:
+    def _parse_fetch_line(self, root: _FileTree, line: str) -> None:
         els = line.split()
         if len(els) != 3:
             raise ValueError('Invalid line in fetch.txt: {}'.format(line))
@@ -221,7 +221,7 @@ class BDBagProvider(ImportProvider):
 
         root.add(ppath, url, size=size)
 
-    def _read_bag_dir(self, root: _BagTree, main: zipfile.Path) -> None:
+    def _read_bag_dir(self, root: _FileTree, main: zipfile.Path) -> None:
         self._scan_dirs(root, main, main)
 
     def _relative_to(self, path: zipfile.Path, root: zipfile.Path) -> pathlib.Path:
@@ -230,7 +230,7 @@ class BDBagProvider(ImportProvider):
     def _path_in_zip(self, path: zipfile.Path) -> pathlib.Path:
         return pathlib.Path(path.at)  # type: ignore
 
-    def _scan_dirs(self, root: _BagTree, dir: zipfile.Path, strip_path: zipfile.Path) -> None:
+    def _scan_dirs(self, root: _FileTree, dir: zipfile.Path, strip_path: zipfile.Path) -> None:
         for item in dir.iterdir():
             if item.is_dir():
                 self._scan_dirs(root, item, strip_path)

@@ -14,8 +14,9 @@ DEFAULT_ILLUSTRATION = (
     "https://raw.githubusercontent.com/whole-tale/dashboard/master/public/"
     "images/demo-graph2.jpg"
 )
-DEFAULT_DERIVA_SCOPE = \
+DEFAULT_DERIVA_SCOPE = (
     "https://auth.globus.org/scopes/a77ee64a-fb7f-11e5-810e-8c705ad34f60/deriva_all"
+)
 
 
 class HarvesterType:
@@ -90,6 +91,16 @@ class SettingDefault:
                 ),
                 "targets": [],
             },
+            {
+                "name": "icpsr",
+                "logo": "",
+                "fullName": "ICPSR",
+                "tags": ["data"],
+                "url": "",
+                "type": "apikey",
+                "docs_href": "https://www.icpsr.umich.edu/mydata?path=ICPSR",
+                "targets": [],
+            },
         ],
         PluginSettings.EXTERNAL_APIKEY_GROUPS: [
             {"name": "zenodo", "targets": ["sandbox.zenodo.org", "zenodo.org"]},
@@ -106,8 +117,9 @@ class SettingDefault:
                 "targets": [
                     "cn-stage.test.dataone.org",
                     "cn.dataone.org",
-                ]
+                ],
             },
+            {"name": "icpsr", "targets": ["www.openicpsr.org"]},
         ],
         PluginSettings.ZENODO_EXTRA_HOSTS: [],
         PluginSettings.PUBLISHER_REPOS: [
@@ -124,8 +136,8 @@ class SettingDefault:
         ],
         PluginSettings.DERIVA_EXPORT_URLS: ["https://pbcconsortium.s3.amazonaws.com/"],
         PluginSettings.DERIVA_SCOPES: {
-            'pbcconsortium.isrd.isi.edu': DEFAULT_DERIVA_SCOPE
-        }
+            "pbcconsortium.isrd.isi.edu": DEFAULT_DERIVA_SCOPE
+        },
     }
 
 
