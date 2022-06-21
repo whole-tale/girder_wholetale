@@ -140,6 +140,9 @@ class ImportProvider:
     def _listRecursive(self, user, pid: str, name: str, base_url: str = None, progress=None):
         raise NotImplementedError()
 
+    def check_auth(self, user):
+        pass
+
 
 class ImportProviders:
     def __init__(self):

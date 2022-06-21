@@ -122,7 +122,7 @@ class OpenICPSRImportProvider(ImportProvider):
                 if token["resource_server"] == "www.openicpsr.org":
                     return token["access_token"]
         except KeyError:
-            return ""  # Raise error?
+            return  # Raise error?
 
     def _get_payload(self, data_url, user):
         headers = {
@@ -267,3 +267,7 @@ class OpenICPSRImportProvider(ImportProvider):
                 )
                 yield from self._listFolder(root, main, pathlib.Path("/"), record["doi"])
                 yield ImportItem(ImportItem.END_FOLDER)
+
+    def check_auth(self, user):
+        if not self._get_user_pass(user):
+            raise ValueError("Authentication required.")

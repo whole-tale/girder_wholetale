@@ -16,6 +16,8 @@ from girder.models.user import User
 from girder.plugins.jobs.models.job import Job
 
 from ..constants import CATALOG_NAME
+from ..lib import IMPORT_PROVIDERS
+from ..lib.data_map import DataMap
 from ..lib.dataone import DataONELocations
 from ..schema.misc import dataMapListSchema
 from ..utils import getOrCreateRootFolder, init_progress
@@ -242,6 +244,14 @@ class Dataset(Resource):
             resource, user, 'Registering Data',
             'Initialization', 2)
 
+        try:
+            for data in DataMap.fromList(dataMap):
+                provider = IMPORT_PROVIDERS.getFromDataMap(data)
+                provider.check_auth(user)
+        except ValueError:
+            raise RestException(
+                f"To register data from {provider.name} you need to provide credentials."
+            )
         job = self._createImportJob(dataMap, parent, parentType, user, base_url, notification)
         Job().scheduleJob(job)
         return job
