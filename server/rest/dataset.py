@@ -236,14 +236,6 @@ class Dataset(Resource):
             parent = self.model(parentType).load(
                 parentId, user=user, level=AccessType.WRITE, exc=True)
 
-        resource = {
-            'type': 'wt_register_data',
-            'dataMap': dataMap,
-        }
-        notification = init_progress(
-            resource, user, 'Registering Data',
-            'Initialization', 2)
-
         try:
             for data in DataMap.fromList(dataMap):
                 provider = IMPORT_PROVIDERS.getFromDataMap(data)
@@ -252,6 +244,15 @@ class Dataset(Resource):
             raise RestException(
                 f"To register data from {provider.name} you need to provide credentials."
             )
+
+        resource = {
+            'type': 'wt_register_data',
+            'dataMap': dataMap,
+        }
+        notification = init_progress(
+            resource, user, 'Registering Data',
+            'Initialization', 2)
+
         job = self._createImportJob(dataMap, parent, parentType, user, base_url, notification)
         Job().scheduleJob(job)
         return job
