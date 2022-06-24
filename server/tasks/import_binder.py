@@ -8,7 +8,6 @@ import stat
 import sys
 import time
 import traceback
-from webdavfs.webdavfs import WebDAVFS
 from fs.base import FS
 from fs.copy import copy_fs
 from fs.enums import ResourceType
@@ -16,6 +15,7 @@ from fs.errors import FileExpected
 from fs.error_tools import convert_os_errors
 from fs.info import Info
 from fs.mode import Mode
+from fs.osfs import OSFS
 from fs.path import basename
 from fs.permissions import Permissions
 from fs.tarfs import ReadTarFS
@@ -171,7 +171,7 @@ def run(job):
             # without worrying about how to handler transfers. DMS will do that for us <3
             session = Session().createSession(user, dataSet=data_set)
 
-            # 3. Copy data to the workspace using WebDAVFS
+            # 3. Copy data to the workspace
             progressCurrent += 1
             jobModel.updateJob(
                 job,
@@ -181,16 +181,12 @@ def run(job):
                 progressCurrent=progressCurrent,
                 progressMessage="Copying files to workspace",
             )
+            workspace = Folder().load(tale["workspaceId"], force=True)
             girder_root = "http://localhost:{}".format(
                 config.getConfig()["server.socket_port"]
             )
-            with WebDAVFS(
-                girder_root,
-                login=user["login"],
-                password="token:{_id}".format(**token),
-                root="/tales/{_id}".format(**tale),
-                cache_ttl=0
-            ) as destination_fs, DMSFS(
+
+            with OSFS(workspace["fsPath"]) as destination_fs, DMSFS(
                 str(session["_id"]), girder_root + "/api/v1", str(token["_id"])
             ) as source_fs:
                 copy_fs(source_fs, destination_fs)
