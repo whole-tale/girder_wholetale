@@ -22,6 +22,8 @@ class ImportProvider:
         """Regular expression used to determine if provider matches url"""
         if not self._regex:
             self._regex = self.create_regex()
+        if not isinstance(self._regex, list):
+            self._regex = [self._regex]
         return self._regex
 
     def create_regex(self):
@@ -32,8 +34,7 @@ class ImportProvider:
         return self.name
 
     def matches(self, entity: Entity) -> bool:
-        url = entity.getValue()
-        return self.regex.match(url) is not None
+        return any(regex.match(entity.getValue()) for regex in self.regex)
 
     def lookup(self, entity: Entity) -> DataMap:
         raise NotImplementedError()
