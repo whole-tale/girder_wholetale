@@ -252,7 +252,7 @@ class ZenodoHarversterTestCase(base.TestCase):
 
         self.assertEqual(
             "^http(s)?://(sandbox.zenodo.org/record/|zenodo.org/record/).*$",
-            ZenodoImportProvider().regex.pattern,
+            ZenodoImportProvider().regex[0].pattern,
         )
 
     @vcr.use_cassette(os.path.join(DATA_PATH, "zenodo_hierarchy.txt"))

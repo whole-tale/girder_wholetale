@@ -139,10 +139,8 @@ class DataverseImportProvider(ImportProvider):
             for _ in data.get("installations", [{"hostname": single_hostname}])
         ]
         domains += self.get_extra_hosts_setting()
-        if domains:
-            return re.compile("^https?://(" + "|".join(domains) + ").*$")
-        else:
-            return re.compile("^$")
+        domain_regex = re.compile("^https?://(" + "|".join(domains) + ").*$")
+        return [re.compile(r"^http.*/dataset\.xhtml\?persistentId=.*$"), domain_regex]
 
     def getDatasetUID(self, doc: object, user: object) -> str:
         if 'folderId' in doc:
