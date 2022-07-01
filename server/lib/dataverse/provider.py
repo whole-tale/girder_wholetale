@@ -356,8 +356,8 @@ class DataverseImportProvider(ImportProvider):
         proto_tale = super().proto_tale_from_datamap(dataMap, user, asTale)  # get the defaults
         if not asTale:
             return proto_tale  # We only bring extra metadata for datasets imported as Tales
-        headers = DataverseVerificator(url=dataMap["dataId"], user=user).headers
-        data = self._get_meta_from_dataset(urlparse(dataMap["dataId"]), headers=headers)
+        headers = DataverseVerificator(url=dataMap.dataId, user=user).headers
+        data = self._get_meta_from_dataset(urlparse(dataMap.dataId), headers=headers)
         meta = data["data"]["latestVersion"]["metadataBlocks"]["citation"]["fields"]
 
         for field in meta:

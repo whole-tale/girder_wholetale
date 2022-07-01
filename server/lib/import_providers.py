@@ -62,11 +62,11 @@ class ImportProvider:
         related_id = [
             {
                 "relation": relation,
-                "identifier": dataMap["doi"] or dataMap["dataId"]
+                "identifier": dataMap.doi or dataMap.dataId
             }
         ]
 
-        long_name = dataMap["name"]
+        long_name = dataMap.name
         long_name = long_name.replace('-', ' ').replace('_', ' ')
         shortened_name = textwrap.shorten(text=long_name, width=30)
         return {

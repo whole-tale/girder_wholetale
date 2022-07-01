@@ -263,9 +263,9 @@ class Tale(Resource):
                     base_url=lookupKwargs.get("base_url", DataONELocations.prod_cn),
                     lookup=True
                 )[0]
-                provider = IMPORT_PROVIDERS.providerMap[dataMap["repository"]]
+                provider = IMPORT_PROVIDERS.providerMap[dataMap.repository]
 
-                if dataMap["tale"]:  # url points to a published Tale
+                if dataMap.tale:  # url points to a published Tale
                     return provider.import_tale(dataMap, user)
 
                 proto_tale = provider.proto_tale_from_datamap(dataMap, user, asTale)
