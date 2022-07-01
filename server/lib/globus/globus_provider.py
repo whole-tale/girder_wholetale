@@ -37,7 +37,7 @@ class GlobusImportProvider(ImportProvider):
         # tc = self.clients.getUserTransferClient(entity.getUser())
         # size = self._computeSize(tc, endpoint, path, entity.getUser())
         size = -1
-        return DataMap(entity.getValue(), size, doi=doi, name=title, repository=self.getName())
+        return DataMap(entity.getValue(), size, doi=doi, name=title, repository=self.name)
 
     def _extractMeta(self, raw_url) -> Tuple[str, str, str, str]:
         url = urlparse(raw_url)

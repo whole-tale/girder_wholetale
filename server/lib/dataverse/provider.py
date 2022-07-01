@@ -308,7 +308,7 @@ class DataverseImportProvider(ImportProvider):
         title, files, doi = self.parse_pid(entity.getValue(), user=entity.user)
         size = sum(_['filesize'] for _ in files)
         return DataMap(entity.getValue(), size, doi=doi, name=title,
-                       repository=self.getName())
+                       repository=self.name)
 
     def listFiles(self, entity: Entity) -> FileMap:
         stack = []
