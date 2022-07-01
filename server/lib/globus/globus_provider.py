@@ -2,6 +2,7 @@ import os
 import re
 from typing import Tuple
 from urllib.parse import urlparse
+import pathlib
 import requests
 
 from girder.models.item import Item
@@ -74,7 +75,7 @@ class GlobusImportProvider(ImportProvider):
 
     def _computeSize(self, tc, endpoint, path, user):
         sz = 0
-        for item in self._listRecursive2(tc, endpoint, path):
+        for item in self._listRecursive2(tc, endpoint, path, "mockdoi"):
             if item.type == ImportItem.FILE:
                 sz += item.size
         return sz
@@ -97,26 +98,44 @@ class GlobusImportProvider(ImportProvider):
 
     def _listRecursive(self, user, pid: str, name: str, base_url: str = None, progress=None):
         endpoint, path, doi, title = self._extractMeta(pid)
-        yield ImportItem(ImportItem.FOLDER, name=title, identifier=doi)
+        yield ImportItem(
+            ImportItem.FOLDER,
+            name=title,
+            identifier=doi,
+            meta={"dsRelPath": "/"}
+        )
         tc = self.clients.getUserTransferClient(user)
-        yield from self._listRecursive2(tc, endpoint, path, progress)
+        yield from self._listRecursive2(tc, endpoint, path, doi, progress=progress)
         yield ImportItem(ImportItem.END_FOLDER)
 
-    def _listRecursive2(self, tc, endpoint: str, path: str, progress=None):
+    def _listRecursive2(self, tc, endpoint: str, path: str, doi: str, progress=None):
         if path[-1] != '/':
             path = path + '/'
+        ds_relative_path = "/".join(pathlib.Path(path).parts[3:])
+        if ds_relative_path and ds_relative_path[0] != "/":
+            ds_relative_path = f"/{ds_relative_path}"
         if progress:
             progress.update(increment=1, message='Listing files')
         for entry in tc.operation_ls(endpoint, path=path):
             if entry['type'] == 'dir':
-                yield ImportItem(ImportItem.FOLDER, name=entry['name'])
-                yield from self._listRecursive2(tc, endpoint, path + entry['name'], progress)
+                yield ImportItem(
+                    ImportItem.FOLDER,
+                    name=entry['name'],
+                    identifier=doi,
+                    meta={"dsRelPath": ds_relative_path + "/" + entry["name"]},
+                )
+                yield from self._listRecursive2(
+                    tc, endpoint, path + entry['name'], doi, progress=progress
+                )
                 yield ImportItem(ImportItem.END_FOLDER)
             elif entry['type'] == 'file':
                 yield ImportItem(
                     ImportItem.FILE, entry['name'], size=entry['size'],
                     mimeType='application/octet-stream',
-                    url='globus://%s/%s%s' % (endpoint, path, entry['name']))
+                    url='globus://%s/%s%s' % (endpoint, path, entry['name']),
+                    identifier=doi,
+                    meta={"dsRelPath": ds_relative_path + "/" + entry["name"]},
+                )
 
     def getDatasetUID(self, doc, user):
         try:

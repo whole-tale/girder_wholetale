@@ -127,7 +127,12 @@ class Dataset(Resource):
 
         if identifiers:
             filters.update(
-                {'meta.identifier': {'$in': identifiers}}
+                {
+                    "$or": [
+                        {"meta.directIdentifier": {"$in": identifiers}},
+                        {"meta.identifier": {"$in": identifiers}},
+                    ]
+                }
             )
 
             for modelType in ('folder', 'item'):

@@ -327,26 +327,36 @@ class DataverseImportProvider(ImportProvider):
     def _listRecursive(self, user, pid: str, name: str, base_url: str = None,
                        progress=None):
 
-        def _recurse_hierarchy(hierarchy):
+        def _recurse_hierarchy(hierarchy, prefix="/"):
             files = hierarchy.pop('+files+')
             for obj in files:
                 alg, checksum = obj["checksum"].split(":")
+                rel_path = os.path.join(prefix, obj["filename"])
+                meta = {"checksum": {alg: checksum}, "dsRelPath": rel_path}
+                if obj.get("doi") and obj["doi"] != doi:
+                    meta["directIdentifier"] = obj["doi"]
                 yield ImportItem(
                     ImportItem.FILE, obj['filename'],
                     size=obj['filesize'],
                     mimeType=obj.get('mimeType', 'application/octet-stream'),
                     url=obj['url'],
-                    identifier=obj.get('doi') or doi,
-                    meta={"checksum": {alg: checksum}},
+                    identifier=doi,
+                    meta=meta,
                 )
             for folder in hierarchy.keys():
-                yield ImportItem(ImportItem.FOLDER, name=folder)
-                yield from _recurse_hierarchy(hierarchy[folder])
+                rel_path = os.path.join(prefix, folder)
+                yield ImportItem(
+                    ImportItem.FOLDER,
+                    name=folder,
+                    identifier=doi,
+                    meta={"dsRelPath": rel_path}
+                )
+                yield from _recurse_hierarchy(hierarchy[folder], prefix=rel_path)
                 yield ImportItem(ImportItem.END_FOLDER)
 
         title, files, doi = self.parse_pid(pid, sanitize=True, user=user)
         hierarchy = self._files_to_hierarchy(files)
-        yield ImportItem(ImportItem.FOLDER, name=title, identifier=doi)
+        yield ImportItem(ImportItem.FOLDER, name=title, identifier=doi, meta={"dsRelPath": "/"})
         yield from _recurse_hierarchy(hierarchy)
         yield ImportItem(ImportItem.END_FOLDER)
 

@@ -93,17 +93,29 @@ class DataOneImportProvider(ImportProvider):
         if not name:
             name = primary_metadata[0]['title']
 
-        yield ImportItem(ImportItem.FOLDER, name, identifier=primary_identifier)
+        yield ImportItem(
+            ImportItem.FOLDER,
+            name,
+            identifier=primary_identifier,
+            meta={
+                "dsRelPath": "/",
+            }
+        )
 
         for fileObj in data:
+            name = fileObj.get("fileName", fileObj["identifier"])
             yield ImportItem(
                 ImportItem.FILE,
-                fileObj.get("fileName", fileObj["identifier"]),
-                identifier=fileObj["identifier"],
+                name,
+                identifier=primary_identifier,
                 url=fileObj["url"],
                 size=int(fileObj["size"]),
                 mimeType=fileObj["formatId"],
-                meta={"checksum": {fileObj["checksumAlgorithm"].lower(): fileObj["checksum"]}},
+                meta={
+                    "checksum": {fileObj["checksumAlgorithm"].lower(): fileObj["checksum"]},
+                    "dsRelPath": f"/{name}",  # D1 packages are flat...
+                    "directIdentifier": fileObj["identifier"],
+                },
             )
 
         # Recurse and add child packages if any exist
