@@ -9,6 +9,9 @@ from typing import Generator
 from urllib.parse import urlparse, urlunparse, parse_qs
 import zipfile
 
+from girder.models.assetstore import Assetstore
+from girder.utility import assetstore_utilities
+
 from ..import_providers import ImportProvider
 from ..bdbag.bdbag_provider import _FileTree
 from ..data_map import DataMap
@@ -125,6 +128,10 @@ class OpenICPSRImportProvider(ImportProvider):
             return  # Raise error?
 
     def _get_payload(self, data_url, user):
+        assetstore = Assetstore().getCurrent()
+        adapter = assetstore_utilities.getAssetstoreAdapter(assetstore)
+        tempDir = adapter.tempDir
+
         resp = requests.get(
             data_url, cookies={"JSESSIONID": self._get_user_pass(user)}, stream=True
         )
@@ -133,11 +140,12 @@ class OpenICPSRImportProvider(ImportProvider):
 
         disp = resp.headers["Content-Disposition"]
         fname = re.findall("filename=(.+)", disp)[0].strip('"')
-        with open(f"/tmp/{fname}", "wb") as fp:
+        zfname = os.path.join(tempDir, fname)
+        with open(zfname, "wb") as fp:
             for chunk in resp.raw:
                 fp.write(chunk)
 
-        return f"/tmp/{fname}"
+        return zfname
 
     def _listRecursive(
         self, user, pid: str, name: str, base_url: str = None, progress=None
