@@ -126,7 +126,7 @@ class OpenICPSRVerificator(Verificator):
             oauth_redir_req.raise_for_status()
             try:
                 callback_url = oauth_redir_req.headers.get("Refresh").split("URL=")[-1]
-            except TypeError:
+            except AttributeError:
                 raise ValueError(f"Invalid password {self.key=} {user['email']=}")
 
             resp = session.get(

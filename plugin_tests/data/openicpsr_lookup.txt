@@ -1,0 +1,842 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.27.1
+    method: HEAD
+    uri: https://doi.org/10.3886/E132081V1
+  response:
+    body:
+      string: ''
+    headers:
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 72714209b8186393-ORD
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '217'
+      Content-Type:
+      - text/html;charset=utf-8
+      Date:
+      - Thu, 07 Jul 2022 14:26:55 GMT
+      Expect-CT:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=brksdfrOU%2B2EdqkHVBNDzq8oNAcj9b7QZBP1tnV8ko3Geku%2FK633Czq02aZOsxDAd5OrT%2BDSXRvocKpDANCUvjtnLDwXr1L3bOezCJPTPVrZNgtpGoS6mQOzy1tjv3isuoRTbi0%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      alt-svc:
+      - h3=":443"; ma=86400, h3-29=":443"; ma=86400
+      expires:
+      - Thu, 07 Jul 2022 15:21:41 GMT
+      location:
+      - https://www.openicpsr.org/openicpsr/project/132081/version/V1/view
+      permissions-policy:
+      - interest-cohort=(),browsing-topics=()
+      vary:
+      - Accept
+    status:
+      code: 302
+      message: Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.27.1
+    method: HEAD
+    uri: https://www.openicpsr.org/openicpsr/project/132081/version/V1/view
+  response:
+    body:
+      string: ''
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token,
+        Accept-Encoding, Cache-Control
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, DELETE, PUT
+      Access-Control-Max-Age:
+      - '1000'
+      Connection:
+      - close
+      Content-Language:
+      - en-US
+      Content-Type:
+      - text/html;charset=UTF-8
+      Date:
+      - Thu, 07 Jul 2022 14:26:56 GMT
+      Set-Cookie:
+      - JSESSIONID=2A465AFA58C40A82BC9FC89091C4E721; Path=/openicpsr; Secure; HttpOnly
+      Strict-Transport-Security:
+      - max-age=15552000
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.27.1
+    method: GET
+    uri: https://iqss.github.io/dataverse-installations/data/data.json
+  response:
+    body:
+      string: !!binary |
+        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
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '215'
+      Cache-Control:
+      - max-age=600
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '12635'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Thu, 07 Jul 2022 14:27:00 GMT
+      ETag:
+      - W/"62c5be74-cb5a"
+      Last-Modified:
+      - Wed, 06 Jul 2022 16:55:16 GMT
+      Server:
+      - GitHub.com
+      Vary:
+      - Accept-Encoding
+      Via:
+      - 1.1 varnish
+      X-Cache:
+      - HIT
+      X-Cache-Hits:
+      - '1'
+      X-Fastly-Request-ID:
+      - cfc7d33e374510ee1991e094d10270f5ca797523
+      X-GitHub-Request-Id:
+      - 1C9E:7566:D3C4ED:155AC7E:62C6E24C
+      X-Served-By:
+      - cache-chi-klot8100112-CHI
+      X-Timer:
+      - S1657204021.636371,VS0,VE4
+      expires:
+      - Thu, 07 Jul 2022 13:50:28 GMT
+      permissions-policy:
+      - interest-cohort=()
+      x-origin-cache:
+      - HIT
+      x-proxy-cache:
+      - MISS
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.27.1
+    method: GET
+    uri: https://www.openicpsr.org/openicpsr/project/132081/version/V1/view
+  response:
+    body:
+      string: "\n\n\n\n\n\n\n<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\"
+        lang=\"en\">\n<head>\n\n\t<title>Data and Code for: Intrahousehold Consumption
+        Allocation and Demand for Agency: A Triple Experimental Investigation</title>\n\n\t\n\t<!--
+        Google Tag Manager -->\n\t<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':\n\tnew
+        Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],\n\tj=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=\n\t'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);\n\t})(window,document,'script','dataLayer','GTM-5X9C45K');</script>\n\t<!--
+        End Google Tag Manager -->\n\n\t\n\t<meta charset=\"UTF-8\" />\n\t<meta http-equiv=\"X-UA-Compatible\"
+        content=\"IE=edge\" />\n\t<meta name=\"viewport\" content=\"width=device-width,
+        initial-scale=1\" />\n\n\t<link href=\"/openicpsr/resources/commons/scripts/bootstrap/css/bootstrap.min.css;jsessionid=C23CA24D94F047A833875C4CD6F73804\"
+        rel=\"stylesheet\" />\n\t<link href=\"/openicpsr/resources/commons/scripts/bootstrap/css/bootstrap-theme.min.css;jsessionid=C23CA24D94F047A833875C4CD6F73804\"
+        rel=\"stylesheet\" />\n\t<link href=\"/openicpsr/resources/commons/scripts/jquery-ui-1.12.0/jquery-ui.min.css;jsessionid=C23CA24D94F047A833875C4CD6F73804\"
+        type=\"text/css\" rel=\"stylesheet\" />\n\t<link href=\"/openicpsr/resources/commons/scripts/jquery-ui-1.12.0/jquery-ui.theme.min.css;jsessionid=C23CA24D94F047A833875C4CD6F73804\"
+        type=\"text/css\" rel=\"stylesheet\" />\n\t\n\t<link href=\"/openicpsr/resources/commons/css/all-tenants.css;jsessionid=C23CA24D94F047A833875C4CD6F73804\"
+        type=\"text/css\" rel=\"stylesheet\" />\n\n\t<link href=\"/openicpsr/resources/css/screen-css.jsp;jsessionid=C23CA24D94F047A833875C4CD6F73804\"
+        type=\"text/css\" rel=\"stylesheet\" media=\"screen\" />\n\t<link href=\"/openicpsr/resources/css/splash-css.jsp;jsessionid=C23CA24D94F047A833875C4CD6F73804\"
+        type=\"text/css\" rel=\"stylesheet\" media=\"screen\" />\n\t<link href=\"/openicpsr/resources/css/print-css.jsp;jsessionid=C23CA24D94F047A833875C4CD6F73804\"
+        type=\"text/css\" rel=\"stylesheet\" media=\"print\" />\n\n\t<script src=\"/openicpsr/resources/commons/scripts/jquery/jquery-1.11.2.min.js;jsessionid=C23CA24D94F047A833875C4CD6F73804\"></script>\n\t<script
+        src=\"/openicpsr/resources/commons/scripts/jquery-ui-1.12.0/jquery-ui.min.js;jsessionid=C23CA24D94F047A833875C4CD6F73804\"></script>\n\t<script
+        src=\"/openicpsr/resources/commons/scripts/bootstrap/js/bootstrap.min.js;jsessionid=C23CA24D94F047A833875C4CD6F73804\"></script>\n\t<script
+        src=\"/openicpsr/resources/js/search-suggest.js;jsessionid=C23CA24D94F047A833875C4CD6F73804\"></script>\n\t<script
+        src=\"/openicpsr/resources/js/set-active.js;jsessionid=C23CA24D94F047A833875C4CD6F73804\"></script>\n\n\t<link
+        href=\"https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i\"
+        rel=\"stylesheet\">\n\t<!-- Font Awesome 6 -->\n\t<link href=\"/openicpsr/resources/commons/fontawesome/css/all.css;jsessionid=C23CA24D94F047A833875C4CD6F73804\"
+        type=\"text/css\" rel=\"stylesheet\" />\n\t\n\t<link href=\"https://www.icpsr.umich.edu/web/pages/css-shared/allsites.css\"
+        type=\"text/css\" rel=\"stylesheet\">\n\t\n\t<meta charset=\"UTF-8\" />\r\n\t<script
+        src=\"/openicpsr/resources/commons/scripts/react-0.14.7/react.min.js;jsessionid=C23CA24D94F047A833875C4CD6F73804\"></script>\r\n\t<script
+        src=\"/openicpsr/resources/commons/scripts/react-0.14.7/react-dom.min.js ;jsessionid=C23CA24D94F047A833875C4CD6F73804\"></script>\r\n\t<link
+        href=\"/openicpsr/resources/commons/scripts/select2-4.0.3/css/select2.min.css;jsessionid=C23CA24D94F047A833875C4CD6F73804\"
+        rel=\"stylesheet\" />\r\n\t<script src=\"/openicpsr/resources/commons/scripts/select2-4.0.3/js/select2.min.js;jsessionid=C23CA24D94F047A833875C4CD6F73804\"></script>\r\n\t<script
+        src=\"/openicpsr/resources/commons/scripts/d3plus/js/d3.min.js;jsessionid=C23CA24D94F047A833875C4CD6F73804\"></script>\r\n\t<script
+        src=\"/openicpsr/resources/commons/scripts/d3plus/js/d3plus.min.js;jsessionid=C23CA24D94F047A833875C4CD6F73804\"></script>\r\n\t\n\n\n\n\n\n\n\n\n<meta
+        name=\"isProd\" value=\"true\" />\n<meta name=\"isLocal\" value=\"false\"
+        />\n\n<script src=\"https://pcms.icpsr.umich.edu/pcms/resources/js/app/projectUsage/ProjectUsage.js?buildNumber=20220427-219720\"
+        onload=\"pcmsJSLoaded=true;\"></script>\n\n     \n       <script src=\"https://deposit.icpsr.umich.edu/deposit/resources/scripts/app/deposit.min.js?buildNumber=20220427-219720\"
+        onload=\"depositJSLoaded=true;\"></script>\n       <script src=\"https://deposit.icpsr.umich.edu/deposit/resources/scripts/app/bibliography.min.js?buildNumber=20220427-219720\"
+        onload=\"depositJSLoaded=true;\"></script>\n      \n      \n    \n\r\n\t<style
+        type=\"text/css\">\t\r\n\t\t.tenantLogo img{float: right;}\r\n\t\tul#relatedPublications
+        div.csl-entry {\r\n\t\t\tdisplay: list-item;\r\n\t\t}\t\r\n\t\t@media(max-width:768px){\r\n\t\t\t.tenantLogo{
+        text-align: center; \r\n\t\t\t}\r\n\t\t}\r\n\t</style>\r\n\t<script type=\"text/javascript\">\r\n\t\tfunction
+        modalCloseHandler(helpTerm,elem){\r\n\t    $('#helpViewDivId').unbind('hidden.bs.modal');\r\n\t\t$('#helpViewDivId').on('hidden.bs.modal',
+        function (e) {\r\n\t\t\t\t$(elem).focus();\r\n\t\t});\r\n\t\t}\r\n\t\tfunction
+        displayHelp(helpTerm,elem){\r\n\t\t\tReactDOM.render(React.createElement(HelpViewer,
+        {modalId:'helpViewDivId', helpTerm:helpTerm, context: 'pcms', application:'openicpsr',module:null,appUrl:'https://deposit.icpsr.umich.edu/deposit'}),
+        document.getElementById('helpViewDiv'));\r\n\t\t\t$('#helpViewDivId').on('shown.bs.modal',
+        function (e) {\r\n\t\t\t\t$('#helpViewDivId .modal-header .close').focus();\r\n\t\t\t\tmodalCloseHandler(helpTerm,elem);\r\n\t\t\t});\r\n\t\t\t$('#helpViewDivId').modal('show');\r\n\t\t}\r\n\t</script>\r\n\t<script
+        type=\"text/javascript\">\r\n\t\tfunction approveDisapproveModal(projectId,
+        versionNumber) {\r\n\t\t\t$(\"#approveDisapproveDialog\").modal().show();\r\n\t\t}\r\n\t\t\r\n\r\n\t\tfunction
+        approveOrDisapprove() {\r\n\t\t\tvar projectId = \"132081\";\r\n\t\t\tvar
+        versionNumber = \"V1\";\r\n\t\t\tvar approveDisapproveValue = $(\"input[name='approveDisapproveSelection']:checked\").val();\r\n\t\t\tvar
+        reason = $(\"#reason\").val();\r\n\t\t\t\r\n\t\t\t$.ajax({\r\n\t\t\t\turl:
+        \"https://deposit.icpsr.umich.edu/deposit/review/approveDisapproveAction\",\r\n\t\t\t\tcrossDomain:
+        true,\r\n\t\t\t\tdataType: \"text\",\r\n\t\t\t\tdata: {projectId: projectId,
+        versionNumber: versionNumber, approveDisapprove: approveDisapproveValue, reason:reason},\r\n\t\t\t\ttype:
+        \"POST\",\r\n\t\t\t\tsuccess: function(data) {\r\n\t\t\t\t\t$(\"#approvalWell\").hide();\r\n\t\t\t\t},\r\n\t\t\t\terror:
+        function(xhr, status, err) {\r\n\t\t\t\t\tconsole.log(err);\r\n\t\t\t\t}\r\n\t\t\t})\r\n\t\t}\r\n\t\t\r\n\t</script>\r\n\t<script>\r\n\t\tvar
+        jwtToken = null;\r\n\t\t$(document).ready(function (e) {\r\n\t\t\tjwtToken
+        = '';\r\n\t\t\t$(document).ajaxSend(function(event, jqxhr, settings) {\r\n\t\t\t\tjqxhr.setRequestHeader(\"Authorization\",
+        \"Bearer \" + jwtToken);\r\n\t\t\t});\r\n\t\t\t\r\n\r\n\t\t\t// test for presence
+        of request button\r\n\t\t\tif($( \"a#restrictedDataRequestButton\" ).length){\r\n\t\t\t\t//
+        FIXME This may \r\n\t\t\t\t// attach a click event to the request link for
+        restricted data\r\n\t\t\t\t$(\"a#restrictedDataRequestButton\").click(function(e){\r\n\t\t\t\t\te.preventDefault();\r\n\t\t\t\t\twindow.setTimeout(
+        function(){\r\n\t\t\t\t\t\twindow.location = $(this).attr('href');\r\n\t\t\t\t\t},
+        500 );\r\n\t\t\t\t});\r\n\t\t\t}\r\n\t\t\t\t\t\t\r\n\t\t});\r\n\r\n\t\tfunction
+        updatePager(pageSelected, pageSize, sortOrder, sortAsc) {\r\n\t\t\tvar newUrl
+        = '/openicpsr' + '/project/132081/version/V1/view?flag=follow' \r\n\t\t\t\t\t\t\t+
+        ((pageSelected !=null) ? ('&pageSelected=' + pageSelected) : '') + ((pageSize
+        !=null) ? ('&pageSize=' + pageSize) : '' ) \r\n\t\t\t\t\t\t\t+ ((sortOrder
+        !=null) ? ('&sortOrder=' + sortOrder) : '') + ((sortAsc != null) ? ('&sortAsc='
+        + sortAsc) : '') ;\r\n\t\t\twindow.location.href = newUrl;\r\n\t\t}\r\n\r\n\t\tfunction
+        showObjectPreview(path, type) {\r\n\t\t\tReactDOM.render(React.createElement(ObjectViewDialog,
+        {\r\n\t\t\t\tpath: path.trim(),\r\n\t\t\t\ttype: type\r\n\t\t\t}), document.getElementById('objectPreviewTag'));\r\n\t\t};\r\n\r\n\t</script>\r\n\t<script
+        type=\"text/javascript\">\r\n\t\tvar depositConfig = {\r\n\t\t\tdepositServerUrl
+        : \"/openicpsr/project/132081/version/V1\",\r\n\t\t\tembed:true\r\n\t\t};\r\n\t</script>\r\n\r\n\t\r\n\r\n\t<meta
+        name=\"DC.identifier\" content=\"10.3886/E132081V1\" />\r\n\t<meta name=\"DC.title\"
+        content=\"Data and Code for: Intrahousehold Consumption Allocation and Demand
+        for Agency: A Triple Experimental Investigation\" />\r\n\t\r\n\t\t<meta name=\"DC.creator\"
+        content=\"Uzma Afzal, University of Nottingham\" />\r\n\t\r\n\t\t<meta name=\"DC.creator\"
+        content=\"Giovanna d'Adda, University of Milan\" />\r\n\t\r\n\t\t<meta name=\"DC.creator\"
+        content=\"Marcel Fafchamps, Stanford University\" />\r\n\t\r\n\t\t<meta name=\"DC.creator\"
+        content=\"Farah Said, Lahore School of Economics\" />\r\n\t\r\n\t<meta name=\"DC.publisher\"
+        content=\"Inter-university Consortium for Political and Social Research (ICPSR)\"
+        />\r\n\t<meta name=\"DC.date\" content=\"2022-06-15\" />\r\n\t<meta name=\"DC.type\"
+        content=\"Dataset\" />\n\n\t<script>\n\t\t$(document).ready(function() {\n\t\t\tvar
+        year = new Date().getFullYear();\n\t\t\t$(\"span#currentYear\").html(year);\n\t\t\t$(\".navbar-toggle\").click(function(){\n\t\t\t\t$(this).toggleClass(\"active\")\n\t\t\t\t});\n\t\t\t$.ajax({\n\t\t\t\turl:
+        \"/openicpsr/banner/applications/openicpsr\",\n\t\t\t\ttype: \"GET\",\n\t\t\t\tdata:
+        \"text\",\n\t\t\t\tsuccess: function(data) {\n\t\t\t\t\tif (data != \"\")
+        {\n\t\t\t\t\t\t$(\"#bannerText\").html(data);\n\t\t\t\t\t\t$(\"#bannerText\").show();\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t});\n\t\t});\n\t</script>\n\n\n\t\n<script>\nwindow.onerror
+        = function() {\n\tconsole.log('Error reported !!');\n\t$(\"#busy\").removeClass('busyModal');\n};\n\t$(document)\n\t\t\t.ajaxError(\n\t\t\t\t\tfunction(event,
+        jqXHR, settings, thrownError) {\n\t\t\t\t\t\t$(\"#busy\").removeClass('busyModal');\n\t\t\t\t\t\tvar
+        msg = '<div class=\"alert alert-danger alert-dismissible fade in\" role=\"alert\">
+        <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span
+        aria-hidden=\"true\">&times;\x97</span></button>';\n\t\t\t\t\t\tvar errmsg
+        = '';\n\t\t\t\t\t\tmsg = msg\n\t\t\t\t\t\t\t\t+ '<strong>Oops!</strong> Problem
+        processing your request. Try again and if problem persists, please email ICPSR
+        support: <a href=\"mailto:help@icpsr.umich.edu\">help@icpsr.umich.edu</a><br>';\n\t\t\t\t\t\tif
+        (jqXHR.status == 0) {\n\t\t\t\t\t\t\terrmsg = 'Network problem';\n\t\t\t\t\t\t\treturn;\n\t\t\t\t\t\t}
+        else if (jqXHR.status == 400) {\n\t\t\t\t\t\t\terrmsg = 'Bad request';\n\t\t\t\t\t\t}
+        else if (jqXHR.status == 401) {\n\t\t\t\t\t\t\terrmsg = 'Unauthorized';\n\t\t\t\t\t\t}
+        else if (jqXHR.status == 403) {\n\t\t\t\t\t\t\terrmsg = 'Forbidden';\n\t\t\t\t\t\t}
+        else if (jqXHR.status == 404) {\n\t\t\t\t\t\t\terrmsg = 'Requested page not
+        found';\n\t\t\t\t\t\t} else if (jqXHR.status == 408\n\t\t\t\t\t\t\t\t|| thrownError
+        == 'timeout') {\n\t\t\t\t\t\t\terrmsg = 'Time out error';\n\t\t\t\t\t\t} else
+        if (jqXHR.status == 500) {\n\t\t\t\t\t\t\terrmsg = 'Internal server error';\n\t\t\t\t\t\t}
+        else if (thrownError == 'parsererror') {\n\t\t\t\t\t\t\terrmsg = 'Requested
+        JSON parse failed';\n\t\t\t\t\t\t} else if (thrownError == 'abort') {\n\t\t\t\t\t\t\terrmsg
+        = 'AJAX request aborted';\n\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\terrmsg = 'Uncaught
+        Error:\\n' + jqXHR.responseText;\n\t\t\t\t\t\t}\n\t\t\t\t\t\tmsg = msg + errmsg;\n\t\t\t\t\t\tmsg
+        = msg\n\t\t\t\t\t\t\t\t+ '; URL : '\n\t\t\t\t\t\t\t\t+ settings.url\n\t\t\t\t\t\t\t\t+
+        '</div>';\n\t\t\t\t\t\t$(\"#errormsg\").html(msg);\n\t\t\t\t\t});\n</script>\n\n</head>\n<body
+        id=\"empty\" class=\"empty\">\n\n<noscript>\n<div class=\"text-center no-js-alert\"
+        style=\"margin-bottom: 0;\">\nPlease enable JavaScript in your browser. JavasScript
+        is required to use the core functionality of this site including searching,
+        downloading data, and depositing data.\n</div>\n</noscript>\n\n\n<!-- Google
+        Tag Manager (noscript) -->\n<noscript><iframe src=\"https://www.googletagmanager.com/ns.html?id=GTM-5X9C45K\"\nheight=\"0\"
+        width=\"0\" style=\"display:none;visibility:hidden\"></iframe></noscript>\n<!--
+        End Google Tag Manager (noscript) -->\n<script>\r\n$(document).ready(function(){\r\n\tvar
+        url = '//cms.icpsr.umich.edu/services/archonnex-alerts?site=openicpsr';\r\n\tvar
+        message = '';\r\n\t$.getJSON(url).done(function(data) {\r\n\t\t\tif(data.length>0){\r\n\t\t\t\tdata
+        = data.slice(0, 1);\r\n\t\t\t\t$.each( data, function( i, item ) {\r\n\t\t\t\t\tmessage
+        += '<div id=\"archonnex-alert-message\" class=\"container\">';\r\n\t\t\t\t\tmessage
+        += item.Message.value;\r\n\t\t\t\t\tmessage += '</div>';\r\n\t\t\t      });\r\n\t\t\t
+        \    $('.archonnex-alert-message-wrapper').prepend(message);\r\n\t\t\t }\r\n\t\t}).fail(function()
+        {\r\n\t\t    console.log( \"No response from cms.\" );\r\n\t\t  });\t\r\n\t});\r\n</script>\r\n\r\n\r\n<div
+        class=\"archonnex-alert-message-wrapper\"></div>\r\n\n<header>\n\t<div id=\"skip\">\n\t\t<a
+        href=\"#skipto\">Skip to Main Content</a>\n\t</div>\t\n\t<nav class=\"navbar\">\n\t\t\n\n\n\t\t<div
+        class=\"container-fluid\">\n\t\t\t<div class=\"navbar-header\">\n\t\t\t\t<button
+        type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\"
+        data-target=\"#bs-example-navbar-collapse-1\">\n\t\t\t\t\t<span class=\"sr-only\">Toggle
+        navigation</span>\n\t\t\t\t\t<span class=\"icon-bar line-1\"></span>\n\t\t\t\t\t<span
+        class=\"icon-bar line-2\"></span>\n\t\t\t\t\t<span class=\"icon-bar line-3\"></span>\n\t\t\t
+        \   </button>\n\t\t\t    <a class=\"navbar-brand header-logo\" href=\"/openicpsr/\"><img
+        src=\"https://www.icpsr.umich.edu/files/openICPSR/openicpsr-logo-oneline-white-02.png\"
+        alt=\"open I C P S R\"></a>\n\t\t\t</div>\n\t\t\t<div class=\"collapse navbar-collapse\"
+        id=\"bs-example-navbar-collapse-1\">\n\t\t\t\t<div class=\"row\">\n\t\t\t\t\t<ul
+        class=\"nav navbar-nav navbar-right loginManagement\">\n\t\t\t\t\t\t\n\t\t\t\t\t\t<li>\n\t\t\t\t\t<!--
+        set the value of requeset URI -->\n\t\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t<a
+        href=\"/openicpsr/login;jsessionid=C23CA24D94F047A833875C4CD6F73804?request_uri=https%3a%2f%2fwww.openicpsr.org%2fopenicpsr%2fproject%2f132081%2fversion%2fV1%2fview&path=openICPSR\"
+        id=\"login\">Log In/Create Account</a>\n\t\t\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\n
+        \       \t</li>\n\t\t\t\t\t</ul>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"row\">\n\t\t\t\t\n\t\t\t\t\t<ul
+        class=\"nav navbar-nav navbar-right row navigation-row\">\n\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t<a
+        href=\"/openicpsr/search/studies\">Find Data</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t<a
+        href=\"/openicpsr/workspace?path=openICPSR\" id=\"topNavShareData\">Share
+        Data</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t<a href=\"/openicpsr/repository/\">Repositories</a>\n\t\t\t\t\t\t</li>\n\n\t\t\t\t\t\t\n\t\t\t\t\t</ul>\n
+        \     \t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</nav>\n</header>\n\n<section
+        id=\"skipto\">\n\n<div class=\"container-fluid\" id=\"mainContent\">\n<div
+        id=\"ie-detection-result\">\n</div>\n\n<script src=\"/openicpsr/resources/commons/scripts/detect-ie.js;jsessionid=C23CA24D94F047A833875C4CD6F73804\"></script>\n\n\n\n\t<div
+        id=\"bannerText\" class=\"alert alert-warning\"></div>\n\n\t<article>\r\n\t\r\n\t<ul
+        class=\"breadcrumb\" style=\"margin-bottom:5px;\">\r\n\t\t<li>\r\n\t\t\t<a
+        href=\"/openicpsr/search/studies;jsessionid=C23CA24D94F047A833875C4CD6F73804\">Find
+        Data</a>\r\n\t\t</li>\r\n\t\t<li>\r\n\t\t\t<a href=\"/openicpsr/project/132081/version/V1/view;jsessionid=C23CA24D94F047A833875C4CD6F73804\">Data
+        and Code for: Intrahousehold Consumption Allocation and Demand for Agency:
+        A Triple Experimental Investigation</a>\r\n\t\t</li>\r\n\t\t\r\n\t\t\t\t\r\n\t\t\r\n\t</ul>\r\n\r\n\t\r\n\t\r\n\t\t\t<div
+        class=\"page-header\">\r\n\t\t\t\t\r\n\t\t\t\t<div class=\"row\">\r\n\t\t\t\t\t<div
+        class=\"col-xs-12\">\r\n\t\t\t\t\t\t<h1 style=\"margin-top:5px;\">Data and
+        Code for: Intrahousehold Consumption Allocation and Demand for Agency: A Triple
+        Experimental Investigation</h1>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div class=\"col-sm-8\">\r\n\t\t\t\t\t\t<p><strong>Principal
+        Investigator(s)</strong>:&nbsp;\r\n\t\t\t\t\t\t<a tabindex=\"0\" href=\"#\"
+        data-helplink=\"yes\" role=\"button\" id=\"helpLink-dcterms-creator\" onclick=\"event.preventDefault();displayHelp('dcterms-creator',this)\"><span
+        class=\"glyphicon glyphicon-question-sign\"></span><span class=\"sr-only\">View
+        help for Principal Investigator(s)</span></a>\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\tUzma
+        Afzal, University of Nottingham; \r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\tGiovanna
+        d'Adda, University of Milan; \r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\tMarcel
+        Fafchamps, Stanford University; \r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\tFarah
+        Said, Lahore School of Economics\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t</p>\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t<p><strong>Version</strong>:&nbsp;\r\n\t\t\t\t\t\t\t<a
+        tabindex=\"0\" href=\"#\" data-helplink=\"yes\" role=\"button\" id=\"helpLink-icpsr-versionLabel\"
+        onclick=\"event.preventDefault();displayHelp('icpsr-versionLabel',this)\"><span
+        class=\"glyphicon glyphicon-question-sign\"></span><span class=\"sr-only\">View
+        help for Version</span></a>\r\n\t\t\t\t\t\t\tV1 \r\n\t\t\t\t\t\t\t</p>\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t<div
+        class=\"col-sm-4 tenantLogo\">\r\n\t\t\t\t\t\r\n\t\t\t\t\t\t<a href=\"https://www.openicpsr.org/openicpsr/aea\"
+        >\r\n\t<img alt=\"AEA Data and Code Repository\" src=\"https://deposit.icpsr.umich.edu/deposit/getSystemResource?filePath=/archive-logos/aea.png\"></img>\r\n\t</a>\r\n\t\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t\t\r\n\t\t\t<div
+        class=\"row\">\r\n\t\t\t\t<div class=\"col-md-8\">\r\n\t\t\t\t\t<div class=\"table-responsive\">\r\n\t\t\t\t\t\t<!--
+        Folders & Files -->\r\n\t\t\t\t\t\t<table class=\"table table-striped\">\r\n\t\t\t\t\t\t\t<thead
+        style=\"background-color:lightgrey;\">\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t<th>Name
+        <a id=\"(?title)\" onclick=\"updatePager(1, 10, this.id, false);\">\r\n\t\t\t\t\t\t\t\t\t\t\t<span
+        class=\"glyphicon glyphicon-collapse-down\"></span></a></th>\r\n\t\t\t\t\t\t\t\t<th>File
+        Type <a id=\"(?fileContentType)\" onclick=\"updatePager(1, 10, this.id, true);\">\r\n\t\t\t\t\t\t\t\t\t\t\t<span
+        class=\"glyphicon glyphicon-collapse-up\" ></span></a></th>\r\n\t\t\t\t\t\t\t\t<th>Size
+        <a id=\"(?fileSize)\" onclick=\"updatePager(1, 10, this.id, true);\">\r\n\t\t\t\t\t\t\t\t\t\t\t<span
+        class=\"glyphicon glyphicon-collapse-up\" ></span></a></th>\r\n\t\t\t\t\t\t\t\t<th>Last
+        Modified <a id=\"(?lastModified)\" onclick=\"updatePager(1, 10, this.id, true);\">\r\n\t\t\t\t\t\t\t\t\t\t\t<span
+        class=\"glyphicon glyphicon-collapse-up\" ></span></a></th>\r\n\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t</thead>\r\n\t\t\t\t\t\t\t<tbody>\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t<td
+        width=\"35%\">\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<i
+        class=\"glyphicon glyphicon-folder-open\"></i>&nbsp;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a
+        href=\"?path=/openicpsr/132081/fcr:versions/V1/Code&type=folder\">Code</a>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t\t\t\t\t<td></td>\r\n\t\t\t\t\t\t\t\t\t\t<td>\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t\t\t\t\t<td>05/05/2021
+        03:28:PM</td>\r\n\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t<td
+        width=\"35%\">\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<i
+        class=\"glyphicon glyphicon-folder-open\"></i>&nbsp;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a
+        href=\"?path=/openicpsr/132081/fcr:versions/V1/Data&type=folder\">Data</a>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t\t\t\t\t<td></td>\r\n\t\t\t\t\t\t\t\t\t\t<td>\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t\t\t\t\t<td>02/09/2021
+        01:00:AM</td>\r\n\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t\t\t\t\t<td
+        width=\"35%\">\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<img
+        src=\"/openicpsr/project/132081/version/V1/getFileIcon;jsessionid=C23CA24D94F047A833875C4CD6F73804?contentType=application/pdf\"
+        width=\"35\" height=\"35\"/>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a href=\"?path=/openicpsr/132081/fcr:versions/V1/README_v2.pdf&type=file\">README_v2.pdf</a>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t\t\t\t\t<td>application/pdf</td>\r\n\t\t\t\t\t\t\t\t\t\t<td>\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t638.5
+        KB\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t\t\t\t\t<td>05/05/2021
+        11:24:AM</td>\r\n\t\t\t\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\r\n\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t</tbody>\r\n\t\t\t\t\t\t</table>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t\t\r\n\t\t\t\t\t\r\n\t\t\t\t\t\r\n\r\n\t\t\t\t\t<!--
+        Citation & DOI -->\r\n\t\t\t\t\t<div class=\"well\">\r\n\t\t\t\t\t\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t<p>\r\n\t\t\t\t\t\t\t\t\t<strong>Project
+        Citation:</strong>&nbsp;\r\n\t\t\t\t\t\t\t\t\t<div id=\"projectCitation\"><div
+        class=\"csl-bib-body\">\n  <div class=\"csl-entry\">Afzal, Uzma, d\u2019Adda,
+        Giovanna, Fafchamps, Marcel, and Said, Farah. Data and Code for: Intrahousehold
+        Consumption Allocation and Demand for Agency: A Triple Experimental Investigation.
+        Nashville, TN: American Economic Association [publisher], 2022. Ann Arbor,
+        MI: Inter-university Consortium for Political and Social Research [distributor],
+        2022-06-15. https://doi.org/10.3886/E132081V1</div>\n</div></div>\r\n\t\t\t\t\t\t\t\t</p>\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t</div>\r\n\r\n\t\t\t\t\t<!--
+        Main Contents -->\r\n\t\t\t\t\t<div>\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t<div
+        class=\"panel-title\"><h4>Project Description</h4></div>\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t<div
+        class=\"panel-heading\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<strong>Summary:</strong>&nbsp;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a
+        tabindex=\"0\" href=\"#\" data-helplink=\"yes\" role=\"button\" id=\"helpLink-dcterms-description\"
+        onclick=\"event.preventDefault();displayHelp('dcterms-description',this)\"><span
+        class=\"glyphicon glyphicon-question-sign\"></span><span class=\"sr-only\">View
+        help for Summary</span></a>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<!--
+        remove instances of excessive white space - no more than two line breaks -->\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div>We
+        conduct lab experiments to investigate demand for consumption agency in married
+        couples from Pakistan. We find subjects are often no better at guessing their
+        spouse's preferences than those of a stranger, and many subjects disregard
+        what they believe or know about others' preferences when assigning them a
+        consumption bundle. This suggests that individual executive agency within
+        the household has instrumental value. We indeed find significant evidence
+        of demand for agency in all experiments, and this demand varies with the cost
+        and anticipated instrumental benefit of agency. But subjects often make choices
+        incompatible with pure instrumental motives -- e.g., paying for agency even
+        when they know their partner assigned them their preferred choice. We also
+        find</div><div>female subjects to be quite willing to exert agency even though,
+        based on survey responses, they have little executive agency within their
+        household.</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<!--
+        Display each attribute value if it contains multiples -->\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div
+        class=\"panel-heading\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<strong>Funding Sources:</strong>&nbsp;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<a
+        tabindex=\"0\" href=\"#\" data-helplink=\"yes\" role=\"button\" id=\"helpLink-imeta-fundingSources\"
+        onclick=\"event.preventDefault();displayHelp('imeta-fundingSources',this)\"><span
+        class=\"glyphicon glyphicon-question-sign\"></span><span class=\"sr-only\">View
+        help for Funding Sources</span></a>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tInternational
+        Growth Centre (1-VRC-VPAK-VXXXX-89308); \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tEconomic
+        and Social Research Council (United Kingdom) (ES/L012286/1)\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t<!--
+        get rid of this line break and instead insert one at the BEGINNING of every
+        new resource property title -->\r\n\t\t\t\t\t\t\t<!-- this is because the
+        issue is occuring when \"summary\" or any other text area is the last field
+        displayed in any particular resource  -->\r\n\t\t\t\t\t\t\t<br/>\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t<div
+        class=\"panel-title\"><h4>Scope of Project</h4></div>\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t<div
+        class=\"panel-heading\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<strong>Subject Terms:</strong>&nbsp;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a
+        tabindex=\"0\" href=\"#\" data-helplink=\"yes\" role=\"button\" id=\"helpLink-dcat-keyword\"
+        onclick=\"event.preventDefault();displayHelp('dcat-keyword',this)\"><span
+        class=\"glyphicon glyphicon-question-sign\"></span><span class=\"sr-only\">View
+        help for Subject Terms</span></a>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\texperiment;
+        \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tallocative efficiency;
+        \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tempowerment;
+        \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tgender equality;
+        \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tprocedural equality;
+        \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tutility theory\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t<div
+        class=\"panel-heading\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<strong>JEL Classification:</strong>&nbsp;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a
+        tabindex=\"0\" href=\"#\" data-helplink=\"yes\" role=\"button\" id=\"helpLink-imeta-jelClassification\"
+        onclick=\"event.preventDefault();displayHelp('imeta-jelClassification',this)\"><span
+        class=\"glyphicon glyphicon-question-sign\"></span><span class=\"sr-only\">View
+        help for JEL Classification</span></a>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<br/>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>D13</b>
+        Household Production and Intrahousehold Allocation<br/>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>D61</b>
+        Allocative Efficiency; Cost-Benefit Analysis<br/>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>D91</b>
+        Micro-Based Behavioral Economics: Role and Effects of Psychological, Emotional,
+        Social, and Cognitive Factors on Decision Making<br/>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>J16</b>
+        Economics of Gender; Non-labor Discrimination\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t<div
+        class=\"panel-heading\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<strong>Geographic Coverage:</strong>&nbsp;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a
+        tabindex=\"0\" href=\"#\" data-helplink=\"yes\" role=\"button\" id=\"helpLink-dcterms-location\"
+        onclick=\"event.preventDefault();displayHelp('dcterms-location',this)\"><span
+        class=\"glyphicon glyphicon-question-sign\"></span><span class=\"sr-only\">View
+        help for Geographic Coverage</span></a>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<!--
+        remove instances of excessive white space - no more than two line breaks -->\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tPakistan\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<!--
+        Display each attribute value if it contains multiples -->\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div
+        class=\"panel-heading\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<strong>Time Period(s):</strong>&nbsp;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<a
+        tabindex=\"0\" href=\"#\" data-helplink=\"yes\" role=\"button\" id=\"helpLink-imeta-timePeriods\"
+        onclick=\"event.preventDefault();displayHelp('imeta-timePeriods',this)\"><span
+        class=\"glyphicon glyphicon-question-sign\"></span><span class=\"sr-only\">View
+        help for Time Period(s)</span></a>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t2015
+        \u2013 2017\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div
+        class=\"panel-heading\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<strong>Collection
+        Date(s):</strong>&nbsp;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<a tabindex=\"0\" href=\"#\"
+        data-helplink=\"yes\" role=\"button\" id=\"helpLink-imeta-collectionDates\"
+        onclick=\"event.preventDefault();displayHelp('imeta-collectionDates',this)\"><span
+        class=\"glyphicon glyphicon-question-sign\"></span><span class=\"sr-only\">View
+        help for Collection Date(s)</span></a>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t2015
+        \u2013 2017\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t<div
+        class=\"panel-heading\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<strong>Universe:</strong>&nbsp;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a
+        tabindex=\"0\" href=\"#\" data-helplink=\"yes\" role=\"button\" id=\"helpLink-disco-universe\"
+        onclick=\"event.preventDefault();displayHelp('disco-universe',this)\"><span
+        class=\"glyphicon glyphicon-question-sign\"></span><span class=\"sr-only\">View
+        help for Universe</span></a>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<!--
+        remove instances of excessive white space - no more than two line breaks -->\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tMarried
+        couples in Punjab, Pakistan.\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<!--
+        Display each attribute value if it contains multiples -->\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t<div
+        class=\"panel-heading\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<strong>Data Type(s):</strong>&nbsp;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a
+        tabindex=\"0\" href=\"#\" data-helplink=\"yes\" role=\"button\" id=\"helpLink-disco-kindOfData\"
+        onclick=\"event.preventDefault();displayHelp('disco-kindOfData',this)\"><span
+        class=\"glyphicon glyphicon-question-sign\"></span><span class=\"sr-only\">View
+        help for Data Type(s)</span></a>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\texperimental
+        data\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t<!--
+        get rid of this line break and instead insert one at the BEGINNING of every
+        new resource property title -->\r\n\t\t\t\t\t\t\t<!-- this is because the
+        issue is occuring when \"summary\" or any other text area is the last field
+        displayed in any particular resource  -->\r\n\t\t\t\t\t\t\t<br/>\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t<div
+        class=\"panel-title\"><h4>Methodology</h4></div>\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t<div
+        class=\"panel-heading\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<strong>Data Source:</strong>&nbsp;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a
+        tabindex=\"0\" href=\"#\" data-helplink=\"yes\" role=\"button\" id=\"helpLink-dcterms-source\"
+        onclick=\"event.preventDefault();displayHelp('dcterms-source',this)\"><span
+        class=\"glyphicon glyphicon-question-sign\"></span><span class=\"sr-only\">View
+        help for Data Source</span></a>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<!--
+        remove instances of excessive white space - no more than two line breaks -->\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tParticipant
+        response and survey data collected from one field and two lab-in-field experiments.\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<!--
+        Display each attribute value if it contains multiples -->\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t<div
+        class=\"panel-heading\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<strong>Collection Mode(s):</strong>&nbsp;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a
+        tabindex=\"0\" href=\"#\" data-helplink=\"yes\" role=\"button\" id=\"helpLink-disco-collectionMode\"
+        onclick=\"event.preventDefault();displayHelp('disco-collectionMode',this)\"><span
+        class=\"glyphicon glyphicon-question-sign\"></span><span class=\"sr-only\">View
+        help for Collection Mode(s)</span></a>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tface-to-face
+        interview; \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tpaper
+        and pencil interview (PAPI)\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t<div
+        class=\"panel-heading\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<strong>Unit(s) of Observation:</strong>&nbsp;\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a
+        tabindex=\"0\" href=\"#\" data-helplink=\"yes\" role=\"button\" id=\"helpLink-disco-analysisUnit\"
+        onclick=\"event.preventDefault();displayHelp('disco-analysisUnit',this)\"><span
+        class=\"glyphicon glyphicon-question-sign\"></span><span class=\"sr-only\">View
+        help for Unit(s) of Observation</span></a>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<!--
+        remove instances of excessive white space - no more than two line breaks -->\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tindividual\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<!--
+        Display each attribute value if it contains multiples -->\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t<!--
+        get rid of this line break and instead insert one at the BEGINNING of every
+        new resource property title -->\r\n\t\t\t\t\t\t\t<!-- this is because the
+        issue is occuring when \"summary\" or any other text area is the last field
+        displayed in any particular resource  -->\r\n\t\t\t\t\t\t\t<br/>\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t<h4>Related
+        Publications</h4>\r\n\t\t\t\t\t\t<div id=\"bibliography\"></div>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>
+        \ \r\n\r\n\t\t\t\t<div class=\"col-md-4 asideColumn\">\r\n\t\t\t\t\t<div class=\"well
+        pubDownloadWell\">\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t<!--
+        Set download type -->\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\t<!--
+        Download folder -->\r\n\t\t\t\t\t\t\t\t\t\t<a href=\"/openicpsr/project/132081/version/V1/download/terms;jsessionid=C23CA24D94F047A833875C4CD6F73804?path=/openicpsr/132081/fcr:versions/V1&type=project\"\r\n\t\t\t\t\t\t\t\t\t\t
+        \  class=\"btn btn-primary\" role=\"button\" id=\"downloadButton\">\r\n\t\t\t\t\t\t\t\t\t\t\t<i
+        class=\"glyphicon glyphicon-download\"></i> Download this project\r\n\t\t\t\t\t\t\t\t\t\t</a>\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t</div>
+        \r\n\t\t\t\t\t\r\n\t\t\t\t\t\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\r\n\t\t\t\t\t\r\n\t\t\t\t\t<div
+        id=\"projectUsage\"></div>\t\r\n\t\t\t\t\t\r\n\t\t\t\t\t<div class=\"well\">\r\n\t\t\t\t\t\t<h2
+        class=\"asideH2\">Published Versions</h2>\r\n\t\t\t\t\t\t<div class=\"indent\">\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t<p
+        style=\"margin-top:10px;\">\r\n\t\t\t\t\t\t\t\t\t<a href=\"/openicpsr/project/132081/version/V1/view;jsessionid=C23CA24D94F047A833875C4CD6F73804\">V1
+        [2022-06-15]</a>\r\n\t\t\t\t\t\t\t\t</p>\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t</div>\r\n\r\n\t\t\t\t\t\r\n\t\t\t\t\t\r\n\r\n\t\t\t\t\t\r\n\t\t\t\t\t<div
+        class=\"well\">\r\n\t\t\t\t\t\t<fieldset>\r\n\t\t\t\t\t\t\t <h2 class=\"asideH2\">Export
+        Metadata</h2>\r\n\t\t\t\t\t      \t<div class=\"indent\">\r\n\t\t\t\t\t\t\t\t<p
+        style=\"margin-top:10px;\">\r\n\t\t\t\t\t\t\t\t\t<a href=\"https://pcms.icpsr.umich.edu/pcms/api/1.0/oai/studies?metadataPrefix=oai_dc&verb=GetRecord&identifier=132081&version=V1&page=/openicpsr/project/132081/version/V1/view?flag=follow\">Dublin
+        Core</a>\r\n\t\t\t\t\t\t\t\t</p>\r\n\t\t\t\t\t\t\t\t<p style=\"margin-top:10px;\">\r\n\t\t\t\t\t\t\t\t\t<a
+        href=\"https://pcms.icpsr.umich.edu/pcms/api/1.0/oai/studies?metadataPrefix=oai_ddi25&verb=GetRecord&identifier=132081&version=V1&page=/openicpsr/project/132081/version/V1/view?flag=follow\">DDI
+        2.5</a>\r\n\t\t\t\t\t\t\t\t</p>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t</fieldset>\r\n\t\t\t\t\t</div>\r\n\r\n\r\n\t\t\t\t\t<div
+        class=\"well\">\r\n\t\t\t\t\t\t<div class=\"well\">\r\n\t\t\t\t\t\t\t<a href='/openicpsr/contactUs;jsessionid=C23CA24D94F047A833875C4CD6F73804?reqProps={\"sip_project_id\":\"132081\",\"version_label\":\"V1\",\"sip_project_title\":\"Data
+        and Code for: Intrahousehold Consumption Allocation and Demand for Agency:
+        A Triple Experimental Investigation\"}'\r\n\t\t\t\t\t\t\t   class=\"btn btn-warning
+        reportAProblemBTN\">Report a Problem</a>\r\n\t\t\t\t\t\t\t<p style=\"margin-top:10px;\">Found
+        a serious problem with the data, such as disclosure risk or\r\n\t\t\t\t\t\t\t\tcopyrighted
+        content? Let us know.</p>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t<div class=\"well\">\r\n\t\t\t\t\t\t\t<div
+        id=\"projectLicense\"></div>\r\n\t\t\t\t\t\t\t<p>This material is distributed
+        exactly as it arrived from the data depositor. ICPSR has not checked or processed
+        this material. Users should consult the investigator(s) if further information
+        is desired.</p>\r\n\t\t\t\t\t\t</div> \r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>
+        \ \r\n\t\t\t</div>  \r\n\t\r\n\r\n\t\r\n</article>\r\n\t<div id=\"helpViewDiv\"></div>\r\n\t\r\n\t<div
+        id=\"approveDisapproveDialog\" class=\"modal fade\">\r\n\t\t<div class=\"modal-dialog
+        modal-vertical-centered\">\r\n\t\t\t<div class=\"modal-content\">\r\n\t\t\t\t<div
+        class=\"modal-header\">\r\n\t\t\t\t\t<button type=\"button\" class=\"close\"
+        data-dismiss=\"modal\">\r\n\t\t\t\t    \t<span aria-hidden=\"true\">x</span>\r\n\t\t\t\t
+        \   \t<span class=\"sr-only\">Close</span>\r\n\t\t\t\t    </button>\r\n\t\t\t\t\t<h4
+        class=\"modal-title\">Approve or Disapprove Project</h4>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div
+        class=\"modal-body\">\r\n\t\t\t\t\t<form>\r\n\t\t\t\t\t\t<div class=\"form-group\">\r\n\t\t\t\t\t\t\t<input
+        type=\"radio\" name=\"approveDisapproveSelection\" value=\"approve\" checked>Approve<br>\r\n\t\t\t\t\t\t\t<input
+        type=\"radio\" name=\"approveDisapproveSelection\" value=\"disapprove\">Disapprove<br>\r\n\t\t\t\t\t\t\t<div
+        style=\"padding-left:14px;\">\r\n\t\t\t\t\t\t\t\t<label for=\"reason\">Reason</label><br/>\r\n\t\t\t\t\t\t\t\t<textarea
+        rows=\"4\" cols=\"100\" id=\"reason\" style=\"max-width:550px\"></textarea>
+        \r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t<button class=\"btn
+        btn-primary\" role=\"button\" id=\"disapproveButton\" onclick=\"approveOrDisapprove();\">Submit</button>\r\n\t\t\t\t\t\t<button
+        class=\"btn\" role=\"button\" id=\"cancel\">Cancel</button>\r\n\t\t\t\t\t</form>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t\r\n\t\r\n\t\t<script
+        type=\"application/ld+json\">\r\n\t\t\t\t{\"funder\":[{\"@type\":\"Organization\",\"name\":\"International
+        Growth Centre\"},{\"@type\":\"Organization\",\"name\":\"Economic and Social
+        Research Council (United Kingdom)\"}],\"identifier\":\"https://doi.org/null\",\"creator\":[{\"affiliation\":[\"University
+        of Nottingham\"],\"@type\":\"Person\",\"name\":\"Uzma Afzal\"},{\"affiliation\":[\"University
+        of Milan\"],\"@type\":\"Person\",\"name\":\"Giovanna d'Adda\"},{\"affiliation\":[\"Stanford
+        University\"],\"@type\":\"Person\",\"name\":\"Marcel Fafchamps\"},{\"affiliation\":[\"Lahore
+        School of Economics\"],\"@type\":\"Person\",\"name\":\"Farah Said\"}],\"keywords\":[\"experiment\",\"allocative
+        efficiency\",\"empowerment\",\"gender equality\",\"procedural equality\",\"utility
+        theory\"],\"@type\":\"Dataset\",\"description\":\"<div>We conduct lab experiments
+        to investigate demand for consumption agency in married couples from Pakistan.
+        We find subjects are often no better at guessing their spouse's preferences
+        than those of a stranger, and many subjects disregard what they believe or
+        know about others' preferences when assigning them a consumption bundle. This
+        suggests that individual executive agency within the household has instrumental
+        value. We indeed find significant evidence of demand for agency in all experiments,
+        and this demand varies with the cost and anticipated instrumental benefit
+        of agency. But subjects often make choices incompatible with pure instrumental
+        motives -- e.g., paying for agency even when they know their partner assigned
+        them their preferred choice. We also find<\\/div><div>female subjects to be
+        quite willing to exert agency even though, based on survey responses, they
+        have little executive agency within their household.<\\/div>\",\"dateModified\":\"\",\"spatialCoverage\":\"Pakistan\",\"distribution\":[],\"@context\":\"http://schema.org\",\"version\":\"V1\",\"url\":\"https://doi.org/null\",\"datePublished\":\"Tue
+        Feb 09 00:21:10 EST 2021\",\"license\":\"https://creativecommons.org/licenses/by/4.0\",\"dateCreated\":\"2022-06-15
+        15:08:32.0\",\"temporalCoverage\":[\"2015 -- 2017\"],\"includedInDataCatalog\":{\"@type\":\"DataCatalog\",\"name\":\"openICPSR\",\"url\":\"https://www.openicpsr.org/\"},\"name\":\"Data
+        and Code for: Intrahousehold Consumption Allocation and Demand for Agency:
+        A Triple Experimental Investigation\",\"publisher\":{\"@type\":\"Organization\",\"name\":\"American
+        Economic Association\",\"alternateName\":\"AEA\",\"url\":\"https://www.aeaweb.org\"}}\r\n\t\t</script>\r\n\t\r\n\t\r\n\t<script
+        type=\"text/javascript\">\r\n\t\tReactDOM.render(React.createElement(ProjectLicense,
+        {depositServerUrl: 'https://deposit.icpsr.umich.edu/deposit', licenseId: '1',
+        resourcePath: '/openicpsr/132081'}), document.getElementById('projectLicense'));\r\n\t\tReactDOM.render(React.createElement(ProjectUsage,
+        {pcmsURL: 'https://pcms.icpsr.umich.edu/pcms', projectId: '132081', tenant:
+        'openicpsr',level: 'project', selectedPath: ''}), document.getElementById('projectUsage'));\r\n\t\tvar
+        studyPath = '/openicpsr/132081';\r\n\t\tvar bibliographyConfig = {\r\n\t\t\t\tbibliographyServerUrl:
+        'https://bibliography.icpsr.umich.edu/bibliography',\r\n\t\t\t\teditLinks:
+        false,\r\n\t\t\t\taddButton: false,\r\n\t\t\t\teditButton: false,\r\n\t\t\t\tdeleteButton:
+        false,\r\n\t\t\t\tpanelDisplay: false,\r\n\t\t\t\trelationshipSort: true\r\n\t\t};\r\n\t\tReactDOM.render(React.createElement(Bibliography,
+        {path: studyPath}), document.getElementById('bibliography'));\r\n\t</script>\n\n\n\n</div>\n\n</section>\n\n<footer
+        class=\"container-fluid\">\n\t<div class=\"container\">\n\t\t<div class=\"row\">\n\t\t\t<div
+        class=\"col-sm-12 center-block\">\n\t\t\t\t<div class=\"footerNav\">\n\t\t\t\t\t<a
+        href=\"/openicpsr/about;jsessionid=C23CA24D94F047A833875C4CD6F73804\" id=\"navAbout\">About
+        openICPSR</a>&nbsp;&nbsp;|&nbsp;&nbsp;  \n\t\t\t\t\t<a href=\"/openicpsr/privacy;jsessionid=C23CA24D94F047A833875C4CD6F73804\"
+        id=\"bottomNavPrivacy\">Privacy</a>&nbsp;&nbsp;|&nbsp;&nbsp;\n\t\t\t\t\t<a
+        href=\"/openicpsr/faqs;jsessionid=C23CA24D94F047A833875C4CD6F73804\" id=\"bottomNavFAQ\">FAQs</a>&nbsp;&nbsp;|&nbsp;&nbsp;\n\t\t\t\t\t<a
+        href=\"/openicpsr/repository/;jsessionid=C23CA24D94F047A833875C4CD6F73804\"
+        \ id=\"bottomNavRepository\">Learn about repositories</a>&nbsp;&nbsp;|&nbsp;&nbsp;\n\t\t\t\t\t<a
+        href=\"/openicpsr/contactUs;jsessionid=C23CA24D94F047A833875C4CD6F73804\"
+        id=\"bottomNavContact\">Contact us</a>\n\t\t\t\n\t\t\t\t</div>\n\t\t\t\t<div
+        id=\"copyrightLine\">&copy; <span id=\"currentYear\">2018</span>  <a href=http://www.regents.umich.edu/>The
+        Regents of the University of Michigan</a></div>\n\t\t\t</div>\n\t\t</div>\t\n\t</div>\n</footer>\n\n\n\n</body>\n</html>\n"
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token,
+        Accept-Encoding, Cache-Control
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, DELETE, PUT
+      Access-Control-Max-Age:
+      - '1000'
+      Connection:
+      - close
+      Content-Language:
+      - en-US
+      Content-Type:
+      - text/html;charset=UTF-8
+      Date:
+      - Thu, 07 Jul 2022 14:27:00 GMT
+      Set-Cookie:
+      - JSESSIONID=C23CA24D94F047A833875C4CD6F73804; Path=/openicpsr; Secure; HttpOnly
+      Strict-Transport-Security:
+      - max-age=15552000
+      Transfer-Encoding:
+      - chunked
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+version: 1
