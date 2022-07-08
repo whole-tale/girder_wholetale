@@ -46,20 +46,20 @@ class HTTPImportProvider(ImportProvider):
         size = headers.get('Content-Length') or \
             headers.get('Content-Range').split('/')[-1]
 
-        return DataMap(pid, int(size), name=fname, repository=self.getName())
+        return DataMap(pid, int(size), name=fname, repository=self.name)
 
     def listFiles(self, entity: Entity) -> FileMap:
-        dm = self.lookup(entity)
-        if dm is None:
+        dataMap = self.lookup(entity)
+        if dataMap is None:
             return None
         else:
-            fm = FileMap(dm.getName())
-            fm.addFile(entity.getValue(), dm.getSize())
+            fm = FileMap(dataMap.name)
+            fm.addFile(entity.getValue(), dataMap.size)
             return fm
 
     def register(self, parent: object, parentType: str, progress, user, dataMap: DataMap,
                  base_url: str = None):
-        uri = dataMap.getDataId()
+        uri = dataMap.dataId
         url = urlparse(uri)
         progress.update(increment=1, message='Processing file {}.'.format(uri))
         # Request basic info via HEAD, use 'identity' to avoid grabbing info about
@@ -97,7 +97,7 @@ class HTTPImportProvider(ImportProvider):
             # Path always starts with '/' which we ignore,
             # We also don't create a folder if the last part of the path has the same
             # name as the registered resource.
-            if part in {'/', dataMap.getName()}:
+            if part in {'/', dataMap.name}:
                 continue
             parent = Folder().createFolder(
                 parent,
@@ -117,7 +117,7 @@ class HTTPImportProvider(ImportProvider):
 
         fileModel = ModelImporter.model('file')
         fileDoc = fileModel.createLinkFile(
-            url=uri, parent=parent, name=dataMap.getName(), parentType='folder',
+            url=uri, parent=parent, name=dataMap.name, parentType='folder',
             creator=user, size=int(size),
             mimeType=headers.get('Content-Type', 'application/octet-stream'),
             reuseExisting=True)

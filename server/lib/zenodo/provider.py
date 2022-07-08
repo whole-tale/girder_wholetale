@@ -148,7 +148,7 @@ class ZenodoImportProvider(ImportProvider):
             size,
             doi=self._get_doi_from_record(record),
             name=self._get_title_from_record(record),
-            repository=self.getName(),
+            repository=self.name,
             tale=self._is_tale(record),
         )
 

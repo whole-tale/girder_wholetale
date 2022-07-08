@@ -6,10 +6,11 @@ from girder.plugins.jobs.constants import JobStatus
 from girder.plugins.jobs.models.job import Job
 
 from ..lib import register_dataMap
+from ..lib.data_map import DataMap
 
 
 def run(job):
-    dataMap, parent, parentType, user = job["args"]
+    data_maps, parent, parentType, user = job["args"]
     base_url = job["kwargs"].get("base_url")
     # In case this job is a part of a more complex task, progressTotal and progressCurrent can be
     # passed as kwargs to take that into account
@@ -31,7 +32,12 @@ def run(job):
     # lot of granularity here.
     # TODO: pass progress context associated with wt_notification perhaps?
     importedData = register_dataMap(
-        dataMap, parent, parentType, user=user, base_url=base_url, progress=False
+        DataMap.fromList(data_maps),
+        parent,
+        parentType,
+        user=user,
+        base_url=base_url,
+        progress=False
     )
     if importedData:
         user_data = set(user.get("myData", []))

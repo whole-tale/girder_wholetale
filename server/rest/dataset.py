@@ -302,12 +302,12 @@ class Dataset(Resource):
             # It happens to work if the job is a synchronous job, which it seems to be for now.
             os.unlink(path)
 
-    def _createImportJob(self, dataMap, parent, parentType, user, base_url, notification):
+    def _createImportJob(self, data_maps, parent, parentType, user, base_url, notification):
         job = Job().createLocalJob(
             title='Registering Data', user=user,
             type='wholetale.register_data', public=False, _async=False,
             module='girder.plugins.wholetale.tasks.register_dataset',
-            args=(dataMap, parent, parentType, user),
+            args=(data_maps, parent, parentType, user),
             kwargs={'base_url': base_url},
             otherFields={'wt_notification_id': str(notification['_id'])},
         )

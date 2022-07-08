@@ -60,7 +60,7 @@ class Repository(Resource):
             )
         except RuntimeError as exc:
             raise RestException(exc.args[0])
-        return sorted(results, key=lambda k: k['name'])
+        return sorted([x.toDict() for x in results], key=lambda k: k['name'])
 
     @access.public
     @autoDescribeRoute(
@@ -94,7 +94,7 @@ class Repository(Resource):
             )
         except RuntimeError as exc:
             raise RestException(exc.args[0])
-        return sorted(results, key=lambda k: list(k))
+        return sorted([x.toDict() for x in results], key=lambda k: list(k))
 
     @access.public
     @autoDescribeRoute(

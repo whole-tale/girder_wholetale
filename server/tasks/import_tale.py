@@ -53,11 +53,11 @@ def run(job):
         )
         dataIds = mp.get_external_data_ids()
         if dataIds:
-            dataMap = pids_to_entities(
+            dataMaps = pids_to_entities(
                 dataIds, user=user, base_url=DataONELocations.prod_cn, lookup=True
             )  # DataONE shouldn't be here
             register_dataMap(
-                dataMap,
+                dataMaps,
                 getOrCreateRootFolder(CATALOG_NAME),
                 "folder",
                 user=user,

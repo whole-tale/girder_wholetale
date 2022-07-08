@@ -63,11 +63,11 @@ class ImportProvider:
         related_id = [
             {
                 "relation": relation,
-                "identifier": dataMap["doi"] or dataMap["dataId"]
+                "identifier": dataMap.doi or dataMap.dataId
             }
         ]
 
-        long_name = dataMap["name"]
+        long_name = dataMap.name
         long_name = long_name.replace('-', ' ').replace('_', ' ')
         shortened_name = textwrap.shorten(text=long_name, width=30)
         return {
@@ -79,8 +79,8 @@ class ImportProvider:
     def register(self, parent: object, parentType: str, progress, user, dataMap: DataMap,
                  base_url: str = None):
         stack = [(parent, parentType)]
-        pid = dataMap.getDataId()
-        name = dataMap.getName()
+        pid = dataMap.dataId
+        name = dataMap.name
         rootObj = None
         rootType = None
 
@@ -106,7 +106,7 @@ class ImportProvider:
                                                reuseExisting=True)
         meta = {
             "identifier": item.identifier,
-            "provider": self.getName(),
+            "provider": self.name,
         }
         if item.meta:
             meta.update(item.meta)
@@ -117,7 +117,7 @@ class ImportProvider:
     def _registerFile(self, stack, item: ImportItem, user):
         (parent, parentType) = stack[-1]
         gitem = self.itemModel.createItem(item.name, user, parent, reuseExisting=True)
-        meta = {'provider': self.getName()}
+        meta = {'provider': self.name}
         if item.identifier:
             meta['identifier'] = item.identifier
         if item.meta:
@@ -148,7 +148,7 @@ class ImportProviders:
 
     def addProvider(self, provider: ImportProvider):
         self.providers.append(provider)
-        self.providerMap[provider.getName()] = provider
+        self.providerMap[provider.name] = provider
 
     def getProvider(self, entity: Entity) -> ImportProvider:
         for provider in self.providers:
@@ -157,4 +157,4 @@ class ImportProviders:
         raise Exception('Could not find suitable provider for entity %s' % entity)
 
     def getFromDataMap(self, dataMap: DataMap) -> ImportProvider:
-        return self.providerMap[dataMap.getRepository()]
+        return self.providerMap[dataMap.repository]
