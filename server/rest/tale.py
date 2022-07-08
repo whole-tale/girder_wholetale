@@ -264,6 +264,12 @@ class Tale(Resource):
                     lookup=True
                 )[0]
                 provider = IMPORT_PROVIDERS.providerMap[dataMap.repository]
+                try:
+                    provider.check_auth(user)
+                except ValueError:
+                    raise RestException(
+                        f"To register data from {provider.name} you need to provide credentials."
+                    )
 
                 if dataMap.tale:  # url points to a published Tale
                     return provider.import_tale(dataMap, user)

@@ -25,6 +25,8 @@ from .globus.globus_provider import GlobusImportProvider
 from .http_provider import HTTPImportProvider
 from .import_providers import ImportProviders
 from .null_provider import NullImportProvider
+from .openicpsr.provider import OpenICPSRImportProvider
+from .openicpsr.auth import OpenICPSRVerificator
 from .resolvers import DOIResolver, ResolutionException, Resolvers, MinidResolver
 from .zenodo.auth import ZenodoVerificator
 from .zenodo.provider import ZenodoImportProvider
@@ -38,6 +40,7 @@ IMPORT_PROVIDERS.addProvider(DerivaProvider())
 IMPORT_PROVIDERS.addProvider(BDBagProvider())
 IMPORT_PROVIDERS.addProvider(DataverseImportProvider())
 IMPORT_PROVIDERS.addProvider(ZenodoImportProvider())
+IMPORT_PROVIDERS.addProvider(OpenICPSRImportProvider())
 IMPORT_PROVIDERS.addProvider(GlobusImportProvider())
 IMPORT_PROVIDERS.addProvider(DataOneImportProvider())
 
@@ -54,7 +57,8 @@ Verificators = {
     "dataoneprod": DataONEVerificator,
     "dataonedev": DataONEVerificator,
     "dataonestage": DataONEVerificator,
-    "deriva": DerivaVerificator
+    "deriva": DerivaVerificator,
+    "icpsr": OpenICPSRVerificator,
 }
 
 

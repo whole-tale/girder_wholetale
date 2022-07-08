@@ -85,5 +85,12 @@ add_python_test(deriva
   EXTERNAL_DATA
   plugins/wholetale/Dataset_1-882P.zip
 )
+add_python_test(openicpsr
+  PLUGIN wholetale
+  EXTERNAL_DATA
+  plugins/wholetale/openicpsr_lookup.txt
+  plugins/wholetale/openicpsr_login_flow.txt
+  plugins/wholetale/openicpsr_import.txt
+)
 add_python_style_test(python_static_analysis_wholetale
                       "${PROJECT_SOURCE_DIR}/plugins/wholetale/server")
