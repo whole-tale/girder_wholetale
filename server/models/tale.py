@@ -187,7 +187,7 @@ class Tale(AccessControlledModel):
                    icon=None, category=None, illustration=None,
                    licenseSPDX=None,
                    status=TaleStatus.READY, publishInfo=None,
-                   relatedIdentifiers=None):
+                   relatedIdentifiers=None, imageInfo=None):
 
         if creator is None:
             creatorId = None
@@ -217,7 +217,7 @@ class Tale(AccessControlledModel):
             'icon': icon,
             'iframe': image.get('iframe', False),
             'imageId': ObjectId(image['_id']),
-            'imageInfo': {},
+            'imageInfo': imageInfo or {},
             'illustration': illustration,
             'title': title,
             'public': public,
