@@ -273,6 +273,21 @@ class ManifestParser:
             for rel_id in {json.dumps(_, sort_keys=True) for _ in related_ids}
         ]
 
+        imageInfo = {}
+        try:
+            r2d_version = next(
+                iter([
+                    obj["schema:softwareVersion"]
+                    for obj in self.manifest["schema:hasPart"]
+                    if obj["@id"] == "https://github.com/whole-tale/repo2docker_wholetale"
+                ]), None
+            )
+            if (r2d_version):
+                imageInfo["repo2docker_version"] = r2d_version
+
+        except KeyError:
+            pass
+
         return {
             "title": self.manifest["schema:name"],
             "description": self.manifest["schema:description"],
@@ -281,6 +296,7 @@ class ManifestParser:
             "category": self.manifest["schema:keywords"],
             "licenseSPDX": licenseSPDX,
             "relatedIdentifiers": related_ids,
+            "imageInfo": imageInfo,
         }
 
     @staticmethod

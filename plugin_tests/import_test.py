@@ -369,6 +369,7 @@ class ImportTaleTestCase(base.TestCase):
             [(obj["_modelType"], obj["mountPath"]) for obj in tale["dataSet"]],
             [("item", "usco2005.xls")],
         )
+        self.assertEqual(tale["imageInfo"]["repo2docker_version"], "wholetale/repo2docker_wholetale:latest")
 
         events = get_events(self, since)
         self.assertEqual(
