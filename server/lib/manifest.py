@@ -3,6 +3,7 @@ import os
 from urllib.parse import quote
 
 from girder import logger
+from girder.models.item import Item
 from girder.models.folder import Folder
 from girder.models.user import User
 from girder.utility import JsonEncoder
@@ -273,6 +274,17 @@ class Manifest:
                     if alg in checksum:
                         return f"{alg}:{checksum[alg]}"
 
+    def _fileList(self, doc, user=None, path='', subpath=True):
+        if subpath:
+            path = os.path.join(path, doc["name"])
+
+        for subfolder in Folder().childFolders(parentType="folder", parent=doc, user=self.user):
+            for path, item in self._fileList(subfolder, user=user, path=path, subpath=True):
+                yield (path, item)
+
+        for item in Folder().childItems(folder=doc):
+            yield (os.path.join(path, item["name"]), item)
+
     def add_tale_records(self):
         """
         Creates and adds file records to the internal manifest object for an entire Tale.
@@ -292,34 +304,40 @@ class Manifest:
                     wfile = os.path.join(curdir, fname).replace(workspace_rootpath, "")
                     self.manifest['aggregates'].append({'uri': './workspace/' + wfile})
 
-        """
-        Handle objects that are in the dataSet, ie files that point to external sources.
-        Some of these sources may be datasets from publishers. We need to save information
-        about the source so that they can added to the wt:usesDataset section.
-        """
-        external_objects, dataset_top_identifiers = self._parse_dataSet()
+        # Handle data folder
+        data_dir = Folder().load(
+            self.tale["dataDirId"], user=self.user, level=AccessType.READ
+        )  # should be current
 
-        # Add records of all top-level dataset identifiers that were used in the Tale:
-        # "wt:usesDataset"
-        for identifier in dataset_top_identifiers:
-            # Assuming Folder model implicitly ignores "datasets" that are
-            # single HTTP files which is intended behavior
-            for folder in Folder().findWithPermissions(
-                    {'meta.identifier': identifier}, limit=1, user=self.user
-            ):
-                self.datasets.add(folder['_id'])
+        dataset_top_identifier = set()
+        for girder_path, item in self._fileList(data_dir, user=self.user, path='/', subpath=False):
+            file_obj = list(Item().childFiles(item))[0]
 
-        # Add records for the remote files that exist under a folder: "aggregates"
-        for obj in external_objects:
-            # Grab identifier of a parent folder
-            if obj['_modelType'] == 'item':
-                bundle = self.create_bundle(obj["relpath"], obj["name"])
-            else:
-                bundle = self.create_bundle(obj["name"], None)
-            record = self.create_aggregation_record(obj['uri'], bundle, obj['dataset_identifier'])
-            record["wt:size"] = obj["size"]
-            record.update({key: obj[key] for key in obj.keys() if key.startswith("wt:")})
-            self.manifest['aggregates'].append(record)
+            dataset_top_identifier.add(item["meta"]["identifier"])
+            agg = {
+                "bundledAs": {
+                    "filename": item["name"],
+                    "folder": os.path.dirname(girder_path),
+                },
+                "schema:isPartOf": item["meta"]["identifier"],
+                "uri": file_obj["linkUrl"],
+                "wt:size": file_obj["size"],
+                "wt:dsRelPath": item["meta"]["dsRelPath"],
+            }
+            for alg, chksum in item["meta"].get("checksum", {}).items():
+                agg[f"wt:{alg}"] = chksum
+
+            self.manifest["aggregates"].append(agg)
+
+        for identifier in dataset_top_identifier:
+            self.manifest["wt:usesDataset"].append(
+                {
+                    "@id": identifier,
+                    "@type": "schema:Dataset",
+                    "schema:name": "FIXME",
+                    "schema:identifier": identifier,
+                }
+            )
 
         # Add records for files in each recorded_run
         for run in Folder().find({'parentId': self.tale['runsRootId'], 'parentCollection': 'folder',
