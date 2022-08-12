@@ -205,7 +205,7 @@ class ManifestTestCase(base.TestCase):
         self._testWorkspace()
         self._testRelatedIdentifiers()
         self._testValidate()
-        self._test_create_repo2docker_version()
+        self._test_create_image_info()
 
     def _testRelatedIdentifiers(self):
         from girder.plugins.wholetale.lib.manifest import Manifest
@@ -431,17 +431,22 @@ class ManifestTestCase(base.TestCase):
         with self.assertRaises(ValueError):
             Manifest(tale_blank_orcid, self.user)
 
-    def _test_create_repo2docker_version(self):
+    def _test_create_image_info(self):
         from server.lib.manifest import Manifest
 
         manifest = Manifest(self.tale, self.user).manifest
         self.assertTrue(len(manifest['schema:hasPart']))
 
-        version_block = manifest['schema:hasPart'][0]
-        self.assertEqual(version_block['schema:softwareVersion'],
+        r2d_block = manifest['schema:hasPart'][0]
+        self.assertEqual(r2d_block['schema:softwareVersion'],
                              self.tale["imageInfo"]['repo2docker_version'])
-        self.assertEqual(version_block['@id'], 'https://github.com/whole-tale/repo2docker_wholetale')
-        self.assertEqual(version_block['@type'], 'schema:SoftwareApplication')
+        self.assertEqual(r2d_block['@id'], 'https://github.com/whole-tale/repo2docker_wholetale')
+        self.assertEqual(r2d_block['@type'], 'schema:SoftwareApplication')
+
+        digest_block = manifest['schema:hasPart'][1]
+        self.assertEqual(digest_block['@id'], self.tale['imageInfo']['digest'].replace('registry', 'images', 1))
+        self.assertEqual(digest_block['schema:applicationCategory'], 'DockerImage')
+        self.assertEqual(digest_block['@type'], 'schema:SoftwareApplication')
 
     def test_dataset_roundtrip(self):
         from server.lib.manifest_parser import ManifestParser

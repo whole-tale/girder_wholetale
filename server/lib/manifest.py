@@ -60,7 +60,7 @@ class Manifest:
         self.add_tale_creator()
         self.manifest.update(self.create_author_record())
         self.manifest.update(self.create_related_identifiers())
-        self.manifest.update(self.create_repo2docker_version())
+        self.manifest.update(self.create_image_info())
         self.add_tale_records()
         # Add any external datasets to the manifest
         self.add_dataset_records()
@@ -156,17 +156,28 @@ class Manifest:
             ]
         }
 
-    def create_repo2docker_version(self):
+    def create_image_info(self):
         # TODO: We shouldn't be publishing a Tale that was never built...
         image_info = self.tale.get("imageInfo", {})
+
         image_info.setdefault("repo2docker_version", REPO2DOCKER_VERSION)
-        return {
+        manifest_part = {
             'schema:hasPart': [{
                 '@id': 'https://github.com/whole-tale/repo2docker_wholetale',
                 '@type': 'schema:SoftwareApplication',
                 'schema:softwareVersion': image_info['repo2docker_version']
             }]
         }
+
+        image_digest = image_info.get("digest")
+        if image_digest is not None:
+            manifest_part['schema:hasPart'].append({
+                '@id': image_digest.replace("registry", "images", 1),
+                '@type': 'schema:SoftwareApplication',
+                'schema:applicationCategory': 'DockerImage'
+            })
+
+        return manifest_part
 
     def create_related_identifiers(self):
         def derive_id_type(identifier):

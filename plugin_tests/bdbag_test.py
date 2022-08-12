@@ -74,6 +74,7 @@ class BDBagFullTestCase(base.TestCase):
                 user="someUser",
                 port=8888,
                 urlPath="",
+                targetMount='/mount',
             ),
         )
 

@@ -284,7 +284,20 @@ class ManifestParser:
             )
             if (r2d_version):
                 imageInfo["repo2docker_version"] = r2d_version
+        except KeyError:
+            pass
 
+        try:
+            image_digest = next(
+                iter([
+                    obj['@id']
+                    for obj in self.manifest['schema:hasPart']
+                    if 'schema:applicationCategory' in
+                       obj and obj['schema:applicationCategory'] == 'DockerImage'
+                ]), None
+            )
+            if (image_digest):
+                imageInfo['digest'] = image_digest.replace('images', 'registry', 1)
         except KeyError:
             pass
 
