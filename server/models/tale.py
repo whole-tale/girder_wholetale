@@ -33,7 +33,7 @@ from gwvolman.tasks import build_tale_image, BUILD_TALE_IMAGE_STEP_TOTAL
 # Whenever the Tale object schema is modified (e.g. fields are added or
 # removed) increase `_currentTaleFormat` to retroactively apply those
 # changes to existing Tales.
-_currentTaleFormat = 9
+_currentTaleFormat = 10
 
 
 class Tale(AccessControlledModel):

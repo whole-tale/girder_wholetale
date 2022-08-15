@@ -336,7 +336,6 @@ class Manifest:
                 {
                     "@id": identifier,
                     "@type": "schema:Dataset",
-                    "schema:name": "FIXME",
                     "schema:identifier": identifier,
                 }
             )
