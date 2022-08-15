@@ -1,7 +1,9 @@
 from datetime import datetime, timezone
-from hashlib import sha1, sha256, md5
+from hashlib import sha1, sha256, md5, sha512
 import os
 from urllib.parse import unquote
+from girder.models.file import File
+
 from . import TaleExporter
 from gwvolman.constants import REPO2DOCKER_VERSION
 
@@ -106,6 +108,15 @@ class BagTaleExporter(TaleExporter):
             payload = self.stream_string(content)
             yield from self.dump_and_checksum(payload, path)
 
+        for agg in self.manifest["aggregates"]:
+            if not (agg["uri"].startswith("./data") and "wt:identifier" in agg):
+                continue
+            fobj = File().load(agg["wt:identifier"], force=True)
+            path = "data/" + unquote(agg["uri"][2:])
+            yield from self.zip_generator.addFile(File().download(fobj), path)
+            oxum["num"] += 1
+            oxum["size"] += agg["wt:size"]
+
         # Update manifest with hashes
         self.append_aggergate_checksums()
 
@@ -147,17 +158,19 @@ class BagTaleExporter(TaleExporter):
                 dump += f"{chksum} {path}\n"
             for bundle in self.manifest['aggregates']:
                 if 'bundledAs' not in bundle:
-                    continue
-                try:
-                    chksum = bundle[f"wt:{alg}"]
+                    path = "data/" + unquote(bundle["uri"][2:])
+                else:
                     folder = f"data{unquote(bundle['bundledAs']['folder'])[1:]}"
                     filename = unquote(bundle['bundledAs'].get('filename', ''))
-                    dump += f"{chksum} {os.path.join(folder, filename)}\n"
+                    path = os.path.join(folder, filename)
+                try:
+                    chksum = bundle[f"wt:{alg}"]
+                    dump += f"{chksum} {path}\n"
                 except KeyError:
                     pass
             return dump
 
-        tagmanifest = dict(md5="", sha1="", sha256="")
+        tagmanifest = dict(md5="", sha1="", sha256="", sha512="")
         for payload, fname in (
             (lambda: top_readme, 'README.md'),
             (lambda: run_file, 'run-local.sh'),
@@ -167,6 +180,7 @@ class BagTaleExporter(TaleExporter):
             (lambda: dump_checksums('md5'), 'manifest-md5.txt'),
             (lambda: dump_checksums('sha1'), 'manifest-sha1.txt'),
             (lambda: dump_checksums('sha256'), 'manifest-sha256.txt'),
+            (lambda: dump_checksums('sha512'), 'manifest-sha512.txt'),
             (lambda: self.formated_dump(self.environment, indent=4), 'metadata/environment.json'),
             (lambda: self.formated_dump(self.manifest, indent=4), 'metadata/manifest.json'),
         ):
@@ -179,12 +193,16 @@ class BagTaleExporter(TaleExporter):
             tagmanifest['sha256'] += "{} {}\n".format(
                 sha256(payload().encode()).hexdigest(), fname
             )
+            tagmanifest['sha512'] += "{} {}\n".format(
+                sha512(payload().encode()).hexdigest(), fname
+            )
             yield from self.zip_generator.addFile(payload, fname)
 
         for payload, fname in (
             (lambda: tagmanifest['md5'], 'tagmanifest-md5.txt'),
             (lambda: tagmanifest['sha1'], 'tagmanifest-sha1.txt'),
             (lambda: tagmanifest['sha256'], 'tagmanifest-sha256.txt'),
+            (lambda: tagmanifest['sha512'], 'tagmanifest-sha512.txt'),
         ):
             yield from self.zip_generator.addFile(payload, fname)
 

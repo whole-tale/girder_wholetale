@@ -66,7 +66,7 @@ class TaleExporter:
         self.environment = environment
 
         if algs is None:
-            self.algs = ["md5", "sha1", "sha256"]
+            self.algs = ["md5", "sha1", "sha256", "sha512"]
 
         zipname = os.path.basename(manifest["dct:hasVersion"]["@id"])
         self.zip_generator = ziputil.ZipGenerator(zipname)
