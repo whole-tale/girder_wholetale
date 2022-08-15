@@ -13,14 +13,17 @@ from girder import events
 from girder.api.rest import setCurrentUser
 from girder.models.folder import Folder
 from girder.models.item import Item
+from girder.models.upload import Upload
 from girder.models.user import User
 from girder.utility import parseTimestamp
 from girder.plugins.jobs.constants import JobStatus
 from girder.plugins.jobs.models.job import Job
+from urllib.parse import unquote
 
 from ..constants import TaleStatus
 from ..lib import pids_to_entities, register_dataMap
 from ..lib.dataone import DataONELocations  # TODO: get rid of it
+from ..lib.import_item import ImportItem
 from ..lib.manifest_parser import ManifestParser
 from ..models.tale import Tale
 from ..utils import notify_event
@@ -77,12 +80,17 @@ def run(job):
                 temp_path = pathlib.Path(ds_rel_path)
                 for subfolder in temp_path.parts[1:-1]:
                     temp_folder = Folder().findOne(
-                        {"name": subfolder, "parentId": temp_folder["_id"]}
+                        {
+                            "parentId": temp_folder["_id"],
+                            "name": ImportItem.sanitize_filename(subfolder),
+                        }
                     )
                 temp_item = Item().findOne(
-                    {"folderId": temp_folder["_id"], "name": temp_path.parts[-1]}
+                    {
+                        "folderId": temp_folder["_id"],
+                        "name": ImportItem.sanitize_filename(temp_path.parts[-1]),
+                    }
                 )
-
                 target_path = pathlib.Path(target_path)
                 target_folder = Tale().getDataDir(tale)
                 for subfolder in target_path.parts[1:-1]:
@@ -96,6 +104,33 @@ def run(job):
                 Item().copyItem(temp_item, user, folder=target_folder)
 
             Folder().remove(temp_data_dir)
+
+        orig_tale_id = pathlib.Path(manifest_file).parts[0]
+
+        for agg in mp.manifest["aggregates"]:
+            if not agg["uri"].startswith("./data"):
+                continue
+            target_path = pathlib.Path(unquote(agg["uri"][7:]))
+            target_folder = Tale().getDataDir(tale)
+            for subfolder in target_path.parts[:-1]:
+                target_folder = Folder().createFolder(
+                    target_folder,
+                    subfolder,
+                    parentType="folder",
+                    creator=user,
+                    reuseExisting=True,
+                )
+            data_path = os.path.join(orig_tale_id, "data", unquote(agg["uri"][2:]))
+            with open(data_path, "rb") as fp:
+                Upload().uploadFromFile(
+                    fp,
+                    agg["wt:size"],
+                    target_path.parts[-1],
+                    parentType="folder",
+                    parent=target_folder,
+                    user=user,
+                    mimeType=agg["wt:mimeType"],
+                )
 
         events.daemon.trigger(
             eventName="tale.update_citation", info={"tale": tale, "user": user}
