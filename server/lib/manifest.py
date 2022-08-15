@@ -320,10 +320,7 @@ class Manifest:
 
             dataset_top_identifier.add(item["meta"]["identifier"])
             agg = {
-                "bundledAs": {
-                    "filename": item["name"],
-                    "folder": os.path.dirname(girder_path),
-                },
+                "bundledAs": self.create_bundle(os.path.dirname(girder_path), item["name"]),
                 "schema:isPartOf": item["meta"]["identifier"],
                 "uri": file_obj["linkUrl"],
                 "wt:size": file_obj["size"],
@@ -485,13 +482,15 @@ class Manifest:
         :param filename:  The name of the file
         :return: A dictionary record of the bundle
         """
+        if folder.startswith("/"):
+            folder = folder[1:]
         folder = quote(os.path.join("./data", folder))
         # Add a trailing slash to the path if there isn't one (RO spec)
         if not folder.endswith('/'):
             folder += '/'
         bundle = dict(folder=folder)
         if filename:
-            bundle['filename'] = quote(filename)
+            bundle["filename"] = quote(filename)
         return bundle
 
     def add_license_record(self):

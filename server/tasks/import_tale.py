@@ -12,17 +12,18 @@ from fs.copy import copy_fs
 from girder import events
 from girder.api.rest import setCurrentUser
 from girder.models.folder import Folder
+from girder.models.item import Item
 from girder.models.user import User
 from girder.utility import parseTimestamp
 from girder.plugins.jobs.constants import JobStatus
 from girder.plugins.jobs.models.job import Job
 
-from ..constants import CATALOG_NAME, TaleStatus
+from ..constants import TaleStatus
 from ..lib import pids_to_entities, register_dataMap
 from ..lib.dataone import DataONELocations  # TODO: get rid of it
 from ..lib.manifest_parser import ManifestParser
 from ..models.tale import Tale
-from ..utils import getOrCreateRootFolder, notify_event
+from ..utils import notify_event
 
 
 def run(job):
@@ -56,30 +57,49 @@ def run(job):
             dataMaps = pids_to_entities(
                 dataIds, user=user, base_url=DataONELocations.prod_cn, lookup=True
             )  # DataONE shouldn't be here
-            register_dataMap(
+            temp_data_dir = Folder().createFolder(
+                Folder().load(tale["dataDirId"], force=True),
+                "temp",
+                parentType="folder",
+                creator=user,
+            )
+            imported_roots = register_dataMap(
                 dataMaps,
-                getOrCreateRootFolder(CATALOG_NAME),
+                temp_data_dir,
                 "folder",
                 user=user,
                 base_url=DataONELocations.prod_cn,
             )
+            ext_map = dict(zip(dataIds, imported_roots))
 
-        # 2. Construct the dataSet
-        dataSet = mp.get_dataset()
+            for doi, ds_rel_path, target_path in mp.get_extdata_from_aggs():
+                temp_folder = Folder().load(ext_map[doi], force=True)
+                temp_path = pathlib.Path(ds_rel_path)
+                for subfolder in temp_path.parts[1:-1]:
+                    temp_folder = Folder().findOne(
+                        {"name": subfolder, "parentId": temp_folder["_id"]}
+                    )
+                temp_item = Item().findOne(
+                    {"folderId": temp_folder["_id"], "name": temp_path.parts[-1]}
+                )
 
-        # 3. Update Tale's dataSet
-        update_citations = {_["itemId"] for _ in tale["dataSet"]} ^ {
-            _["itemId"] for _ in dataSet
-        }
-        tale["dataSet"] = dataSet
-        Tale().update(
-            {"_id": tale["_id"]}, update={"$set": {"dataSet": tale["dataSet"]}}
+                target_path = pathlib.Path(target_path)
+                target_folder = Tale().getDataDir(tale)
+                for subfolder in target_path.parts[1:-1]:
+                    target_folder = Folder().createFolder(
+                        target_folder,
+                        subfolder,
+                        parentType="folder",
+                        creator=user,
+                        reuseExisting=True,
+                    )
+                Item().copyItem(temp_item, user, folder=target_folder)
+
+            Folder().remove(temp_data_dir)
+
+        events.daemon.trigger(
+            eventName="tale.update_citation", info={"tale": tale, "user": user}
         )
-
-        if update_citations:
-            events.daemon.trigger(
-                eventName="tale.update_citation", info={"tale": tale, "user": user}
-            )
 
         # 4. Copy data to the workspace
         progressCurrent += 1
@@ -141,7 +161,9 @@ def run(job):
             run["updated"] = parseTimestamp(run_obj["schema:dateModified"])
             run["created"] = parseTimestamp(run_obj["schema:dateCreated"])
             # vv calls save()
-            run_resource.setStatus(id=run["_id"], status=int(run_obj["wt:runStatus"]), params={})
+            run_resource.setStatus(
+                id=run["_id"], status=int(run_obj["wt:runStatus"]), params={}
+            )
 
         # Tale is ready to be built
         Tale().update(

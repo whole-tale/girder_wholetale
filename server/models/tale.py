@@ -561,3 +561,7 @@ class Tale(AccessControlledModel):
         tale = event.info
         if (dataDir := Folder().load(tale["dataDirId"], force=True)):
             Folder().remove(dataDir)
+
+    @staticmethod
+    def getDataDir(tale, name=None):
+        return Folder().findOne({"parentId": tale["dataDirId"], "name": name or "current"})

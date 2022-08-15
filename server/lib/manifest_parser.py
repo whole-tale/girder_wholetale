@@ -191,6 +191,26 @@ class ManifestParser:
         ]
         return dataIds
 
+    def get_extdata_from_aggs(self, data_prefix="./data"):
+        data_set = []
+        for obj in self.manifest["aggregates"]:
+            if "schema:isPartOf" not in obj:
+                continue
+
+            bundle = obj["bundledAs"]
+            folder_path = unquote(bundle["folder"]).replace(data_prefix, "", 1)
+            if folder_path.endswith("/"):
+                folder_path = folder_path[:-1]
+
+            data_set.append(
+                (
+                    obj["schema:isPartOf"],
+                    obj["wt:dsRelPath"],
+                    os.path.join(folder_path, bundle["filename"]),
+                )
+            )
+        return data_set
+
     def get_dataset(self, data_prefix="./data/"):
         """Creates a 'dataSet' using manifest's aggregates section."""
         dataSet = []
@@ -276,13 +296,16 @@ class ManifestParser:
         imageInfo = {}
         try:
             r2d_version = next(
-                iter([
-                    obj["schema:softwareVersion"]
-                    for obj in self.manifest["schema:hasPart"]
-                    if obj["@id"] == "https://github.com/whole-tale/repo2docker_wholetale"
-                ]), None
+                iter(
+                    [
+                        obj["schema:softwareVersion"]
+                        for obj in self.manifest["schema:hasPart"]
+                        if obj["@id"] == "https://github.com/whole-tale/repo2docker_wholetale"
+                    ]
+                ),
+                None,
             )
-            if (r2d_version):
+            if r2d_version:
                 imageInfo["repo2docker_version"] = r2d_version
         except KeyError:
             pass
