@@ -278,12 +278,12 @@ class Manifest:
         if subpath:
             path = os.path.join(path, doc["name"])
 
+        for item in Folder().childItems(folder=doc):
+            yield (os.path.join(path, item["name"]), item)
+
         for subfolder in Folder().childFolders(parentType="folder", parent=doc, user=self.user):
             for path, item in self._fileList(subfolder, user=user, path=path, subpath=True):
                 yield (path, item)
-
-        for item in Folder().childItems(folder=doc):
-            yield (os.path.join(path, item["name"]), item)
 
     def add_tale_records(self):
         """
@@ -305,9 +305,14 @@ class Manifest:
                     self.manifest['aggregates'].append({'uri': './workspace/' + wfile})
 
         # Handle data folder
-        data_dir = Folder().load(
+        root_data_dir = Folder().load(
             self.tale["dataDirId"], user=self.user, level=AccessType.READ
-        )  # should be current
+        )
+        if self.version["_id"] == self.tale["_id"]:  # manifest without version
+            data_dir_name = "current"
+        else:
+            data_dir_name = str(self.version["_id"])
+        data_dir = Folder().findOne({"parentId": root_data_dir["_id"], "name": data_dir_name})
 
         dataset_top_identifier = set()
         for girder_path, item in self._fileList(data_dir, user=self.user, path='/', subpath=False):
