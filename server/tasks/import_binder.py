@@ -3,7 +3,6 @@
 
 import json
 import os
-import pathlib
 import stat
 import sys
 import time
@@ -23,9 +22,7 @@ from fs.zipfs import ReadZipFS
 from girder import events
 from girderfs.dms import WtDmsGirderFS
 from girder_client import GirderClient
-from girder.constants import AccessType
 from girder.models.folder import Folder
-from girder.models.item import Item
 from girder.models.notification import Notification
 from girder.models.token import Token
 from girder.models.user import User
@@ -33,12 +30,12 @@ from girder.utility import config, JsonEncoder
 from girder.plugins.jobs.constants import JobStatus
 from girder.plugins.jobs.models.job import Job
 
-from ..constants import CATALOG_NAME, InstanceStatus, TaleStatus
+from ..constants import InstanceStatus, TaleStatus
 from ..lib import pids_to_entities, register_dataMap
 from ..lib.dataone import DataONELocations  # TODO: get rid of it
 from ..models.instance import Instance
 from ..models.tale import Tale
-from ..utils import getOrCreateRootFolder, notify_event
+from ..utils import notify_event
 
 
 def sanitize_binder(root):
@@ -98,12 +95,11 @@ def run(job):
     jobModel = Job()
     jobModel.updateJob(job, status=JobStatus.RUNNING)
 
-    lookup_kwargs, = job["args"]
+    (lookup_kwargs,) = job["args"]
     user = User().load(job["userId"], force=True)
     tale = Tale().load(job["kwargs"]["taleId"], user=user)
     spawn = job["kwargs"]["spawn"]
     asTale = job["kwargs"]["asTale"]
-    dataset_root_path = job["kwargs"].get("dsRootPath", "/")
     token = Token().createToken(user=user, days=0.5)
     wt_notification = Notification().load(job["wt_notification_id"])
 
@@ -111,7 +107,7 @@ def run(job):
     progressCurrent = 0
 
     try:
-        notify_event([user["_id"]], "wt_import_started", {"taleId": tale['_id']})
+        notify_event([user["_id"]], "wt_import_started", {"taleId": tale["_id"]})
 
         # 0. Spawn instance in the background
         if spawn:
@@ -130,44 +126,41 @@ def run(job):
         dataMaps = pids_to_entities(
             dataIds, user=user, base_url=base_url, lookup=True
         )  # DataONE shouldn't be here
-        imported_data = register_dataMap(
+        ds_ids = register_dataMap(
             dataMaps,
-            getOrCreateRootFolder(CATALOG_NAME),
+            Tale().getDataDir(tale),
             "folder",
             user=user,
             base_url=base_url,
         )
-
-        dataMap = dataMaps[0]
-
-        if dataMap.repository.lower().startswith("http"):
-            resource = Item().load(imported_data[0], user=user, level=AccessType.READ)
-            resourceType = "item"
-        else:
-            resource = Folder().load(imported_data[0], user=user, level=AccessType.READ)
-            resourceType = "folder"
-
-        dataset_root_path = pathlib.Path(dataset_root_path)
-        if dataset_root_path.is_absolute() and resourceType == "folder":
-            # the minimum is '/' which we interpret as inside the imported_data root
-            # and we skip parts[0]
-            for name in dataset_root_path.parts[1:]:
-                resource = Folder().findOne({"parentId": resource["_id"], "name": name})
-            data_set = folder_to_dataSet(resource, user)
-        else:
-            data_set = [
-                {
-                    "itemId": str(resource["_id"]),
-                    "mountPath": resource["name"],
-                    "_modelType": resourceType,
-                }
-            ]
 
         if asTale:
             # 2. Create a session
             # TODO: yay circular dependencies! IMHO we really should merge
             # wholetale and wt_data_manager plugins...
             from girder.plugins.wt_data_manager.models.session import Session
+
+            data_dir = Tale().getDataDir(tale)
+            data_set = []
+            for item in Folder().childItems(folder=data_dir):
+                data_set.append(
+                    {
+                        "_modelType": "item",
+                        "itemId": item["_id"],
+                        "mountPath": item["name"],
+                    }
+                )
+
+            for folder in Folder().childFolders(
+                parentType="folder", parent=data_dir, user=user
+            ):
+                data_set.append(
+                    {
+                        "_modelType": "folder",
+                        "itemId": folder["_id"],
+                        "mountPath": folder["name"],
+                    }
+                )
 
             # Session is created so that we can easily copy files to workspace,
             # without worrying about how to handler transfers. DMS will do that for us <3
@@ -195,6 +188,8 @@ def run(job):
                 sanitize_binder(destination_fs)
 
             Session().deleteSession(user, session)
+            for folder_id in ds_ids:
+                Folder().remove(Folder().load(folder_id, force=True))
         else:
             # 3. Update Tale's dataSet
             progressCurrent += 1
@@ -207,18 +202,13 @@ def run(job):
                 progressMessage="Updating datasets",
             )
 
-            update_citations = {_["itemId"] for _ in tale["dataSet"]} ^ {
-                _["itemId"] for _ in data_set
-            }
-            tale["dataSet"] = data_set
-            Tale().update({"_id": tale["_id"]}, update={"$set": {"dataSet": tale["dataSet"]}})
-
-            if update_citations:
-                eventParams = {"tale": tale, "user": user}
-                events.daemon.trigger("tale.update_citation", eventParams)
+            eventParams = {"tale": tale, "user": user}
+            events.daemon.trigger("tale.update_citation", eventParams)
 
         # Tale is ready to be built
-        Tale().update({"_id": tale["_id"]}, update={"$set": {"status": TaleStatus.READY}})
+        Tale().update(
+            {"_id": tale["_id"]}, update={"$set": {"status": TaleStatus.READY}}
+        )
 
         # 4. Wait for container to show up
         if spawn:
@@ -246,10 +236,12 @@ def run(job):
         else:
             instance = None
 
-        notify_event([user["_id"]], "wt_import_completed", {"taleId": tale['_id']})
+        notify_event([user["_id"]], "wt_import_completed", {"taleId": tale["_id"]})
 
     except Exception:
-        Tale().update({"_id": tale["_id"]}, update={"$set": {"status": TaleStatus.ERROR}})
+        Tale().update(
+            {"_id": tale["_id"]}, update={"$set": {"status": TaleStatus.ERROR}}
+        )
         t, val, tb = sys.exc_info()
         log = "%s: %s\n%s" % (t.__name__, repr(val), traceback.extract_tb(tb))
         jobModel.updateJob(
