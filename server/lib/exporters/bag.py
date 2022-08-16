@@ -131,19 +131,6 @@ class BagTaleExporter(TaleExporter):
         # Update manifest with filesizes and mimeTypes for extra items
         self.append_extras_filesize_mimetypes(extra_files)
 
-        # Create the fetch file
-        fetch_file = ""
-        for bundle in self.manifest['aggregates']:
-            if 'bundledAs' not in bundle:
-                continue
-            # 'folder' is relative to root of a Tale, we need to adjust it
-            # to make it relative to the root of the bag. It always startswith
-            # "./"
-            folder = f"data{unquote(bundle['bundledAs']['folder'])[1:]}"
-            fetch_file += f"{bundle['uri']} {bundle['wt:size']} {folder}"
-            fetch_file += unquote(bundle['bundledAs'].get('filename', ''))
-            fetch_file += '\n'
-
         now = datetime.now(timezone.utc)
         bag_info = bag_info_tpl.format(
             bag_profile=bag_profile,
@@ -152,35 +139,17 @@ class BagTaleExporter(TaleExporter):
             oxum="{size}.{num}".format(**oxum),
         )
 
-        def dump_checksums(alg):
-            dump = ""
-            for path, chksum in self.state[alg]:
-                dump += f"{chksum} {path}\n"
-            for bundle in self.manifest['aggregates']:
-                if 'bundledAs' not in bundle:
-                    path = "data/" + unquote(bundle["uri"][2:])
-                else:
-                    folder = f"data{unquote(bundle['bundledAs']['folder'])[1:]}"
-                    filename = unquote(bundle['bundledAs'].get('filename', ''))
-                    path = os.path.join(folder, filename)
-                try:
-                    chksum = bundle[f"wt:{alg}"]
-                    dump += f"{chksum} {path}\n"
-                except KeyError:
-                    pass
-            return dump
-
         tagmanifest = dict(md5="", sha1="", sha256="", sha512="")
         for payload, fname in (
             (lambda: top_readme, 'README.md'),
             (lambda: run_file, 'run-local.sh'),
             (lambda: self.default_bagit, 'bagit.txt'),
             (lambda: bag_info, 'bag-info.txt'),
-            (lambda: fetch_file, 'fetch.txt'),
-            (lambda: dump_checksums('md5'), 'manifest-md5.txt'),
-            (lambda: dump_checksums('sha1'), 'manifest-sha1.txt'),
-            (lambda: dump_checksums('sha256'), 'manifest-sha256.txt'),
-            (lambda: dump_checksums('sha512'), 'manifest-sha512.txt'),
+            (lambda: self.create_fetch_file(), 'fetch.txt'),
+            (lambda: self.dump_checksums('md5'), 'manifest-md5.txt'),
+            (lambda: self.dump_checksums('sha1'), 'manifest-sha1.txt'),
+            (lambda: self.dump_checksums('sha256'), 'manifest-sha256.txt'),
+            (lambda: self.dump_checksums('sha512'), 'manifest-sha512.txt'),
             (lambda: self.formated_dump(self.environment, indent=4), 'metadata/environment.json'),
             (lambda: self.formated_dump(self.manifest, indent=4), 'metadata/manifest.json'),
         ):
@@ -207,6 +176,38 @@ class BagTaleExporter(TaleExporter):
             yield from self.zip_generator.addFile(payload, fname)
 
         yield self.zip_generator.footer()
+
+    def create_fetch_file(self):
+        fetch_file = ""
+        for bundle in self.manifest['aggregates']:
+            if 'bundledAs' not in bundle:
+                continue
+            # 'folder' is relative to root of a Tale, we need to adjust it
+            # to make it relative to the root of the bag. It always startswith
+            # "./"
+            folder = f"data{unquote(bundle['bundledAs']['folder'])[1:]}"
+            fetch_file += f"{bundle['uri']} {bundle['wt:size']} {folder}"
+            fetch_file += unquote(bundle['bundledAs'].get('filename', ''))
+            fetch_file += '\n'
+        return fetch_file
+
+    def dump_checksums(self, alg):
+        dump = ""
+        for path, chksum in self.state[alg]:
+            dump += f"{chksum} {path}\n"
+        for bundle in self.manifest['aggregates']:
+            if 'bundledAs' not in bundle:
+                path = "data/" + unquote(bundle["uri"][2:])
+            else:
+                folder = f"data{unquote(bundle['bundledAs']['folder'])[1:]}"
+                filename = unquote(bundle['bundledAs'].get('filename', ''))
+                path = os.path.join(folder, filename)
+            try:
+                chksum = bundle[f"wt:{alg}"]
+                dump += f"{chksum} {path}\n"
+            except KeyError:
+                pass
+        return dump
 
     def calculate_data_oxum(self):
         oxum = {"num": 0, "size": 0}
