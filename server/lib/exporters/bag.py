@@ -76,39 +76,10 @@ class BagTaleExporter(TaleExporter):
     def stream(self):
         token = 'wholetale'
         container_config = self.environment["config"]
-        rendered_command = container_config.get('command', '').format(
-            base_path='', port=container_config['port'], ip='0.0.0.0', token=token
-        )
-
         urlPath = container_config['urlPath'].format(token=token)
 
-        taleId = self.manifest["wt:identifier"]
-        image_name = None
-        for obj in self.manifest['schema:hasPart']:
-            if ('schema:applicationCategory' in obj
-                    and obj['schema:applicationCategory'] == 'DockerImage'):
-                image_name = obj['@id']
+        run_file = self.format_run_file(container_config, urlPath, token)
 
-        # If the tale doesn't have a built image, output the command
-        # to build the image with r2d
-        build_cmd = ''
-        if image_name is None:
-            image_name = f"wholetale/tale_{taleId}"
-            build_cmd = build_tpl.format(
-                repo2docker=container_config.get('repo2docker_version', REPO2DOCKER_VERSION),
-                user=container_config['user'],
-                image_name=image_name
-            )
-
-        run_file = run_tpl.format(
-            build_cmd=build_cmd,
-            repo2docker=container_config.get('repo2docker_version', REPO2DOCKER_VERSION),
-            port=container_config['port'],
-            image_name=image_name,
-            command=rendered_command,
-            targetMount=container_config['targetMount'],
-            urlPath=urlPath,
-        )
         top_readme = readme_tpl.format(
             title=self.manifest["schema:name"],
             description=self.manifest["schema:description"],
@@ -227,3 +198,37 @@ class BagTaleExporter(TaleExporter):
             oxum["num"] += 1
             oxum["size"] += int(agg["wt:size"])
         return oxum
+
+    def format_run_file(self, container_config, urlPath, token):
+
+        rendered_command = container_config.get('command', '').format(
+            base_path='', port=container_config['port'], ip='0.0.0.0', token=token
+        )
+
+        taleId = self.manifest["wt:identifier"]
+        image_name = None
+        for obj in self.manifest['schema:hasPart']:
+            if ('schema:applicationCategory' in
+                    obj and obj['schema:applicationCategory'] == 'DockerImage'):
+                image_name = obj['@id']
+
+        # If the tale doesn't have a built image, output the command
+        # to build the image with r2d
+        build_cmd = ''
+        if image_name is None:
+            image_name = f"wholetale/tale_{taleId}"
+            build_cmd = build_tpl.format(
+                repo2docker=container_config.get('repo2docker_version', REPO2DOCKER_VERSION),
+                user=container_config['user'],
+                image_name=image_name
+            )
+
+        return run_tpl.format(
+            build_cmd=build_cmd,
+            repo2docker=container_config.get('repo2docker_version', REPO2DOCKER_VERSION),
+            port=container_config['port'],
+            image_name=image_name,
+            command=rendered_command,
+            targetMount=container_config['targetMount'],
+            urlPath=urlPath,
+        )
