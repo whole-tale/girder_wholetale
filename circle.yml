@@ -12,6 +12,9 @@ jobs:
             rm -rf /girder/plugins/wholetale
             ln -s /root/project /girder/plugins/wholetale
             set -o pipefail; python3 -m pip install --upgrade --force-reinstall -r requirements.txt -r requirements-dev.txt | cat
+            rm -rf /girder/plugins/wt_versioning
+            git clone https://github.com/whole-tale/wt_versioning -b datadirs /girder/plugins/wt_versioning
+            cd /girder/plugins/wt_versioning ; set -o pipefail; python3 -m pip install --upgrade --force-reinstall -r requirements.txt | cat
       - run:
           name: Install Test Dependencies
           environment:
