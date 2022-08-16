@@ -17,7 +17,7 @@ from girder.models.folder import Folder
 from girder.utility.path import lookUpPath
 from tests import base
 
-from .tests_helpers import event_types, get_events
+from .tests_helpers import event_types, get_events, get_data_dir_content
 
 DATA_PATH = os.path.join(
     os.path.dirname(os.environ["GIRDER_TEST_DATA_PREFIX"]),
@@ -369,7 +369,9 @@ class ImportTaleTestCase(base.TestCase):
             [(obj["_modelType"], obj["mountPath"]) for obj in tale["dataSet"]],
             [("item", "usco2005.xls")],
         )
-        self.assertEqual(tale["imageInfo"]["repo2docker_version"], "wholetale/repo2docker_wholetale:latest")
+        self.assertEqual(
+            tale["imageInfo"]["repo2docker_version"], "wholetale/repo2docker_wholetale:latest"
+        )
 
         events = get_events(self, since)
         self.assertEqual(
@@ -580,7 +582,7 @@ class ImportTaleTestCase(base.TestCase):
 
         tale = Tale().load(tale["_id"], force=True)
         self.assertEqual(
-            {_["mountPath"] for _ in tale["dataSet"]},
+            get_data_dir_content(tale, self.user),
             {
                 (
                     "Replication Data for Anchor Management A Field Experiment to "
@@ -595,7 +597,7 @@ class ImportTaleTestCase(base.TestCase):
 
         tale = Tale().load(tale["_id"], force=True)
         self.assertEqual(
-            {_["mountPath"] for _ in tale["dataSet"]},
+            get_data_dir_content(tale, self.user),
             {"00-README.md", "DHS-TANFRecertification-Public"},
         )
         Tale().remove(tale)
@@ -606,7 +608,7 @@ class ImportTaleTestCase(base.TestCase):
             )
         tale = Tale().load(tale["_id"], force=True)
         self.assertEqual(
-            {_["mountPath"] for _ in tale["dataSet"]},
+            get_data_dir_content(tale, self.user),
             {"df_replication_anonymized.csv", "df_replication_anonymized.tab"},
         )
         Tale().remove(tale)

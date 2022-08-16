@@ -3,6 +3,7 @@
 
 import json
 import os
+import pathlib
 import stat
 import sys
 import time
@@ -22,7 +23,9 @@ from fs.zipfs import ReadZipFS
 from girder import events
 from girderfs.dms import WtDmsGirderFS
 from girder_client import GirderClient
+from girder.constants import AccessType
 from girder.models.folder import Folder
+from girder.models.item import Item
 from girder.models.notification import Notification
 from girder.models.token import Token
 from girder.models.user import User
@@ -67,28 +70,28 @@ def sanitize_binder(root):
             sanitize_binder(root)
 
 
-def folder_to_dataSet(resource, user):
-    # Create a dataset with the content of root ds folder,
-    # so that it looks nicely and it's easy to copy to workspace later on
-    data_set = [
-        {
-            "itemId": str(folder["_id"]),
-            "mountPath": folder["name"],
-            "_modelType": "folder",
-        }
-        for folder in Folder().childFolders(
-            parentType="folder", parent=resource, user=user
-        )
-    ]
-    data_set += [
-        {
-            "itemId": str(item["_id"]),
-            "mountPath": item["name"],
-            "_modelType": "item",
-        }
-        for item in Folder().childItems(resource)
-    ]
-    return data_set
+def offset_ds_root_path(dataMap, registered_ds, user, tale, dataset_root_path):
+    """If dsRootPath was provided shift data in Tale Data Dir."""
+    if dataMap.repository.lower().startswith("http"):
+        resource = Item().load(registered_ds, user=user, level=AccessType.READ)
+        resourceType = "item"
+    else:
+        resource = Folder().load(registered_ds, user=user, level=AccessType.READ)
+        resourceType = "folder"
+
+    if dataset_root_path.is_absolute() and resourceType == "folder":
+        # the minimum is '/' which we interpret as inside the imported_data root
+        # and we skip parts[0]
+        data_dir = Tale().getDataDir(tale)
+        for name in dataset_root_path.parts[1:]:
+            resource = Folder().findOne({"parentId": resource["_id"], "name": name})
+
+        for item in Folder().childItems(folder=resource):
+            Item().move(item, data_dir)
+        for subfolder in Folder().childFolders(resource, "folder", user=user):
+            Folder().move(subfolder, data_dir, "folder")
+        resource = Folder().load(registered_ds, user=user, level=AccessType.WRITE)
+        Folder().remove(resource)
 
 
 def run(job):
@@ -100,6 +103,7 @@ def run(job):
     tale = Tale().load(job["kwargs"]["taleId"], user=user)
     spawn = job["kwargs"]["spawn"]
     asTale = job["kwargs"]["asTale"]
+    dataset_root_path = pathlib.Path(job["kwargs"].get("dsRootPath", "/"))
     token = Token().createToken(user=user, days=0.5)
     wt_notification = Notification().load(job["wt_notification_id"])
 
@@ -121,6 +125,7 @@ def run(job):
             progressCurrent=progressCurrent,
             progressMessage="Registering external data",
         )
+
         dataIds = lookup_kwargs.pop("dataId")
         base_url = lookup_kwargs.get("base_url", DataONELocations.prod_cn)
         dataMaps = pids_to_entities(
@@ -133,6 +138,9 @@ def run(job):
             user=user,
             base_url=base_url,
         )
+
+        for i in range(len(dataMaps)):
+            offset_ds_root_path(dataMaps[i], ds_ids[i], user, tale, dataset_root_path)
 
         if asTale:
             # 2. Create a session

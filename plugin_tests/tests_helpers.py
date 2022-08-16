@@ -24,3 +24,21 @@ def event_types(events, affected_resources):
         for event in events
         if affected_resources == event["data"]["affectedResourceIds"]
     }
+
+
+def get_data_dir_content(tale, user):
+    from girder.models.folder import Folder
+    from girder.plugins.wholetale.models.tale import Tale
+
+    tale = Tale().load(tale["_id"], force=True)
+    data_dir = Tale().getDataDir(tale)
+    dataset = set([_["name"] for _ in Folder().childItems(data_dir)])
+    dataset |= set(
+        [
+            _["name"]
+            for _ in Folder().childFolders(
+                parentType="folder", parent=data_dir, user=user
+            )
+        ]
+    )
+    return dataset

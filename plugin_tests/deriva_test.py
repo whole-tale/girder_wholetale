@@ -10,6 +10,8 @@ from urllib.parse import urlparse, parse_qs
 from girder.exceptions import GirderException
 from girder.models.assetstore import Assetstore
 
+from .test_helpers import get_data_dir_content
+
 
 DATA_PATH = os.path.join(
     os.path.dirname(os.environ["GIRDER_TEST_DATA_PREFIX"]),
@@ -222,8 +224,9 @@ class DerivaHarversterTestCase(base.TestCase):
                 self.assertEqual(job["status"], JobStatus.SUCCESS)
 
         tale = Tale().load(tale["_id"], force=True)
+        dataset = get_data_dir_content(tale, self.user)
         self.assertEqual(
-            {_["mountPath"] for _ in tale["dataSet"]},
+            dataset,
             {
                 "Biosample.csv",
                 "Image Data.csv",
