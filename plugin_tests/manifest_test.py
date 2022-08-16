@@ -448,29 +448,6 @@ class ManifestTestCase(base.TestCase):
         self.assertEqual(digest_block['schema:applicationCategory'], 'DockerImage')
         self.assertEqual(digest_block['@type'], 'schema:SoftwareApplication')
 
-    def test_dataset_roundtrip(self):
-        from server.lib.manifest_parser import ManifestParser
-        from server.lib.manifest import Manifest
-        manifest = Manifest(self.tale, self.user).manifest
-        dataset = ManifestParser(manifest).get_dataset()
-        self.assertEqual(
-            [_["itemId"] for _ in dataset],
-            [str(_["itemId"]) for _ in self.tale["dataSet"]]
-        )
-
-        # test it still works if schema:identifier is not present
-        aggregates = []
-        for obj in manifest["aggregates"]:
-            if "schema:identifier" in obj:
-                obj.pop("schema:identifier")
-            aggregates.append(obj)
-        manifest["aggregates"] = aggregates
-        dataset = ManifestParser(manifest).get_dataset()
-        self.assertEqual(
-            [_["itemId"] for _ in dataset],
-            [str(_["itemId"]) for _ in self.tale["dataSet"]]
-        )
-
     def tearDown(self):
         self.model("user").remove(self.user)
         self.model("user").remove(self.admin)
