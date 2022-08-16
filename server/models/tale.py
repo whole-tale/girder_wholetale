@@ -2,13 +2,16 @@
 
 from bson.objectid import ObjectId
 import datetime
+from functools import lru_cache
+import html2markdown
 import json
 import jsonschema
 import pathlib
 import tempfile
+from urllib.request import urlopen
 import zipfile
 
-from girder import events
+from girder import events, logger
 from girder.constants import AccessType
 from girder.exceptions import GirderException, ValidationException
 from girder.models.assetstore import Assetstore
@@ -27,7 +30,7 @@ from ..schema.misc import related_identifiers_schema
 from ..utils import getOrCreateRootFolder, init_progress, notify_event, diff_access
 from ..lib.license import WholeTaleLicense
 from ..lib.manifest_parser import ManifestParser
-from ..lib import pids_to_entities, register_dataMap
+from ..lib import pids_to_entities, register_dataMap, IMPORT_PROVIDERS
 from ..lib.dataone import DataONELocations  # TODO: get rid of it
 from ..lib.import_item import ImportItem
 
@@ -38,6 +41,11 @@ from gwvolman.tasks import build_tale_image, BUILD_TALE_IMAGE_STEP_TOTAL
 # removed) increase `_currentTaleFormat` to retroactively apply those
 # changes to existing Tales.
 _currentTaleFormat = 10
+
+
+@lru_cache(maxsize=128, typed=True)
+def _get_citation(url):
+    return urlopen(url).read().decode()
 
 
 class Tale(AccessControlledModel):
@@ -100,6 +108,7 @@ class Tale(AccessControlledModel):
 
         events.bind('model.tale.save.created', 'wholetale', self.createDataDir)
         events.bind('model.tale.remove', 'wholetale', self.removeDataDir)
+        events.bind("tale.update_citation", "wholetale", self.update_citation)
 
     @staticmethod
     def _validate_dataset(tale):
@@ -559,6 +568,56 @@ class Tale(AccessControlledModel):
         )
         tale["dataDirId"] = dataDir["_id"]
         self.save(tale, triggerEvents=False, validate=False)
+
+    def update_citation(self, event: events.Event):
+        tale = event.info["tale"]
+        user = event.info["user"]
+
+        dataset_top_identifiers = set()
+        for obj in tale.get("dataSet", []):
+            if obj["_modelType"] == "folder":
+                load = Folder().load
+            else:
+                load = Item().load
+            try:
+                doc = load(obj["itemId"], user=user, level=AccessType.READ, exc=True)
+                provider_name = doc["meta"]["provider"]
+                if provider_name.startswith("HTTP"):
+                    continue
+                provider = IMPORT_PROVIDERS.providerMap[provider_name]
+            except (KeyError, ValidationException):
+                continue
+            top_identifier = provider.getDatasetUID(doc, user)
+            if top_identifier:
+                dataset_top_identifiers.add(top_identifier)
+
+        citations = []
+        related_ids = [
+            related_id
+            for related_id in tale["relatedIdentifiers"]
+            if related_id["relation"] != "Cites"
+        ]
+        for doi in dataset_top_identifiers:
+            related_ids.append(dict(identifier=doi, relation="Cites"))
+            if doi.startswith("doi:"):
+                doi = doi[4:]
+            try:
+                url = (
+                    "https://api.datacite.org/dois/"
+                    f"text/x-bibliography/{doi}?style=harvard-cite-them-right"
+                )
+                citation = _get_citation(url)
+                citations.append(html2markdown.convert(citation))
+            except Exception as ex:
+                logger.info('Unable to get a citation for %s, getting "%s"', doi, str(ex))
+
+        self.update({"_id": tale["_id"]}, update={"$set": {
+            "dataSetCitation": citations,
+            "relatedIdentifiers": related_ids,
+        }})
+        notify_event(
+            [_["id"] for _ in tale["access"]["users"]], "wt_tale_updated", {"taleId": tale["_id"]}
+        )
 
     @staticmethod
     def removeDataDir(event: events.Event):

@@ -9,7 +9,6 @@ from girder.models.folder import Folder
 from girder.models.item import Item
 
 from .license import WholeTaleLicense
-from ..models.image import Image
 
 
 _NEW_DATACITE_KEY = "datacite"
@@ -337,6 +336,7 @@ class ManifestParser:
 
     @staticmethod
     def get_tale_fields_from_environment(environment):
+        from girder.plugins.wholetale.models.image import Image  # circular dep
         image = Image().findOne({"name": environment["name"]})
         icon = image.get(
             "icon",

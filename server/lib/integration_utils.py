@@ -3,8 +3,6 @@ import os
 from urllib.parse import urlparse, urlunparse, urlencode
 from girder.plugins.oauth.rest import OAuth as OAuthResource
 
-from ..models.tale import Tale
-
 
 def autologin(args=None):
     args = {k: v for (k, v) in args.items() if v is not None}
@@ -18,6 +16,8 @@ def autologin(args=None):
 
 
 def redirect_if_tale_exists(user, token, doi):
+    from girder.plugins.wholetale.models.tale import Tale  # circular dep
+
     existing_tale_id = Tale().findOne(
         query={
             "creatorId": user["_id"],

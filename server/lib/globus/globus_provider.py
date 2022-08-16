@@ -8,7 +8,7 @@ import requests
 from girder.models.item import Item
 from girder.models.folder import Folder
 
-from plugins.wholetale.server.lib.file_map import FileMap
+from ..file_map import FileMap
 from ..import_providers import ImportProvider
 from ..entity import Entity
 from ..data_map import DataMap

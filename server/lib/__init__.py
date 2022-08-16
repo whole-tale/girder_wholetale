@@ -1,18 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from functools import lru_cache
-from urllib.request import urlopen
-
-import html2markdown
-from girder import logger
-from girder.constants import AccessType
-from girder.exceptions import ValidationException
-from girder.models.folder import Folder
-from girder.models.item import Item
 from girder.utility.progress import ProgressContext
 
-from ..models.tale import Tale
-from ..utils import notify_event
 from .bdbag.bdbag_provider import BDBagProvider
 from .deriva.provider import DerivaProvider
 from .dataone.auth import DataONEVerificator
@@ -117,59 +106,3 @@ def register_dataMap(dataMaps, parent, parentType, user=None, base_url=None, pro
             )
             importedData.append(obj["_id"])
     return importedData
-
-
-@lru_cache(maxsize=128, typed=True)
-def _get_citation(url):
-    return urlopen(url).read().decode()
-
-
-def update_citation(event):
-    tale = event.info["tale"]
-    user = event.info["user"]
-
-    dataset_top_identifiers = set()
-    for obj in tale.get("dataSet", []):
-        if obj["_modelType"] == "folder":
-            load = Folder().load
-        else:
-            load = Item().load
-        try:
-            doc = load(obj["itemId"], user=user, level=AccessType.READ, exc=True)
-            provider_name = doc["meta"]["provider"]
-            if provider_name.startswith("HTTP"):
-                continue
-            provider = IMPORT_PROVIDERS.providerMap[provider_name]
-        except (KeyError, ValidationException):
-            continue
-        top_identifier = provider.getDatasetUID(doc, user)
-        if top_identifier:
-            dataset_top_identifiers.add(top_identifier)
-
-    citations = []
-    related_ids = [
-        related_id
-        for related_id in tale["relatedIdentifiers"]
-        if related_id["relation"] != "Cites"
-    ]
-    for doi in dataset_top_identifiers:
-        related_ids.append(dict(identifier=doi, relation="Cites"))
-        if doi.startswith("doi:"):
-            doi = doi[4:]
-        try:
-            url = (
-                "https://api.datacite.org/dois/"
-                f"text/x-bibliography/{doi}?style=harvard-cite-them-right"
-            )
-            citation = _get_citation(url)
-            citations.append(html2markdown.convert(citation))
-        except Exception as ex:
-            logger.info('Unable to get a citation for %s, getting "%s"', doi, str(ex))
-
-    Tale().update({"_id": tale["_id"]}, update={"$set": {
-        "dataSetCitation": citations,
-        "relatedIdentifiers": related_ids,
-    }})
-    notify_event(
-        [_["id"] for _ in tale["access"]["users"]], "wt_tale_updated", {"taleId": tale["_id"]}
-    )

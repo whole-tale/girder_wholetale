@@ -15,7 +15,6 @@ from ..file_map import FileMap
 from ..import_item import ImportItem
 from ..entity import Entity
 from ... import constants
-from ...models.tale import Tale
 from . import ZenodoNotATaleError
 
 
@@ -76,6 +75,7 @@ class ZenodoImportProvider(ImportProvider):
         return "doi:" + record["doi"]
 
     def import_tale(self, data_map, user, force=False):
+        from girder.plugins.wholetale.models.tale import Tale   # circular dep...
         # dataId in this case == record["links"]["record_html"]
         dataId = data_map.dataId
         record = self._get_record(dataId)

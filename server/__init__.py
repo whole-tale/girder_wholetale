@@ -29,7 +29,6 @@ from girder.utility import assetstore_utilities, setting_utilities
 from girder.utility.model_importer import ModelImporter
 
 from .constants import PluginSettings, SettingDefault
-from .lib import update_citation
 from .rest.account import Account
 from .rest.dataset import Dataset
 from .rest.image import Image
@@ -545,7 +544,6 @@ def load(info):
     ModelImporter.model('user').exposeFields(
         level=AccessType.ADMIN, fields=('otherTokens',))
 
-    events.bind("tale.update_citation", "wholetale", update_citation)
     path_to_assets = os.path.join(
         os.path.dirname(os.path.dirname(__file__)),
         "web_client/extra/img",

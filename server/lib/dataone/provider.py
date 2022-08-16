@@ -11,7 +11,6 @@ from ..data_map import DataMap
 from ..file_map import FileMap
 from ..import_item import ImportItem
 from ..entity import Entity
-from ...models.tale import Tale
 from .register import \
     D1_lookup, \
     extract_metadata_docs, \
@@ -139,6 +138,7 @@ class DataOneImportProvider(ImportProvider):
             d['url'] = "{}/{}/{}".format(base_url, 'resolve', d['identifier'])
 
     def import_tale(self, data_map, user, force=False):
+        from girder.plugins.wholetale.models.tale import Tale   # circular dep...
         existing_tale_id = Tale().findOne(
             query={
                 "creatorId": user["_id"],
