@@ -208,7 +208,8 @@ class ImportTaleTestCase(base.TestCase):
                 )
             ],
         )
-        self.assertEqual(len(tale["dataSet"]), 1)
+
+        self.assertEqual(len(get_data_dir_content(tale, self.user)), 1)
 
         # Confirm notifications
         events = get_events(self, since)
@@ -335,7 +336,7 @@ class ImportTaleTestCase(base.TestCase):
 
         since = datetime.utcnow().isoformat()
         with open(
-            os.path.join(DATA_PATH, "604126f45f6bb2c4c997e967.zip"), "rb"
+            os.path.join(DATA_PATH, "62fbfb461eeeb701f9f84057.zip"), "rb"
         ) as fp:
             resp = self.request(
                 path="/tale/import",
@@ -366,8 +367,8 @@ class ImportTaleTestCase(base.TestCase):
         tale = Tale().findOne({"title": "Water Tale"})
         self.assertTrue(tale is not None)
         self.assertEqual(
-            [(obj["_modelType"], obj["mountPath"]) for obj in tale["dataSet"]],
-            [("item", "usco2005.xls")],
+            get_data_dir_content(tale, self.user),
+            {"usco2005.xls"},
         )
         self.assertEqual(
             tale["imageInfo"]["repo2docker_version"], "wholetale/repo2docker_wholetale:latest"
