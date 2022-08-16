@@ -12,7 +12,6 @@ from fs.copy import copy_fs
 from girder import events
 from girder.api.rest import setCurrentUser
 from girder.models.folder import Folder
-from girder.models.item import Item
 from girder.models.upload import Upload
 from girder.models.user import User
 from girder.utility import parseTimestamp
@@ -21,9 +20,6 @@ from girder.plugins.jobs.models.job import Job
 from urllib.parse import unquote
 
 from ..constants import TaleStatus
-from ..lib import pids_to_entities, register_dataMap
-from ..lib.dataone import DataONELocations  # TODO: get rid of it
-from ..lib.import_item import ImportItem
 from ..lib.manifest_parser import ManifestParser
 from ..models.tale import Tale
 from ..utils import notify_event
@@ -55,58 +51,10 @@ def run(job):
             progressCurrent=progressCurrent,
             progressMessage="Registering external data",
         )
-        dataIds = mp.get_external_data_ids()
-        if dataIds:
-            dataMaps = pids_to_entities(
-                dataIds, user=user, base_url=DataONELocations.prod_cn, lookup=True
-            )  # DataONE shouldn't be here
-            temp_data_dir = Folder().createFolder(
-                Folder().load(tale["dataDirId"], force=True),
-                "temp",
-                parentType="folder",
-                creator=user,
-            )
-            imported_roots = register_dataMap(
-                dataMaps,
-                temp_data_dir,
-                "folder",
-                user=user,
-                base_url=DataONELocations.prod_cn,
-            )
-            ext_map = dict(zip(dataIds, imported_roots))
+        Tale().restore_external_data(tale, mp, user=user)
 
-            for doi, ds_rel_path, target_path in mp.get_extdata_from_aggs():
-                temp_folder = Folder().load(ext_map[doi], force=True)
-                temp_path = pathlib.Path(ds_rel_path)
-                for subfolder in temp_path.parts[1:-1]:
-                    temp_folder = Folder().findOne(
-                        {
-                            "parentId": temp_folder["_id"],
-                            "name": ImportItem.sanitize_filename(subfolder),
-                        }
-                    )
-                temp_item = Item().findOne(
-                    {
-                        "folderId": temp_folder["_id"],
-                        "name": ImportItem.sanitize_filename(temp_path.parts[-1]),
-                    }
-                )
-                target_path = pathlib.Path(target_path)
-                target_folder = Tale().getDataDir(tale)
-                for subfolder in target_path.parts[1:-1]:
-                    target_folder = Folder().createFolder(
-                        target_folder,
-                        subfolder,
-                        parentType="folder",
-                        creator=user,
-                        reuseExisting=True,
-                    )
-                Item().copyItem(temp_item, user, folder=target_folder)
-
-            Folder().remove(temp_data_dir)
-
+        # 1a. Upload raw data
         orig_tale_id = pathlib.Path(manifest_file).parts[0]
-
         for agg in mp.manifest["aggregates"]:
             if not agg["uri"].startswith("./data"):
                 continue
@@ -145,7 +93,6 @@ def run(job):
             progressCurrent=progressCurrent,
             progressMessage="Copying files to workspace",
         )
-        orig_tale_id = pathlib.Path(manifest_file).parts[0]
         for workdir in ("workspace", "data/workspace"):
             workdir = os.path.join(orig_tale_id, workdir)
             if os.path.isdir(workdir):

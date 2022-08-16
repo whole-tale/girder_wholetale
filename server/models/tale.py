@@ -4,6 +4,7 @@ from bson.objectid import ObjectId
 import datetime
 import json
 import jsonschema
+import pathlib
 import tempfile
 import zipfile
 
@@ -26,6 +27,9 @@ from ..schema.misc import related_identifiers_schema
 from ..utils import getOrCreateRootFolder, init_progress, notify_event, diff_access
 from ..lib.license import WholeTaleLicense
 from ..lib.manifest_parser import ManifestParser
+from ..lib import pids_to_entities, register_dataMap
+from ..lib.dataone import DataONELocations  # TODO: get rid of it
+from ..lib.import_item import ImportItem
 
 from gwvolman.tasks import build_tale_image, BUILD_TALE_IMAGE_STEP_TOTAL
 
@@ -565,3 +569,56 @@ class Tale(AccessControlledModel):
     @staticmethod
     def getDataDir(tale, name=None):
         return Folder().findOne({"parentId": tale["dataDirId"], "name": name or "current"})
+
+    def restore_external_data(self, tale, parsed_manifest, user=None):
+        mp = parsed_manifest
+        dataIds = mp.get_external_data_ids()
+        if not dataIds:
+            return
+        dataMaps = pids_to_entities(
+            dataIds, user=user, base_url=DataONELocations.prod_cn, lookup=True
+        )  # DataONE shouldn't be here
+        temp_data_dir = Folder().createFolder(
+            Folder().load(tale["dataDirId"], force=True),
+            "temp",
+            parentType="folder",
+            creator=user,
+        )
+        imported_roots = register_dataMap(
+            dataMaps,
+            temp_data_dir,
+            "folder",
+            user=user,
+            base_url=DataONELocations.prod_cn,
+        )
+        ext_map = dict(zip(dataIds, imported_roots))
+
+        for doi, ds_rel_path, target_path in mp.get_extdata_from_aggs():
+            temp_folder = Folder().load(ext_map[doi], force=True)
+            temp_path = pathlib.Path(ds_rel_path)
+            for subfolder in temp_path.parts[1:-1]:
+                temp_folder = Folder().findOne(
+                    {
+                        "parentId": temp_folder["_id"],
+                        "name": ImportItem.sanitize_filename(subfolder),
+                    }
+                )
+            temp_item = Item().findOne(
+                {
+                    "folderId": temp_folder["_id"],
+                    "name": ImportItem.sanitize_filename(temp_path.parts[-1]),
+                }
+            )
+            target_path = pathlib.Path(target_path)
+            target_folder = self.getDataDir(tale)
+            for subfolder in target_path.parts[1:-1]:
+                target_folder = Folder().createFolder(
+                    target_folder,
+                    subfolder,
+                    parentType="folder",
+                    creator=user,
+                    reuseExisting=True,
+                )
+            Item().copyItem(temp_item, user, folder=target_folder)
+
+        Folder().remove(temp_data_dir)
