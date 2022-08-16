@@ -29,8 +29,9 @@ from ..constants import TaleStatus, TALE_DATADIRS_NAME
 from ..schema.misc import related_identifiers_schema
 from ..utils import getOrCreateRootFolder, init_progress, notify_event, diff_access
 from ..lib.license import WholeTaleLicense
+from ..lib.manifest import Manifest
 from ..lib.manifest_parser import ManifestParser
-from ..lib import pids_to_entities, register_dataMap, IMPORT_PROVIDERS
+from ..lib import pids_to_entities, register_dataMap
 from ..lib.dataone import DataONELocations  # TODO: get rid of it
 from ..lib.import_item import ImportItem
 
@@ -573,24 +574,8 @@ class Tale(AccessControlledModel):
         tale = event.info["tale"]
         user = event.info["user"]
 
-        dataset_top_identifiers = set()
-        for obj in tale.get("dataSet", []):
-            if obj["_modelType"] == "folder":
-                load = Folder().load
-            else:
-                load = Item().load
-            try:
-                doc = load(obj["itemId"], user=user, level=AccessType.READ, exc=True)
-                provider_name = doc["meta"]["provider"]
-                if provider_name.startswith("HTTP"):
-                    continue
-                provider = IMPORT_PROVIDERS.providerMap[provider_name]
-            except (KeyError, ValidationException):
-                continue
-            top_identifier = provider.getDatasetUID(doc, user)
-            if top_identifier:
-                dataset_top_identifiers.add(top_identifier)
-
+        manifest = Manifest(tale, user).manifest
+        dataset_top_identifiers = set([_["@id"] for _ in manifest["wt:usesDataset"]])
         citations = []
         related_ids = [
             related_id
