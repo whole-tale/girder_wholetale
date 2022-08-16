@@ -10,7 +10,7 @@ from urllib.parse import urlparse, parse_qs
 from girder.exceptions import GirderException
 from girder.models.assetstore import Assetstore
 
-from .test_helpers import get_data_dir_content
+from .tests_helpers import get_data_dir_content
 
 
 DATA_PATH = os.path.join(

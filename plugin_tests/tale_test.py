@@ -1195,6 +1195,8 @@ class TaleWithWorkspaceTestCase(base.TestCase):
         for key in restored_tale.keys():
             if key == "imageId":
                 self.assertEqual(tale[key], str(restored_tale[key]))
+            elif key == "dataSet":
+                continue
             else:
                 self.assertEqual(tale[key], restored_tale[key])
         Tale().remove(tale)
