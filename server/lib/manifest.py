@@ -2,7 +2,6 @@ import json
 import os
 from urllib.parse import quote
 
-from girder import logger
 from girder.models.item import Item
 from girder.models.folder import Folder
 from girder.models.user import User
@@ -13,7 +12,6 @@ from girder.constants import AccessType
 from gwvolman.constants import REPO2DOCKER_VERSION
 
 from .license import WholeTaleLicense
-from . import IMPORT_PROVIDERS
 
 
 class Manifest:
@@ -49,8 +47,6 @@ class Manifest:
 
         self.validate()
         self.manifest = dict()
-        # Create a set that represents any external data packages
-        self.datasets = set()
 
         self.imageModel = ModelImporter.model("image", "wholetale")
         self.itemModel = ModelImporter.model("item")
@@ -64,7 +60,6 @@ class Manifest:
         self.manifest.update(self.create_image_info())
         self.add_tale_records()
         # Add any external datasets to the manifest
-        self.add_dataset_records()
         self.add_license_record()
         self.add_version_info()
         self.add_run_info()
@@ -222,36 +217,6 @@ class Manifest:
             ]
         }
 
-    def create_dataset_record(self, folder_id):
-        """
-        Creates a record that describes a Dataset
-        :param folder_id: Folder that represents a dataset
-        :return: Dictionary that describes a dataset
-        """
-        try:
-            folder = Folder().load(
-                folder_id, user=self.user, exc=True, level=AccessType.READ
-            )
-            provider = folder["meta"]["provider"]
-            if provider in {"HTTP", "HTTPS"}:
-                return None
-            identifier = folder["meta"]["identifier"]
-            return {
-                "@id": identifier,
-                "@type": "schema:Dataset",
-                "schema:name": folder["name"],
-                "schema:identifier": identifier,
-                # "publisher": self.publishers[provider]
-            }
-
-        except (KeyError, TypeError, ValidationException):
-            msg = 'While creating a manifest for Tale "{}" '.format(
-                str(self.tale["_id"])
-            )
-            msg += "encountered a following error:\n"
-            logger.warning(msg)
-            raise  # We don't want broken manifests, do we?
-
     def create_aggregation_record(
         self, uri, bundle=None, parent_dataset_identifier=None
     ):
@@ -392,31 +357,6 @@ class Manifest:
                     }
                     self.manifest["aggregates"].append(rinfo)
 
-    def _expand_folder_into_items(self, folder, user, relpath=""):
-        """
-        Recursively handle data folder and return all child items as ext objs
-
-        In a perfect world there should be a better place for this...
-        """
-        curpath = os.path.join(relpath, folder["name"])
-        dataSet = []
-        ext = []
-        for item in Folder().childItems(folder, user=user):
-            dataSet.append(
-                {
-                    "itemId": item["_id"],
-                    "_modelType": "item",
-                    "mountPath": os.path.join(curpath, item["name"]),
-                }
-            )
-
-        if dataSet:
-            ext, _ = self._parse_dataSet(dataSet=dataSet, relpath=curpath)
-
-        for subfolder in Folder().childFolders(folder, parentType="folder", user=user):
-            ext += self._expand_folder_into_items(subfolder, user, relpath=curpath)
-        return ext
-
     def _get_folder_uri(self, doc, provider, top_identifier):
         is_root_folder = doc["meta"].get("identifier") == top_identifier
         try:
@@ -426,92 +366,6 @@ class Manifest:
                 return provider.getURI(doc, self.user)
         except NotImplementedError:
             pass
-
-    def _parse_dataSet(self, dataSet=None, relpath=""):
-        """
-        Get the basic info about the contents of `dataSet`
-
-        Returns:
-            external_objects: A list of objects that represent externally defined data
-            dataset_top_identifiers: A set of DOIs for top-level packages that contain
-                objects from external_objects
-
-        """
-        if dataSet is None:
-            dataSet = self.tale["dataSet"]
-
-        dataset_top_identifiers = set()
-        external_objects = []
-        for obj in dataSet:
-            try:
-                doc = ModelImporter.model(obj["_modelType"]).load(
-                    obj["itemId"], user=self.user, level=AccessType.READ, exc=True
-                )
-                provider_name = doc["meta"]["provider"]
-                if provider_name.startswith("HTTP"):
-                    provider_name = "HTTP"  # TODO: handle HTTPS to make it unnecessary
-                provider = IMPORT_PROVIDERS.providerMap[provider_name]
-                top_identifier = provider.getDatasetUID(doc, self.user)
-                if top_identifier:
-                    dataset_top_identifiers.add(top_identifier)
-
-                ext_obj = {
-                    "dataset_identifier": top_identifier,
-                    "provider": provider_name,
-                    "_modelType": obj["_modelType"],
-                    "relpath": relpath,
-                    "wt:identifier": str(doc["_id"]),
-                }
-
-                if obj["_modelType"] == "folder":
-                    uri = self._get_folder_uri(doc, provider, top_identifier)
-                    # if uri is None and self.expand_folders and not is_root_folder:
-                    if self.expand_folders:
-                        external_objects += self._expand_folder_into_items(
-                            doc, self.user
-                        )
-                        continue
-
-                    ext_obj["uri"] = uri or "undefined"
-                    ext_obj["name"] = doc["name"]
-                    ext_obj["size"] = 0
-                    for _, f in Folder().fileList(
-                        doc, user=self.user, subpath=False, data=False
-                    ):
-                        ext_obj["size"] += f["size"]
-
-                elif obj["_modelType"] == "item":
-                    fileObj = self.itemModel.childFiles(doc)[0]
-                    ext_obj.update(
-                        {
-                            "name": fileObj["name"],
-                            "uri": fileObj["linkUrl"],
-                            "size": fileObj["size"],
-                        }
-                    )
-                    if checksum := self._get_checksum(doc, fileObj):
-                        alg, value = checksum.split(":")
-                        ext_obj[f"wt:{alg}"] = value
-                external_objects.append(ext_obj)
-            except (ValidationException, KeyError):
-                msg = 'While creating a manifest for Tale "{}" '.format(
-                    str(self.tale["_id"])
-                )
-                msg += "encountered a following error:\n"
-                logger.warning(msg)
-                raise  # We don't want broken manifests, do we?
-
-        return external_objects, dataset_top_identifiers
-
-    def add_dataset_records(self):
-        """
-        Adds dataset records to the manifest document
-        :return: None
-        """
-        for folder_id in self.datasets:
-            dataset_record = self.create_dataset_record(folder_id)
-            if dataset_record:
-                self.manifest["wt:usesDataset"].append(dataset_record)
 
     def create_bundle(self, folder, filename):
         """
