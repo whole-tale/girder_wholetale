@@ -204,7 +204,9 @@ class BagTaleExporter(TaleExporter):
                 path = os.path.join(folder, filename)
             try:
                 chksum = bundle[f"wt:{alg}"]
-                dump += f"{chksum} {path}\n"
+                line = f"{chksum} {path}\n"
+                if line not in dump:
+                    dump += line
             except KeyError:
                 pass
         return dump
