@@ -3,11 +3,6 @@ import os
 from pathlib import Path
 from urllib.parse import quote, unquote
 
-from girder.exceptions import ValidationException
-from girder.models.file import File
-from girder.models.folder import Folder
-from girder.models.item import Item
-
 from .license import WholeTaleLicense
 
 
@@ -23,85 +18,6 @@ def rename_dc(data):
         )
         for k, v in data.items()
     }
-
-
-def fold_hierarchy_smart(objs):
-    # This only works because it takes into account what can be done with current UI and
-    # API easily. It's still possible to manually craft a Tale that will break this if
-    # you know how. If you happen to do that and after hours/days of debugging you'll
-    # end up here ask me for a refund...
-    reduced = []
-    processed = set()
-    for obj in objs:
-        obj_path = Path(obj["mountPath"])
-        if len(obj_path.parts) == 1:
-            reduced.append(obj)
-            continue
-        # Since it's '/<something>/... parts[0] is the unique thing we
-        # are looking for
-        key = obj_path.parts[0]
-        if key in processed:
-            continue
-        leaf_item = Item().load(obj["itemId"], force=True)
-        current = Folder().load(leaf_item["folderId"], force=True)
-        for _ in range(len(obj_path.parts[1:]) - 1):
-            current = Folder().load(current["parentId"], force=True)
-        reduced.append(
-            {
-                "itemId": str(current["_id"]),
-                "_modelType": "folder",
-                "mountPath": key,
-            }
-        )
-        processed.add(key)
-    return reduced
-
-
-def fold_hierarchy(objs):
-    # shortcut for expand_folder == True, which should be the majority
-    if {obj["_modelType"] for obj in objs} == {"item"}:
-        return fold_hierarchy_smart(objs)
-    reduced = []
-    covered_ids = set()
-    reiterate = False
-
-    current_ids = set([obj["itemId"] for obj in objs])
-
-    for obj in objs:
-        mount_path = Path(obj["mountPath"])
-        if len(mount_path.parts) > 1:
-            reiterate = True
-            if obj["itemId"] in covered_ids:
-                continue
-
-            if obj["_modelType"] == "item":
-                parentId = Item().load(obj["itemId"], force=True)["folderId"]
-            else:
-                parentId = Folder().load(obj["itemId"], force=True)["parentId"]
-
-            if str(parentId) in current_ids:
-                continue
-
-            parent = Folder().load(parentId, force=True)
-            covered_ids |= set([str(_["_id"]) for _ in Folder().childItems(parent)])
-            covered_ids |= set(
-                [str(_["_id"]) for _ in Folder().childFolders(parent, "folder")]
-            )
-
-            reduced.append(
-                {
-                    "itemId": str(parent["_id"]),
-                    "_modelType": "folder",
-                    "mountPath": mount_path.parent.as_posix(),
-                }
-            )
-        else:
-            reduced.append(obj)
-
-    if reiterate:
-        return fold_hierarchy(reduced)
-
-    return reduced
 
 
 class ManifestParser:
@@ -209,53 +125,6 @@ class ManifestParser:
                 )
             )
         return data_set
-
-    def get_dataset(self, data_prefix="./data/"):
-        """Creates a 'dataSet' using manifest's aggregates section."""
-        dataSet = []
-        for obj in self.manifest.get("aggregates", []):
-            try:
-                bundle = obj["bundledAs"]
-            except KeyError:
-                continue
-
-            folder_path = unquote(bundle["folder"]).replace(data_prefix, "", 1)
-            if folder_path.endswith("/"):
-                folder_path = folder_path[:-1]
-            if "filename" in bundle:
-                try:
-                    item = Item().load(obj["wt:identifier"], force=True, exc=True)
-                    assert item["name"] == unquote(bundle["filename"])
-                    itemId = item["_id"]
-                except (KeyError, ValidationException, AssertionError):
-                    file_obj = File().findOne(
-                        {"linkUrl": obj["uri"]}, fields=["itemId"]
-                    )
-                    itemId = file_obj["itemId"]
-                path = os.path.join(folder_path, unquote(bundle["filename"]))
-                model_type = "item"
-            else:
-                fname = Path(unquote(bundle["folder"])).parts[-1]
-                try:
-                    folder = Folder().load(obj["wt:identifier"], force=True, exc=True)
-                    assert folder["name"] == fname
-                except (KeyError, ValidationException, AssertionError):
-                    folder = Folder().findOne(
-                        {"meta.identifier": obj["uri"]}, fields=[]
-                    )
-
-                if not folder:
-                    # TODO: There should be a better way to do it...
-                    folder = Folder().findOne(
-                        {"name": fname, "size": obj["size"]}, fields=[]
-                    )
-                itemId = folder["_id"]
-                path = folder_path
-                model_type = "folder"
-            dataSet.append(
-                dict(mountPath=path, _modelType=model_type, itemId=str(itemId))
-            )
-        return fold_hierarchy(dataSet)
 
     def get_tale_fields(self):
         licenseSPDX = next(

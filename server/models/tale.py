@@ -481,9 +481,6 @@ class Tale(AccessControlledModel):
             )
         )
 
-        # We don't call mp.get_dataset now, cause it might require
-        # a registration step. It's going to be called inside import_tale job.
-
         tale = self.createTale(
             image,
             [],
@@ -554,7 +551,6 @@ class Tale(AccessControlledModel):
         mp = ManifestParser(manifest)
         restored_tale = mp.get_tale_fields()
         restored_tale.update(mp.get_tale_fields_from_environment(environment))
-        restored_tale["dataSet"] = mp.get_dataset()
         return restored_tale
 
     def createDataDir(self, event: events.Event):
