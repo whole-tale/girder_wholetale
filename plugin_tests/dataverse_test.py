@@ -315,13 +315,8 @@ class DataverseHarversterTestCase(base.TestCase):
 
     @vcr.use_cassette(os.path.join(DATA_PATH, 'dataverse_hierarchy.txt'))
     def testDatasetWithHierarchy(self):
-        return  # disable obsolete test for now
         from girder.plugins.jobs.models.job import Job
         from girder.plugins.jobs.constants import JobStatus
-        from server.models.image import Image
-        from server.models.tale import Tale
-        from server.lib.manifest import Manifest
-        from server.lib.manifest_parser import ManifestParser
         doi = "doi:10.7910/DVN/Q5PV4U"
         dataMap = [
             {
@@ -360,38 +355,12 @@ class DataverseHarversterTestCase(base.TestCase):
         ds_subfolder = Folder().findOne(
             {"name": "Source Data", "parentId": ds_root["_id"]}
         )
+        self.assertEqual(ds_subfolder["meta"]["dsRelPath"], "/Source Data")
+        self.assertTrue(ds_subfolder is not None)
         ds_item = Item().findOne(
-            {"name": "03_Analysis_Code.R", "folderId": ds_root["_id"]}
+            {"name": "Source Data.zip", "folderId": ds_subfolder["_id"]}
         )
-
-        dataSet = [
-            {
-                "_modelType": "folder",
-                "itemId": str(ds_root["_id"]),
-                "mountPath": ds_root["name"],
-            },
-            {
-                "_modelType": "folder",
-                "itemId": str(ds_subfolder["_id"]),
-                "mountPath": ds_subfolder["name"],
-            },
-            {
-                "_modelType": "item",
-                "itemId": str(ds_item["_id"]),
-                "mountPath": ds_item["name"],
-            }
-        ]
-
-        image = Image().createImage(name="test my name", creator=self.user, public=True)
-        tale = Tale().createTale(
-            image, dataSet, creator=self.user, title="Blah", public=True
-        )
-        manifest = Manifest(tale, self.user, expand_folders=True).manifest
-        restored_dataset = ManifestParser(manifest).get_dataset()
-        self.assertEqual(restored_dataset, dataSet)
-
-        Tale().remove(tale)
-        Image().remove(image)
+        self.assertEqual(ds_item["meta"]["dsRelPath"], "/Source Data/Source Data.zip")
 
     def testProtoTale(self):
         from server.lib.dataverse.provider import DataverseImportProvider
