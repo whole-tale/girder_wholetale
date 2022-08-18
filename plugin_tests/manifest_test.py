@@ -199,7 +199,6 @@ class ManifestTestCase(base.TestCase):
         self._testAddTaleCreator()
         self._testCreateContext()
         self._testCreateAggregationRecord()
-        self._testGetFolderIdentifier()
         self._testDataSet()
         self._test_different_user()
         self._testWorkspace()
@@ -319,14 +318,6 @@ class ManifestTestCase(base.TestCase):
 
         manifest_doc = Manifest(self.tale, self.user)
         self.assertTrue(len(manifest_doc.manifest["schema:author"]))
-
-    def _testGetFolderIdentifier(self):
-        from server.lib.manifest import get_folder_identifier
-
-        folder_identifier = get_folder_identifier(
-            self.tale["dataSet"][0]["itemId"], self.user
-        )
-        self.assertEqual(folder_identifier, "doi:10.5065/D6862DM8")
 
     def _testWorkspace(self):
         from server.lib.manifest import Manifest

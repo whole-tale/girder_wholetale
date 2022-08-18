@@ -7,7 +7,6 @@ from girder.models.folder import Folder
 from girder.models.user import User
 from girder.utility import JsonEncoder
 from girder.utility.model_importer import ModelImporter
-from girder.exceptions import ValidationException
 from girder.constants import AccessType
 from gwvolman.constants import REPO2DOCKER_VERSION
 
@@ -357,16 +356,6 @@ class Manifest:
                     }
                     self.manifest["aggregates"].append(rinfo)
 
-    def _get_folder_uri(self, doc, provider, top_identifier):
-        is_root_folder = doc["meta"].get("identifier") == top_identifier
-        try:
-            if is_root_folder:
-                return top_identifier
-            else:
-                return provider.getURI(doc, self.user)
-        except NotImplementedError:
-            pass
-
     def create_bundle(self, folder, filename):
         """
         Creates a bundle for an externally referenced file
@@ -467,30 +456,3 @@ class Manifest:
             allow_nan=False,
             **kwargs,
         )
-
-
-def get_folder_identifier(folder_id, user):
-    """
-    Gets the 'identifier' field out of a folder. If it isn't present in the
-    folder, it will navigate to the folder above until it reaches the collection
-    :param folder_id: The ID of the folder
-    :param user: The user that is creating the manifest
-    :return: The identifier of a dataset
-    """
-    try:
-        folder = ModelImporter.model("folder").load(
-            folder_id, user=user, level=AccessType.READ, exc=True
-        )
-
-        meta = folder.get("meta")
-        if meta:
-            if meta["provider"] in {"HTTP", "HTTPS"}:
-                return None
-            identifier = meta.get("identifier")
-            if identifier:
-                return identifier
-
-        get_folder_identifier(folder["parentID"], user)
-
-    except (ValidationException, KeyError):
-        pass
