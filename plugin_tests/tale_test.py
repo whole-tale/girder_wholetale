@@ -17,8 +17,11 @@ import shutil
 from tests import base
 
 from .tests_helpers import mockOtherRequest, get_events
+from girder import events
 from girder.constants import AccessType
+from girder.models.file import File
 from girder.models.item import Item
+from girder.models.upload import Upload
 from girder.exceptions import ValidationException
 from girder.models.folder import Folder
 
@@ -904,73 +907,28 @@ class TaleWithWorkspaceTestCase(base.TestCase):
 
     def _create_water_tale(self):
         # register required data
-        self.data_collection = self.model('collection').createCollection(
-            'WholeTale Catalog', public=True, reuseExisting=True
-        )
-        catalog = self.model('folder').createFolder(
-            self.data_collection,
-            'WholeTale Catalog',
-            parentType='collection',
-            public=True,
-            reuseExisting=True,
-        )
-        # Tale map of values to check against in tests
+        from girder.plugins.wholetale.models.image import _DEFAULT_ICON
+        external_item = {
+            "meta": {
+                "checksum": {
+                    "sha256": "73135613c7a1692fcc7635e1f0755b755ff82c2f435fa0ecb1e70c30ff391813"
+                },
+                "directIdentifier": "urn:uuid:62e1a8c5-406b-43f9-9234-1415277674cb",
+                "dsRelPath": "/usco2000.xls",
+                "identifier": "doi:10.5065/D6862DM8",
+                "provider": "DataONE",
+            },
+            "name": "usco2000.xls"
+        }
 
-        def restore_catalog(parent, current):
-            for folder in current['folders']:
-                resp = self.request(
-                    path='/folder',
-                    method='POST',
-                    user=self.admin,
-                    params={
-                        'parentId': parent['_id'],
-                        'name': folder['name'],
-                        'metadata': json.dumps(folder['meta']),
-                    },
-                )
-                folderObj = resp.json
-                restore_catalog(folderObj, folder)
-
-            for obj in current['files']:
-                resp = self.request(
-                    path='/item',
-                    method='POST',
-                    user=self.admin,
-                    params={
-                        'folderId': parent['_id'],
-                        'name': obj['name'],
-                        'metadata': json.dumps(obj['meta']),
-                    },
-                )
-                item = resp.json
-                self.request(
-                    path='/file',
-                    method='POST',
-                    user=self.admin,
-                    params={
-                        'parentType': 'item',
-                        'parentId': item['_id'],
-                        'name': obj['name'],
-                        'size': obj['size'],
-                        'mimeType': obj['mimeType'],
-                        'linkUrl': obj['linkUrl'],
-                    },
-                )
-
-        with open(os.path.join(DATA_PATH, 'watertale_catalog.json'), 'r') as fp:
-            data = json.load(fp)
-            restore_catalog(catalog, data)
-
-        resp = self.request(
-            path='/dataset', method='GET', user=self.user)
-        self.assertStatusOk(resp)
-        ds = resp.json[0]
-
-        resp = self.request(
-            path='/item', method='GET', user=self.user,
-            params={'name': 'usco2000.xls', 'folderId': ds['_id']}
-        )
-        item = resp.json[0]
+        external_file = {
+            "mimeType": "application/vnd.ms-excel",
+            "size": 1558016,
+            "linkUrl": (
+                "https://cn.dataone.org/cn/v2/resolve/"
+                "urn:uuid:62e1a8c5-406b-43f9-9234-1415277674cb"
+            ),
+        }
 
         authors = [
             {
@@ -984,22 +942,19 @@ class TaleWithWorkspaceTestCase(base.TestCase):
                 'orcid': 'https://orcid.org/111-111'
             }
         ]
-
-        resp = self.request(
-            path='/tale', method='POST', user=self.user,
-            type='application/json',
-            body=json.dumps({
-                'imageId': str(self.image['_id']),
-                'dataSet': [
-                    {'itemId': item['_id'], '_modelType': 'item', 'mountPath': item['name']}
-                ],
-                "title": "Export Tale",
-                "public": True,
-                "authors": authors,
-            })
+        tale = Tale().createTale(
+            self.image,
+            [],
+            creator=self.user,
+            title="Water Tale",
+            description="Test tale with ext data and raw data.",
+            public=False,
+            authors=authors,
+            icon=_DEFAULT_ICON,
+            category="test",
         )
-        self.assertStatusOk(resp)
-        tale = resp.json
+
+        # Set up the workspace
         workspace = self.model('folder').load(tale['workspaceId'], force=True)
         nb_file = os.path.join(workspace["fsPath"], "wt_quickstart.ipynb")
         with urllib.request.urlopen(
@@ -1009,7 +964,42 @@ class TaleWithWorkspaceTestCase(base.TestCase):
         ) as url:
             with open(nb_file, "wb") as target:
                 target.write(url.read())
-        return tale
+
+        # Set up the data dir
+        data_dir = Tale().getDataDir(tale)
+        data_item = Item().createItem(external_item["name"], self.user, data_dir)
+        data_item = Item().setMetadata(data_item, external_item["meta"])
+        File().createLinkFile(
+            external_item["name"],
+            data_item,
+            "item",
+            external_file["linkUrl"],
+            self.user,
+            size=external_file["size"],
+            mimeType=external_file["mimeType"]
+        )
+        events.trigger(eventName="tale.update_citation", info=dict(tale=tale, user=self.user))
+        with tempfile.TemporaryFile() as tfp:
+            tfp.write(b"some_data\n")
+            size = tfp.tell()
+            tfp.seek(0)
+
+            Upload().uploadFromFile(
+                tfp,
+                size,
+                "data.txt",
+                parentType="folder",
+                parent=data_dir,
+                user=self.user,
+                mimeType="data/txt",
+            )
+
+        resp = self.request(
+            path="/tale/{_id}".format(**tale), method="GET",
+            user=self.user
+        )
+        self.assertStatusOk(resp)
+        return resp.json
 
     def testTaleCopy(self):
         from girder.plugins.wholetale.models.tale import Tale
@@ -1081,31 +1071,7 @@ class TaleWithWorkspaceTestCase(base.TestCase):
             pass  # TODO: Goes without saying that we should not be doing that...
         shutil.rmtree(dirpath)
 
-        # Test dataSetCitation
-        resp = self.request(
-            path='/tale/{_id}'.format(**tale), method='PUT',
-            type='application/json',
-            user=self.user, body=json.dumps({
-                'dataSet': [],
-                'imageId': str(tale['imageId']),
-                'public': tale['public'],
-            })
-        )
-        self.assertStatusOk(resp)
-        tale = resp.json
-        count = 0
-        while tale["dataSetCitation"]:
-            time.sleep(0.5)
-            resp = self.request(path=f"/tale/{tale['_id']}", method="GET", user=self.user)
-            self.assertStatusOk(resp)
-            tale = resp.json
-            count += 1
-            if count > 5:
-                break
-        self.assertEqual(tale['dataSetCitation'], [])
-
         self.model('tale', 'wholetale').remove(tale)
-        self.model('collection').remove(self.data_collection)
 
     def testExportBagWithRun(self):
         tale = self._create_water_tale()
