@@ -105,7 +105,7 @@ class TaleTestCase(base.TestCase):
         self.image = self.model('image', 'wholetale').createImage(
             name="test my name", creator=self.user, public=True,
             config=dict(template='base.tpl', buildpack='SomeBuildPack',
-                        user='someUser', port=8888, urlPath=''))
+                        user='someUser', port=8888, urlPath='', targetMount='/mount'))
 
     def testTaleFlow(self):
         from server.lib.license import WholeTaleLicense
@@ -889,7 +889,7 @@ class TaleWithWorkspaceTestCase(base.TestCase):
             creator=self.admin,
             public=True,
             config=dict(template='base.tpl', buildpack='SomeBuildPack',
-                        user='someUser', port=8888, urlPath=''),
+                        user='someUser', port=8888, urlPath='', targetMount='/mount'),
         )
 
         from girder.plugins.wt_home_dir import HOME_DIRS_APPS
