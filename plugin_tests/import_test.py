@@ -14,6 +14,8 @@ from fs.copy import copy_fs
 from fs.osfs import OSFS
 from girder import config
 from girder.models.folder import Folder
+from girder.models.item import Item
+from girder.models.file import File
 from girder.utility.path import lookUpPath
 from tests import base
 
@@ -336,7 +338,7 @@ class ImportTaleTestCase(base.TestCase):
 
         since = datetime.utcnow().isoformat()
         with open(
-            os.path.join(DATA_PATH, "62fbfb461eeeb701f9f84057.zip"), "rb"
+            os.path.join(DATA_PATH, "62ffa9425220803582185409.zip"), "rb"
         ) as fp:
             resp = self.request(
                 path="/tale/import",
@@ -368,7 +370,20 @@ class ImportTaleTestCase(base.TestCase):
         self.assertTrue(tale is not None)
         self.assertEqual(
             get_data_dir_content(tale, self.user),
-            {"usco2005.xls"},
+            {"usco2005.xls", "subfolder"},
+        )
+        data_dir = Tale().getDataDir(tale)
+        subf = Folder().findOne({"parentId": data_dir["_id"], "name": "subfolder"})
+        item = Item().findOne({"folderId": subf["_id"], "name": "all-pages-realtime.csv"})
+        self.assertTrue(item is not None)
+        fobj = File().findOne({"itemId": item["_id"], "name": item["name"]})
+        self.assertTrue(fobj is not None)
+        self.assertEqual(
+            fobj["sha512"],
+            (
+                "6739b0c4ea0fd9065565e570904e258e8e855a3a9d1f6d5dd3ffc196a6515296"
+                "a997329c2b0085dc3d7166f1d26f1fe579b6b55c9715a78788074da8f5e442c4"
+            )
         )
         self.assertEqual(
             tale["imageInfo"]["repo2docker_version"], "wholetale/repo2docker_wholetale:latest"
