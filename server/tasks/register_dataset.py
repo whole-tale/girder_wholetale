@@ -1,12 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from girder import events
+from girder.constants import AccessType
+from girder.models.folder import Folder
 from girder.models.user import User
 from girder.plugins.jobs.constants import JobStatus
 from girder.plugins.jobs.models.job import Job
 
 from ..lib import register_dataMap
 from ..lib.data_map import DataMap
+from ..models.tale import Tale
 
 
 def run(job):
@@ -37,9 +41,20 @@ def run(job):
         parentType,
         user=user,
         base_url=base_url,
-        progress=False
+        progress=False,
     )
     if importedData:
+        if parent["name"] == "current":  # TODO: make it more robust
+            root_data_dir = Folder().load(
+                parent["parentId"], user=user, level=AccessType.READ
+            )
+            tale = Tale().load(root_data_dir["meta"]["taleId"], user=user)
+            eventParams = {
+                "tale": tale,
+                "user": user,
+            }
+            events.daemon.trigger("tale.update_citation", eventParams)
+
         user_data = set(user.get("myData", []))
         user["myData"] = list(user_data.union(set(importedData)))
         user = User().save(user)
