@@ -603,8 +603,11 @@ class Tale(AccessControlledModel):
     @staticmethod
     def removeDataDir(event: events.Event):
         tale = event.info
-        if (dataDir := Folder().load(tale["dataDirId"], force=True)):
-            Folder().remove(dataDir)
+        try:
+            if (dataDir := Folder().load(tale["dataDirId"], force=True)):
+                Folder().remove(dataDir)
+        except KeyError:
+            pass
 
     @staticmethod
     def getDataDir(tale, name=None):
