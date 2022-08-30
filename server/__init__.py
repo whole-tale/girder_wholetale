@@ -496,6 +496,9 @@ def store_other_globus_tokens(event):
 
 def load(info):
     from girder.plugins.oauth.providers.globus import Globus
+
+    # Remove unnecessary scope https://github.com/whole-tale/girder_wholetale/issues/534
+    Globus._AUTH_SCOPES.remove("urn:globus:auth:scope:auth.globus.org:view_identities")
     deriva_scopes = Setting().get(PluginSettings.DERIVA_SCOPES)
     Globus.addScopes(list(deriva_scopes.values()))
     info['apiRoot'].wholetale = wholeTale()
