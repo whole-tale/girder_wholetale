@@ -643,6 +643,11 @@ class Tale(Resource):
         default_authors = [
             dict(firstName=user['firstName'], lastName=user['lastName'], orcid="")
         ]
+
+        # Duplicate imageInfo but not jobId
+        old_imageInfo = tale.get("imageInfo", {})
+        new_imageInfo = {k: v for k, v in old_imageInfo.items() if k not in {"jobId"}}
+
         new_tale = self._model.createTale(
             image, tale['dataSet'], creator=user, save=True,
             title=tale.get('title'), description=tale.get('description'),
@@ -654,6 +659,7 @@ class Tale(Resource):
             licenseSPDX=tale.get('licenseSPDX'),
             status=TaleStatus.PREPARING,
             relatedIdentifiers=tale.get('relatedIdentifiers'),
+            imageInfo=new_imageInfo,
         )
         new_tale['copyOfTale'] = tale['_id']
         new_tale = self._model.save(new_tale)
