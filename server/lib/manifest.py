@@ -2,13 +2,15 @@ import json
 import os
 from urllib.parse import quote
 
-from girder import logger
+from girder import events, logger
 from girder.models.folder import Folder
 from girder.models.user import User
 from girder.utility import JsonEncoder
 from girder.utility.model_importer import ModelImporter
 from girder.exceptions import ValidationException
 from girder.constants import AccessType
+from girder.plugins.virtual_resources.rest import VirtualObject
+
 from gwvolman.constants import REPO2DOCKER_VERSION
 
 from .license import WholeTaleLicense
@@ -39,6 +41,13 @@ class Manifest:
                 versionId, user=self.user, level=AccessType.READ, exc=True
             )
             version = Folder().filter(version, user)  # to get _modelType
+            try:
+                event = events.trigger(
+                    "tale.view_restored", info={"tale": self.tale, "version": version}
+                )
+                self.tale.update(event.responses[0])
+            except FileNotFoundError:
+                pass  # We are creating, not restoring so manifest.json doesn't exist
         else:
             version = tale
             version["_modelType"] = "tale"
@@ -279,18 +288,22 @@ class Manifest:
         """
 
         # Handle the files in the workspace
-        workspace = Folder().load(
-            self.tale["workspaceId"], user=self.user, level=AccessType.READ
-        )
-        if workspace and "fsPath" in workspace:
+        if str(self.tale["workspaceId"]).startswith("wtlocal:"):
+            workspace_rootpath, _ = VirtualObject.path_from_id(self.tale["workspaceId"])
+            workspace_rootpath = workspace_rootpath.as_posix()
+        else:
+            workspace = Folder().load(
+                self.tale["workspaceId"], user=self.user, level=AccessType.READ, exc=True
+            )
             workspace_rootpath = workspace["fsPath"]
-            if not workspace_rootpath.endswith("/"):
-                workspace_rootpath += "/"
 
-            for curdir, _, files in os.walk(workspace_rootpath):
-                for fname in files:
-                    wfile = os.path.join(curdir, fname).replace(workspace_rootpath, "")
-                    self.manifest['aggregates'].append({'uri': './workspace/' + wfile})
+        if not workspace_rootpath.endswith("/"):
+            workspace_rootpath += "/"
+
+        for curdir, _, files in os.walk(workspace_rootpath):
+            for fname in files:
+                wfile = os.path.join(curdir, fname).replace(workspace_rootpath, "")
+                self.manifest['aggregates'].append({'uri': './workspace/' + wfile})
 
         """
         Handle objects that are in the dataSet, ie files that point to external sources.
