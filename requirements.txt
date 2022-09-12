@@ -12,5 +12,6 @@ dataone.libclient==3.4.7
 dataone.cli==3.4.7
 validators
 html2markdown
+lxml
 GitPython
 httpio>=0.3.0
