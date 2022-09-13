@@ -4,4 +4,5 @@ version: "1.2.dev0"
 dependencies:
     - jobs
     - worker
+    - virtual_resources
     - globus_handler
