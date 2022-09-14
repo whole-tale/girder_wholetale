@@ -197,7 +197,8 @@ class DataONEHarversterTestCase(base.TestCase):
         for i in range(len(items)):
             self.assertEqual(items[i]['name'], source[i]['fileName'])
             self.assertEqual(items[i]['size'], source[i]['size'])
-            self.assertEqual(items[i]['meta']['identifier'],
+            self.assertEqual(items[i]['meta']['identifier'], "doi:10.18739/A2ND53")
+            self.assertEqual(items[i]['meta']['directIdentifier'],
                              source[i]['identifier'])
 
         # TODO: check if it's that method is still used anywhere

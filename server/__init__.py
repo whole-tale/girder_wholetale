@@ -19,6 +19,7 @@ from girder.constants import AccessType, TokenScope
 from girder.exceptions import GirderException
 from girder.models.model_base import ValidationException
 from girder.models.notification import Notification, ProgressState
+from girder.models.setting import Setting
 from girder.models.user import User
 from girder.plugins.jobs.constants import JobStatus
 from girder.plugins.jobs.models.job import Job as JobModel
@@ -481,7 +482,7 @@ def store_other_globus_tokens(event):
     globus_token = event.info["token"]
     user = event.info["user"]
     user_tokens = user.get("otherTokens", [])
-    for token in globus_token["other_tokens"]:
+    for token in globus_token.get("other_tokens", []):
         for i, user_token in enumerate(user_tokens):
             if user_token["resource_server"] == token["resource_server"]:
                 user_tokens[i].update(token)
@@ -494,6 +495,12 @@ def store_other_globus_tokens(event):
 
 
 def load(info):
+    from girder.plugins.oauth.providers.globus import Globus
+
+    # Remove unnecessary scope https://github.com/whole-tale/girder_wholetale/issues/534
+    Globus._AUTH_SCOPES.remove("urn:globus:auth:scope:auth.globus.org:view_identities")
+    deriva_scopes = Setting().get(PluginSettings.DERIVA_SCOPES)
+    Globus.addScopes(list(deriva_scopes.values()))
     info['apiRoot'].wholetale = wholeTale()
     info['apiRoot'].instance = Instance()
     tale = Tale()

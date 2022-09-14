@@ -306,7 +306,7 @@ class DataverseHarversterTestCase(base.TestCase):
         from girder.plugins.wholetale.lib.dataverse.provider import DataverseImportProvider
         self.assertEqual(
             '^https?://(demo.dataverse.org|random.d.org|random2.d.org).*$',
-            DataverseImportProvider().regex.pattern
+            DataverseImportProvider().regex[-1].pattern
         )
         resp = self.request(
             '/system/setting', user=self.admin, method='PUT',
@@ -394,6 +394,7 @@ class DataverseHarversterTestCase(base.TestCase):
 
     def testProtoTale(self):
         from server.lib.dataverse.provider import DataverseImportProvider
+        from server.lib.data_map import DataMap
         provider = DataverseImportProvider()
 
         datamap = {
@@ -410,28 +411,30 @@ class DataverseHarversterTestCase(base.TestCase):
             "size": 44382520,
             "tale": False,
         }
+        dataMap = DataMap.fromDict(datamap)
 
-        tale = provider.proto_tale_from_datamap(datamap, self.user, False)
+        tale = provider.proto_tale_from_datamap(dataMap, self.user, False)
         self.assertEqual(set(tale.keys()), {"title", "relatedIdentifiers", "category"})
-        tale = provider.proto_tale_from_datamap(datamap, self.user, True)
+        tale = provider.proto_tale_from_datamap(dataMap, self.user, True)
         self.assertEqual(tale["authors"][0]["lastName"], "Tesler")
 
-        datamap = {
-            "dataId": (
-                "http://dataverse.icrisat.org/dataset.xhtml?"
-                "persistentId=doi:10.21421/D2/TCCVS7"
-            ),
-            "doi": "doi:10.21421/D2/TCCVS7",
-            "name": (
-                "Phenotypic evaluation data of International Chickpea "
-                "Varietal Trials (ICVTs) – Desi for Year 2016-17"
-            ),
-            "repository": "Dataverse",
-            "size": 99504,
-            "tale": False,
-        }
-        tale = provider.proto_tale_from_datamap(datamap, self.user, True)
-        self.assertEqual(tale["authors"][0]["firstName"], "Pooran")
+        # dataverse.icrisat.org failing as of 8/15/2022
+        #datamap = {
+        #    "dataId": (
+        #        "http://dataverse.icrisat.org/dataset.xhtml?"
+        #        "persistentId=doi:10.21421/D2/TCCVS7"
+        #    ),
+        #    "doi": "doi:10.21421/D2/TCCVS7",
+        #    "name": (
+        #        "Phenotypic evaluation data of International Chickpea "
+        #        "Varietal Trials (ICVTs) – Desi for Year 2016-17"
+        #    ),
+        #    "repository": "Dataverse",
+        #    "size": 99504,
+        #    "tale": False,
+        #}
+        #tale = provider.proto_tale_from_datamap(DataMap.fromDict(datamap), self.user, True)
+        #self.assertEqual(tale["authors"][0]["firstName"], "Pooran")
 
     def tearDown(self):
         self.model('user').remove(self.user)

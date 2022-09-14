@@ -16,6 +16,8 @@ from girder.models.user import User
 from girder.plugins.jobs.models.job import Job
 
 from ..constants import CATALOG_NAME
+from ..lib import IMPORT_PROVIDERS
+from ..lib.data_map import DataMap
 from ..lib.dataone import DataONELocations
 from ..schema.misc import dataMapListSchema
 from ..utils import getOrCreateRootFolder, init_progress
@@ -127,7 +129,12 @@ class Dataset(Resource):
 
         if identifiers:
             filters.update(
-                {'meta.identifier': {'$in': identifiers}}
+                {
+                    "$or": [
+                        {"meta.directIdentifier": {"$in": identifiers}},
+                        {"meta.identifier": {"$in": identifiers}},
+                    ]
+                }
             )
 
             for modelType in ('folder', 'item'):
@@ -229,6 +236,15 @@ class Dataset(Resource):
             parent = self.model(parentType).load(
                 parentId, user=user, level=AccessType.WRITE, exc=True)
 
+        try:
+            for data in DataMap.fromList(dataMap):
+                provider = IMPORT_PROVIDERS.getFromDataMap(data)
+                provider.check_auth(user)
+        except ValueError:
+            raise RestException(
+                f"To register data from {provider.name} you need to provide credentials."
+            )
+
         resource = {
             'type': 'wt_register_data',
             'dataMap': dataMap,
@@ -297,12 +313,12 @@ class Dataset(Resource):
             # It happens to work if the job is a synchronous job, which it seems to be for now.
             os.unlink(path)
 
-    def _createImportJob(self, dataMap, parent, parentType, user, base_url, notification):
+    def _createImportJob(self, data_maps, parent, parentType, user, base_url, notification):
         job = Job().createLocalJob(
             title='Registering Data', user=user,
             type='wholetale.register_data', public=False, _async=False,
             module='girder.plugins.wholetale.tasks.register_dataset',
-            args=(dataMap, parent, parentType, user),
+            args=(data_maps, parent, parentType, user),
             kwargs={'base_url': base_url},
             otherFields={'wt_notification_id': str(notification['_id'])},
         )

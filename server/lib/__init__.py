@@ -15,7 +15,6 @@ from ..models.tale import Tale
 from ..utils import notify_event
 from .bdbag.bdbag_provider import BDBagProvider
 from .deriva.provider import DerivaProvider
-from .data_map import DataMap
 from .dataone.auth import DataONEVerificator
 from .dataone.provider import DataOneImportProvider
 from .dataverse.auth import DataverseVerificator
@@ -26,6 +25,8 @@ from .globus.globus_provider import GlobusImportProvider
 from .http_provider import HTTPImportProvider
 from .import_providers import ImportProviders
 from .null_provider import NullImportProvider
+from .openicpsr.provider import OpenICPSRImportProvider
+from .openicpsr.auth import OpenICPSRVerificator
 from .resolvers import DOIResolver, ResolutionException, Resolvers, MinidResolver
 from .zenodo.auth import ZenodoVerificator
 from .zenodo.provider import ZenodoImportProvider
@@ -39,6 +40,7 @@ IMPORT_PROVIDERS.addProvider(DerivaProvider())
 IMPORT_PROVIDERS.addProvider(BDBagProvider())
 IMPORT_PROVIDERS.addProvider(DataverseImportProvider())
 IMPORT_PROVIDERS.addProvider(ZenodoImportProvider())
+IMPORT_PROVIDERS.addProvider(OpenICPSRImportProvider())
 IMPORT_PROVIDERS.addProvider(GlobusImportProvider())
 IMPORT_PROVIDERS.addProvider(DataOneImportProvider())
 
@@ -55,7 +57,8 @@ Verificators = {
     "dataoneprod": DataONEVerificator,
     "dataonedev": DataONEVerificator,
     "dataonestage": DataONEVerificator,
-    "deriva": DerivaVerificator
+    "deriva": DerivaVerificator,
+    "icpsr": OpenICPSRVerificator,
 }
 
 
@@ -76,9 +79,9 @@ def pids_to_entities(pids, user=None, base_url=None, lookup=True):
             entity = RESOLVERS.resolve(entity)
             provider = IMPORT_PROVIDERS.getProvider(entity)
             if lookup:
-                results.append(provider.lookup(entity))
+                results.append(provider.lookup(entity))  # list of dataMaps
             else:
-                results.append(provider.listFiles(entity))
+                results.append(provider.listFiles(entity))  # list of FileMaps
     except ResolutionException:
         msg = 'Id "{}" was categorized as DOI, but its resolution failed.'.format(pid)
         raise RuntimeError(msg)
@@ -88,7 +91,7 @@ def pids_to_entities(pids, user=None, base_url=None, lookup=True):
         else:
             msg = 'Listing files at "{}" failed with: {}'
         raise RuntimeError(msg.format(pid, str(exc)))
-    return [x.toDict() for x in results]
+    return results
 
 
 def register_dataMap(dataMaps, parent, parentType, user=None, base_url=None, progress=False):
@@ -105,7 +108,7 @@ def register_dataMap(dataMaps, parent, parentType, user=None, base_url=None, pro
     """
     importedData = []
     with ProgressContext(progress, user=user, title="Registering resources") as ctx:
-        for dataMap in DataMap.fromList(dataMaps):
+        for dataMap in dataMaps:
             # probably would be nicer if Entity kept all details and the dataMap
             # would be merged into it
             provider = IMPORT_PROVIDERS.getFromDataMap(dataMap)

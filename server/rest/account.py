@@ -336,20 +336,25 @@ class Account(Resource):
         except KeyError:
             raise RestException('Unknown provider "%s".' % provider)
 
-        Verificators[provider](resource_server=resource_server, key=key).verify()
+        verificator = Verificators[provider](resource_server=resource_server, key=key)
+        try:
+            verificator.preauth(user)
+        except ValueError:
+            raise RestException(f"Invalid key/password for {provider}")
+        verificator.verify()
 
         user_tokens = user.get("otherTokens", [])
         for i, user_token in enumerate(user_tokens):
             if user_token["resource_server"] == resource_server:
                 user_tokens[i].update(  # update token if found.
-                    {"access_token": key, "token_type": key_type}
+                    {"access_token": verificator.key, "token_type": key_type}
                 )
                 break
         else:
             user_tokens.append(
                 {
                     "resource_server": resource_server,
-                    "access_token": key,
+                    "access_token": verificator.key,
                     "token_type": key_type,
                     "provider": provider,
                 }

@@ -74,6 +74,7 @@ class BDBagFullTestCase(base.TestCase):
                 user="someUser",
                 port=8888,
                 urlPath="",
+                targetMount='/mount',
             ),
         )
 
@@ -140,16 +141,20 @@ class BDBagFullTestCase(base.TestCase):
                     "_modelType": "item",
                 }
             )
+    
+        # Fake imageInfo
+        imageInfo = {
+            "digest": "registry.local.wholetale.org/digest123"
+        }
 
-        resp = self.request(
-            path="/tale",
-            method="POST",
-            user=self.user,
-            type="application/json",
-            body=json.dumps({"imageId": str(self.image["_id"]), "dataSet": dataSet}),
+        # Create tale (use model directly to set imageInfo)
+        from girder.plugins.wholetale.models.tale import Tale
+        tale = Tale().createTale(
+            image=self.image,
+            data=dataSet,
+            creator=self.user,
+            imageInfo=imageInfo
         )
-        self.assertStatusOk(resp)
-        tale = resp.json
 
         # "Upload" something to workspace
         workspace = Folder().load(tale["workspaceId"], force=True)
@@ -177,6 +182,7 @@ class BDBagFullTestCase(base.TestCase):
                 )
                 version_id = Path(manifest_path).parts[0]
 
+
                 zip_archive.extractall(tmpdirname)
                 zip_archive.close()
 
@@ -185,3 +191,13 @@ class BDBagFullTestCase(base.TestCase):
             self.assertTrue(bdbag.resolve_fetch(bag_path))
             bdbag.validate_bag(bag_path, fast=True)
             bdbag.validate_bag(bag_path, fast=False)
+
+            # Confirm image digest.
+            manifest_fs_path = os.path.join(bag_path, "metadata/manifest.json")
+            with open(manifest_fs_path, 'r') as fp:
+                manifest_json = json.load(fp)
+                self.assertEqual(manifest_json["schema:hasPart"][1]["@id"], "images.local.wholetale.org/digest123")
+
+            from server.lib.manifest_parser import ManifestParser
+            tale_fields = ManifestParser(manifest_fs_path).get_tale_fields()
+            self.assertEqual(tale_fields["imageInfo"]["digest"], "registry.local.wholetale.org/digest123")

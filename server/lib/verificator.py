@@ -32,3 +32,6 @@ class Verificator:
 
     def verify(self):
         raise NotImplementedError
+
+    def preauth(self, user):
+        pass

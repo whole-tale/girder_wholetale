@@ -13,10 +13,9 @@ from bson import ObjectId
 from fs.copy import copy_fs
 from fs.osfs import OSFS
 from girder import config
-from girder.models.token import Token
+from girder.models.folder import Folder
 from girder.utility.path import lookUpPath
 from tests import base
-from webdavfs.webdavfs import WebDAVFS
 
 from .tests_helpers import event_types, get_events
 
@@ -370,6 +369,7 @@ class ImportTaleTestCase(base.TestCase):
             [(obj["_modelType"], obj["mountPath"]) for obj in tale["dataSet"]],
             [("item", "usco2005.xls")],
         )
+        self.assertEqual(tale["imageInfo"]["repo2docker_version"], "wholetale/repo2docker_wholetale:latest")
 
         events = get_events(self, since)
         self.assertEqual(
@@ -464,7 +464,6 @@ class ImportTaleTestCase(base.TestCase):
         from girder.plugins.wholetale.tasks.import_binder import sanitize_binder
 
         tale = Tale().createTale(self.image, [], creator=self.user, title="Binder")
-        token = Token().createToken(user=self.user, days=0.25)
         tmpdir = tempfile.mkdtemp()
 
         with open(tmpdir + "/i_am_a_binder", "w") as fobj:
@@ -480,16 +479,8 @@ class ImportTaleTestCase(base.TestCase):
         os.makedirs(tmpdir + "/hidden_binder")
         os.rename(tmpdir + "/tale.zip", tmpdir + "/hidden_binder" + "/tale.zip")
 
-        girder_root = "http://localhost:{}".format(
-            config.getConfig()["server.socket_port"]
-        )
-        with WebDAVFS(
-            girder_root,
-            login=self.user["login"],
-            password="token:{_id}".format(**token),
-            root="/tales/{_id}".format(**tale),
-            cache_ttl=0,
-        ) as destination_fs, OSFS(tmpdir) as source_fs:
+        workspace = Folder().load(tale["workspaceId"], force=True)
+        with OSFS(workspace["fsPath"]) as destination_fs, OSFS(tmpdir) as source_fs:
             copy_fs(source_fs, destination_fs)
             sanitize_binder(destination_fs)
             self.assertEqual(list(destination_fs.listdir("/")), ["i_am_a_binder"])

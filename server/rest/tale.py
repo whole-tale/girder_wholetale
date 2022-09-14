@@ -263,9 +263,15 @@ class Tale(Resource):
                     base_url=lookupKwargs.get("base_url", DataONELocations.prod_cn),
                     lookup=True
                 )[0]
-                provider = IMPORT_PROVIDERS.providerMap[dataMap["repository"]]
+                provider = IMPORT_PROVIDERS.providerMap[dataMap.repository]
+                try:
+                    provider.check_auth(user)
+                except ValueError:
+                    raise RestException(
+                        f"To register data from {provider.name} you need to provide credentials."
+                    )
 
-                if dataMap["tale"]:  # url points to a published Tale
+                if dataMap.tale:  # url points to a published Tale
                     return provider.import_tale(dataMap, user)
 
                 proto_tale = provider.proto_tale_from_datamap(dataMap, user, asTale)
@@ -616,18 +622,32 @@ class Tale(Resource):
     @autoDescribeRoute(
         Description('Copy a tale.')
         .modelParam('id', model='tale', plugin='wholetale', level=AccessType.READ)
+        .param(
+            "versionId", "The specific Tale version that should be restored after",
+            required=False,
+            default=None
+        )
+        .param(
+            "shallow", "Only copy the current state, or if versionId is set, the given version",
+            required=False, default=False, dataType="boolean"
+        )
         .responseClass('tale')
         .errorResponse('ID was invalid.')
         .errorResponse('You are not authorized to copy this tale.', 403)
     )
     @filtermodel(model='tale', plugin='wholetale')
-    def copyTale(self, tale):
+    def copyTale(self, tale, versionId, shallow):
         user = self.getCurrentUser()
         image = self.model('image', 'wholetale').load(
             tale['imageId'], user=user, level=AccessType.READ, exc=True)
         default_authors = [
             dict(firstName=user['firstName'], lastName=user['lastName'], orcid="")
         ]
+
+        # Duplicate imageInfo but not jobId
+        old_imageInfo = tale.get("imageInfo", {})
+        new_imageInfo = {k: v for k, v in old_imageInfo.items() if k not in {"jobId"}}
+
         new_tale = self._model.createTale(
             image, tale['dataSet'], creator=user, save=True,
             title=tale.get('title'), description=tale.get('description'),
@@ -639,6 +659,7 @@ class Tale(Resource):
             licenseSPDX=tale.get('licenseSPDX'),
             status=TaleStatus.PREPARING,
             relatedIdentifiers=tale.get('relatedIdentifiers'),
+            imageInfo=new_imageInfo,
         )
         new_tale['copyOfTale'] = tale['_id']
         new_tale = self._model.save(new_tale)
@@ -647,7 +668,7 @@ class Tale(Resource):
             title='Copy "{title}" workspace'.format(**tale), user=user,
             type='wholetale.copy_workspace', public=False, _async=True,
             module='girder.plugins.wholetale.tasks.copy_workspace',
-            args=(tale, new_tale),
+            args=(tale, new_tale, versionId, shallow),
         )
         Job().scheduleJob(job)
         return new_tale

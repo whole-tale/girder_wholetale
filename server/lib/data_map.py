@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import Dict, List
 
 
@@ -51,45 +52,15 @@ dataMapDoc = {
 }
 
 
+@dataclass
 class DataMap:
-    def __init__(
-        self,
-        dataId: str,
-        size: int,
-        doi: str = None,
-        name: str = None,
-        repository: str = None,
-        tale: bool = False,
-        base_url: str = None,
-    ):
-        self.dataId = dataId
-        self.size = size
-        self.repository = repository
-        self.doi = doi
-        self.name = name
-        self.tale = tale
-        self.base_url = base_url
-
-    def getName(self) -> str:
-        return self.name
-
-    def getDOI(self) -> str:
-        return self.doi
-
-    def getDataId(self) -> str:
-        return self.dataId
-
-    def getRepository(self) -> str:
-        return self.repository
-
-    def setRepository(self, repository: str):
-        self.repository = repository
-
-    def getSize(self) -> int:
-        return self.size
-
-    def setSize(self, size: int):
-        self.size = size
+    dataId: str
+    size: int
+    doi: str = None
+    name: str = None
+    repository: str = None
+    tale: bool = False
+    base_url: str = None
 
     def toDict(self) -> Dict:
         ret = {

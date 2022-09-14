@@ -1,8 +1,9 @@
 import jwt
 from girder.exceptions import RestException
+from ..verificator import Verificator
 
 
-class DataONEVerificator:
+class DataONEVerificator(Verificator):
     def __init__(self, resource_server=None, key=None, url=None, user=None):
         self.key = key
         self.resource_server = resource_server

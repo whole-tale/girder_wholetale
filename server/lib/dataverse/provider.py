@@ -139,10 +139,8 @@ class DataverseImportProvider(ImportProvider):
             for _ in data.get("installations", [{"hostname": single_hostname}])
         ]
         domains += self.get_extra_hosts_setting()
-        if domains:
-            return re.compile("^https?://(" + "|".join(domains) + ").*$")
-        else:
-            return re.compile("^$")
+        domain_regex = re.compile("^https?://(" + "|".join(domains) + ").*$")
+        return [re.compile(r"^http.*/dataset\.xhtml\?persistentId=.*$"), domain_regex]
 
     def getDatasetUID(self, doc: object, user: object) -> str:
         if 'folderId' in doc:
@@ -308,7 +306,7 @@ class DataverseImportProvider(ImportProvider):
         title, files, doi = self.parse_pid(entity.getValue(), user=entity.user)
         size = sum(_['filesize'] for _ in files)
         return DataMap(entity.getValue(), size, doi=doi, name=title,
-                       repository=self.getName())
+                       repository=self.name)
 
     def listFiles(self, entity: Entity) -> FileMap:
         stack = []
@@ -329,26 +327,36 @@ class DataverseImportProvider(ImportProvider):
     def _listRecursive(self, user, pid: str, name: str, base_url: str = None,
                        progress=None):
 
-        def _recurse_hierarchy(hierarchy):
+        def _recurse_hierarchy(hierarchy, prefix="/"):
             files = hierarchy.pop('+files+')
             for obj in files:
                 alg, checksum = obj["checksum"].split(":")
+                rel_path = os.path.join(prefix, obj["filename"])
+                meta = {"checksum": {alg: checksum}, "dsRelPath": rel_path}
+                if obj.get("doi") and obj["doi"] != doi:
+                    meta["directIdentifier"] = obj["doi"]
                 yield ImportItem(
                     ImportItem.FILE, obj['filename'],
                     size=obj['filesize'],
                     mimeType=obj.get('mimeType', 'application/octet-stream'),
                     url=obj['url'],
-                    identifier=obj.get('doi') or doi,
-                    meta={"checksum": {alg: checksum}},
+                    identifier=doi,
+                    meta=meta,
                 )
             for folder in hierarchy.keys():
-                yield ImportItem(ImportItem.FOLDER, name=folder)
-                yield from _recurse_hierarchy(hierarchy[folder])
+                rel_path = os.path.join(prefix, folder)
+                yield ImportItem(
+                    ImportItem.FOLDER,
+                    name=folder,
+                    identifier=doi,
+                    meta={"dsRelPath": rel_path}
+                )
+                yield from _recurse_hierarchy(hierarchy[folder], prefix=rel_path)
                 yield ImportItem(ImportItem.END_FOLDER)
 
         title, files, doi = self.parse_pid(pid, sanitize=True, user=user)
         hierarchy = self._files_to_hierarchy(files)
-        yield ImportItem(ImportItem.FOLDER, name=title, identifier=doi)
+        yield ImportItem(ImportItem.FOLDER, name=title, identifier=doi, meta={"dsRelPath": "/"})
         yield from _recurse_hierarchy(hierarchy)
         yield ImportItem(ImportItem.END_FOLDER)
 
@@ -356,8 +364,8 @@ class DataverseImportProvider(ImportProvider):
         proto_tale = super().proto_tale_from_datamap(dataMap, user, asTale)  # get the defaults
         if not asTale:
             return proto_tale  # We only bring extra metadata for datasets imported as Tales
-        headers = DataverseVerificator(url=dataMap["dataId"], user=user).headers
-        data = self._get_meta_from_dataset(urlparse(dataMap["dataId"]), headers=headers)
+        headers = DataverseVerificator(url=dataMap.dataId, user=user).headers
+        data = self._get_meta_from_dataset(urlparse(dataMap.dataId), headers=headers)
         meta = data["data"]["latestVersion"]["metadataBlocks"]["citation"]["fields"]
 
         for field in meta:
@@ -376,12 +384,11 @@ class DataverseImportProvider(ImportProvider):
                         lastName, firstName = raw_author.split(",", 1)
                     else:
                         firstName, lastName = raw_author.split(" ", 1)
-                    if (
-                        "authorIdentifierScheme" in author
-                        and author["authorIdentifierScheme"]["value"] == "ORCID"  # noqa
-                    ):
+                    try:
+                        if author["authorIdentifierScheme"]["value"] != "ORCID":
+                            raise ValueError
                         orcid = author["authorIdentifier"]["value"]
-                    else:
+                    except (KeyError, ValueError):
                         orcid = "0000-0000-0000-0000"
                     authors.append(
                         dict(

@@ -2,13 +2,15 @@ import json
 import os
 from urllib.parse import quote
 
-from girder import logger
+from girder import events, logger
 from girder.models.folder import Folder
 from girder.models.user import User
 from girder.utility import JsonEncoder
 from girder.utility.model_importer import ModelImporter
 from girder.exceptions import ValidationException
 from girder.constants import AccessType
+from girder.plugins.virtual_resources.rest import VirtualObject
+
 from gwvolman.constants import REPO2DOCKER_VERSION
 
 from .license import WholeTaleLicense
@@ -39,6 +41,13 @@ class Manifest:
                 versionId, user=self.user, level=AccessType.READ, exc=True
             )
             version = Folder().filter(version, user)  # to get _modelType
+            try:
+                event = events.trigger(
+                    "tale.view_restored", info={"tale": self.tale, "version": version}
+                )
+                self.tale.update(event.responses[0])
+            except FileNotFoundError:
+                pass  # We are creating, not restoring so manifest.json doesn't exist
         else:
             version = tale
             version["_modelType"] = "tale"
@@ -60,7 +69,7 @@ class Manifest:
         self.add_tale_creator()
         self.manifest.update(self.create_author_record())
         self.manifest.update(self.create_related_identifiers())
-        self.manifest.update(self.create_repo2docker_version())
+        self.manifest.update(self.create_image_info())
         self.add_tale_records()
         # Add any external datasets to the manifest
         self.add_dataset_records()
@@ -156,17 +165,28 @@ class Manifest:
             ]
         }
 
-    def create_repo2docker_version(self):
+    def create_image_info(self):
         # TODO: We shouldn't be publishing a Tale that was never built...
         image_info = self.tale.get("imageInfo", {})
+
         image_info.setdefault("repo2docker_version", REPO2DOCKER_VERSION)
-        return {
+        manifest_part = {
             'schema:hasPart': [{
                 '@id': 'https://github.com/whole-tale/repo2docker_wholetale',
                 '@type': 'schema:SoftwareApplication',
                 'schema:softwareVersion': image_info['repo2docker_version']
             }]
         }
+
+        image_digest = image_info.get("digest")
+        if image_digest is not None:
+            manifest_part['schema:hasPart'].append({
+                '@id': image_digest.replace("registry", "images", 1),
+                '@type': 'schema:SoftwareApplication',
+                'schema:applicationCategory': 'DockerImage'
+            })
+
+        return manifest_part
 
     def create_related_identifiers(self):
         def derive_id_type(identifier):
@@ -268,18 +288,22 @@ class Manifest:
         """
 
         # Handle the files in the workspace
-        workspace = Folder().load(
-            self.tale["workspaceId"], user=self.user, level=AccessType.READ
-        )
-        if workspace and "fsPath" in workspace:
+        if str(self.tale["workspaceId"]).startswith("wtlocal:"):
+            workspace_rootpath, _ = VirtualObject.path_from_id(self.tale["workspaceId"])
+            workspace_rootpath = workspace_rootpath.as_posix()
+        else:
+            workspace = Folder().load(
+                self.tale["workspaceId"], user=self.user, level=AccessType.READ, exc=True
+            )
             workspace_rootpath = workspace["fsPath"]
-            if not workspace_rootpath.endswith("/"):
-                workspace_rootpath += "/"
 
-            for curdir, _, files in os.walk(workspace_rootpath):
-                for fname in files:
-                    wfile = os.path.join(curdir, fname).replace(workspace_rootpath, "")
-                    self.manifest['aggregates'].append({'uri': './workspace/' + wfile})
+        if not workspace_rootpath.endswith("/"):
+            workspace_rootpath += "/"
+
+        for curdir, _, files in os.walk(workspace_rootpath):
+            for fname in files:
+                wfile = os.path.join(curdir, fname).replace(workspace_rootpath, "")
+                self.manifest['aggregates'].append({'uri': './workspace/' + wfile})
 
         """
         Handle objects that are in the dataSet, ie files that point to external sources.

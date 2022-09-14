@@ -43,9 +43,9 @@ class DataOneImportProvider(ImportProvider):
         # this does not seem to properly resolve individual files. If passed something like
         # https://cn.dataone.org/cn/v2/resolve/urn:uuid:9266a118-78b3-48e3-a675-b3dfcc5d0fc4,
         # it returns the parent dataset, which, as a user, I'd be annoyed with
-        dm = D1_lookup(entity.getValue(), entity['base_url'])
-        dm.setRepository(self.getName())
-        return dm
+        dataMap = D1_lookup(entity.getValue(), entity['base_url'])
+        dataMap.repository = self.name
+        return dataMap
 
     def listFiles(self, entity: Entity) -> FileMap:
         result = get_package_list(entity.getValue(), entity['base_url'])
@@ -93,17 +93,29 @@ class DataOneImportProvider(ImportProvider):
         if not name:
             name = primary_metadata[0]['title']
 
-        yield ImportItem(ImportItem.FOLDER, name, identifier=primary_identifier)
+        yield ImportItem(
+            ImportItem.FOLDER,
+            name,
+            identifier=primary_identifier,
+            meta={
+                "dsRelPath": "/",
+            }
+        )
 
         for fileObj in data:
+            name = fileObj.get("fileName", fileObj["identifier"])
             yield ImportItem(
                 ImportItem.FILE,
-                fileObj.get("fileName", fileObj["identifier"]),
-                identifier=fileObj["identifier"],
+                name,
+                identifier=primary_identifier,
                 url=fileObj["url"],
                 size=int(fileObj["size"]),
                 mimeType=fileObj["formatId"],
-                meta={"checksum": {fileObj["checksumAlgorithm"].lower(): fileObj["checksum"]}},
+                meta={
+                    "checksum": {fileObj["checksumAlgorithm"].lower(): fileObj["checksum"]},
+                    "dsRelPath": f"/{name}",  # D1 packages are flat...
+                    "directIdentifier": fileObj["identifier"],
+                },
             )
 
         # Recurse and add child packages if any exist

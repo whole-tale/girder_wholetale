@@ -1,3 +1,4 @@
+import os
 import pathlib
 import re
 import requests
@@ -147,7 +148,7 @@ class ZenodoImportProvider(ImportProvider):
             size,
             doi=self._get_doi_from_record(record),
             name=self._get_title_from_record(record),
-            repository=self.getName(),
+            repository=self.name,
             tale=self._is_tale(record),
         )
 
@@ -192,10 +193,12 @@ class ZenodoImportProvider(ImportProvider):
         self, user, pid: str, name: str, base_url: str = None, progress=None
     ):
         record = self._get_record(pid)
+        doi = self._get_doi_from_record(record)
 
-        def _recurse_hierarchy(hierarchy):
+        def _recurse_hierarchy(hierarchy, prefix="/"):
             files = hierarchy.pop("+files+")
             for obj in files:
+                rel_path = os.path.join(prefix, obj["name"])
                 alg, checksum = obj["checksum"].split(":")
                 yield ImportItem(
                     ImportItem.FILE,
@@ -203,11 +206,14 @@ class ZenodoImportProvider(ImportProvider):
                     size=obj["size"],
                     mimeType=obj["mimeType"],
                     url=obj["url"],
-                    meta={"checksum": {alg: checksum}},
+                    identifier=doi,
+                    meta={"checksum": {alg: checksum}, "dsRelPath": rel_path},
                 )
             for folder in hierarchy.keys():
-                yield ImportItem(ImportItem.FOLDER, name=folder)
-                yield from _recurse_hierarchy(hierarchy[folder])
+                rel_path = os.path.join(prefix, folder)
+                meta = {"dsRelPath": rel_path}
+                yield ImportItem(ImportItem.FOLDER, name=folder, identifier=doi, meta=meta)
+                yield from _recurse_hierarchy(hierarchy[folder], prefix=rel_path)
                 yield ImportItem(ImportItem.END_FOLDER)
 
         meta = {k: record.get(k, "") for k in ["conceptdoi", "conceptrecid"]}
@@ -216,7 +222,7 @@ class ZenodoImportProvider(ImportProvider):
         yield ImportItem(
             ImportItem.FOLDER,
             name=self._get_title_from_record(record),
-            identifier=self._get_doi_from_record(record),
+            identifier=doi,
             meta=meta,
         )
         yield from _recurse_hierarchy(self._files_to_hierarchy(record["files"]))

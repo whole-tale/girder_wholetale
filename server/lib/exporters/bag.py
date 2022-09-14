@@ -17,13 +17,12 @@ Bagging-Time: {time}
 Payload-Oxum: {oxum}
 """
 
-run_tpl = r"""#!/bin/sh
-
-# Use repo2docker to build the image from the workspace
+build_tpl = r"""
+# Use repo2docker to build the image from the workspace when no image digest
 docker run  \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -v "`pwd`/data/workspace:/WholeTale/workspace" \
-  -v "`pwd`/metadata/environment.json:/WholeTale/workspace/.wholetale/environment.json" \
+  -v "`pwd`/metadata/environment.json:/WholeTale/workspace/environment.json" \
   --privileged=true \
   -e DOCKER_HOST=unix:///var/run/docker.sock \
   {repo2docker} \
@@ -32,8 +31,13 @@ docker run  \
     --target-repo-dir=/WholeTale/workspace \
     --user-id=1000 --user-name={user} \
     --no-clean --no-run --debug \
-    --image-name wholetale/tale_{taleId} \
+    --image-name {image_name} \
     /WholeTale/workspace
+"""
+
+run_tpl = r"""#!/bin/sh
+
+{build_cmd}
 
 docker run --rm \
     -v "`pwd`:/bag" \
@@ -45,10 +49,9 @@ echo "========================================================================"
 
 # Run the built image
 docker run -p {port}:{port} \
-  -v "`pwd`/data/data:/WholeTale/data" \
-  -v "`pwd`/data/workspace:/WholeTale/workspace" \
-  wholetale/tale_{taleId} {command}
-
+  -v "`pwd`/data/data:{targetMount}/data" \
+  -v "`pwd`/data/workspace:{targetMount}/workspace" \
+  {image_name} {command}
 """
 
 
@@ -73,18 +76,10 @@ class BagTaleExporter(TaleExporter):
     def stream(self):
         token = 'wholetale'
         container_config = self.environment["config"]
-        rendered_command = container_config.get('command', '').format(
-            base_path='', port=container_config['port'], ip='0.0.0.0', token=token
-        )
         urlPath = container_config['urlPath'].format(token=token)
-        run_file = run_tpl.format(
-            repo2docker=container_config.get('repo2docker_version', REPO2DOCKER_VERSION),
-            user=container_config['user'],
-            port=container_config['port'],
-            taleId=self.manifest["wt:identifier"],
-            command=rendered_command,
-            urlPath=urlPath,
-        )
+
+        run_file = self.format_run_file(container_config, urlPath, token)
+
         top_readme = readme_tpl.format(
             title=self.manifest["schema:name"],
             description=self.manifest["schema:description"],
@@ -203,3 +198,37 @@ class BagTaleExporter(TaleExporter):
             oxum["num"] += 1
             oxum["size"] += int(agg["wt:size"])
         return oxum
+
+    def format_run_file(self, container_config, urlPath, token):
+
+        rendered_command = container_config.get('command', '').format(
+            base_path='', port=container_config['port'], ip='0.0.0.0', token=token
+        )
+
+        taleId = self.manifest["wt:identifier"]
+        image_name = None
+        for obj in self.manifest['schema:hasPart']:
+            if ('schema:applicationCategory' in
+                    obj and obj['schema:applicationCategory'] == 'DockerImage'):
+                image_name = obj['@id']
+
+        # If the tale doesn't have a built image, output the command
+        # to build the image with r2d
+        build_cmd = ''
+        if image_name is None:
+            image_name = f"wholetale/tale_{taleId}"
+            build_cmd = build_tpl.format(
+                repo2docker=container_config.get('repo2docker_version', REPO2DOCKER_VERSION),
+                user=container_config['user'],
+                image_name=image_name
+            )
+
+        return run_tpl.format(
+            build_cmd=build_cmd,
+            repo2docker=container_config.get('repo2docker_version', REPO2DOCKER_VERSION),
+            port=container_config['port'],
+            image_name=image_name,
+            command=rendered_command,
+            targetMount=container_config['targetMount'],
+            urlPath=urlPath,
+        )
