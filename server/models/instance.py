@@ -10,6 +10,7 @@ from girder import logger
 from girder.constants import AccessType, SortDir, TokenScope
 from girder.exceptions import ValidationException
 from girder.models.model_base import AccessControlledModel
+from girder.models.setting import Setting
 from girder.models.token import Token
 from girder.models.user import User
 from girder.plugins.worker import getCeleryApp
@@ -20,7 +21,7 @@ from gwvolman.tasks import \
     CREATE_VOLUME_STEP_TOTAL, BUILD_TALE_IMAGE_STEP_TOTAL, \
     LAUNCH_CONTAINER_STEP_TOTAL, UPDATE_CONTAINER_STEP_TOTAL
 
-from ..constants import InstanceStatus
+from ..constants import InstanceStatus, PluginSettings
 from ..schema.misc import containerInfoSchema
 from ..utils import init_progress, notify_event
 
@@ -233,6 +234,17 @@ class Instance(AccessControlledModel):
             notify_event([instance["creatorId"]], "wt_instance_launching",
                          {'taleId': instance['taleId'], 'instanceId': instance['_id']})
         return instance
+
+    def get_logs(self, instance, tail):
+        r = requests.get(
+            Setting().get(PluginSettings.LOGGER_URL),
+            params={"tail": tail, "name": instance["containerInfo"].get("name")}
+        )
+        try:
+            r.raise_for_status()
+            return r.text
+        except requests.exceptions.HTTPError:
+            return f"Logs for instance {instance['_id']} are currently unavailable..."
 
 
 def _wait_for_server(url, token, timeout=30, wait_time=0.5):
