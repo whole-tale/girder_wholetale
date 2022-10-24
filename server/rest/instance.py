@@ -5,7 +5,13 @@ from girder import events
 from girder.api import access
 from girder.api.describe import Description, autoDescribeRoute
 from girder.api.docs import addModel
-from girder.api.rest import Resource, filtermodel, RestException, setResponseHeader
+from girder.api.rest import (
+    Resource,
+    filtermodel,
+    RestException,
+    setResponseHeader,
+    setRawResponse
+)
 from girder.constants import AccessType, SortDir
 from girder.plugins.jobs.constants import JobStatus
 from girder.plugins.worker import getCeleryApp
@@ -270,11 +276,13 @@ class Instance(Resource):
         .modelParam('id', model='instance', plugin='wholetale', level=AccessType.READ)
         .param("tail", "Number of lines to show from the end of the logs",
                default=100, required=False, dataType='int')
+        .produces("text/plain")
         .errorResponse('ID was invalid.')
         .errorResponse('Read access was denied for the instance.', 403)
     )
     def getInstanceLog(self, instance, tail):
         if tail < 0:
             tail = "all"
-        setResponseHeader('Content-Type', "text/plain;charset=UTF-8")
+        setResponseHeader('Content-Type', "text/plain")
+        setRawResponse()
         return self._model.get_logs(instance, tail)
