@@ -1,5 +1,6 @@
 import textwrap
 
+from girder import logger
 from girder.utility.model_importer import ModelImporter
 
 from .entity import Entity
@@ -117,6 +118,9 @@ class ImportProvider:
     def _registerFile(self, stack, item: ImportItem, user):
         (parent, parentType) = stack[-1]
         gitem = self.itemModel.createItem(item.name, user, parent, reuseExisting=True)
+        if self.fileModel.findOne({"itemId": gitem["_id"]}):
+            logger.info(f"Item ({gitem['_id']=}, {gitem['name']=}) already has a file.")
+            return (gitem, 'item')
         meta = {'provider': self.name}
         if item.identifier:
             meta['identifier'] = item.identifier
