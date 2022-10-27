@@ -319,7 +319,12 @@ class ImportTaleTestCase(base.TestCase):
         self.model("image", "wholetale").remove(image)
 
     @vcr.use_cassette(os.path.join(DATA_PATH, "tale_import_zip.txt"))
-    def testTaleImportZip(self):
+    @mock.patch("girder.plugins.wholetale.lib.manifest.ImageBuilder")
+    def testTaleImportZip(self, mock_builder):
+        mock_builder.return_value.container_config.repo2docker_version = \
+            "craigwillis/repo2docker:latest"
+        mock_builder.return_value.get_tag.return_value = \
+            "some_image_digest"
         image = self.model("image", "wholetale").createImage(
             name="Jupyter Notebook",
             creator=self.user,
@@ -363,13 +368,16 @@ class ImportTaleTestCase(base.TestCase):
             job = Job().load(job["_id"], force=True)
         self.assertEqual(job["status"], JobStatus.SUCCESS)
         # TODO: make it more extensive...
-        tale = Tale().findOne({"title": "Water Tale"})
+        tale = Tale().load(tale["_id"], force=True)
         self.assertTrue(tale is not None)
         self.assertEqual(
             [(obj["_modelType"], obj["mountPath"]) for obj in tale["dataSet"]],
             [("item", "usco2005.xls")],
         )
-        self.assertEqual(tale["imageInfo"]["repo2docker_version"], "wholetale/repo2docker_wholetale:latest")
+        self.assertEqual(
+            tale["imageInfo"]["repo2docker_version"],
+            "wholetale/repo2docker_wholetale:latest"
+        )
 
         events = get_events(self, since)
         self.assertEqual(
@@ -384,7 +392,12 @@ class ImportTaleTestCase(base.TestCase):
         self.model("image", "wholetale").remove(image)
 
     @vcr.use_cassette(os.path.join(DATA_PATH, "tale_import_rrzip.txt"))
-    def testTaleImportZipWithRuns(self):
+    @mock.patch("girder.plugins.wholetale.lib.manifest.ImageBuilder")
+    def testTaleImportZipWithRuns(self, mock_builder):
+        mock_builder.return_value.container_config.repo2docker_version = \
+            "craigwillis/repo2docker:latest"
+        mock_builder.return_value.get_tag.return_value = \
+            "some_image_digest"
         image = self.model("image", "wholetale").createImage(
             name="Jupyter Notebook",
             creator=self.user,
