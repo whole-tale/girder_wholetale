@@ -23,6 +23,7 @@ from girder.models.setting import Setting
 from girder.models.user import User
 from girder.plugins.jobs.constants import JobStatus
 from girder.plugins.jobs.models.job import Job as JobModel
+from girder.plugins.worker.utils import jobInfoSpec
 from girder.plugins.oauth.rest import OAuth as OAuthResource
 from girder.plugins.worker import getCeleryApp
 from girder.utility import assetstore_utilities, setting_utilities
@@ -494,6 +495,15 @@ def store_other_globus_tokens(event):
     User().save(user)
 
 
+def attachJobInfoSpec(event):
+    job = event.info
+    if not job.get("module"):
+        JobModel().updateJob(
+            job,
+            otherFields={"jobInfoSpec": jobInfoSpec(job, token=job.get("token"))}
+        )
+
+
 def load(info):
     from girder.plugins.oauth.providers.globus import Globus
 
@@ -527,6 +537,8 @@ def load(info):
     events.bind('model.file.validate', 'wholetale', validateFileLink)
     events.bind('oauth.auth_callback.after', 'wholetale', store_other_globus_tokens)
     events.bind('heartbeat', 'wholetale', cullIdleInstances)
+    events.unbind("model.job.save.after", "worker")
+    events.bind("model.job.save.after", "wholetale", attachJobInfoSpec)
 
     info['apiRoot'].account = Account()
     info['apiRoot'].repository = Repository()
