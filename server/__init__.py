@@ -153,6 +153,14 @@ def validateDataverseURL(doc):
         raise ValidationException('Invalid Dataverse URL', 'value')
 
 
+@setting_utilities.validator(PluginSettings.LOGGER_URL)
+def validateLoggerURL(doc):
+    if not doc['value']:
+        doc['value'] = defaultLoggerUrl()
+    if not validators.url(doc['value']):
+        raise ValidationException('Invalid Instance Logger URL', 'value')
+
+
 @setting_utilities.default(PluginSettings.INSTANCE_CAP)
 def defaultInstanceCap():
     return SettingDefault.defaults[PluginSettings.INSTANCE_CAP]
@@ -181,6 +189,11 @@ def defaultDerivaExportUrls():
 @setting_utilities.default(PluginSettings.DERIVA_SCOPES)
 def defaultDerivaScopes():
     return SettingDefault.defaults[PluginSettings.DERIVA_SCOPES]
+
+
+@setting_utilities.default(PluginSettings.LOGGER_URL)
+def defaultLoggerUrl():
+    return SettingDefault.defaults[PluginSettings.LOGGER_URL]
 
 
 @access.public(scope=TokenScope.DATA_READ)

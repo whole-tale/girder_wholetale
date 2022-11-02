@@ -1,12 +1,15 @@
+import httmock
 import time
+import pytest
 import json
 import mock
 import six
+import urllib.parse
 from bson import ObjectId
 from datetime import datetime
 from tests import base
 from girder.exceptions import ValidationException
-from .tests_helpers import get_events
+from .tests_helpers import get_events, mockOtherRequest
 from girder.utility import config
 
 
@@ -232,7 +235,7 @@ class InstanceTestCase(base.TestCase):
             gca().send_task.return_value = FakeAsyncResult(instance['_id'])
 
             jobModel.scheduleJob(job)
-            for i in range(20):
+            for _ in range(20):
                 job = jobModel.load(job['_id'], force=True)
                 if job['status'] == JobStatus.QUEUED:
                     break
@@ -383,7 +386,7 @@ class InstanceTestCase(base.TestCase):
             mock_apply_async.assert_called_once()
 
             jobModel.scheduleJob(job)
-            for i in range(20):
+            for _ in range(20):
                 job = jobModel.load(job['_id'], force=True)
                 if job['status'] == JobStatus.QUEUED:
                     break
@@ -456,8 +459,11 @@ class InstanceTestCase(base.TestCase):
             mock_apply_async.assert_called_once()
 
             jobModel.scheduleJob(job)
-            for i in range(20):
+            for _ in range(20):
                 job = jobModel.load(job['_id'], force=True)
+                if job['status'] == JobStatus.QUEUED:
+                    break
+                time.sleep(0.1)
             self.assertEqual(job['status'], JobStatus.QUEUED)
 
             instance = Instance().load(instance['_id'], force=True)
@@ -576,6 +582,70 @@ class InstanceTestCase(base.TestCase):
         mock_delete.assert_called_once()
 
         self.model('instance', 'wholetale').remove(instance)
+
+    def testInstanceLogs(self):
+        instance = self.model('instance', 'wholetale').createInstance(
+            self.tale_one, self.user, name="instance", spawn=False
+        )
+        instance['containerInfo'] = {
+            'imageId': self.image['_id'],
+        }
+        self.model('instance', 'wholetale').updateInstance(instance)
+
+        @httmock.urlmatch(
+            scheme="http",
+            netloc="logger:8000",
+            path="^/$",
+        )
+        def logger_call(url, request):
+            params = urllib.parse.parse_qs(url.query)
+            if "name" not in params:
+                return httmock.response(
+                    status_code=400,
+                    content={"detail": "Missing 'name' parameter"}
+                )
+            name = params["name"][0]
+            assert name == "some_service"
+            return httmock.response(
+                status_code=200,
+                content="blah",
+                headers={"content-type": "text/plain; charset=utf-8"},
+            )
+
+        with httmock.HTTMock(logger_call, mockOtherRequest):
+            resp = self.request(
+                user=self.user,
+                path=f"/instance/{instance['_id']}/log",
+                method="GET",
+                isJson=False,
+            )
+            self.assertEqual(
+                self.getBody(resp),
+                f"Logs for instance {instance['_id']} are currently unavailable..."
+            )
+            instance["containerInfo"]["name"] = "some_service"
+            self.model('instance', 'wholetale').updateInstance(instance)
+
+            resp = self.request(
+                user=self.user,
+                path=f"/instance/{instance['_id']}/log",
+                method="GET",
+                isJson=False,
+            )
+            self.assertEqual(self.getBody(resp), "blah")
+
+        self.model('instance', 'wholetale').remove(instance)
+
+    def testLoggerSetting(self):
+        from girder.plugins.wholetale.constants import PluginSettings, SettingDefault
+        with pytest.raises(ValidationException) as exc:
+            self.model('setting').set(PluginSettings.LOGGER_URL, 'a')
+        self.assertTrue(str(exc.value) == "Invalid Instance Logger URL")
+
+        self.assertEqual(
+            self.model('setting').get(PluginSettings.LOGGER_URL),
+            SettingDefault.defaults[PluginSettings.LOGGER_URL]
+        )
 
     def tearDown(self):
         self.model('folder').remove(self.userPrivateFolder)
