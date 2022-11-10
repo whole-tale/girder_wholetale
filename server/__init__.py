@@ -409,8 +409,9 @@ def updateNotification(event):
 
     job = event.info["job"]
     params = event.info["params"]
-    if "wt_notification_id" in job:
-        notification = Notification().load(job['wt_notification_id'])
+    if "wt_notification_id" in job and (
+        notification := Notification().load(job["wt_notification_id"])
+    ):
         resource = notification["data"]["resource"]
 
         # Add job IDs to the resource
