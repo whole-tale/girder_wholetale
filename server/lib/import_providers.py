@@ -3,8 +3,8 @@ import textwrap
 from girder import logger
 from girder.utility.model_importer import ModelImporter
 
-from .entity import Entity
 from .data_map import DataMap
+from .entity import Entity
 from .file_map import FileMap
 from .import_item import ImportItem
 
@@ -14,9 +14,9 @@ class ImportProvider:
 
     def __init__(self, name):
         self.name = name
-        self.folderModel = ModelImporter.model('folder')
-        self.itemModel = ModelImporter.model('item')
-        self.fileModel = ModelImporter.model('file')
+        self.folderModel = ModelImporter.model("folder")
+        self.itemModel = ModelImporter.model("item")
+        self.fileModel = ModelImporter.model("file")
 
     @property
     def regex(self):
@@ -55,30 +55,36 @@ class ImportProvider:
         """Given a dataId import dataset as Tale"""
         raise NotImplementedError()
 
-    def proto_tale_from_datamap(self, dataMap: DataMap, user: object, asTale: bool) -> object:
+    def proto_tale_from_datamap(
+        self, dataMap: DataMap, user: object, asTale: bool
+    ) -> object:
         if asTale:
             relation = "IsDerivedFrom"
         else:
             relation = "Cites"
 
         related_id = [
-            {
-                "relation": relation,
-                "identifier": dataMap.doi or dataMap.dataId
-            }
+            {"relation": relation, "identifier": dataMap.doi or dataMap.dataId}
         ]
 
         long_name = dataMap.name
-        long_name = long_name.replace('-', ' ').replace('_', ' ')
+        long_name = long_name.replace("-", " ").replace("_", " ")
         shortened_name = textwrap.shorten(text=long_name, width=30)
         return {
             "relatedIdentifiers": related_id,
-            "title": f"A Tale for \"{shortened_name}\"",
+            "title": f'A Tale for "{shortened_name}"',
             "category": "science",
         }
 
-    def register(self, parent: object, parentType: str, progress, user, dataMap: DataMap,
-                 base_url: str = None):
+    def register(
+        self,
+        parent: object,
+        parentType: str,
+        progress,
+        user,
+        dataMap: DataMap,
+        base_url: str = None,
+    ):
         stack = [(parent, parentType)]
         pid = dataMap.dataId
         name = dataMap.name
@@ -93,7 +99,7 @@ class ImportProvider:
             elif item.type == ImportItem.FILE:
                 (obj, objType) = self._registerFile(stack, item, user)
             else:
-                raise Exception('Unknown import item type: %s' % item.type)
+                raise Exception("Unknown import item type: %s" % item.type)
             if rootObj is None:
                 rootObj = obj
                 rootType = objType
@@ -102,9 +108,14 @@ class ImportProvider:
 
     def _registerFolder(self, stack, item: ImportItem, user):
         (parent, parentType) = stack[-1]
-        folder = self.folderModel.createFolder(parent, item.name, description='',
-                                               parentType=parentType, creator=user,
-                                               reuseExisting=True)
+        folder = self.folderModel.createFolder(
+            parent,
+            item.name,
+            description="",
+            parentType=parentType,
+            creator=user,
+            reuseExisting=True,
+        )
         meta = {
             "identifier": item.identifier,
             "provider": self.name,
@@ -112,36 +123,51 @@ class ImportProvider:
         if item.meta:
             meta.update(item.meta)
         folder = self.folderModel.setMetadata(folder, meta)
-        stack.append((folder, 'folder'))
-        return (folder, 'folder')
+        stack.append((folder, "folder"))
+        return (folder, "folder")
 
     def _registerFile(self, stack, item: ImportItem, user):
         (parent, parentType) = stack[-1]
         gitem = self.itemModel.createItem(item.name, user, parent, reuseExisting=True)
         if self.fileModel.findOne({"itemId": gitem["_id"]}):
             logger.info(f"Item ({gitem['_id']=}, {gitem['name']=}) already has a file.")
-            return (gitem, 'item')
-        meta = {'provider': self.name}
+            return (gitem, "item")
+        meta = {"provider": self.name}
         if item.identifier:
-            meta['identifier'] = item.identifier
+            meta["identifier"] = item.identifier
         if item.meta:
             meta.update(item.meta)
         gitem = self.itemModel.setMetadata(gitem, meta)
 
-        if item.url and item.url.startswith('file://'):
-            with open(item.url[len('file://'):], 'rb') as f:
-                ModelImporter.model('upload').uploadFromFile(f, item.size, item.name, parent=gitem,
-                                                             parentType='item', user=user,
-                                                             mimeType=item.mimeType)
+        if item.url and item.url.startswith("file://"):
+            with open(item.url[len("file://"):], "rb") as f:
+                ModelImporter.model("upload").uploadFromFile(
+                    f,
+                    item.size,
+                    item.name,
+                    parent=gitem,
+                    parentType="item",
+                    user=user,
+                    mimeType=item.mimeType,
+                )
         else:
             # girder does not allow anything else than http and https. So we need a better
             # mechanism here to communicate relevant information to WTDM
-            self.fileModel.createLinkFile(item.name, url=item.url, parent=gitem, parentType='item',
-                                          creator=user, size=item.size, mimeType=item.mimeType,
-                                          reuseExisting=True)
-        return (gitem, 'item')
+            self.fileModel.createLinkFile(
+                item.name,
+                url=item.url,
+                parent=gitem,
+                parentType="item",
+                creator=user,
+                size=item.size,
+                mimeType=item.mimeType,
+                reuseExisting=True,
+            )
+        return (gitem, "item")
 
-    def _listRecursive(self, user, pid: str, name: str, base_url: str = None, progress=None):
+    def _listRecursive(
+        self, user, pid: str, name: str, base_url: str = None, progress=None
+    ):
         raise NotImplementedError()
 
     def check_auth(self, user):
@@ -161,7 +187,7 @@ class ImportProviders:
         for provider in self.providers:
             if provider.matches(entity):
                 return provider
-        raise Exception('Could not find suitable provider for entity %s' % entity)
+        raise Exception("Could not find suitable provider for entity %s" % entity)
 
     def getFromDataMap(self, dataMap: DataMap) -> ImportProvider:
         return self.providerMap[dataMap.repository]

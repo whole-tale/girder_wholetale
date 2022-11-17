@@ -1,11 +1,11 @@
-import mock
-import os
 import json
+import os
 import time
-from tests import base
+
+import mock
 from girder import config
 from girder.models.folder import Folder
-
+from tests import base
 
 JobStatus = None
 ImageStatus = None
@@ -28,9 +28,9 @@ def setUpModule():
     global JobStatus, Tale, ImageStatus, TaleStatus, Job, Image
     from girder.plugins.jobs.constants import JobStatus
     from girder.plugins.jobs.models.job import Job
+    from girder.plugins.wholetale.constants import ImageStatus, TaleStatus
     from girder.plugins.wholetale.models.image import Image
     from girder.plugins.wholetale.models.tale import Tale
-    from girder.plugins.wholetale.constants import ImageStatus, TaleStatus
 
 
 def tearDownModule():
@@ -105,11 +105,9 @@ class TaskFailTestCase(base.TestCase):
             tale = resp.json
 
             job = Job().findOne({"type": "wholetale.import_binder"})
-            self.assertEqual(
-                json.loads(job["kwargs"])["taleId"]["$oid"], tale["_id"]
-            )
+            self.assertEqual(json.loads(job["kwargs"])["taleId"]["$oid"], tale["_id"])
 
-            for i in range(300):
+            for _ in range(300):
                 if job["status"] in {JobStatus.SUCCESS, JobStatus.ERROR}:
                     break
                 time.sleep(0.1)
@@ -150,10 +148,8 @@ class TaskFailTestCase(base.TestCase):
             tale = resp.json
 
             job = Job().findOne({"type": "wholetale.import_tale"})
-            self.assertEqual(
-                json.loads(job["kwargs"])["taleId"]["$oid"], tale["_id"]
-            )
-            for i in range(300):
+            self.assertEqual(json.loads(job["kwargs"])["taleId"]["$oid"], tale["_id"])
+            for _ in range(300):
                 if job["status"] in {JobStatus.SUCCESS, JobStatus.ERROR}:
                     break
                 time.sleep(0.1)
@@ -194,7 +190,7 @@ class TaskFailTestCase(base.TestCase):
             args=(tale, new_tale),
         )
         Job().scheduleJob(job)
-        for i in range(300):
+        for _ in range(300):
             if job["status"] in {JobStatus.SUCCESS, JobStatus.ERROR}:
                 break
             time.sleep(0.1)

@@ -1,16 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
+from urllib.parse import urlencode, urlparse, urlunparse
+
 import cherrypy
 import validators
-from urllib.parse import urlparse, urlunparse, urlencode
 from girder.api import access
 from girder.api.describe import Description, autoDescribeRoute
-from girder.api.rest import RestException, setResponseHeader, boundHandler
+from girder.api.rest import RestException, boundHandler, setResponseHeader
 
+from ..integration_utils import autologin, redirect_if_tale_exists
 from .auth import DataverseVerificator
 from .provider import DataverseImportProvider
-from ..integration_utils import autologin, redirect_if_tale_exists
 
 
 @access.public
@@ -127,7 +128,9 @@ def dataverseExternalTools(
         url = "{scheme}://{netloc}/api/access/datafile/{fileId}".format(
             scheme=site.scheme, netloc=site.netloc, fileId=fileId
         )
-        title, _, doi = DataverseImportProvider._parse_access_url(urlparse(url), headers=headers)
+        title, _, doi = DataverseImportProvider._parse_access_url(
+            urlparse(url), headers=headers
+        )
     elif datasetId:
         try:
             datasetId = int(datasetId)
@@ -136,16 +139,22 @@ def dataverseExternalTools(
         url = "{scheme}://{netloc}/api/datasets/{_id}".format(
             scheme=site.scheme, netloc=site.netloc, _id=datasetId
         )
-        title, _, doi = DataverseImportProvider()._parse_dataset(urlparse(url), headers=headers)
+        title, _, doi = DataverseImportProvider()._parse_dataset(
+            urlparse(url), headers=headers
+        )
         url = _dataset_full_url(site, doi)
     elif filePid:
         url = "{scheme}://{netloc}/file.xhtml?persistentId={doi}".format(
             scheme=site.scheme, netloc=site.netloc, doi=filePid
         )
-        title, _, doi = DataverseImportProvider._parse_file_url(urlparse(url), headers=headers)
+        title, _, doi = DataverseImportProvider._parse_file_url(
+            urlparse(url), headers=headers
+        )
     elif datasetPid:
         url = _dataset_full_url(site, datasetPid)
-        title, _, doi = DataverseImportProvider()._parse_dataset(urlparse(url), headers=headers)
+        title, _, doi = DataverseImportProvider()._parse_dataset(
+            urlparse(url), headers=headers
+        )
 
     if not force:
         redirect_if_tale_exists(user, self.getCurrentToken(), doi)

@@ -3,7 +3,7 @@ import httmock
 
 @httmock.all_requests
 def mockOtherRequest(url, request):
-    raise Exception('Unexpected url %s' % str(request.url))
+    raise Exception("Unexpected url %s" % str(request.url))
 
 
 def get_events(test, since, user=None):
@@ -11,11 +11,11 @@ def get_events(test, since, user=None):
         user = test.user
 
     resp = test.request(
-        path="/notification", method='GET',
-        user=user, params={'since': since})
+        path="/notification", method="GET", user=user, params={"since": since}
+    )
     test.assertStatusOk(resp)
 
-    return [event for event in resp.json if event['type'] == 'wt_event']
+    return [event for event in resp.json if event["type"] == "wt_event"]
 
 
 def event_types(events, affected_resources):

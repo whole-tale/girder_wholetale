@@ -1,23 +1,23 @@
-from bs4 import BeautifulSoup
 import functools
 import os
 import pathlib
 import re
-import requests
 import tempfile
-from typing import Generator
-from urllib.parse import urlparse, urlunparse, parse_qs
 import zipfile
+from typing import Generator
+from urllib.parse import parse_qs, urlparse, urlunparse
 
+import requests
+from bs4 import BeautifulSoup
 from girder.models.assetstore import Assetstore
 from girder.utility import assetstore_utilities
 
-from ..import_providers import ImportProvider
 from ..bdbag.bdbag_provider import _FileTree
 from ..data_map import DataMap
+from ..entity import Entity
 from ..file_map import FileMap
 from ..import_item import ImportItem
-from ..entity import Entity
+from ..import_providers import ImportProvider
 
 
 class OpenICPSRImportProvider(ImportProvider):
@@ -173,7 +173,9 @@ class OpenICPSRImportProvider(ImportProvider):
                     identifier=record["doi"],
                     meta={"dsRelPath": "/"},
                 )
-                yield from self._listFolder(root, main, pathlib.Path("/"), record["doi"])
+                yield from self._listFolder(
+                    root, main, pathlib.Path("/"), record["doi"]
+                )
                 yield ImportItem(ImportItem.END_FOLDER)
 
     def check_auth(self, user):

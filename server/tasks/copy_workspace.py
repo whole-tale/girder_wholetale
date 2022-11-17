@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from pathlib import Path
 import shutil
 import sys
 import traceback
+from pathlib import Path
+
 from girder import events
 from girder.constants import AccessType
 from girder.models.folder import Folder

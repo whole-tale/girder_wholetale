@@ -8,9 +8,8 @@ from girder.models.file import File
 from girder.models.folder import Folder
 from girder.models.item import Item
 
-from .license import WholeTaleLicense
 from ..models.image import Image
-
+from .license import WholeTaleLicense
 
 _NEW_DATACITE_KEY = "datacite"
 
@@ -276,28 +275,35 @@ class ManifestParser:
         imageInfo = {}
         try:
             r2d_version = next(
-                iter([
-                    obj["schema:softwareVersion"]
-                    for obj in self.manifest["schema:hasPart"]
-                    if obj["@id"] == "https://github.com/whole-tale/repo2docker_wholetale"
-                ]), None
+                iter(
+                    [
+                        obj["schema:softwareVersion"]
+                        for obj in self.manifest["schema:hasPart"]
+                        if obj["@id"]
+                        == "https://github.com/whole-tale/repo2docker_wholetale"
+                    ]
+                ),
+                None,
             )
-            if (r2d_version):
+            if r2d_version:
                 imageInfo["repo2docker_version"] = r2d_version
         except KeyError:
             pass
 
         try:
             image_digest = next(
-                iter([
-                    obj['@id']
-                    for obj in self.manifest['schema:hasPart']
-                    if 'schema:applicationCategory' in
-                       obj and obj['schema:applicationCategory'] == 'DockerImage'
-                ]), None
+                iter(
+                    [
+                        obj["@id"]
+                        for obj in self.manifest["schema:hasPart"]
+                        if "schema:applicationCategory" in obj
+                        and obj["schema:applicationCategory"] == "DockerImage"
+                    ]
+                ),
+                None,
             )
-            if (image_digest):
-                imageInfo['digest'] = image_digest.replace('images', 'registry', 1)
+            if image_digest:
+                imageInfo["digest"] = image_digest.replace("images", "registry", 1)
         except KeyError:
             pass
 

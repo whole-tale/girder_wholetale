@@ -2,22 +2,21 @@ import json
 import os
 from urllib.parse import quote
 
+import cherrypy
 from girder import events, logger
+from girder.constants import AccessType
+from girder.exceptions import ValidationException
 from girder.models.folder import Folder
-from girder.models.user import User
 from girder.models.token import Token
+from girder.models.user import User
+from girder.plugins.virtual_resources.rest import VirtualObject
 from girder.utility import JsonEncoder
 from girder.utility.model_importer import ModelImporter
-from girder.exceptions import ValidationException
-from girder.constants import AccessType
-from girder.plugins.virtual_resources.rest import VirtualObject
-
-import cherrypy
 from girder_client import GirderClient
 from gwvolman.build_utils import ImageBuilder
 
-from .license import WholeTaleLicense
 from . import IMPORT_PROVIDERS
+from .license import WholeTaleLicense
 
 
 class Manifest:
@@ -64,8 +63,8 @@ class Manifest:
         self.datasets = set()
 
         self.imageModel = ModelImporter.model("image", "wholetale")
-        self.itemModel = ModelImporter.model('item')
-        self.userModel = ModelImporter.model('user')
+        self.itemModel = ModelImporter.model("item")
+        self.userModel = ModelImporter.model("user")
 
         self.manifest.update(self.create_context())
         self.manifest.update(self.create_basic_attributes())
@@ -81,20 +80,18 @@ class Manifest:
         self.add_run_info()
 
     publishers = {
-        "DataONE":
-            {
-                "@id": "https://www.dataone.org/",
-                "@type": "Organization",
-                "legalName": "DataONE",
-                "Description": "A federated data network allowing access to science data"
-            },
-        "Globus":
-            {
-                "@id": "https://www.materialsdatafacility.org/",
-                "@type": "Organization",
-                "legalName": "Materials Data Facility",
-                "Description": "A simple way to publish, discover, and access materials datasets"
-            }
+        "DataONE": {
+            "@id": "https://www.dataone.org/",
+            "@type": "Organization",
+            "legalName": "DataONE",
+            "Description": "A federated data network allowing access to science data",
+        },
+        "Globus": {
+            "@id": "https://www.materialsdatafacility.org/",
+            "@type": "Organization",
+            "legalName": "Materials Data Facility",
+            "Description": "A simple way to publish, discover, and access materials datasets",
+        },
     }
 
     def validate(self):
@@ -104,15 +101,15 @@ class Manifest:
         """
         try:
             # Check that each author has an ORCID, first name, and last name
-            for author in self.tale['authors']:
-                if not len(author['orcid']):
-                    raise ValueError('A Tale author is missing an ORCID')
-                if not len(author['firstName']):
-                    raise ValueError('A Tale author is missing a first name')
-                if not len(author['lastName']):
-                    raise ValueError('A Tale author is missing a last name')
+            for author in self.tale["authors"]:
+                if not len(author["orcid"]):
+                    raise ValueError("A Tale author is missing an ORCID")
+                if not len(author["firstName"]):
+                    raise ValueError("A Tale author is missing a first name")
+                if not len(author["lastName"]):
+                    raise ValueError("A Tale author is missing a last name")
         except KeyError:
-            raise ValueError('A Tale author is missing an ORCID')
+            raise ValueError("A Tale author is missing an ORCID")
 
     def create_basic_attributes(self):
         """
@@ -140,15 +137,15 @@ class Manifest:
         Adds basic information about the Tale author
         """
 
-        tale_user = self.userModel.load(self.tale['creatorId'],
-                                        user=self.user,
-                                        force=True)
-        self.manifest['createdBy'] = {
+        tale_user = self.userModel.load(
+            self.tale["creatorId"], user=self.user, force=True
+        )
+        self.manifest["createdBy"] = {
             "@id": f"mailto:{tale_user['email']}",
             "@type": "schema:Person",
-            "schema:givenName": tale_user.get('firstName', ''),
-            "schema:familyName": tale_user.get('lastName', ''),
-            "schema:email": tale_user.get('email', '')
+            "schema:givenName": tale_user.get("firstName", ""),
+            "schema:familyName": tale_user.get("lastName", ""),
+            "schema:email": tale_user.get("email", ""),
         }
 
     def create_author_record(self):
@@ -157,14 +154,14 @@ class Manifest:
         :return: A dictionary listing of the authors
         """
         return {
-            'schema:author': [
+            "schema:author": [
                 {
                     "@id": author["orcid"],
                     "@type": "schema:Person",
                     "schema:givenName": author["firstName"],
-                    "schema:familyName": author["lastName"]
+                    "schema:familyName": author["lastName"],
                 }
-                for author in self.tale['authors']
+                for author in self.tale["authors"]
             ]
         }
 
@@ -186,13 +183,13 @@ class Manifest:
                 {
                     "@id": "https://github.com/whole-tale/repo2docker_wholetale",
                     "@type": "schema:SoftwareApplication",
-                    "schema:softwareVersion": image_builder.container_config.repo2docker_version
+                    "schema:softwareVersion": image_builder.container_config.repo2docker_version,
                 },
                 {
                     "@id": image_digest.replace("registry", "images", 1),
                     "@type": "schema:SoftwareApplication",
-                    "schema:applicationCategory": "DockerImage"
-                }
+                    "schema:applicationCategory": "DockerImage",
+                },
             ]
         }
 
@@ -211,7 +208,9 @@ class Manifest:
                     "datacite:relatedIdentifier": {
                         "@id": rel_id["identifier"],
                         "datacite:relationType": "datacite:" + rel_id["relation"],
-                        "datacite:relatedIdentifierType": derive_id_type(rel_id["identifier"]),
+                        "datacite:relatedIdentifierType": derive_id_type(
+                            rel_id["identifier"]
+                        ),
                     }
                 }
                 for rel_id in self.tale["relatedIdentifiers"]
@@ -244,25 +243,29 @@ class Manifest:
             folder = Folder().load(
                 folder_id, user=self.user, exc=True, level=AccessType.READ
             )
-            provider = folder['meta']['provider']
-            if provider in {'HTTP', 'HTTPS'}:
+            provider = folder["meta"]["provider"]
+            if provider in {"HTTP", "HTTPS"}:
                 return None
-            identifier = folder['meta']['identifier']
+            identifier = folder["meta"]["identifier"]
             return {
                 "@id": identifier,
                 "@type": "schema:Dataset",
-                "schema:name": folder['name'],
+                "schema:name": folder["name"],
                 "schema:identifier": identifier,
                 # "publisher": self.publishers[provider]
             }
 
         except (KeyError, TypeError, ValidationException):
-            msg = 'While creating a manifest for Tale "{}" '.format(str(self.tale['_id']))
-            msg += 'encountered a following error:\n'
+            msg = 'While creating a manifest for Tale "{}" '.format(
+                str(self.tale["_id"])
+            )
+            msg += "encountered a following error:\n"
             logger.warning(msg)
             raise  # We don't want broken manifests, do we?
 
-    def create_aggregation_record(self, uri, bundle=None, parent_dataset_identifier=None):
+    def create_aggregation_record(
+        self, uri, bundle=None, parent_dataset_identifier=None
+    ):
         """
         Creates an aggregation record. Externally defined aggregations should include
         a bundle and a parent_dataset if it belongs to one
@@ -272,12 +275,12 @@ class Manifest:
         :return: Dictionary representing an aggregated file
         """
         aggregation = dict()
-        aggregation['uri'] = uri
+        aggregation["uri"] = uri
         if bundle:
-            aggregation['bundledAs'] = bundle
+            aggregation["bundledAs"] = bundle
         # TODO: in case parent_dataset_id == uri do something special?
         if parent_dataset_identifier and parent_dataset_identifier != uri:
-            aggregation['schema:isPartOf'] = parent_dataset_identifier
+            aggregation["schema:isPartOf"] = parent_dataset_identifier
         return aggregation
 
     @staticmethod
@@ -301,7 +304,10 @@ class Manifest:
             workspace_rootpath = workspace_rootpath.as_posix()
         else:
             workspace = Folder().load(
-                self.tale["workspaceId"], user=self.user, level=AccessType.READ, exc=True
+                self.tale["workspaceId"],
+                user=self.user,
+                level=AccessType.READ,
+                exc=True,
             )
             workspace_rootpath = workspace["fsPath"]
 
@@ -311,7 +317,7 @@ class Manifest:
         for curdir, _, files in os.walk(workspace_rootpath):
             for fname in files:
                 wfile = os.path.join(curdir, fname).replace(workspace_rootpath, "")
-                self.manifest['aggregates'].append({'uri': './workspace/' + wfile})
+                self.manifest["aggregates"].append({"uri": "./workspace/" + wfile})
 
         """
         Handle objects that are in the dataSet, ie files that point to external sources.
@@ -326,25 +332,34 @@ class Manifest:
             # Assuming Folder model implicitly ignores "datasets" that are
             # single HTTP files which is intended behavior
             for folder in Folder().findWithPermissions(
-                    {'meta.identifier': identifier}, limit=1, user=self.user
+                {"meta.identifier": identifier}, limit=1, user=self.user
             ):
-                self.datasets.add(folder['_id'])
+                self.datasets.add(folder["_id"])
 
         # Add records for the remote files that exist under a folder: "aggregates"
         for obj in external_objects:
             # Grab identifier of a parent folder
-            if obj['_modelType'] == 'item':
+            if obj["_modelType"] == "item":
                 bundle = self.create_bundle(obj["relpath"], obj["name"])
             else:
                 bundle = self.create_bundle(obj["name"], None)
-            record = self.create_aggregation_record(obj['uri'], bundle, obj['dataset_identifier'])
+            record = self.create_aggregation_record(
+                obj["uri"], bundle, obj["dataset_identifier"]
+            )
             record["wt:size"] = obj["size"]
-            record.update({key: obj[key] for key in obj.keys() if key.startswith("wt:")})
-            self.manifest['aggregates'].append(record)
+            record.update(
+                {key: obj[key] for key in obj.keys() if key.startswith("wt:")}
+            )
+            self.manifest["aggregates"].append(record)
 
         # Add records for files in each recorded_run
-        for run in Folder().find({'parentId': self.tale['runsRootId'], 'parentCollection': 'folder',
-                                  'runVersionId': self.version['_id']}):
+        for run in Folder().find(
+            {
+                "parentId": self.tale["runsRootId"],
+                "parentCollection": "folder",
+                "runVersionId": self.version["_id"],
+            }
+        ):
             run_rootpath = run["fsPath"]
             if not run_rootpath.endswith("/"):
                 run_rootpath += "/"
@@ -352,38 +367,39 @@ class Manifest:
 
             for curdir, _, files in os.walk(run_rootpath):
                 for fname in files:
-                    rfile = os.path.join(curdir, fname).replace(run_rootpath, run['name'] + "/")
+                    rfile = os.path.join(curdir, fname).replace(
+                        run_rootpath, run["name"] + "/"
+                    )
                     rinfo = {
-                        'uri': './runs/' + rfile,
-                        'wt:isPartOfRun': (
-                            "https://data.wholetale.org/api/v1/"
-                            f"folder/{run['_id']}"
-                        )
+                        "uri": "./runs/" + rfile,
+                        "wt:isPartOfRun": (
+                            "https://data.wholetale.org/api/v1/" f"folder/{run['_id']}"
+                        ),
                     }
-                    self.manifest['aggregates'].append(rinfo)
+                    self.manifest["aggregates"].append(rinfo)
 
-    def _expand_folder_into_items(self, folder, user, relpath=''):
+    def _expand_folder_into_items(self, folder, user, relpath=""):
         """
         Recursively handle data folder and return all child items as ext objs
 
         In a perfect world there should be a better place for this...
         """
-        curpath = os.path.join(relpath, folder['name'])
+        curpath = os.path.join(relpath, folder["name"])
         dataSet = []
         ext = []
         for item in Folder().childItems(folder, user=user):
-            dataSet.append({
-                'itemId': item['_id'],
-                '_modelType': 'item',
-                'mountPath': os.path.join(curpath, item['name'])
-            })
+            dataSet.append(
+                {
+                    "itemId": item["_id"],
+                    "_modelType": "item",
+                    "mountPath": os.path.join(curpath, item["name"]),
+                }
+            )
 
         if dataSet:
             ext, _ = self._parse_dataSet(dataSet=dataSet, relpath=curpath)
 
-        for subfolder in Folder().childFolders(
-            folder, parentType='folder', user=user
-        ):
+        for subfolder in Folder().childFolders(folder, parentType="folder", user=user):
             ext += self._expand_folder_into_items(subfolder, user, relpath=curpath)
         return ext
 
@@ -397,7 +413,7 @@ class Manifest:
         except NotImplementedError:
             pass
 
-    def _parse_dataSet(self, dataSet=None, relpath=''):
+    def _parse_dataSet(self, dataSet=None, relpath=""):
         """
         Get the basic info about the contents of `dataSet`
 
@@ -408,59 +424,66 @@ class Manifest:
 
         """
         if dataSet is None:
-            dataSet = self.tale['dataSet']
+            dataSet = self.tale["dataSet"]
 
         dataset_top_identifiers = set()
         external_objects = []
         for obj in dataSet:
             try:
-                doc = ModelImporter.model(obj['_modelType']).load(
-                    obj['itemId'], user=self.user, level=AccessType.READ, exc=True)
-                provider_name = doc['meta']['provider']
-                if provider_name.startswith('HTTP'):
-                    provider_name = 'HTTP'  # TODO: handle HTTPS to make it unnecessary
+                doc = ModelImporter.model(obj["_modelType"]).load(
+                    obj["itemId"], user=self.user, level=AccessType.READ, exc=True
+                )
+                provider_name = doc["meta"]["provider"]
+                if provider_name.startswith("HTTP"):
+                    provider_name = "HTTP"  # TODO: handle HTTPS to make it unnecessary
                 provider = IMPORT_PROVIDERS.providerMap[provider_name]
                 top_identifier = provider.getDatasetUID(doc, self.user)
                 if top_identifier:
                     dataset_top_identifiers.add(top_identifier)
 
                 ext_obj = {
-                    'dataset_identifier': top_identifier,
-                    'provider': provider_name,
-                    '_modelType': obj['_modelType'],
-                    'relpath': relpath,
+                    "dataset_identifier": top_identifier,
+                    "provider": provider_name,
+                    "_modelType": obj["_modelType"],
+                    "relpath": relpath,
                     "wt:identifier": str(doc["_id"]),
                 }
 
-                if obj['_modelType'] == 'folder':
+                if obj["_modelType"] == "folder":
                     uri = self._get_folder_uri(doc, provider, top_identifier)
                     # if uri is None and self.expand_folders and not is_root_folder:
                     if self.expand_folders:
-                        external_objects += self._expand_folder_into_items(doc, self.user)
+                        external_objects += self._expand_folder_into_items(
+                            doc, self.user
+                        )
                         continue
 
-                    ext_obj['uri'] = uri or "undefined"
-                    ext_obj['name'] = doc['name']
-                    ext_obj['size'] = 0
+                    ext_obj["uri"] = uri or "undefined"
+                    ext_obj["name"] = doc["name"]
+                    ext_obj["size"] = 0
                     for _, f in Folder().fileList(
                         doc, user=self.user, subpath=False, data=False
                     ):
-                        ext_obj['size'] += f['size']
+                        ext_obj["size"] += f["size"]
 
-                elif obj['_modelType'] == 'item':
+                elif obj["_modelType"] == "item":
                     fileObj = self.itemModel.childFiles(doc)[0]
-                    ext_obj.update({
-                        'name': fileObj['name'],
-                        'uri': fileObj['linkUrl'],
-                        'size': fileObj['size']
-                    })
+                    ext_obj.update(
+                        {
+                            "name": fileObj["name"],
+                            "uri": fileObj["linkUrl"],
+                            "size": fileObj["size"],
+                        }
+                    )
                     if checksum := self._get_checksum(doc, fileObj):
                         alg, value = checksum.split(":")
                         ext_obj[f"wt:{alg}"] = value
                 external_objects.append(ext_obj)
             except (ValidationException, KeyError):
-                msg = 'While creating a manifest for Tale "{}" '.format(str(self.tale['_id']))
-                msg += 'encountered a following error:\n'
+                msg = 'While creating a manifest for Tale "{}" '.format(
+                    str(self.tale["_id"])
+                )
+                msg += "encountered a following error:\n"
                 logger.warning(msg)
                 raise  # We don't want broken manifests, do we?
 
@@ -485,11 +508,11 @@ class Manifest:
         """
         folder = quote(os.path.join("./data", folder))
         # Add a trailing slash to the path if there isn't one (RO spec)
-        if not folder.endswith('/'):
-            folder += '/'
+        if not folder.endswith("/"):
+            folder += "/"
         bundle = dict(folder=folder)
         if filename:
-            bundle['filename'] = quote(filename)
+            bundle["filename"] = quote(filename)
         return bundle
 
     def add_license_record(self):
@@ -497,9 +520,9 @@ class Manifest:
         Adds a record for the License file. When exporting to a bag, this gets placed
         in their data/ folder.
         """
-        license = self.tale.get('licenseSPDX', WholeTaleLicense.default_spdx())
-        self.manifest['aggregates'].append(
-            {'uri': './LICENSE', 'schema:license': license}
+        license = self.tale.get("licenseSPDX", WholeTaleLicense.default_spdx())
+        self.manifest["aggregates"].append(
+            {"uri": "./LICENSE", "schema:license": license}
         )
 
     def add_version_info(self):
@@ -526,14 +549,16 @@ class Manifest:
     def add_run_info(self):
         """Adds recorded run metadata."""
 
-        for run in Folder().find({'parentId': self.tale['runsRootId'], 'parentCollection': 'folder',
-                                  'runVersionId': self.version['_id']}):
+        for run in Folder().find(
+            {
+                "parentId": self.tale["runsRootId"],
+                "parentCollection": "folder",
+                "runVersionId": self.version["_id"],
+            }
+        ):
             creator = User().load(run["creatorId"], force=True)
             run = {
-                "@id": (
-                    "https://data.wholetale.org/api/v1/"
-                    f"folder/{run['_id']}"
-                ),
+                "@id": ("https://data.wholetale.org/api/v1/" f"folder/{run['_id']}"),
                 "@type": "wt:RecordedRun",
                 "schema:name": run["name"],
                 "schema:dateCreated": run["created"],
@@ -545,17 +570,13 @@ class Manifest:
                     "schema:givenName": creator["firstName"],
                     "schema:familyName": creator["lastName"],
                     "schema:email": creator["email"],
-                }
+                },
             }
-            self.manifest['wt:hasRecordedRuns'].append(run)
+            self.manifest["wt:hasRecordedRuns"].append(run)
 
     def dump_manifest(self, **kwargs):
         return json.dumps(
-            self.manifest,
-            cls=JsonEncoder,
-            sort_keys=True,
-            allow_nan=False,
-            **kwargs
+            self.manifest, cls=JsonEncoder, sort_keys=True, allow_nan=False, **kwargs
         )
 
     def get_environment(self):
@@ -574,7 +595,7 @@ class Manifest:
             cls=JsonEncoder,
             sort_keys=True,
             allow_nan=False,
-            **kwargs
+            **kwargs,
         )
 
 
@@ -587,20 +608,19 @@ def get_folder_identifier(folder_id, user):
     :return: The identifier of a dataset
     """
     try:
-        folder = ModelImporter.model('folder').load(folder_id,
-                                                    user=user,
-                                                    level=AccessType.READ,
-                                                    exc=True)
+        folder = ModelImporter.model("folder").load(
+            folder_id, user=user, level=AccessType.READ, exc=True
+        )
 
-        meta = folder.get('meta')
+        meta = folder.get("meta")
         if meta:
-            if meta['provider'] in {'HTTP', 'HTTPS'}:
+            if meta["provider"] in {"HTTP", "HTTPS"}:
                 return None
-            identifier = meta.get('identifier')
+            identifier = meta.get("identifier")
             if identifier:
                 return identifier
 
-        get_folder_identifier(folder['parentID'], user)
+        get_folder_identifier(folder["parentID"], user)
 
     except (ValidationException, KeyError):
         pass

@@ -3,7 +3,6 @@
 
 from girder import events
 
-
 API_VERSION = "2.1"
 CATALOG_NAME = "WholeTale Catalog"
 DEFAULT_IMAGE_ICON = (

@@ -1,17 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import git
 import json
 import os
 import re
 import shutil
 import time
+
+import git
 from girder.models.folder import Folder
 from girder.models.user import User
-from girder.utility import JsonEncoder
 from girder.plugins.jobs.constants import JobStatus
 from girder.plugins.jobs.models.job import Job
+from girder.utility import JsonEncoder
 
 from ..constants import InstanceStatus, TaleStatus
 from ..models.instance import Instance
@@ -23,7 +24,7 @@ def run(job):
     jobModel = Job()
     jobModel.updateJob(job, status=JobStatus.RUNNING)
 
-    url, = job["args"]
+    (url,) = job["args"]
     if "@" in url:
         repo_url, branch = url.split("@")
     else:
@@ -35,13 +36,13 @@ def run(job):
     spawn = job["kwargs"]["spawn"]
     change_status = job["kwargs"].get("change_status", True)
     # Get users for notifications since job can be called after a tale is shared
-    users = [str(user['id']) for user in tale['access']['users']]
+    users = [str(user["id"]) for user in tale["access"]["users"]]
 
     progressTotal = 1 + int(spawn)
     progressCurrent = 0
 
     try:
-        notify_event(users, "wt_import_started", {"taleId": tale['_id']})
+        notify_event(users, "wt_import_started", {"taleId": tale["_id"]})
 
         workspace = Folder().load(tale["workspaceId"], force=True)
         has_dot_git_already = os.path.isdir(os.path.join(workspace["fsPath"], ".git"))
@@ -81,7 +82,9 @@ def run(job):
             raise RuntimeError("Failed to import from git:\n {}".format(str(exc)))
 
         # Tale is ready to be built
-        Tale().update({"_id": tale["_id"]}, update={"$set": {"status": TaleStatus.READY}})
+        Tale().update(
+            {"_id": tale["_id"]}, update={"$set": {"status": TaleStatus.READY}}
+        )
 
         # 4. Wait for container to show up
         if spawn:
@@ -110,14 +113,16 @@ def run(job):
         else:
             instance = None
 
-        notify_event(users, "wt_import_completed", {"taleId": tale['_id']})
+        notify_event(users, "wt_import_completed", {"taleId": tale["_id"]})
 
     except Exception as exc:
         dot_git = os.path.join(workspace["fsPath"], ".git")
         if not has_dot_git_already and os.path.isdir(dot_git):
             shutil.rmtree(dot_git, ignore_errors=True)
         if change_status:
-            Tale().update({"_id": tale["_id"]}, update={"$set": {"status": TaleStatus.ERROR}})
+            Tale().update(
+                {"_id": tale["_id"]}, update={"$set": {"status": TaleStatus.ERROR}}
+            )
         jobModel.updateJob(
             job,
             progressTotal=progressTotal,
@@ -126,7 +131,7 @@ def run(job):
             status=JobStatus.ERROR,
             log=str(exc),
         )
-        notify_event(users, "wt_import_failed", {"taleId": tale['_id']})
+        notify_event(users, "wt_import_failed", {"taleId": tale["_id"]})
         raise
 
     # To get rid of ObjectId's, dates etc.

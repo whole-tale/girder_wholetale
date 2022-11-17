@@ -19,14 +19,13 @@
 
 import datetime
 import json
-from six.moves import urllib
 
 import httmock
 import requests
 import six
-
 from girder.models.token import Token
 from girder.models.user import User
+from six.moves import urllib
 from tests import base
 
 

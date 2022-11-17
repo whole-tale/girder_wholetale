@@ -1,15 +1,15 @@
-from bson import ObjectId
-import httmock
 import json
-import mock
 import os
 import tempfile
 import time
-from tests import base
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import parse_qs, urlparse
+
+import httmock
+import mock
+from bson import ObjectId
 from girder.exceptions import GirderException
 from girder.models.assetstore import Assetstore
-
+from tests import base
 
 DATA_PATH = os.path.join(
     os.path.dirname(os.environ["GIRDER_TEST_DATA_PREFIX"]),
@@ -191,8 +191,8 @@ class DerivaHarversterTestCase(base.TestCase):
         self.assertEqual(qs["uri"][0], EXAMPLE_URL)
 
     def testImportBDBagFromDeriva(self):
-        from girder.plugins.jobs.models.job import Job
         from girder.plugins.jobs.constants import JobStatus
+        from girder.plugins.jobs.models.job import Job
         from girder.plugins.wholetale.models.tale import Tale
 
         with mock.patch("httpio.open", side_effect=fake_remote_bag_open):

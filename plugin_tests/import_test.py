@@ -321,10 +321,10 @@ class ImportTaleTestCase(base.TestCase):
     @vcr.use_cassette(os.path.join(DATA_PATH, "tale_import_zip.txt"))
     @mock.patch("girder.plugins.wholetale.lib.manifest.ImageBuilder")
     def testTaleImportZip(self, mock_builder):
-        mock_builder.return_value.container_config.repo2docker_version = \
+        mock_builder.return_value.container_config.repo2docker_version = (
             "craigwillis/repo2docker:latest"
-        mock_builder.return_value.get_tag.return_value = \
-            "some_image_digest"
+        )
+        mock_builder.return_value.get_tag.return_value = "some_image_digest"
         image = self.model("image", "wholetale").createImage(
             name="Jupyter Notebook",
             creator=self.user,
@@ -339,9 +339,7 @@ class ImportTaleTestCase(base.TestCase):
         )
 
         since = datetime.utcnow().isoformat()
-        with open(
-            os.path.join(DATA_PATH, "604126f45f6bb2c4c997e967.zip"), "rb"
-        ) as fp:
+        with open(os.path.join(DATA_PATH, "604126f45f6bb2c4c997e967.zip"), "rb") as fp:
             resp = self.request(
                 path="/tale/import",
                 method="POST",
@@ -358,9 +356,7 @@ class ImportTaleTestCase(base.TestCase):
         job = Job().findOne(
             {"type": "wholetale.import_tale", "taleId": ObjectId(tale["_id"])}
         )
-        self.assertEqual(
-            json.loads(job["kwargs"])["taleId"]["$oid"], tale["_id"]
-        )
+        self.assertEqual(json.loads(job["kwargs"])["taleId"]["$oid"], tale["_id"])
         for _ in range(600):
             if job["status"] in {JobStatus.SUCCESS, JobStatus.ERROR}:
                 break
@@ -376,7 +372,7 @@ class ImportTaleTestCase(base.TestCase):
         )
         self.assertEqual(
             tale["imageInfo"]["repo2docker_version"],
-            "wholetale/repo2docker_wholetale:latest"
+            "wholetale/repo2docker_wholetale:latest",
         )
 
         events = get_events(self, since)
@@ -394,10 +390,10 @@ class ImportTaleTestCase(base.TestCase):
     @vcr.use_cassette(os.path.join(DATA_PATH, "tale_import_rrzip.txt"))
     @mock.patch("girder.plugins.wholetale.lib.manifest.ImageBuilder")
     def testTaleImportZipWithRuns(self, mock_builder):
-        mock_builder.return_value.container_config.repo2docker_version = \
+        mock_builder.return_value.container_config.repo2docker_version = (
             "craigwillis/repo2docker:latest"
-        mock_builder.return_value.get_tag.return_value = \
-            "some_image_digest"
+        )
+        mock_builder.return_value.get_tag.return_value = "some_image_digest"
         image = self.model("image", "wholetale").createImage(
             name="Jupyter Notebook",
             creator=self.user,
@@ -412,9 +408,7 @@ class ImportTaleTestCase(base.TestCase):
         )
 
         since = datetime.utcnow().isoformat()
-        with open(
-            os.path.join(DATA_PATH, "61f18414fdfd5791fbb61b7b.zip"), "rb"
-        ) as fp:
+        with open(os.path.join(DATA_PATH, "61f18414fdfd5791fbb61b7b.zip"), "rb") as fp:
             resp = self.request(
                 path="/tale/import",
                 method="POST",
@@ -429,9 +423,7 @@ class ImportTaleTestCase(base.TestCase):
         from girder.plugins.jobs.models.job import Job
 
         job = Job().findOne({"type": "wholetale.import_tale"})
-        self.assertEqual(
-            json.loads(job["kwargs"])["taleId"]["$oid"], tale["_id"]
-        )
+        self.assertEqual(json.loads(job["kwargs"])["taleId"]["$oid"], tale["_id"])
         for _ in range(600):
             if job["status"] in {JobStatus.SUCCESS, JobStatus.ERROR}:
                 break
@@ -445,16 +437,13 @@ class ImportTaleTestCase(base.TestCase):
             path="/version",
             method="GET",
             user=self.user,
-            params={"taleId": tale["_id"]}
+            params={"taleId": tale["_id"]},
         )
         self.assertStatusOk(resp)
         self.assertEqual(len(resp.json), 1)
 
         resp = self.request(
-            path="/run",
-            method="GET",
-            user=self.user,
-            params={"taleId": tale["_id"]}
+            path="/run", method="GET", user=self.user, params={"taleId": tale["_id"]}
         )
         self.assertStatusOk(resp)
         runs = resp.json
@@ -467,9 +456,9 @@ class ImportTaleTestCase(base.TestCase):
                 "wt_tale_created",
                 "wt_import_started",
                 "wt_tale_updated",
-                "wt_import_completed"
+                "wt_import_completed",
             },
-            event_types(events, {"taleId": str(tale["_id"])})
+            event_types(events, {"taleId": str(tale["_id"])}),
         )
         self.model("image", "wholetale").remove(image)
 

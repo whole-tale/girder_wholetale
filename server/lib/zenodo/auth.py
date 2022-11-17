@@ -1,5 +1,6 @@
 import requests
 from girder.exceptions import RestException
+
 from ..verificator import Verificator
 
 
@@ -17,9 +18,7 @@ class ZenodoVerificator(Verificator):
         try:
             r = requests.post(deposition_url, data="{}", headers=headers)
             r.raise_for_status()
-            r = requests.delete(
-                deposition_url + f"/{r.json()['id']}", headers=headers
-            )
+            r = requests.delete(deposition_url + f"/{r.json()['id']}", headers=headers)
             r.raise_for_status()
         except requests.exceptions.HTTPError:
             raise RestException(

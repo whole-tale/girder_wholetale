@@ -1,6 +1,6 @@
 import requests
-
 from girder.exceptions import RestException
+
 from ..verificator import Verificator
 
 
@@ -129,9 +129,7 @@ class OpenICPSRVerificator(Verificator):
             except AttributeError:
                 raise ValueError(f"Invalid password {self.key=} {user['email']=}")
 
-            resp = session.get(
-                callback_url, headers=oheaders, cookies=cookies
-            )
+            resp = session.get(callback_url, headers=oheaders, cookies=cookies)
             resp.raise_for_status()
 
             self.key = cookies["JSESSIONID"]

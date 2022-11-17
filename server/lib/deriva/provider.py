@@ -4,10 +4,11 @@ from urllib.parse import urlparse
 from girder.models.folder import Folder
 from girder.models.item import Item
 from girder.models.setting import Setting
+
 from ...constants import PluginSettings
+from ..bdbag.bdbag_provider import BDBagProvider
 from ..data_map import DataMap
 from ..entity import Entity
-from ..bdbag.bdbag_provider import BDBagProvider
 
 
 class DerivaProvider(BDBagProvider):

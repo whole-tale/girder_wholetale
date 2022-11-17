@@ -5,35 +5,39 @@ from girder.api.rest import RestException
 from girder.constants import AccessType
 from girder.models.folder import Folder
 
-from . import DataONELocations, DataONENotATaleError
-from ..import_providers import ImportProvider
+from ...models.tale import Tale
 from ..data_map import DataMap
+from ..entity import Entity
 from ..file_map import FileMap
 from ..import_item import ImportItem
-from ..entity import Entity
-from ...models.tale import Tale
-from .register import \
-    D1_lookup, \
-    extract_metadata_docs, \
-    get_documents, \
-    get_package_pid, \
-    get_package_list, \
-    extract_data_docs, \
-    extract_resource_docs, \
-    check_multiple_metadata
+from ..import_providers import ImportProvider
+from . import DataONELocations, DataONENotATaleError
+from .register import (
+    D1_lookup,
+    check_multiple_metadata,
+    extract_data_docs,
+    extract_metadata_docs,
+    extract_resource_docs,
+    get_documents,
+    get_package_list,
+    get_package_pid,
+)
 
-
-ALL_LOCATIONS = [DataONELocations.prod_cn, DataONELocations.dev_mn, DataONELocations.dev_cn]
+ALL_LOCATIONS = [
+    DataONELocations.prod_cn,
+    DataONELocations.dev_mn,
+    DataONELocations.dev_cn,
+]
 
 
 class DataOneImportProvider(ImportProvider):
     def __init__(self):
-        super().__init__('DataONE')
+        super().__init__("DataONE")
 
     def matches(self, entity: Entity) -> bool:
         url = entity.getValue()
         try:
-            package_pid = get_package_pid(url, entity['base_url'])
+            package_pid = get_package_pid(url, entity["base_url"])
         except RestException:
             return False
         return package_pid is not None
@@ -43,26 +47,32 @@ class DataOneImportProvider(ImportProvider):
         # this does not seem to properly resolve individual files. If passed something like
         # https://cn.dataone.org/cn/v2/resolve/urn:uuid:9266a118-78b3-48e3-a675-b3dfcc5d0fc4,
         # it returns the parent dataset, which, as a user, I'd be annoyed with
-        dataMap = D1_lookup(entity.getValue(), entity['base_url'])
+        dataMap = D1_lookup(entity.getValue(), entity["base_url"])
         dataMap.repository = self.name
         return dataMap
 
     def listFiles(self, entity: Entity) -> FileMap:
-        result = get_package_list(entity.getValue(), entity['base_url'])
+        result = get_package_list(entity.getValue(), entity["base_url"])
         return FileMap.fromDict(result)
 
     def getDatasetUID(self, doc: object, user: object) -> str:
-        if 'folderId' in doc:
+        if "folderId" in doc:
             # It's an item, grab the parent which should contain all the info
-            doc = Folder().load(doc['folderId'], user=user, level=AccessType.READ)
+            doc = Folder().load(doc["folderId"], user=user, level=AccessType.READ)
         # obj is a folder at this point use its meta
-        return doc['meta']['identifier']
+        return doc["meta"]["identifier"]
 
-    def _listRecursive(self, user, pid: str, name: str, base_url: str = DataONELocations.prod_cn,
-                       progress=None):
+    def _listRecursive(
+        self,
+        user,
+        pid: str,
+        name: str,
+        base_url: str = DataONELocations.prod_cn,
+        progress=None,
+    ):
         """Create a package description (Dict) suitable for dumping to JSON."""
         if progress:
-            progress.update(increment=1, message='Processing package {}.'.format(pid))
+            progress.update(increment=1, message="Processing package {}.".format(pid))
 
         # query for things in the resource map. At this point, it is assumed that the pid
         # has been correctly identified by the user in the UI.
@@ -81,17 +91,17 @@ class DataOneImportProvider(ImportProvider):
         # Determine the folder name. This is usually the title of the metadata file
         # in the package but when there are multiple metadata files in the package,
         # we need to figure out which one is the 'main' or 'documenting' one.
-        primary_metadata = [doc for doc in metadata if 'documents' in doc]
+        primary_metadata = [doc for doc in metadata if "documents" in doc]
 
         check_multiple_metadata(primary_metadata)
 
         # Create a Dict to store folders' information
         # the data key is a concatenation of the data and any metadata objects
         # that aren't the main or documenting metadata
-        primary_identifier = primary_metadata[0]['identifier']
-        data += [doc for doc in metadata if doc['identifier'] != primary_identifier]
+        primary_identifier = primary_metadata[0]["identifier"]
+        data += [doc for doc in metadata if doc["identifier"] != primary_identifier]
         if not name:
-            name = primary_metadata[0]['title']
+            name = primary_metadata[0]["title"]
 
         yield ImportItem(
             ImportItem.FOLDER,
@@ -99,7 +109,7 @@ class DataOneImportProvider(ImportProvider):
             identifier=primary_identifier,
             meta={
                 "dsRelPath": "/",
-            }
+            },
         )
 
         for fileObj in data:
@@ -112,7 +122,9 @@ class DataOneImportProvider(ImportProvider):
                 size=int(fileObj["size"]),
                 mimeType=fileObj["formatId"],
                 meta={
-                    "checksum": {fileObj["checksumAlgorithm"].lower(): fileObj["checksum"]},
+                    "checksum": {
+                        fileObj["checksumAlgorithm"].lower(): fileObj["checksum"]
+                    },
                     "dsRelPath": f"/{name}",  # D1 packages are flat...
                     "directIdentifier": fileObj["identifier"],
                 },
@@ -121,12 +133,19 @@ class DataOneImportProvider(ImportProvider):
         # Recurse and add child packages if any exist
         if children is not None and len(children) > 0:
             for child in children:
-                logger.debug('Registering child package, {}'.format(child['identifier']))
+                logger.debug(
+                    "Registering child package, {}".format(child["identifier"])
+                )
                 yield from self._listRecursive(
-                    user, child['identifier'], None, base_url=base_url, progress=progress)
+                    user,
+                    child["identifier"],
+                    None,
+                    base_url=base_url,
+                    progress=progress,
+                )
 
         yield ImportItem(ImportItem.END_FOLDER)
-        logger.debug('Finished registering dataset')
+        logger.debug("Finished registering dataset")
 
     def _addResolutionUrls(self, docs, base_url):
         """
@@ -136,7 +155,7 @@ class DataOneImportProvider(ImportProvider):
         :return: None
         """
         for d in docs:
-            d['url'] = "{}/{}/{}".format(base_url, 'resolve', d['identifier'])
+            d["url"] = "{}/{}/{}".format(base_url, "resolve", d["identifier"])
 
     def import_tale(self, data_map, user, force=False):
         existing_tale_id = Tale().findOne(
@@ -177,9 +196,7 @@ class DataOneImportProvider(ImportProvider):
                 "repository": "DataONE",
             }
         ]
-        relatedIdentifiers = [
-            {"relation": "IsDerivedFrom", "identifier": data_map.doi}
-        ]
+        relatedIdentifiers = [{"relation": "IsDerivedFrom", "identifier": data_map.doi}]
         return Tale().createTaleFromStream(
             stream_zipfile,
             user=user,

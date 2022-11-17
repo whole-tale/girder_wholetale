@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import cherrypy
 import os
-from urllib.parse import urlparse, urlunparse, urlencode
+from urllib.parse import urlencode, urlparse, urlunparse
 
+import cherrypy
 from girder.api import access
 from girder.api.describe import Description, autoDescribeRoute
-from girder.api.rest import boundHandler, RestException
+from girder.api.rest import RestException, boundHandler
 
-from . import ZenodoNotATaleError
 from .. import IMPORT_PROVIDERS
 from ..data_map import DataMap
 from ..integration_utils import autologin
+from . import ZenodoNotATaleError
 
 
 @access.public
@@ -50,8 +50,10 @@ def zenodoDataImport(self, doi, record_id, resource_server, environment, force):
     user = self.getCurrentUser()
     if user is None:
         args = {
-            "record_id": record_id, "resource_server": resource_server,
-            "environment": environment, "force": force
+            "record_id": record_id,
+            "resource_server": resource_server,
+            "environment": environment,
+            "force": force,
         }
         autologin(args=args)
 
@@ -74,8 +76,6 @@ def zenodoDataImport(self, doi, record_id, resource_server, environment, force):
             urlparse(dashboard_url)._replace(path="/mine", query=urlencode(query))
         )
     except Exception as exc:
-        raise RestException(
-            f"Failed to import Tale. Server returned: '{str(exc)}'"
-        )
+        raise RestException(f"Failed to import Tale. Server returned: '{str(exc)}'")
 
     raise cherrypy.HTTPRedirect(location)

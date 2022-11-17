@@ -1,11 +1,11 @@
-import cherrypy
 import datetime
 from urllib.parse import urlparse
 
-from girder.exceptions import RestException, ValidationException
+import cherrypy
 from girder.api import access
 from girder.api.describe import Description, autoDescribeRoute
 from girder.api.rest import Resource, getApiUrl
+from girder.exceptions import RestException, ValidationException
 from girder.models.setting import Setting
 from girder.models.token import Token
 from girder.models.user import User

@@ -1,31 +1,45 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
+from urllib.parse import urlencode, urlparse, urlunparse
+
 import cherrypy
-from urllib.parse import urlparse, urlunparse, urlencode
 from girder.api import access
 from girder.api.describe import Description, autoDescribeRoute
 from girder.api.rest import boundHandler
 from girder.exceptions import RestException
 
+from ..entity import Entity
+from ..integration_utils import autologin, redirect_if_tale_exists
 from . import DataONELocations, DataONENotATaleError
 from .provider import DataOneImportProvider
-from ..integration_utils import autologin, redirect_if_tale_exists
-from ..entity import Entity
 
 
 @access.public
 @autoDescribeRoute(
-    Description('Handle a DataONE import request and bounce it to the dashboard.')
-    .param('uri', 'The URI of the dataset. This cna be the landing page, pid, or doi.',
-           required=True)
-    .param('title', 'The Dataverse database ID of a file the external tool has '
-           'been launched on.', required=False)
-    .param('environment', 'The environment that should be selected.', required=False)
-    .param('api', 'An optional API endpoint that should be used to find the dataset.',
-           required=False)
-    .param('apiToken', 'The DataONE JWT of the user importing the data, '
-           'if available.', required=False)
+    Description("Handle a DataONE import request and bounce it to the dashboard.")
+    .param(
+        "uri",
+        "The URI of the dataset. This cna be the landing page, pid, or doi.",
+        required=True,
+    )
+    .param(
+        "title",
+        "The Dataverse database ID of a file the external tool has "
+        "been launched on.",
+        required=False,
+    )
+    .param("environment", "The environment that should be selected.", required=False)
+    .param(
+        "api",
+        "An optional API endpoint that should be used to find the dataset.",
+        required=False,
+    )
+    .param(
+        "apiToken",
+        "The DataONE JWT of the user importing the data, " "if available.",
+        required=False,
+    )
     .param(
         "force",
         "If True, create a new Tale regardless of the fact it was previously imported.",
@@ -33,7 +47,7 @@ from ..entity import Entity
         dataType="boolean",
         default=False,
     )
-    .notes('apiToken is currently ignored.')
+    .notes("apiToken is currently ignored.")
 )
 @boundHandler()
 def dataoneDataImport(self, uri, title, environment, api, apiToken, force):
@@ -68,20 +82,18 @@ def dataoneDataImport(self, uri, title, environment, api, apiToken, force):
         )
     except DataONENotATaleError:
         query = dict()
-        query['uri'] = uri
+        query["uri"] = uri
         if title:
-            query['name'] = title
+            query["name"] = title
         if environment:
-            query['environment'] = environment
+            query["environment"] = environment
         if api:
-            query['api'] = api
+            query["api"] = api
 
         location = urlunparse(
             urlparse(dashboard_url)._replace(path="/mine", query=urlencode(query))
         )
     except Exception as exc:
-        raise RestException(
-            f"Failed to import Tale. Server returned: '{str(exc)}'"
-        )
+        raise RestException(f"Failed to import Tale. Server returned: '{str(exc)}'")
 
     raise cherrypy.HTTPRedirect(location)

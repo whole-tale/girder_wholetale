@@ -1,6 +1,7 @@
-import cherrypy
 import os
-from urllib.parse import urlparse, urlunparse, urlencode
+from urllib.parse import urlencode, urlparse, urlunparse
+
+import cherrypy
 from girder.plugins.oauth.rest import OAuth as OAuthResource
 
 from ..models.tale import Tale

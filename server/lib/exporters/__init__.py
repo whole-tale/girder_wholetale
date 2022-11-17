@@ -1,11 +1,13 @@
-from hashlib import sha256, md5
 import json
-import magic
 import os
+from hashlib import md5, sha256
+
+import magic
 import requests
-from girder.utility import hash_state, ziputil, JsonEncoder
-from girder.models.folder import Folder
 from girder.constants import AccessType
+from girder.models.folder import Folder
+from girder.utility import JsonEncoder, hash_state, ziputil
+
 from ..license import WholeTaleLicense
 
 
@@ -22,8 +24,8 @@ class HashFileStream:
         except TypeError:
             self.gen = gen
         self.state = {
-            'md5': hash_state.serializeHex(md5()),
-            'sha256': hash_state.serializeHex(sha256()),
+            "md5": hash_state.serializeHex(md5()),
+            "sha256": hash_state.serializeHex(sha256()),
         }
 
     def __iter__(self):
@@ -43,11 +45,11 @@ class HashFileStream:
 
     @property
     def sha256(self):
-        return hash_state.restoreHex(self.state['sha256'], 'sha256').hexdigest()
+        return hash_state.restoreHex(self.state["sha256"], "sha256").hexdigest()
 
     @property
     def md5(self):
-        return hash_state.restoreHex(self.state['md5'], 'md5').hexdigest()
+        return hash_state.restoreHex(self.state["md5"], "md5").hexdigest()
 
 
 class TaleExporter:
@@ -76,7 +78,7 @@ class TaleExporter:
                 for agg in manifest["aggregates"]
                 if "schema:license" in agg
             ),
-            WholeTaleLicense.default_spdx()
+            WholeTaleLicense.default_spdx(),
         )
         self.tale_license = WholeTaleLicense().license_from_spdx(license_spdx)
         self.state = {}
@@ -91,7 +93,9 @@ class TaleExporter:
            fullpath - absolute path to a file
            relpath - path to a file relative to workspace root
         """
-        for obj in [self.manifest["dct:hasVersion"]] + self.manifest["wt:hasRecordedRuns"]:
+        for obj in [self.manifest["dct:hasVersion"]] + self.manifest[
+            "wt:hasRecordedRuns"
+        ]:
             uri = obj["@id"]
             obj_type = obj["@type"]
             obj_id = uri.rsplit("/", 1)[-1]
@@ -101,7 +105,9 @@ class TaleExporter:
                 for fname in files:
                     fullpath = os.path.join(curdir, fname)
                     if obj_type == "wt:RecordedRun":
-                        relpath = fullpath.replace(workspace_path, "runs/" + obj["schema:name"])
+                        relpath = fullpath.replace(
+                            workspace_path, "runs/" + obj["schema:name"]
+                        )
                     else:
                         relpath = fullpath.replace(workspace_path, "workspace")
                     yield fullpath, relpath
@@ -129,11 +135,11 @@ class TaleExporter:
             yield data
         # MD5 is the only required alg in profile. See Manifests-Required in
         # https://raw.githubusercontent.com/fair-research/bdbag/master/profiles/bdbag-ro-profile.json
-        self.state['md5'].append((zip_path, hash_file_stream.md5))
+        self.state["md5"].append((zip_path, hash_file_stream.md5))
 
     def _agg_index_by_uri(self, uri):
         aggs = self.manifest["aggregates"]
-        return next((i for (i, d) in enumerate(aggs) if d['uri'] == uri), None)
+        return next((i for (i, d) in enumerate(aggs) if d["uri"] == uri), None)
 
     def append_aggergate_checksums(self):
         """
@@ -141,11 +147,11 @@ class TaleExporter:
         :return: None
         """
         aggs = self.manifest["aggregates"]
-        for path, chksum in self.state['md5']:
+        for path, chksum in self.state["md5"]:
             uri = "./" + path.replace("data/", "", 1)
             index = self._agg_index_by_uri(uri)
             if index is not None:
-                aggs[index]['wt:md5'] = chksum
+                aggs[index]["wt:md5"] = chksum
         self.verify_aggregate_checksums()
 
     def verify_aggregate_checksums(self):

@@ -1,6 +1,6 @@
-from urllib.parse import urlparse, urlunparse, quote
-from d1_common.env import D1_ENV_DICT
+from urllib.parse import quote, urlparse, urlunparse
 
+from d1_common.env import D1_ENV_DICT
 from girder.api.rest import getApiUrl
 from girder.plugins.oauth.providers.base import ProviderBase
 

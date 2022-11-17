@@ -1,13 +1,14 @@
-import mock
 import copy
 import json
-from operator import itemgetter
 import os
+from operator import itemgetter
+
+import mock
 import pytest
-from tests import base
 from bson import ObjectId
 from girder.exceptions import AccessException, ValidationException
 from girder.utility.path import lookUpPath
+from tests import base
 
 
 def setUpModule():
@@ -133,13 +134,14 @@ class ManifestTestCase(base.TestCase):
             restore_catalog(catalog, data)
         catalog_ready = True
         dataSet = []
+        # In order [D1 folder, D1 file, Globus file, Globus folder, HTTP file, HTTP Folder]
         data_paths = [
-            "Humans and Hydrology at High Latitudes: Water Use Information",  # D1 folder
-            "Humans and Hydrology at High Latitudes: Water Use Information/usco2005.xls",  # D1 file
-            "Twin-mediated Crystal Growth: an Enigma Resolved/data/D_whites_darks_AJS.hdf",  # Globus file
-            "A Machine Learning Approach for  Engineering Bulk Metallic Glass Alloys/data/Dmax",  # Globus folder
-            "www.gw-openscience.org/s/events/BBH_events_v3.json",  # HTTP file
-            "www.gw-openscience.org/s/events/GW170104",  # HTTP folder
+            "Humans and Hydrology at High Latitudes: Water Use Information",
+            "Humans and Hydrology at High Latitudes: Water Use Information/usco2005.xls",
+            "Twin-mediated Crystal Growth: an Enigma Resolved/data/D_whites_darks_AJS.hdf",
+            "A Machine Learning Approach for  Engineering Bulk Metallic Glass Alloys/data/Dmax",
+            "www.gw-openscience.org/s/events/BBH_events_v3.json",
+            "www.gw-openscience.org/s/events/GW170104",
         ]
         root = "/collection/WholeTale Catalog/WholeTale Catalog"
         for path in data_paths:
@@ -181,9 +183,9 @@ class ManifestTestCase(base.TestCase):
             "jobId": ObjectId("5c9009deda39aa0001d702b7"),
             "last_build": 1552943449,
             "repo2docker_version": "craigwillis/repo2docker:latest",
-            "status": 3
+            "status": 3,
         }
-        self.model('tale', 'wholetale').save(self.tale)
+        self.model("tale", "wholetale").save(self.tale)
 
         self.tale2 = self.model("tale", "wholetale").createTale(
             {"_id": self.tale_info["_id"]},
@@ -197,9 +199,12 @@ class ManifestTestCase(base.TestCase):
 
     @mock.patch("gwvolman.build_utils.ImageBuilder")
     def testManifest(self, mock_builder):
-        mock_builder.return_value.container_config.repo2docker_version = "craigwillis/repo2docker:latest"
-        mock_builder.return_value.get_tag.return_value = \
-            self.tale['imageInfo']['digest'].replace('registry', 'images', 1)
+        mock_builder.return_value.container_config.repo2docker_version = (
+            "craigwillis/repo2docker:latest"
+        )
+        mock_builder.return_value.get_tag.return_value = self.tale["imageInfo"][
+            "digest"
+        ].replace("registry", "images", 1)
         self._testCreateBasicAttributes()
         self._testAddTaleCreator()
         self._testCreateContext()
@@ -213,8 +218,9 @@ class ManifestTestCase(base.TestCase):
         self._test_create_image_info()
 
     def _testRelatedIdentifiers(self):
-        from server.lib.manifest import Manifest
         from girder.plugins.wholetale.models.tale import Tale
+
+        from server.lib.manifest import Manifest
 
         tale = copy.deepcopy(self.tale)
         tale.pop("_id")
@@ -284,7 +290,6 @@ class ManifestTestCase(base.TestCase):
         self.assertEqual(manifest_creator["schema:givenName"], self.user["firstName"])
         self.assertEqual(manifest_creator["schema:familyName"], self.user["lastName"])
         self.assertEqual(manifest_creator["schema:email"], self.user["email"])
-        self.assertEqual(manifest_creator["@id"], self.tale["authors"])
 
     def _testCreateContext(self):
         # Rather than check the contents of the context (subject to change), check that we
@@ -319,12 +324,6 @@ class ManifestTestCase(base.TestCase):
         agg = manifest_doc.create_aggregation_record(uri, bundle, parent_dataset)
         self.assertEqual(agg["schema:isPartOf"], parent_dataset)
 
-    def _testAddTaleCreator(self):
-        from server.lib.manifest import Manifest
-
-        manifest_doc = Manifest(self.tale, self.user)
-        self.assertTrue(len(manifest_doc.manifest["schema:author"]))
-
     def _testGetFolderIdentifier(self):
         from server.lib.manifest import get_folder_identifier
 
@@ -335,6 +334,7 @@ class ManifestTestCase(base.TestCase):
 
     def _testWorkspace(self):
         from server.lib.manifest import Manifest
+
         workspace = self.model("folder").load(self.tale["workspaceId"], force=True)
         fspath = workspace["fsPath"]
         with open(os.path.join(fspath, "file1.csv"), "w") as f:
@@ -361,7 +361,6 @@ class ManifestTestCase(base.TestCase):
             if "wt:identifier" in d:
                 d.pop("wt:identifier")
         manifest_doc = Manifest(self.tale, self.user, expand_folders=True)
-        tale_dataset_ids = {str(_["itemId"]) for _ in self.tale["dataSet"]}
         for i, aggregate in enumerate(
             sorted(manifest_doc.manifest["aggregates"], key=itemgetter("uri"))
         ):
@@ -374,7 +373,9 @@ class ManifestTestCase(base.TestCase):
             {
                 "@id": "doi:10.18126/M2662X",
                 "@type": "schema:Dataset",
-                "schema:name": "A Machine Learning Approach for  Engineering Bulk Metallic Glass Alloys",
+                "schema:name": (
+                    "A Machine Learning Approach for  Engineering Bulk Metallic Glass Alloys"
+                ),
                 "schema:identifier": "doi:10.18126/M2662X",
             },
             {
@@ -440,27 +441,35 @@ class ManifestTestCase(base.TestCase):
         from server.lib.manifest import Manifest
 
         manifest = Manifest(self.tale, self.user).manifest
-        self.assertTrue(len(manifest['schema:hasPart']))
+        self.assertTrue(len(manifest["schema:hasPart"]))
 
-        r2d_block = manifest['schema:hasPart'][0]
-        self.assertEqual(r2d_block['schema:softwareVersion'],
-                             self.tale["imageInfo"]['repo2docker_version'])
-        self.assertEqual(r2d_block['@id'], 'https://github.com/whole-tale/repo2docker_wholetale')
-        self.assertEqual(r2d_block['@type'], 'schema:SoftwareApplication')
+        r2d_block = manifest["schema:hasPart"][0]
+        self.assertEqual(
+            r2d_block["schema:softwareVersion"],
+            self.tale["imageInfo"]["repo2docker_version"],
+        )
+        self.assertEqual(
+            r2d_block["@id"], "https://github.com/whole-tale/repo2docker_wholetale"
+        )
+        self.assertEqual(r2d_block["@type"], "schema:SoftwareApplication")
 
-        digest_block = manifest['schema:hasPart'][1]
-        self.assertEqual(digest_block['@id'], self.tale['imageInfo']['digest'].replace('registry', 'images', 1))
-        self.assertEqual(digest_block['schema:applicationCategory'], 'DockerImage')
-        self.assertEqual(digest_block['@type'], 'schema:SoftwareApplication')
+        digest_block = manifest["schema:hasPart"][1]
+        self.assertEqual(
+            digest_block["@id"],
+            self.tale["imageInfo"]["digest"].replace("registry", "images", 1),
+        )
+        self.assertEqual(digest_block["schema:applicationCategory"], "DockerImage")
+        self.assertEqual(digest_block["@type"], "schema:SoftwareApplication")
 
     def test_dataset_roundtrip(self):
-        from server.lib.manifest_parser import ManifestParser
         from server.lib.manifest import Manifest
+        from server.lib.manifest_parser import ManifestParser
+
         manifest = Manifest(self.tale, self.user).manifest
         dataset = ManifestParser(manifest).get_dataset()
         self.assertEqual(
             [_["itemId"] for _ in dataset],
-            [str(_["itemId"]) for _ in self.tale["dataSet"]]
+            [str(_["itemId"]) for _ in self.tale["dataSet"]],
         )
 
         # test it still works if schema:identifier is not present
@@ -473,7 +482,7 @@ class ManifestTestCase(base.TestCase):
         dataset = ManifestParser(manifest).get_dataset()
         self.assertEqual(
             [_["itemId"] for _ in dataset],
-            [str(_["itemId"]) for _ in self.tale["dataSet"]]
+            [str(_["itemId"]) for _ in self.tale["dataSet"]],
         )
 
     def tearDown(self):

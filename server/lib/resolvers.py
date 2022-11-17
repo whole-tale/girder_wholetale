@@ -1,7 +1,9 @@
 import re
-from .entity import Entity
 from typing import Optional
+
 import requests
+
+from .entity import Entity
 
 """Regex that matches:
 
@@ -20,8 +22,8 @@ http://hdl.handle.net/10.24431/rw1k118
 """
 
 _DOI_RESOLVERS_RE = re.compile(
-    r'^(|https?://(dx.doi.org|doi.org|hdl.handle.net)/)(doi:)?(10.\d{4,9}/[-._;()/:A-Z0-9]+)$',
-    re.IGNORECASE
+    r"^(|https?://(dx.doi.org|doi.org|hdl.handle.net)/)(doi:)?(10.\d{4,9}/[-._;()/:A-Z0-9]+)$",
+    re.IGNORECASE,
 )
 
 
@@ -64,7 +66,6 @@ class ResolutionException(Exception):
 
 
 class DOIResolver(Resolver):
-
     @staticmethod
     def extractDOI(url: str):
         doi_match = _DOI_RESOLVERS_RE.match(url)
@@ -83,13 +84,13 @@ class DOIResolver(Resolver):
     def resolveDOI(self, entity: Entity, doi: str):
         # Expect a redirect. Basically, don't do anything fancy because I don't know
         # if I can correctly resolve a DOI using the structured record
-        url = 'https://doi.org/%s' % doi
+        url = "https://doi.org/%s" % doi
         resolved_url = requests.head(url, allow_redirects=True).url
         if url == resolved_url:
-            raise ResolutionException('Could not resolve DOI %s' % (doi,))
+            raise ResolutionException("Could not resolve DOI %s" % (doi,))
 
         entity.setValue(resolved_url)
-        entity['DOI'] = doi
+        entity["DOI"] = doi
 
 
 class MinidResolver(Resolver):

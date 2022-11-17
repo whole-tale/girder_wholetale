@@ -1,25 +1,26 @@
 import json
-import mock
 import os
-import responses
 import time
-import vcr
-from tests import base
 
+import mock
+import responses
+import vcr
 from girder.models.folder import Folder
 from girder.models.item import Item
-
+from tests import base
 
 DATA_PATH = os.path.join(
-    os.path.dirname(os.environ['GIRDER_TEST_DATA_PREFIX']),
-    'data_src', 'plugins', 'wholetale'
+    os.path.dirname(os.environ["GIRDER_TEST_DATA_PREFIX"]),
+    "data_src",
+    "plugins",
+    "wholetale",
 )
 
 
 def setUpModule():
-    base.enabledPlugins.append('wholetale')
-    base.enabledPlugins.append('wt_home_dir')
-    base.enabledPlugins.append('wt_versioning')
+    base.enabledPlugins.append("wholetale")
+    base.enabledPlugins.append("wt_home_dir")
+    base.enabledPlugins.append("wt_versioning")
     base.startServer()
 
 
@@ -28,25 +29,28 @@ def tearDownModule():
 
 
 class DataverseHarversterTestCase(base.TestCase):
-
     def setUp(self):
-        users = ({
-            'email': 'root@dev.null',
-            'login': 'admin',
-            'firstName': 'Root',
-            'lastName': 'van Klompf',
-            'password': 'secret'
-        }, {
-            'email': 'joe@dev.null',
-            'login': 'joeregular',
-            'firstName': 'Joe',
-            'lastName': 'Regular',
-            'password': 'secret'
-        })
-        self.admin, self.user = [self.model('user').createUser(**user)
-                                 for user in users]
+        users = (
+            {
+                "email": "root@dev.null",
+                "login": "admin",
+                "firstName": "Root",
+                "lastName": "van Klompf",
+                "password": "secret",
+            },
+            {
+                "email": "joe@dev.null",
+                "login": "joeregular",
+                "firstName": "Joe",
+                "lastName": "Regular",
+                "password": "secret",
+            },
+        )
+        self.admin, self.user = [
+            self.model("user").createUser(**user) for user in users
+        ]
 
-    @vcr.use_cassette(os.path.join(DATA_PATH, 'dataverse_lookup.txt'))
+    @vcr.use_cassette(os.path.join(DATA_PATH, "dataverse_lookup.txt"))
     @responses.activate
     def testLookup(self):
         responses.add_passthru("https://dataverse.harvard.edu/api/access")
@@ -54,7 +58,9 @@ class DataverseHarversterTestCase(base.TestCase):
         responses.add_passthru("https://dataverse.harvard.edu/dataset.xhtml")
         responses.add_passthru("https://dataverse.harvard.edu/file.xhtml")
         responses.add_passthru("https://dvn-cloud.s3.amazonaws.com/")
-        responses.add_passthru("https://dataverse.harvard.edu/api/search?q=filePersistentId")
+        responses.add_passthru(
+            "https://dataverse.harvard.edu/api/search?q=filePersistentId"
+        )
         responses.add_passthru("https://dataverse.harvard.edu/citation")
         responses.add_passthru("https://doi.org")
         responses.add(
@@ -84,7 +90,7 @@ class DataverseHarversterTestCase(base.TestCase):
                             },
                             "unf": "UNF:6:6wGE3C5ragT8A0qkpGaEaQ==",
                             "dataset_citation": (
-                                "Durbin, Philip, 2017, \"Open Source at Harvard\", "
+                                'Durbin, Philip, 2017, "Open Source at Harvard", '
                                 "https://doi.org/10.7910/DVN/TJCLKP, Harvard Dataverse, "
                                 " V2, UNF:6:6wGE3C5ragT8A0qkpGaEaQ== [fileUNF]"
                             ),
@@ -92,242 +98,344 @@ class DataverseHarversterTestCase(base.TestCase):
                     ],
                     "count_in_response": 1,
                 },
-            }
+            },
         )
 
         resp = self.request(
-            path='/repository/lookup', method='GET', user=self.user,
-            params={'dataId': json.dumps([
-                'https://doi.org/10.7910/DVN/RLMYMR',
-                'https://doi.org/10.7910/DVN/RLMYMR/WNKD3W',
-                'https://dataverse.harvard.edu/api/access/datafile/3040230'
-            ])}
+            path="/repository/lookup",
+            method="GET",
+            user=self.user,
+            params={
+                "dataId": json.dumps(
+                    [
+                        "https://doi.org/10.7910/DVN/RLMYMR",
+                        "https://doi.org/10.7910/DVN/RLMYMR/WNKD3W",
+                        "https://dataverse.harvard.edu/api/access/datafile/3040230",
+                    ]
+                )
+            },
         )
         self.assertStatus(resp, 200)
-        self.assertEqual(resp.json, [
-            {
-                "dataId": "https://dataverse.harvard.edu/dataset.xhtml"
-                          "?persistentId=doi:10.7910/DVN/RLMYMR",
-                "doi": "doi:10.7910/DVN/RLMYMR",
-                "name": "Karnataka Diet Diversity and Food Security for "
-                        "Agricultural Biodiversity Assessment",
-                "repository": "Dataverse",
-                "size": 495885,
-                "tale": False,
-            },
-            {
-                "dataId": "https://dataverse.harvard.edu/file.xhtml"
-                          "?persistentId=doi:10.7910/DVN/RLMYMR/WNKD3W",
-                "doi": "doi:10.7910/DVN/RLMYMR",
-                "name": "Karnataka Diet Diversity and Food Security for "
-                        "Agricultural Biodiversity Assessment",
-                "repository": "Dataverse",
-                "size": 2321,
-                "tale": False,
-            },
-            {
-                "dataId": "https://dataverse.harvard.edu/api/access/datafile/3040230",
-                "doi": "doi:10.7910/DVN/TJCLKP",
-                "name": "Open Source at Harvard",
-                "repository": "Dataverse",
-                "size": 12025,
-                "tale": False,
-            }
-        ])
+        self.assertEqual(
+            resp.json,
+            [
+                {
+                    "dataId": "https://dataverse.harvard.edu/dataset.xhtml"
+                    "?persistentId=doi:10.7910/DVN/RLMYMR",
+                    "doi": "doi:10.7910/DVN/RLMYMR",
+                    "name": "Karnataka Diet Diversity and Food Security for "
+                    "Agricultural Biodiversity Assessment",
+                    "repository": "Dataverse",
+                    "size": 495885,
+                    "tale": False,
+                },
+                {
+                    "dataId": "https://dataverse.harvard.edu/file.xhtml"
+                    "?persistentId=doi:10.7910/DVN/RLMYMR/WNKD3W",
+                    "doi": "doi:10.7910/DVN/RLMYMR",
+                    "name": "Karnataka Diet Diversity and Food Security for "
+                    "Agricultural Biodiversity Assessment",
+                    "repository": "Dataverse",
+                    "size": 2321,
+                    "tale": False,
+                },
+                {
+                    "dataId": "https://dataverse.harvard.edu/api/access/datafile/3040230",
+                    "doi": "doi:10.7910/DVN/TJCLKP",
+                    "name": "Open Source at Harvard",
+                    "repository": "Dataverse",
+                    "size": 12025,
+                    "tale": False,
+                },
+            ],
+        )
 
         resp = self.request(
-            path='/repository/listFiles', method='GET', user=self.user,
-            params={'dataId': json.dumps([
-                'https://doi.org/10.7910/DVN/RLMYMR',
-                'https://doi.org/10.7910/DVN/RLMYMR/WNKD3W',
-                'https://dataverse.harvard.edu/api/access/datafile/3040230'
-            ])}
+            path="/repository/listFiles",
+            method="GET",
+            user=self.user,
+            params={
+                "dataId": json.dumps(
+                    [
+                        "https://doi.org/10.7910/DVN/RLMYMR",
+                        "https://doi.org/10.7910/DVN/RLMYMR/WNKD3W",
+                        "https://dataverse.harvard.edu/api/access/datafile/3040230",
+                    ]
+                )
+            },
         )
         self.assertStatus(resp, 200)
-        self.assertEqual(resp.json, [
-            {
-                "Karnataka Diet Diversity and Food Security for "
-                "Agricultural Biodiversity Assessment": {
-                    "fileList": [
-                        {"Karnataka_DDFS_Data-1.tab": {"size": 2408}},
-                        {"Karnataka_DDFS_Data-1.xlsx": {"size": 700840}},
-                        {"Karnataka_DDFS_Questionnaire.pdf": {"size": 493564}}
-                    ]
-                }
-            },
-            {
-                "Karnataka Diet Diversity and Food Security for "
-                "Agricultural Biodiversity Assessment": {
-                    "fileList": [
-                        {"Karnataka_DDFS_Data-1.tab": {"size": 2408}},
-                        {"Karnataka_DDFS_Data-1.xlsx": {"size": 700840}}
-                    ]
-                }
-            },
-            {
-                "Open Source at Harvard": {
-                    "fileList": [
-                        {"2017-07-31.csv": {"size": 11684}},
-                        {"2017-07-31.tab": {"size": 12100}}
-                    ]
-                }
-            }
-        ])
+        self.assertEqual(
+            resp.json,
+            [
+                {
+                    "Karnataka Diet Diversity and Food Security for "
+                    "Agricultural Biodiversity Assessment": {
+                        "fileList": [
+                            {"Karnataka_DDFS_Data-1.tab": {"size": 2408}},
+                            {"Karnataka_DDFS_Data-1.xlsx": {"size": 700840}},
+                            {"Karnataka_DDFS_Questionnaire.pdf": {"size": 493564}},
+                        ]
+                    }
+                },
+                {
+                    "Karnataka Diet Diversity and Food Security for "
+                    "Agricultural Biodiversity Assessment": {
+                        "fileList": [
+                            {"Karnataka_DDFS_Data-1.tab": {"size": 2408}},
+                            {"Karnataka_DDFS_Data-1.xlsx": {"size": 700840}},
+                        ]
+                    }
+                },
+                {
+                    "Open Source at Harvard": {
+                        "fileList": [
+                            {"2017-07-31.csv": {"size": 11684}},
+                            {"2017-07-31.tab": {"size": 12100}},
+                        ]
+                    }
+                },
+            ],
+        )
 
     def testConfigValidators(self):
         from girder.plugins.wholetale.constants import PluginSettings, SettingDefault
-        resp = self.request('/system/setting', user=self.admin, method='PUT',
-                            params={'key': PluginSettings.DATAVERSE_URL,
-                                    'value': 'random_string'})
+
+        resp = self.request(
+            "/system/setting",
+            user=self.admin,
+            method="PUT",
+            params={"key": PluginSettings.DATAVERSE_URL, "value": "random_string"},
+        )
         self.assertStatus(resp, 400)
-        self.assertEqual(resp.json, {
-            'field': 'value',
-            'type': 'validation',
-            'message': 'Invalid Dataverse URL'
-        })
+        self.assertEqual(
+            resp.json,
+            {
+                "field": "value",
+                "type": "validation",
+                "message": "Invalid Dataverse URL",
+            },
+        )
 
         resp = self.request(
-            '/system/setting', user=self.admin, method='PUT',
-            params={'key': PluginSettings.DATAVERSE_URL,
-                    'value': SettingDefault.defaults[PluginSettings.DATAVERSE_URL]})
+            "/system/setting",
+            user=self.admin,
+            method="PUT",
+            params={
+                "key": PluginSettings.DATAVERSE_URL,
+                "value": SettingDefault.defaults[PluginSettings.DATAVERSE_URL],
+            },
+        )
         self.assertStatusOk(resp)
 
         resp = self.request(
-            '/system/setting', user=self.admin, method='PUT',
-            params={'key': PluginSettings.DATAVERSE_URL,
-                    'value': ''})
+            "/system/setting",
+            user=self.admin,
+            method="PUT",
+            params={"key": PluginSettings.DATAVERSE_URL, "value": ""},
+        )
         self.assertStatusOk(resp)
         resp = self.request(
-            '/system/setting', user=self.admin, method='GET',
-            params={'key': PluginSettings.DATAVERSE_URL})
+            "/system/setting",
+            user=self.admin,
+            method="GET",
+            params={"key": PluginSettings.DATAVERSE_URL},
+        )
         self.assertStatusOk(resp)
         self.assertEqual(
             resp.body[0].decode(),
-            '"{}"'.format(SettingDefault.defaults[PluginSettings.DATAVERSE_URL]))
+            '"{}"'.format(SettingDefault.defaults[PluginSettings.DATAVERSE_URL]),
+        )
 
-    @vcr.use_cassette(os.path.join(DATA_PATH, 'dataverse_single.txt'))
+    @vcr.use_cassette(os.path.join(DATA_PATH, "dataverse_single.txt"))
     def testSingleDataverseInstance(self):
         from girder.plugins.wholetale.constants import PluginSettings, SettingDefault
-        resp = self.request('/system/setting', user=self.admin, method='PUT',
-                            params={'key': PluginSettings.DATAVERSE_URL,
-                                    'value': 'https://demo.dataverse.org/'})
+
+        resp = self.request(
+            "/system/setting",
+            user=self.admin,
+            method="PUT",
+            params={
+                "key": PluginSettings.DATAVERSE_URL,
+                "value": "https://demo.dataverse.org/",
+            },
+        )
         self.assertStatusOk(resp)
 
         resp = self.request(
-            path='/repository/lookup', method='GET', user=self.user,
-            params={'dataId': json.dumps([
-                "https://demo.dataverse.org/api/access/datafile/1849559"
-            ])}
+            path="/repository/lookup",
+            method="GET",
+            user=self.user,
+            params={
+                "dataId": json.dumps(
+                    ["https://demo.dataverse.org/api/access/datafile/1849559"]
+                )
+            },
         )
         self.assertStatus(resp, 200)
-        self.assertEqual(resp.json, [
-            {
-                "dataId": "https://demo.dataverse.org/api/access/datafile/1849559",
-                "doi": "doi:10.70122/FK2/H60OIK",
-                "name": "test file access by version",
-                "repository": "Dataverse",
-                "size": 4750,
-                "tale": False,
-            }
-        ])
-
-        resp = self.request(
-            path='/repository/listFiles', method='GET', user=self.user,
-            params={'dataId': json.dumps([
-                'https://demo.dataverse.org/api/access/datafile/1849559'
-            ])}
-        )
-        self.assertStatus(resp, 200)
-        self.assertEqual(resp.json, [
-            {
-                "test file access by version": {
-                    "fileList": [
-                        {"images.jpg": {"size": 4750}},
-                    ]
+        self.assertEqual(
+            resp.json,
+            [
+                {
+                    "dataId": "https://demo.dataverse.org/api/access/datafile/1849559",
+                    "doi": "doi:10.70122/FK2/H60OIK",
+                    "name": "test file access by version",
+                    "repository": "Dataverse",
+                    "size": 4750,
+                    "tale": False,
                 }
-            }
-        ])
+            ],
+        )
 
         resp = self.request(
-            '/system/setting', user=self.admin, method='PUT',
-            params={'key': PluginSettings.DATAVERSE_URL,
-                    'value': SettingDefault.defaults[PluginSettings.DATAVERSE_URL]})
+            path="/repository/listFiles",
+            method="GET",
+            user=self.user,
+            params={
+                "dataId": json.dumps(
+                    ["https://demo.dataverse.org/api/access/datafile/1849559"]
+                )
+            },
+        )
+        self.assertStatus(resp, 200)
+        self.assertEqual(
+            resp.json,
+            [
+                {
+                    "test file access by version": {
+                        "fileList": [
+                            {"images.jpg": {"size": 4750}},
+                        ]
+                    }
+                }
+            ],
+        )
+
+        resp = self.request(
+            "/system/setting",
+            user=self.admin,
+            method="PUT",
+            params={
+                "key": PluginSettings.DATAVERSE_URL,
+                "value": SettingDefault.defaults[PluginSettings.DATAVERSE_URL],
+            },
+        )
         self.assertStatusOk(resp)
 
     def testExtraHosts(self):
         from girder.plugins.wholetale.constants import PluginSettings, SettingDefault
-        resp = self.request('/system/setting', user=self.admin, method='PUT',
-                            params={'key': PluginSettings.DATAVERSE_EXTRA_HOSTS,
-                                    'value': 'dataverse.org'})
-        self.assertStatus(resp, 400)
-        self.assertEqual(resp.json, {
-            'field': 'value',
-            'type': 'validation',
-            'message': 'Dataverse extra hosts setting must be a list.'
-        })
 
-        resp = self.request('/system/setting', user=self.admin, method='PUT',
-                            params={'key': PluginSettings.DATAVERSE_EXTRA_HOSTS,
-                                    'value': json.dumps(['not a domain'])})
+        resp = self.request(
+            "/system/setting",
+            user=self.admin,
+            method="PUT",
+            params={
+                "key": PluginSettings.DATAVERSE_EXTRA_HOSTS,
+                "value": "dataverse.org",
+            },
+        )
         self.assertStatus(resp, 400)
-        self.assertEqual(resp.json, {
-            'field': 'value',
-            'type': 'validation',
-            'message': 'Invalid domain in Dataverse extra hosts'
-        })
+        self.assertEqual(
+            resp.json,
+            {
+                "field": "value",
+                "type": "validation",
+                "message": "Dataverse extra hosts setting must be a list.",
+            },
+        )
+
+        resp = self.request(
+            "/system/setting",
+            user=self.admin,
+            method="PUT",
+            params={
+                "key": PluginSettings.DATAVERSE_EXTRA_HOSTS,
+                "value": json.dumps(["not a domain"]),
+            },
+        )
+        self.assertStatus(resp, 400)
+        self.assertEqual(
+            resp.json,
+            {
+                "field": "value",
+                "type": "validation",
+                "message": "Invalid domain in Dataverse extra hosts",
+            },
+        )
 
         # defaults
         resp = self.request(
-            '/system/setting', user=self.admin, method='PUT',
-            params={'key': PluginSettings.DATAVERSE_EXTRA_HOSTS,
-                    'value': ''})
+            "/system/setting",
+            user=self.admin,
+            method="PUT",
+            params={"key": PluginSettings.DATAVERSE_EXTRA_HOSTS, "value": ""},
+        )
         self.assertStatusOk(resp)
         resp = self.request(
-            '/system/setting', user=self.admin, method='GET',
-            params={'key': PluginSettings.DATAVERSE_EXTRA_HOSTS})
+            "/system/setting",
+            user=self.admin,
+            method="GET",
+            params={"key": PluginSettings.DATAVERSE_EXTRA_HOSTS},
+        )
         self.assertStatusOk(resp)
         self.assertEqual(
             resp.body[0].decode(),
-            str(SettingDefault.defaults[PluginSettings.DATAVERSE_EXTRA_HOSTS]))
+            str(SettingDefault.defaults[PluginSettings.DATAVERSE_EXTRA_HOSTS]),
+        )
 
         resp = self.request(
-            '/system/setting', user=self.admin, method='PUT',
-            params={'list': json.dumps([
-                {
-                    'key': PluginSettings.DATAVERSE_EXTRA_HOSTS,
-                    'value': ['random.d.org', 'random2.d.org']
-                },
-                {
-                    'key': PluginSettings.DATAVERSE_URL,
-                    'value': 'https://demo.dataverse.org'
-                }
-            ])}
+            "/system/setting",
+            user=self.admin,
+            method="PUT",
+            params={
+                "list": json.dumps(
+                    [
+                        {
+                            "key": PluginSettings.DATAVERSE_EXTRA_HOSTS,
+                            "value": ["random.d.org", "random2.d.org"],
+                        },
+                        {
+                            "key": PluginSettings.DATAVERSE_URL,
+                            "value": "https://demo.dataverse.org",
+                        },
+                    ]
+                )
+            },
         )
         self.assertStatusOk(resp)
-        from girder.plugins.wholetale.lib.dataverse.provider import DataverseImportProvider
-        self.assertEqual(
-            '^https?://(demo.dataverse.org|random.d.org|random2.d.org).*$',
-            DataverseImportProvider().regex[-1].pattern
+        from girder.plugins.wholetale.lib.dataverse.provider import (
+            DataverseImportProvider,
+        )
+
+        self.assertTrue(
+            "random.d.org|random2.d.org"
+            in DataverseImportProvider().regex[-1].pattern
         )
         resp = self.request(
-            '/system/setting', user=self.admin, method='PUT',
-            params={'key': PluginSettings.DATAVERSE_URL,
-                    'value': SettingDefault.defaults[PluginSettings.DATAVERSE_URL]})
+            "/system/setting",
+            user=self.admin,
+            method="PUT",
+            params={
+                "key": PluginSettings.DATAVERSE_URL,
+                "value": SettingDefault.defaults[PluginSettings.DATAVERSE_URL],
+            },
+        )
 
-    @vcr.use_cassette(os.path.join(DATA_PATH, 'dataverse_hierarchy.txt'))
+    @vcr.use_cassette(os.path.join(DATA_PATH, "dataverse_hierarchy.txt"))
     def testDatasetWithHierarchy(self):
-        from girder.plugins.jobs.models.job import Job
         from girder.plugins.jobs.constants import JobStatus
-        from server.models.image import Image
-        from server.models.tale import Tale
+        from girder.plugins.jobs.models.job import Job
+
         from server.lib.manifest import Manifest
         from server.lib.manifest_parser import ManifestParser
+        from server.models.image import Image
+        from server.models.tale import Tale
+
         doi = "doi:10.7910/DVN/Q5PV4U"
         dataMap = [
             {
                 "dataId": (
-                    "https://dataverse.harvard.edu/dataset.xhtml?"
-                    "persistentId=" + doi
+                    "https://dataverse.harvard.edu/dataset.xhtml?" "persistentId=" + doi
                 ),
                 "doi": doi,
                 "name": (
@@ -379,7 +487,7 @@ class DataverseHarversterTestCase(base.TestCase):
                 "_modelType": "item",
                 "itemId": str(ds_item["_id"]),
                 "mountPath": ds_item["name"],
-            }
+            },
         ]
 
         image = Image().createImage(name="test my name", creator=self.user, public=True)
@@ -387,8 +495,9 @@ class DataverseHarversterTestCase(base.TestCase):
             image, dataSet, creator=self.user, title="Blah", public=True
         )
         with mock.patch("server.lib.manifest.ImageBuilder") as mock_builder:
-            mock_builder.return_value.container_config.repo2docker_version = \
+            mock_builder.return_value.container_config.repo2docker_version = (
                 "craigwillis/repo2docker:latest"
+            )
             mock_builder.return_value.get_tag.return_value = "some_digest"
             manifest = Manifest(tale, self.user, expand_folders=True).manifest
 
@@ -399,8 +508,9 @@ class DataverseHarversterTestCase(base.TestCase):
         Image().remove(image)
 
     def testProtoTale(self):
-        from server.lib.dataverse.provider import DataverseImportProvider
         from server.lib.data_map import DataMap
+        from server.lib.dataverse.provider import DataverseImportProvider
+
         provider = DataverseImportProvider()
 
         datamap = {
@@ -443,5 +553,5 @@ class DataverseHarversterTestCase(base.TestCase):
         # self.assertEqual(tale["authors"][0]["firstName"], "Pooran")
 
     def tearDown(self):
-        self.model('user').remove(self.user)
-        self.model('user').remove(self.admin)
+        self.model("user").remove(self.user)
+        self.model("user").remove(self.admin)

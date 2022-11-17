@@ -1,34 +1,31 @@
 # -*- coding: utf-8 -*-
 
-from bson.objectid import ObjectId
 import datetime
 import json
-import jsonschema
 import tempfile
 import zipfile
 
+import jsonschema
+from bson.objectid import ObjectId
 from girder import events
 from girder.constants import AccessType
 from girder.exceptions import GirderException, ValidationException
 from girder.models.assetstore import Assetstore
 from girder.models.folder import Folder
 from girder.models.item import Item
-from girder.models.user import User
 from girder.models.model_base import AccessControlledModel
 from girder.models.token import Token
+from girder.models.user import User
 from girder.plugins.jobs.models.job import Job
 from girder.utility import assetstore_utilities
+from gwvolman.tasks import BUILD_TALE_IMAGE_STEP_TOTAL, build_tale_image
 
-from .image import Image as imageModel
-from ..schema.misc import dataSetSchema
 from ..constants import TaleStatus
-from ..schema.misc import related_identifiers_schema
-from ..utils import getOrCreateRootFolder, init_progress, notify_event, diff_access
 from ..lib.license import WholeTaleLicense
 from ..lib.manifest_parser import ManifestParser
-
-from gwvolman.tasks import build_tale_image, BUILD_TALE_IMAGE_STEP_TOTAL
-
+from ..schema.misc import dataSetSchema, related_identifiers_schema
+from ..utils import diff_access, getOrCreateRootFolder, init_progress, notify_event
+from .image import Image as imageModel
 
 # Whenever the Tale object schema is modified (e.g. fields are added or
 # removed) increase `_currentTaleFormat` to retroactively apply those
@@ -37,14 +34,10 @@ _currentTaleFormat = 9
 
 
 class Tale(AccessControlledModel):
-
     def initialize(self):
-        self.name = 'tale'
-        self.ensureIndices(('imageId', ([('imageId', 1)], {})))
-        self.ensureTextIndex({
-            'title': 10,
-            'description': 1
-        })
+        self.name = "tale"
+        self.ensureIndices(("imageId", ([("imageId", 1)], {})))
+        self.ensureTextIndex({"title": 10, "description": 1})
 
         # Fields that can be modified via PUT /tale/:id
         self.modifiableFields = {
@@ -90,7 +83,7 @@ class Tale(AccessControlledModel):
                 "status",
                 "title",
                 "updated",
-            }
+            },
         )
 
     @staticmethod
@@ -107,11 +100,7 @@ class Tale(AccessControlledModel):
             else:
                 model = Item()
             model.load(
-                obj["itemId"],
-                level=AccessType.READ,
-                user=creator,
-                fields={},
-                exc=True
+                obj["itemId"], level=AccessType.READ, user=creator, fields={}, exc=True
             )
 
     @staticmethod
@@ -122,38 +111,51 @@ class Tale(AccessControlledModel):
             raise ValidationException(str(exc))
 
     def validate(self, tale):
-        if 'status' not in tale:
-            tale['status'] = TaleStatus.READY
+        if "status" not in tale:
+            tale["status"] = TaleStatus.READY
 
-        if 'iframe' not in tale:
-            tale['iframe'] = False
+        if "iframe" not in tale:
+            tale["iframe"] = False
 
         for array_key in (
-            'publishInfo', 'dataSet', 'dataSetCitation', 'relatedIdentifiers', 'authors',
+            "publishInfo",
+            "dataSet",
+            "dataSetCitation",
+            "relatedIdentifiers",
+            "authors",
         ):
             if not isinstance(tale.get(array_key), list):
                 tale[array_key] = []
 
-        if 'licenseSPDX' not in tale:
-            tale['licenseSPDX'] = WholeTaleLicense.default_spdx()
+        if "licenseSPDX" not in tale:
+            tale["licenseSPDX"] = WholeTaleLicense.default_spdx()
         tale_licenses = WholeTaleLicense()
-        if tale['licenseSPDX'] not in tale_licenses.supported_spdxes():
-            tale['licenseSPDX'] = WholeTaleLicense.default_spdx()
+        if tale["licenseSPDX"] not in tale_licenses.supported_spdxes():
+            tale["licenseSPDX"] = WholeTaleLicense.default_spdx()
 
-        if tale.get('config') is None:
-            tale['config'] = {}
+        if tale.get("config") is None:
+            tale["config"] = {}
 
-        if 'copyOfTale' not in tale:
-            tale['copyOfTale'] = None
+        if "copyOfTale" not in tale:
+            tale["copyOfTale"] = None
 
-        tale['format'] = _currentTaleFormat
+        tale["format"] = _currentTaleFormat
 
         self._validate_dataset(tale)
         self._validate_related_identifiers(tale)
         return tale
 
-    def list(self, user=None, data=None, image=None, limit=0, offset=0,
-             sort=None, currentUser=None, level=AccessType.READ):
+    def list(
+        self,
+        user=None,
+        data=None,
+        image=None,
+        limit=0,
+        offset=0,
+        sort=None,
+        currentUser=None,
+        level=AccessType.READ,
+    ):
         """
         List a page of jobs for a given user.
 
@@ -170,62 +172,78 @@ class Tale(AccessControlledModel):
         """
         cursor_def = {}
         if user is not None:
-            cursor_def['creatorId'] = user['_id']
+            cursor_def["creatorId"] = user["_id"]
         if data is not None:
-            cursor_def['dataSet'] = data
+            cursor_def["dataSet"] = data
         if image is not None:
-            cursor_def['imageId'] = image['_id']
+            cursor_def["imageId"] = image["_id"]
 
         cursor = self.find(cursor_def, sort=sort)
         for r in self.filterResultsByPermission(
-                cursor=cursor, user=currentUser, level=level,
-                limit=limit, offset=offset):
+            cursor=cursor, user=currentUser, level=level, limit=limit, offset=offset
+        ):
             yield r
 
-    def createTale(self, image, data, creator=None, save=True, title=None,
-                   description=None, public=None, config=None, authors=None,
-                   icon=None, category=None, illustration=None,
-                   licenseSPDX=None,
-                   status=TaleStatus.READY, publishInfo=None,
-                   relatedIdentifiers=None, imageInfo=None):
+    def createTale(
+        self,
+        image,
+        data,
+        creator=None,
+        save=True,
+        title=None,
+        description=None,
+        public=None,
+        config=None,
+        authors=None,
+        icon=None,
+        category=None,
+        illustration=None,
+        licenseSPDX=None,
+        status=TaleStatus.READY,
+        publishInfo=None,
+        relatedIdentifiers=None,
+        imageInfo=None,
+    ):
 
         if creator is None:
             creatorId = None
         else:
-            creatorId = creator.get('_id', None)
+            creatorId = creator.get("_id", None)
 
         if title is None:
             title = f"A tale based on {image['name']}"
 
         if description is None:
-            description = f'This Tale, {title}, represents a computational experiment. ' \
-                          f'It contains code, data, and metadata relevant to the experiment.'
+            description = (
+                f"This Tale, {title}, represents a computational experiment. "
+                f"It contains code, data, and metadata relevant to the experiment."
+            )
         # if illustration is None:
-            # Get image from SILS
+        # Get image from SILS
 
         now = datetime.datetime.utcnow()
         tale = {
-            'authors': authors,
-            'category': category,
-            'config': config or {},
-            'copyOfTale': None,
-            'creatorId': creatorId,
-            'dataSet': data or [],
-            'description': description,
-            'format': _currentTaleFormat,
-            'created': now,
-            'icon': icon,
-            'iframe': image.get('iframe', False),
-            'imageId': ObjectId(image['_id']),
-            'imageInfo': imageInfo or {},
-            'illustration': illustration,
-            'title': title,
-            'public': public,
-            'publishInfo': publishInfo or [],
-            'relatedIdentifiers': relatedIdentifiers or [],
-            'updated': now,
-            'licenseSPDX': licenseSPDX or WholeTaleLicense.default_spdx(),
-            'status': status,
+            "authors": authors,
+            "category": category,
+            "config": config or {},
+            "copyOfTale": None,
+            "creatorId": creatorId,
+            "dataSet": data or [],
+            "description": description,
+            "format": _currentTaleFormat,
+            "created": now,
+            "icon": icon,
+            "iframe": image.get("iframe", False),
+            "imageId": ObjectId(image["_id"]),
+            "imageInfo": imageInfo or {},
+            "illustration": illustration,
+            "title": title,
+            "public": public,
+            "publishInfo": publishInfo or [],
+            "relatedIdentifiers": relatedIdentifiers or [],
+            "updated": now,
+            "licenseSPDX": licenseSPDX or WholeTaleLicense.default_spdx(),
+            "status": status,
         }
         if public is not None and isinstance(public, bool):
             self.setPublic(tale, public, save=False)
@@ -233,38 +251,41 @@ class Tale(AccessControlledModel):
             public = False
 
         if creator is not None:
-            self.setUserAccess(tale, user=creator, level=AccessType.ADMIN,
-                               save=False)
+            self.setUserAccess(tale, user=creator, level=AccessType.ADMIN, save=False)
 
         if save:
             tale = self.save(tale)
-            notify_event([creator["_id"]], "wt_tale_created", {"taleId": tale['_id']})
+            notify_event([creator["_id"]], "wt_tale_created", {"taleId": tale["_id"]})
 
-        if tale['dataSet']:
+        if tale["dataSet"]:
             events.daemon.trigger(
-                eventName="tale.update_citation",
-                info={"tale": tale, "user": creator}
+                eventName="tale.update_citation", info={"tale": tale, "user": creator}
             )
         return tale
 
     def _createAuxFolder(self, tale, rootFolderName, creator=None):
         if creator is None:
-            creator = self.model('user').load(tale['creatorId'], force=True)
+            creator = self.model("user").load(tale["creatorId"], force=True)
 
-        if tale['public'] is not None and isinstance(tale['public'], bool):
-            public = tale['public']
+        if tale["public"] is not None and isinstance(tale["public"], bool):
+            public = tale["public"]
         else:
             public = False
 
         rootFolder = getOrCreateRootFolder(rootFolderName)
-        auxFolder = self.model('folder').createFolder(
-            rootFolder, str(tale['_id']), parentType='folder',
-            public=public, reuseExisting=True)
-        self.model('folder').setUserAccess(
-            auxFolder, user=creator, level=AccessType.ADMIN,
-            save=True)
-        auxFolder = self.model('folder').setMetadata(
-            auxFolder, {'taleId': str(tale['_id'])})
+        auxFolder = self.model("folder").createFolder(
+            rootFolder,
+            str(tale["_id"]),
+            parentType="folder",
+            public=public,
+            reuseExisting=True,
+        )
+        self.model("folder").setUserAccess(
+            auxFolder, user=creator, level=AccessType.ADMIN, save=True
+        )
+        auxFolder = self.model("folder").setMetadata(
+            auxFolder, {"taleId": str(tale["_id"])}
+        )
         return auxFolder
 
     def updateTale(self, tale):
@@ -275,14 +296,22 @@ class Tale(AccessControlledModel):
         :type tale: dict
         :returns: The tale document that was edited.
         """
-        tale['updated'] = datetime.datetime.utcnow()
+        tale["updated"] = datetime.datetime.utcnow()
         ret = self.save(tale)
-        users = [user['id'] for user in tale['access']['users']]
-        notify_event(users, "wt_tale_updated", {"taleId": tale['_id']})
+        users = [user["id"] for user in tale["access"]["users"]]
+        notify_event(users, "wt_tale_updated", {"taleId": tale["_id"]})
         return ret
 
-    def setAccessList(self, doc, access, save=False, user=None, force=False,
-                      setPublic=None, publicFlags=None):
+    def setAccessList(
+        self,
+        doc,
+        access,
+        save=False,
+        user=None,
+        force=False,
+        setPublic=None,
+        publicFlags=None,
+    ):
         """
         Overrides AccessControlledModel.setAccessList to encapsulate ACL
         functionality for a tale.
@@ -309,12 +338,12 @@ class Tale(AccessControlledModel):
             self.setPublic(doc, setPublic, save=False)
 
         if publicFlags is not None:
-            doc = self.setPublicFlags(doc, publicFlags, user=user, save=False,
-                                      force=force)
+            doc = self.setPublicFlags(
+                doc, publicFlags, user=user, save=False, force=force
+            )
 
         added, removed = diff_access(doc["access"], access)
-        doc = super().setAccessList(
-            doc, access, user=user, save=save, force=force)
+        doc = super().setAccessList(doc, access, user=user, save=save, force=force)
 
         if save:
             notify_event(added, "wt_tale_shared", {"taleId": str(doc["_id"])})
@@ -322,8 +351,15 @@ class Tale(AccessControlledModel):
 
             for folder in Folder().find({"meta.taleId": str(doc["_id"])}):
                 Folder().setAccessList(
-                    folder, access, user=user, save=save, force=force, recurse=True,
-                    setPublic=setPublic, publicFlags=publicFlags)
+                    folder,
+                    access,
+                    user=user,
+                    save=save,
+                    force=force,
+                    recurse=True,
+                    setPublic=setPublic,
+                    publicFlags=publicFlags,
+                )
 
         return doc
 
@@ -339,7 +375,13 @@ class Tale(AccessControlledModel):
             level = None
 
         doc = super().setUserAccess(
-            doc, user, level, save=save, flags=flags, currentUser=currentUser, force=force
+            doc,
+            user,
+            level,
+            save=save,
+            flags=flags,
+            currentUser=currentUser,
+            force=force,
         )
 
         if save and "_id" in doc:  # During creation of Tale it's not there yet.
@@ -352,7 +394,7 @@ class Tale(AccessControlledModel):
                     save=save,
                     flags=flags,
                     currentUser=currentUser,
-                    force=force
+                    force=force,
                 )
         return doc
 
@@ -362,23 +404,27 @@ class Tale(AccessControlledModel):
         """
 
         resource = {
-            'type': 'wt_build_image',
-            'tale_id': tale['_id'],
-            'tale_title': tale['title']
+            "type": "wt_build_image",
+            "tale_id": tale["_id"],
+            "tale_title": tale["title"],
         }
 
         token = Token().createToken(user=user, days=0.5)
 
         notification = init_progress(
-            resource, user, 'Building image',
-            'Initializing', BUILD_TALE_IMAGE_STEP_TOTAL)
+            resource,
+            user,
+            "Building image",
+            "Initializing",
+            BUILD_TALE_IMAGE_STEP_TOTAL,
+        )
 
         buildTask = build_tale_image.signature(
-            args=[str(tale['_id']), force],
+            args=[str(tale["_id"]), force],
             girder_job_other_fields={
-                'wt_notification_id': str(notification['_id']),
+                "wt_notification_id": str(notification["_id"]),
             },
-            girder_client_token=str(token['_id']),
+            girder_client_token=str(token["_id"]),
         ).apply_async()
 
         return buildTask.job
@@ -398,11 +444,12 @@ class Tale(AccessControlledModel):
 
             with zipfile.ZipFile(fp) as z:
                 manifest_file = next(
-                    (_ for _ in z.namelist() if _.endswith('manifest.json')),
-                    None
+                    (_ for _ in z.namelist() if _.endswith("manifest.json")), None
                 )
                 if not manifest_file:
-                    raise GirderException("Provided file doesn't contain a Tale manifest")
+                    raise GirderException(
+                        "Provided file doesn't contain a Tale manifest"
+                    )
 
                 try:
                     mp = ManifestParser(json.loads(z.read(manifest_file).decode()))
@@ -413,14 +460,15 @@ class Tale(AccessControlledModel):
                     )
 
                 env_file = next(
-                    (_ for _ in z.namelist() if _.endswith("environment.json")),
-                    None
+                    (_ for _ in z.namelist() if _.endswith("environment.json")), None
                 )
                 try:
                     environment = json.loads(z.read(env_file).decode())
                 except Exception as e:
                     raise GirderException(
-                        "Couldn't read environment.json or not a Tale: {}".format(str(e))
+                        "Couldn't read environment.json or not a Tale: {}".format(
+                            str(e)
+                        )
                     )
 
                 # Extract files to tmp on workspace assetstore
@@ -434,13 +482,13 @@ class Tale(AccessControlledModel):
     def createTaleFromStream(
         self, stream, user=None, publishInfo=None, relatedIdentifiers=None
     ):
-        temp_dir, manifest_file, manifest, environment = self._extractZipPayload(
-            stream
-        )
+        temp_dir, manifest_file, manifest, environment = self._extractZipPayload(stream)
 
         mp = ManifestParser(manifest)
         new_tale = mp.get_tale_fields_from_environment(environment)
-        image = imageModel().load(new_tale.pop("imageId"), user=user, level=AccessType.READ)
+        image = imageModel().load(
+            new_tale.pop("imageId"), user=user, level=AccessType.READ
+        )
         new_tale.update(mp.get_tale_fields())
 
         if relatedIdentifiers is None:
@@ -466,40 +514,41 @@ class Tale(AccessControlledModel):
         # We don't call mp.get_dataset now, cause it might require
         # a registration step. It's going to be called inside import_tale job.
 
-        tale = self.createTale(
-            image,
-            [],
-            **new_tale
-        )
+        tale = self.createTale(image, [], **new_tale)
 
         resource = {
             "type": "wt_zip_import",
             "tale_id": tale["_id"],
-            "tale_title": tale["title"]
+            "tale_title": tale["title"],
         }
         notification = init_progress(
             resource, user, "Importing Tale", "Initializing", 3
         )
 
         job = Job().createLocalJob(
-            title='Import Tale from zip', user=user,
-            type='wholetale.import_tale', public=False, _async=True,
-            module='girder.plugins.wholetale.tasks.import_tale',
+            title="Import Tale from zip",
+            user=user,
+            type="wholetale.import_tale",
+            public=False,
+            _async=True,
+            module="girder.plugins.wholetale.tasks.import_tale",
             args=(temp_dir, manifest_file),
-            kwargs={'taleId': tale["_id"]},
+            kwargs={"taleId": tale["_id"]},
             otherFields={
                 "taleId": tale["_id"],
-                "wt_notification_id": str(notification["_id"])
+                "wt_notification_id": str(notification["_id"]),
             },
         )
         Job().scheduleJob(job)
         return tale
 
-    def addGitRepo(self, tale, url, user=None, spawn=False, change_status=False, title=None):
+    def addGitRepo(
+        self, tale, url, user=None, spawn=False, change_status=False, title=None
+    ):
         resource = {
             "type": "wt_git_import",
             "tale_id": tale["_id"],
-            "tale_title": tale["title"]
+            "tale_title": tale["title"],
         }
         notification = init_progress(
             resource, user, "Importing from Git", "Initializing", 1
@@ -516,11 +565,11 @@ class Tale(AccessControlledModel):
             kwargs={
                 "taleId": tale["_id"],
                 "spawn": spawn,
-                "change_status": change_status
+                "change_status": change_status,
             },
             otherFields={
                 "taleId": tale["_id"],
-                "wt_notification_id": str(notification["_id"])
+                "wt_notification_id": str(notification["_id"]),
             },
         )
         Job().scheduleJob(job)

@@ -1,19 +1,19 @@
-import httmock
 import io
 import json
-import mock
 import os
 import tempfile
-import vcr
 import zipfile
-from tests import base
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import parse_qs, urlparse
+
+import httmock
+import mock
+import vcr
 from girder.exceptions import GirderException
 from girder.models.assetstore import Assetstore
 from girder.models.folder import Folder
 from girder.models.setting import Setting
 from girder.models.user import User
-
+from tests import base
 
 DATA_PATH = os.path.join(
     os.path.dirname(os.environ["GIRDER_TEST_DATA_PREFIX"]),
@@ -332,8 +332,8 @@ class ZenodoHarversterTestCase(base.TestCase):
         self.assertEqual(qs["uri"], ["https://zenodo.org/record/5092301"])
 
     def test_import_tale(self):
-        from girder.plugins.wholetale.models.tale import Tale
         from girder.plugins.oauth.constants import PluginSettings as OAuthSettings
+        from girder.plugins.wholetale.models.tale import Tale
 
         Setting().set(OAuthSettings.PROVIDERS_ENABLED, ["globus"])
         Setting().set(OAuthSettings.GLOBUS_CLIENT_ID, "client_id")

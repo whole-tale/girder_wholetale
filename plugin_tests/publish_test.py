@@ -1,8 +1,8 @@
 import json
-import mock
-from tests import base
 
+import mock
 from girder.models.user import User
+from tests import base
 
 
 def setUpModule():
@@ -49,9 +49,16 @@ class PublishTestCase(base.TestCase):
         )
         self.admin, self.user = [User().createUser(**user) for user in users]
         self.image = self.model("image", "wholetale").createImage(
-            name="test my name", creator=self.admin, public=True,
-            config=dict(template='base.tpl', buildpack='SomeBuildPack',
-                        user='someUser', port=8888, urlPath='')
+            name="test my name",
+            creator=self.admin,
+            public=True,
+            config=dict(
+                template="base.tpl",
+                buildpack="SomeBuildPack",
+                user="someUser",
+                port=8888,
+                urlPath="",
+            ),
         )
 
         self.tale = self.model("tale", "wholetale").createTale(
@@ -98,9 +105,12 @@ class PublishTestCase(base.TestCase):
         ) as dl, mock.patch(
             "girder.plugins.wholetale.lib.manifest.ImageBuilder"
         ) as mock_builder:
-            mock_builder.return_value.container_config.repo2docker_version = \
+            mock_builder.return_value.container_config.repo2docker_version = (
                 "craigwillis/repo2docker:latest"
-            mock_builder.return_value.get_tag.return_value = "images.local.wholetale.org/digest123"
+            )
+            mock_builder.return_value.get_tag.return_value = (
+                "images.local.wholetale.org/digest123"
+            )
             dl.return_value = FakeJob()
 
             remoteMemberNode = "nowhere"  # non exisiting repository
@@ -158,9 +168,12 @@ class PublishTestCase(base.TestCase):
         ) as dl, mock.patch(
             "girder.plugins.wholetale.lib.manifest.ImageBuilder"
         ) as mock_builder:
-            mock_builder.return_value.container_config.repo2docker_version = \
+            mock_builder.return_value.container_config.repo2docker_version = (
                 "craigwillis/repo2docker:latest"
-            mock_builder.return_value.get_tag.return_value = "images.local.wholetale.org/digest123"
+            )
+            mock_builder.return_value.get_tag.return_value = (
+                "images.local.wholetale.org/digest123"
+            )
             dl.return_value = FakeJob()
 
             repository = "sandbox.zenodo.org"

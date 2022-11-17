@@ -14,20 +14,20 @@ from girder.utility.progress import ProgressContext
 from ..models.tale import Tale
 from ..utils import notify_event
 from .bdbag.bdbag_provider import BDBagProvider
-from .deriva.provider import DerivaProvider
 from .dataone.auth import DataONEVerificator
 from .dataone.provider import DataOneImportProvider
 from .dataverse.auth import DataverseVerificator
 from .dataverse.provider import DataverseImportProvider
 from .deriva.auth import DerivaVerificator
+from .deriva.provider import DerivaProvider
 from .entity import Entity
 from .globus.globus_provider import GlobusImportProvider
 from .http_provider import HTTPImportProvider
 from .import_providers import ImportProviders
 from .null_provider import NullImportProvider
-from .openicpsr.provider import OpenICPSRImportProvider
 from .openicpsr.auth import OpenICPSRVerificator
-from .resolvers import DOIResolver, ResolutionException, Resolvers, MinidResolver
+from .openicpsr.provider import OpenICPSRImportProvider
+from .resolvers import DOIResolver, MinidResolver, ResolutionException, Resolvers
 from .zenodo.auth import ZenodoVerificator
 from .zenodo.provider import ZenodoImportProvider
 
@@ -94,7 +94,9 @@ def pids_to_entities(pids, user=None, base_url=None, lookup=True):
     return results
 
 
-def register_dataMap(dataMaps, parent, parentType, user=None, base_url=None, progress=False):
+def register_dataMap(
+    dataMaps, parent, parentType, user=None, base_url=None, progress=False
+):
     """
     Register a list of Data Maps into a given Girder object
 
@@ -166,10 +168,17 @@ def update_citation(event):
         except Exception as ex:
             logger.info('Unable to get a citation for %s, getting "%s"', doi, str(ex))
 
-    Tale().update({"_id": tale["_id"]}, update={"$set": {
-        "dataSetCitation": citations,
-        "relatedIdentifiers": related_ids,
-    }})
+    Tale().update(
+        {"_id": tale["_id"]},
+        update={
+            "$set": {
+                "dataSetCitation": citations,
+                "relatedIdentifiers": related_ids,
+            }
+        },
+    )
     notify_event(
-        [_["id"] for _ in tale["access"]["users"]], "wt_tale_updated", {"taleId": tale["_id"]}
+        [_["id"] for _ in tale["access"]["users"]],
+        "wt_tale_updated",
+        {"taleId": tale["_id"]},
     )

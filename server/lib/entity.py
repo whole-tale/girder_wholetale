@@ -8,6 +8,7 @@ class Entity:
     DOI points to, store it in the "URL" entity field, and store "10.1037/rmh0000008" in the
     entity "DOI" field.
     """
+
     def __init__(self, rawValue, user):
         self.rawValue = rawValue
         self.value = rawValue
@@ -39,4 +40,4 @@ class Entity:
         return key in self.dict
 
     def __str__(self):
-        return 'Entity[%s, %s; %s]' % (self.rawValue, self.value, self.dict)
+        return "Entity[%s, %s; %s]" % (self.rawValue, self.value, self.dict)

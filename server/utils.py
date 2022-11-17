@@ -1,22 +1,27 @@
-import os
 import datetime
-import six.moves.urllib as urllib
+import os
 
-from girder.utility.model_importer import ModelImporter
+import six.moves.urllib as urllib
 from girder.models.notification import Notification
 from girder.models.user import User
-
+from girder.utility.model_importer import ModelImporter
 
 NOTIFICATION_EXP_HOURS = 1
 WT_EVENT_EXP_SECONDS = int(os.environ.get("GIRDER_WT_EVENT_EXP_SECONDS", 5))
 
 
 def getOrCreateRootFolder(name, description=""):
-    collection = ModelImporter.model('collection').createCollection(
-        name, public=True, reuseExisting=True)
-    folder = ModelImporter.model('folder').createFolder(
-        collection, name, parentType='collection', public=True,
-        reuseExisting=True, description=description)
+    collection = ModelImporter.model("collection").createCollection(
+        name, public=True, reuseExisting=True
+    )
+    folder = ModelImporter.model("folder").createFolder(
+        collection,
+        name,
+        parentType="collection",
+        public=True,
+        reuseExisting=True,
+        description=description,
+    )
     return folder
 
 
@@ -57,37 +62,43 @@ def notify_event(users, event, affectedIds):
     :param affectedIds: Map of affected object Ids
     """
     data = {
-        'event': event,
-        'affectedResourceIds': affectedIds,
-        'resourceName': 'WT event'
+        "event": event,
+        "affectedResourceIds": affectedIds,
+        "resourceName": "WT event",
     }
 
-    expires = datetime.datetime.utcnow() + datetime.timedelta(seconds=WT_EVENT_EXP_SECONDS)
+    expires = datetime.datetime.utcnow() + datetime.timedelta(
+        seconds=WT_EVENT_EXP_SECONDS
+    )
 
     for user_id in users:
         user = User().load(user_id, force=True)
         Notification().createNotification(
-            type="wt_event", data=data, user=user, expires=expires)
+            type="wt_event", data=data, user=user, expires=expires
+        )
 
 
 def init_progress(resource, user, title, message, total):
     resource["jobCurrent"] = 0
     resource["jobId"] = None
     data = {
-        'title': title,
-        'total': total,
-        'current': 0,
-        'state': 'active',
-        'message': message,
-        'estimateTime': False,
-        'resource': resource,
-        'resourceName': 'WT custom resource'
+        "title": title,
+        "total": total,
+        "current": 0,
+        "state": "active",
+        "message": message,
+        "estimateTime": False,
+        "resource": resource,
+        "resourceName": "WT custom resource",
     }
 
-    expires = datetime.datetime.utcnow() + datetime.timedelta(hours=NOTIFICATION_EXP_HOURS)
+    expires = datetime.datetime.utcnow() + datetime.timedelta(
+        hours=NOTIFICATION_EXP_HOURS
+    )
 
     return Notification().createNotification(
-        type="wt_progress", data=data, user=user, expires=expires)
+        type="wt_progress", data=data, user=user, expires=expires
+    )
 
 
 def deep_get(dikt, path):
@@ -113,8 +124,8 @@ def diff_access(access1, access2):
     """Diff two access lists to identify which users
     were added or removed.
     """
-    existing = {str(user['id']) for user in access1['users']}
-    new = {str(user['id']) for user in access2['users']}
+    existing = {str(user["id"]) for user in access1["users"]}
+    new = {str(user["id"]) for user in access2["users"]}
     added = list(new - existing)
     removed = list(existing - new)
     return (added, removed)

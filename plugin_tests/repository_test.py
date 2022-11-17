@@ -1,6 +1,7 @@
 import json
-from tests import base
+
 from girder.models.user import User
+from tests import base
 
 # TODO: for some reason vcr is stuck in a infinite loop
 

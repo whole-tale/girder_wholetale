@@ -8,11 +8,12 @@ import stat
 import sys
 import time
 import traceback
+
 from fs.base import FS
 from fs.copy import copy_fs
 from fs.enums import ResourceType
-from fs.errors import FileExpected
 from fs.error_tools import convert_os_errors
+from fs.errors import FileExpected
 from fs.info import Info
 from fs.mode import Mode
 from fs.osfs import OSFS
@@ -21,17 +22,17 @@ from fs.permissions import Permissions
 from fs.tarfs import ReadTarFS
 from fs.zipfs import ReadZipFS
 from girder import events
-from girderfs.dms import WtDmsGirderFS
-from girder_client import GirderClient
 from girder.constants import AccessType
 from girder.models.folder import Folder
 from girder.models.item import Item
 from girder.models.notification import Notification
 from girder.models.token import Token
 from girder.models.user import User
-from girder.utility import config, JsonEncoder
 from girder.plugins.jobs.constants import JobStatus
 from girder.plugins.jobs.models.job import Job
+from girder.utility import JsonEncoder, config
+from girder_client import GirderClient
+from girderfs.dms import WtDmsGirderFS
 
 from ..constants import CATALOG_NAME, InstanceStatus, TaleStatus
 from ..lib import pids_to_entities, register_dataMap
@@ -98,7 +99,7 @@ def run(job):
     jobModel = Job()
     jobModel.updateJob(job, status=JobStatus.RUNNING)
 
-    lookup_kwargs, = job["args"]
+    (lookup_kwargs,) = job["args"]
     user = User().load(job["userId"], force=True)
     tale = Tale().load(job["kwargs"]["taleId"], user=user)
     spawn = job["kwargs"]["spawn"]
@@ -111,7 +112,7 @@ def run(job):
     progressCurrent = 0
 
     try:
-        notify_event([user["_id"]], "wt_import_started", {"taleId": tale['_id']})
+        notify_event([user["_id"]], "wt_import_started", {"taleId": tale["_id"]})
 
         # 0. Spawn instance in the background
         if spawn:
@@ -211,14 +212,18 @@ def run(job):
                 _["itemId"] for _ in data_set
             }
             tale["dataSet"] = data_set
-            Tale().update({"_id": tale["_id"]}, update={"$set": {"dataSet": tale["dataSet"]}})
+            Tale().update(
+                {"_id": tale["_id"]}, update={"$set": {"dataSet": tale["dataSet"]}}
+            )
 
             if update_citations:
                 eventParams = {"tale": tale, "user": user}
                 events.daemon.trigger("tale.update_citation", eventParams)
 
         # Tale is ready to be built
-        Tale().update({"_id": tale["_id"]}, update={"$set": {"status": TaleStatus.READY}})
+        Tale().update(
+            {"_id": tale["_id"]}, update={"$set": {"status": TaleStatus.READY}}
+        )
 
         # 4. Wait for container to show up
         if spawn:
@@ -246,10 +251,12 @@ def run(job):
         else:
             instance = None
 
-        notify_event([user["_id"]], "wt_import_completed", {"taleId": tale['_id']})
+        notify_event([user["_id"]], "wt_import_completed", {"taleId": tale["_id"]})
 
     except Exception:
-        Tale().update({"_id": tale["_id"]}, update={"$set": {"status": TaleStatus.ERROR}})
+        Tale().update(
+            {"_id": tale["_id"]}, update={"$set": {"status": TaleStatus.ERROR}}
+        )
         t, val, tb = sys.exc_info()
         log = "%s: %s\n%s" % (t.__name__, repr(val), traceback.extract_tb(tb))
         jobModel.updateJob(

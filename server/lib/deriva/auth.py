@@ -1,4 +1,5 @@
 from girder.models.setting import Setting
+
 from ...constants import PluginSettings
 from ..verificator import Verificator
 
@@ -13,8 +14,8 @@ class DerivaVerificator(Verificator):
         scope_map = Setting().get(PluginSettings.DERIVA_SCOPES)
         if self.resource_server in scope_map:
             scope = scope_map[self.resource_server]
-            if 'otherTokens' in self.user:
-                for token in self.user['otherTokens']:
+            if "otherTokens" in self.user:
+                for token in self.user["otherTokens"]:
                     if token.get("scope") == scope:
-                        return {'Authorization': 'Bearer ' + token['access_token']}
+                        return {"Authorization": "Bearer " + token["access_token"]}
         return {}

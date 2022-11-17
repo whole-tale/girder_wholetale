@@ -1,17 +1,17 @@
+import os
+import shutil
+import tempfile
+import time
+from datetime import datetime
+
 import git
 import mock
-import os
 import pymongo
-import time
-import tempfile
-import shutil
-from datetime import datetime
-from tests import base
-from .tests_helpers import get_events
-
 from girder.models.folder import Folder
 from girder.models.user import User
+from tests import base
 
+from .tests_helpers import get_events
 
 Tale = None
 Image = None
@@ -29,9 +29,9 @@ def setUpModule():
     global JobStatus, Tale, ImageStatus, Image, Job
     from girder.plugins.jobs.constants import JobStatus
     from girder.plugins.jobs.models.job import Job
-    from girder.plugins.wholetale.models.tale import Tale
-    from girder.plugins.wholetale.models.image import Image
     from girder.plugins.wholetale.constants import ImageStatus
+    from girder.plugins.wholetale.models.image import Image
+    from girder.plugins.wholetale.models.tale import Tale
 
 
 def tearDownModule():
@@ -98,15 +98,14 @@ class GitImportTestCase(base.TestCase):
         )
         self.assertStatusOk(resp)
 
-        job = (
+        job = list(
             Job()
             .find({"type": "wholetale.import_git_repo"})
             .sort([("created", pymongo.DESCENDING)])
             .limit(1)
-            .next()
-        )
+        )[0]
 
-        for i in range(10):
+        for _ in range(10):
             time.sleep(0.5)
             job = Job().load(job["_id"], force=True, includeLog=True)
             if job["status"] >= JobStatus.SUCCESS:
@@ -129,15 +128,14 @@ class GitImportTestCase(base.TestCase):
         self.assertStatusOk(resp)
         tale = resp.json
 
-        job = (
+        job = list(
             Job()
             .find({"type": "wholetale.import_git_repo"})
             .sort([("created", pymongo.DESCENDING)])
-            .limit(1)
-            .next()
-        )
+            .limit(1),
+        )[0]
 
-        for i in range(60):
+        for _ in range(60):
             time.sleep(0.5)
             job = Job().load(job["_id"], force=True, includeLog=True)
             if job["status"] >= JobStatus.SUCCESS:
@@ -180,9 +178,9 @@ class GitImportTestCase(base.TestCase):
             # Confirm events
             events = get_events(self, since)
             self.assertEqual(len(events), 3)
-            self.assertEqual(events[0]['data']['event'], 'wt_tale_created')
-            self.assertEqual(events[1]['data']['event'], 'wt_import_started')
-            self.assertEqual(events[2]['data']['event'], 'wt_import_completed')
+            self.assertEqual(events[0]["data"]["event"], "wt_tale_created")
+            self.assertEqual(events[1]["data"]["event"], "wt_import_started")
+            self.assertEqual(events[2]["data"]["event"], "wt_import_completed")
             shutil.rmtree(workspace_path)
             os.mkdir(workspace_path)
             Tale().remove(tale)
@@ -198,9 +196,9 @@ class GitImportTestCase(base.TestCase):
         # Confirm events
         events = get_events(self, since)
         self.assertEqual(len(events), 3)
-        self.assertEqual(events[0]['data']['event'], 'wt_tale_created')
-        self.assertEqual(events[1]['data']['event'], 'wt_import_started')
-        self.assertEqual(events[2]['data']['event'], 'wt_import_failed')
+        self.assertEqual(events[0]["data"]["event"], "wt_tale_created")
+        self.assertEqual(events[1]["data"]["event"], "wt_import_started")
+        self.assertEqual(events[2]["data"]["event"], "wt_import_failed")
         Tale().remove(tale)
 
     def testGitImport(self):
@@ -218,8 +216,8 @@ class GitImportTestCase(base.TestCase):
         # Confirm events
         events = get_events(self, since)
         self.assertEqual(len(events), 2)
-        self.assertEqual(events[0]['data']['event'], 'wt_import_started')
-        self.assertEqual(events[1]['data']['event'], 'wt_import_failed')
+        self.assertEqual(events[0]["data"]["event"], "wt_import_started")
+        self.assertEqual(events[1]["data"]["event"], "wt_import_failed")
 
         # Default branch (master)
         since = datetime.utcnow().isoformat()
@@ -234,8 +232,8 @@ class GitImportTestCase(base.TestCase):
         # Confirm events
         events = get_events(self, since)
         self.assertEqual(len(events), 2)
-        self.assertEqual(events[0]['data']['event'], 'wt_import_started')
-        self.assertEqual(events[1]['data']['event'], 'wt_import_completed')
+        self.assertEqual(events[0]["data"]["event"], "wt_import_started")
+        self.assertEqual(events[1]["data"]["event"], "wt_import_completed")
         shutil.rmtree(workspace_path)
         os.mkdir(workspace_path)
 

@@ -1,21 +1,21 @@
 import os
 import pathlib
 import re
-import requests
 from urllib.parse import urlparse, urlunparse
 from urllib.request import urlopen
 
+import requests
 from girder.models.folder import Folder
 from girder.models.item import Item
 from girder.models.setting import Setting
 
-from ..import_providers import ImportProvider
-from ..data_map import DataMap
-from ..file_map import FileMap
-from ..import_item import ImportItem
-from ..entity import Entity
 from ... import constants
 from ...models.tale import Tale
+from ..data_map import DataMap
+from ..entity import Entity
+from ..file_map import FileMap
+from ..import_item import ImportItem
+from ..import_providers import ImportProvider
 from . import ZenodoNotATaleError
 
 
@@ -212,7 +212,9 @@ class ZenodoImportProvider(ImportProvider):
             for folder in hierarchy.keys():
                 rel_path = os.path.join(prefix, folder)
                 meta = {"dsRelPath": rel_path}
-                yield ImportItem(ImportItem.FOLDER, name=folder, identifier=doi, meta=meta)
+                yield ImportItem(
+                    ImportItem.FOLDER, name=folder, identifier=doi, meta=meta
+                )
                 yield from _recurse_hierarchy(hierarchy[folder], prefix=rel_path)
                 yield ImportItem(ImportItem.END_FOLDER)
 

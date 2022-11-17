@@ -37,7 +37,7 @@ def run(job):
         parentType,
         user=user,
         base_url=base_url,
-        progress=False
+        progress=False,
     )
     if importedData:
         user_data = set(user.get("myData", []))

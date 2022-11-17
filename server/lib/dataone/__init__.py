@@ -1,4 +1,5 @@
 from girder.plugins.oauth.providers import addProvider
+
 from .fakeoauth import FakeDataONE
 
 
@@ -24,9 +25,7 @@ class DataONENotATaleError(Exception):
 
     """
 
-    def __init__(
-        self, data_map, message="DataONE package ({}) is not a Tale (CN: {})"
-    ):
+    def __init__(self, data_map, message="DataONE package ({}) is not a Tale (CN: {})"):
         self.data_map = data_map
         self.message = message.format(self.data_map.dataId, self.data_map.base_url)
         super().__init__(self.message)

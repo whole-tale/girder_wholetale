@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import mock
 import os
-import vcr
-from tests import base
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import parse_qs, urlparse
 
-from girder.models.user import User
+import mock
+import vcr
 from girder.models.setting import Setting
+from girder.models.user import User
+from tests import base
 
 DATA_PATH = os.path.join(
     os.path.dirname(os.environ["GIRDER_TEST_DATA_PREFIX"]),
@@ -187,7 +187,9 @@ class IntegrationTestCase(base.TestCase):
         from girder.plugins.wholetale.lib.data_map import DataMap
 
         def lookup(entity):
-            return DataMap("urn:uuid:12345.6789", 0, base_url="https://some.dataone.cn/")
+            return DataMap(
+                "urn:uuid:12345.6789", 0, base_url="https://some.dataone.cn/"
+            )
 
         with mock.patch(
             "girder.plugins.wholetale.lib.dataone.integration.DataOneImportProvider.lookup",
@@ -236,8 +238,8 @@ class IntegrationTestCase(base.TestCase):
         self.assertEqual(query["siteUrl"][0], "https://dataverse.harvard.edu")
 
     def testSingletonDataverse(self):
-        from girder.plugins.wholetale.models.tale import Tale
         from bson import ObjectId
+        from girder.plugins.wholetale.models.tale import Tale
 
         tale = Tale().createTale(
             {"_id": ObjectId()},

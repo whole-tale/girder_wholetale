@@ -1,15 +1,7 @@
-import httmock
-import io
 import json
-import mock
-import os
-import vcr
-import zipfile
-from tests import base
-from urllib.parse import urlparse, parse_qs
-from girder.models.folder import Folder
-from girder.models.setting import Setting
+
 from girder.models.user import User
+from tests import base
 
 
 def setUpModule():

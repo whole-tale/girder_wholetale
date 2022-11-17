@@ -1,10 +1,11 @@
-from datetime import datetime, timezone
-from hashlib import sha1, sha256, md5
 import os
+from datetime import datetime, timezone
+from hashlib import md5, sha1, sha256
 from urllib.parse import unquote
-from . import TaleExporter
+
 from gwvolman.constants import REPO2DOCKER_VERSION
 
+from . import TaleExporter
 
 bag_profile = (
     "https://raw.githubusercontent.com/fair-research/bdbag/"
@@ -74,35 +75,35 @@ Access on http://localhost:{port}/{urlPath}
 
 class BagTaleExporter(TaleExporter):
     def stream(self):
-        token = 'wholetale'
+        token = "wholetale"
         container_config = self.environment["config"]
-        urlPath = container_config['urlPath'].format(token=token)
+        urlPath = container_config["urlPath"].format(token=token)
 
         run_file = self.format_run_file(container_config, urlPath, token)
 
         top_readme = readme_tpl.format(
             title=self.manifest["schema:name"],
             description=self.manifest["schema:description"],
-            port=container_config['port'],
+            port=container_config["port"],
             urlPath=urlPath,
         )
         extra_files = {
-            'data/LICENSE': self.tale_license['text'],
+            "data/LICENSE": self.tale_license["text"],
         }
         oxum = dict(size=0, num=0)
 
         # Add files from the workspace computing their checksum
         for fullpath, relpath in self.list_files():
             yield from self.dump_and_checksum(
-                self.bytes_from_file(fullpath), 'data/' + relpath
+                self.bytes_from_file(fullpath), "data/" + relpath
             )
             oxum["num"] += 1
             oxum["size"] += os.path.getsize(fullpath)
 
         # Compute checksums for the extrafiles
         for path, content in extra_files.items():
-            oxum['num'] += 1
-            oxum['size'] += len(content)
+            oxum["num"] += 1
+            oxum["size"] += len(content)
             payload = self.stream_string(content)
             yield from self.dump_and_checksum(payload, path)
 
@@ -122,22 +123,22 @@ class BagTaleExporter(TaleExporter):
 
         # Create the fetch file
         fetch_file = ""
-        for bundle in self.manifest['aggregates']:
-            if 'bundledAs' not in bundle:
+        for bundle in self.manifest["aggregates"]:
+            if "bundledAs" not in bundle:
                 continue
             # 'folder' is relative to root of a Tale, we need to adjust it
             # to make it relative to the root of the bag. It always startswith
             # "./"
             folder = f"data{unquote(bundle['bundledAs']['folder'])[1:]}"
             fetch_file += f"{bundle['uri']} {bundle['wt:size']} {folder}"
-            fetch_file += unquote(bundle['bundledAs'].get('filename', ''))
-            fetch_file += '\n'
+            fetch_file += unquote(bundle["bundledAs"].get("filename", ""))
+            fetch_file += "\n"
 
         now = datetime.now(timezone.utc)
         bag_info = bag_info_tpl.format(
             bag_profile=bag_profile,
-            date=now.strftime('%Y-%m-%d'),
-            time=now.strftime('%H:%M:%S %Z'),
+            date=now.strftime("%Y-%m-%d"),
+            time=now.strftime("%H:%M:%S %Z"),
             oxum="{size}.{num}".format(**oxum),
         )
 
@@ -145,13 +146,13 @@ class BagTaleExporter(TaleExporter):
             dump = ""
             for path, chksum in self.state[alg]:
                 dump += f"{chksum} {path}\n"
-            for bundle in self.manifest['aggregates']:
-                if 'bundledAs' not in bundle:
+            for bundle in self.manifest["aggregates"]:
+                if "bundledAs" not in bundle:
                     continue
                 try:
                     chksum = bundle[f"wt:{alg}"]
                     folder = f"data{unquote(bundle['bundledAs']['folder'])[1:]}"
-                    filename = unquote(bundle['bundledAs'].get('filename', ''))
+                    filename = unquote(bundle["bundledAs"].get("filename", ""))
                     dump += f"{chksum} {os.path.join(folder, filename)}\n"
                 except KeyError:
                     pass
@@ -159,32 +160,38 @@ class BagTaleExporter(TaleExporter):
 
         tagmanifest = dict(md5="", sha1="", sha256="")
         for payload, fname in (
-            (lambda: top_readme, 'README.md'),
-            (lambda: run_file, 'run-local.sh'),
-            (lambda: self.default_bagit, 'bagit.txt'),
-            (lambda: bag_info, 'bag-info.txt'),
-            (lambda: fetch_file, 'fetch.txt'),
-            (lambda: dump_checksums('md5'), 'manifest-md5.txt'),
-            (lambda: dump_checksums('sha1'), 'manifest-sha1.txt'),
-            (lambda: dump_checksums('sha256'), 'manifest-sha256.txt'),
-            (lambda: self.formated_dump(self.environment, indent=4), 'metadata/environment.json'),
-            (lambda: self.formated_dump(self.manifest, indent=4), 'metadata/manifest.json'),
+            (lambda: top_readme, "README.md"),
+            (lambda: run_file, "run-local.sh"),
+            (lambda: self.default_bagit, "bagit.txt"),
+            (lambda: bag_info, "bag-info.txt"),
+            (lambda: fetch_file, "fetch.txt"),
+            (lambda: dump_checksums("md5"), "manifest-md5.txt"),
+            (lambda: dump_checksums("sha1"), "manifest-sha1.txt"),
+            (lambda: dump_checksums("sha256"), "manifest-sha256.txt"),
+            (
+                lambda: self.formated_dump(self.environment, indent=4),
+                "metadata/environment.json",
+            ),
+            (
+                lambda: self.formated_dump(self.manifest, indent=4),
+                "metadata/manifest.json",
+            ),
         ):
-            tagmanifest['md5'] += "{} {}\n".format(
+            tagmanifest["md5"] += "{} {}\n".format(
                 md5(payload().encode()).hexdigest(), fname
             )
-            tagmanifest['sha1'] += "{} {}\n".format(
+            tagmanifest["sha1"] += "{} {}\n".format(
                 sha1(payload().encode()).hexdigest(), fname
             )
-            tagmanifest['sha256'] += "{} {}\n".format(
+            tagmanifest["sha256"] += "{} {}\n".format(
                 sha256(payload().encode()).hexdigest(), fname
             )
             yield from self.zip_generator.addFile(payload, fname)
 
         for payload, fname in (
-            (lambda: tagmanifest['md5'], 'tagmanifest-md5.txt'),
-            (lambda: tagmanifest['sha1'], 'tagmanifest-sha1.txt'),
-            (lambda: tagmanifest['sha256'], 'tagmanifest-sha256.txt'),
+            (lambda: tagmanifest["md5"], "tagmanifest-md5.txt"),
+            (lambda: tagmanifest["sha1"], "tagmanifest-sha1.txt"),
+            (lambda: tagmanifest["sha256"], "tagmanifest-sha256.txt"),
         ):
             yield from self.zip_generator.addFile(payload, fname)
 
@@ -201,34 +208,40 @@ class BagTaleExporter(TaleExporter):
 
     def format_run_file(self, container_config, urlPath, token):
 
-        rendered_command = container_config.get('command', '').format(
-            base_path='', port=container_config['port'], ip='0.0.0.0', token=token
+        rendered_command = container_config.get("command", "").format(
+            base_path="", port=container_config["port"], ip="0.0.0.0", token=token
         )
 
         taleId = self.manifest["wt:identifier"]
         image_name = None
-        for obj in self.manifest['schema:hasPart']:
-            if ('schema:applicationCategory' in
-                    obj and obj['schema:applicationCategory'] == 'DockerImage'):
-                image_name = obj['@id']
+        for obj in self.manifest["schema:hasPart"]:
+            if (
+                "schema:applicationCategory" in obj
+                and obj["schema:applicationCategory"] == "DockerImage"
+            ):
+                image_name = obj["@id"]
 
         # If the tale doesn't have a built image, output the command
         # to build the image with r2d
-        build_cmd = ''
+        build_cmd = ""
         if image_name is None:
             image_name = f"wholetale/tale_{taleId}"
             build_cmd = build_tpl.format(
-                repo2docker=container_config.get('repo2docker_version', REPO2DOCKER_VERSION),
-                user=container_config['user'],
-                image_name=image_name
+                repo2docker=container_config.get(
+                    "repo2docker_version", REPO2DOCKER_VERSION
+                ),
+                user=container_config["user"],
+                image_name=image_name,
             )
 
         return run_tpl.format(
             build_cmd=build_cmd,
-            repo2docker=container_config.get('repo2docker_version', REPO2DOCKER_VERSION),
-            port=container_config['port'],
+            repo2docker=container_config.get(
+                "repo2docker_version", REPO2DOCKER_VERSION
+            ),
+            port=container_config["port"],
             image_name=image_name,
             command=rendered_command,
-            targetMount=container_config['targetMount'],
+            targetMount=container_config["targetMount"],
             urlPath=urlPath,
         )

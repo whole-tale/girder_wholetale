@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 from typing import Dict, List
 
-
 dataMapDoc = {
     "type": "object",
     "description": (

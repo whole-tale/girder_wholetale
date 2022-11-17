@@ -1,10 +1,11 @@
 import json
+
 import httmock
-from tests import base
-from girder.models.setting import Setting
-from girder.models.user import User
-from girder.models.token import Token
 from girder.exceptions import ValidationException
+from girder.models.setting import Setting
+from girder.models.token import Token
+from girder.models.user import User
+from tests import base
 
 AUTH_PROVIDERS = [
     {
@@ -169,7 +170,7 @@ class ExternalAccountsTestCase(base.TestCase):
         Setting().set(OAuthPluginSettings.PROVIDERS_ENABLED, ["orcid"])
 
     def test_default_settings(self):
-        from girder.plugins.wholetale.constants import SettingDefault, PluginSettings
+        from girder.plugins.wholetale.constants import PluginSettings, SettingDefault
 
         for key, error_msg in (
             (
@@ -186,7 +187,7 @@ class ExternalAccountsTestCase(base.TestCase):
                 Setting().set(key, "blah")
 
     def test_list_accounts(self):
-        from girder.plugins.wholetale.constants import SettingDefault, PluginSettings
+        from girder.plugins.wholetale.constants import PluginSettings, SettingDefault
 
         Setting().set(PluginSettings.EXTERNAL_AUTH_PROVIDERS, AUTH_PROVIDERS)
         Setting().set(PluginSettings.EXTERNAL_APIKEY_GROUPS, APIKEY_GROUPS)
@@ -385,7 +386,7 @@ class ExternalAccountsTestCase(base.TestCase):
         self.user = User().save(self.user)
 
     def test_revoke(self):
-        from girder.plugins.wholetale.constants import SettingDefault, PluginSettings
+        from girder.plugins.wholetale.constants import PluginSettings, SettingDefault
 
         Setting().set(PluginSettings.EXTERNAL_AUTH_PROVIDERS, AUTH_PROVIDERS)
         Setting().set(PluginSettings.EXTERNAL_APIKEY_GROUPS, APIKEY_GROUPS)
@@ -476,7 +477,7 @@ class ExternalAccountsTestCase(base.TestCase):
             Setting().set(key, SettingDefault.defaults[key])
 
     def test_dataverse_apikey(self):
-        from girder.plugins.wholetale.constants import SettingDefault, PluginSettings
+        from girder.plugins.wholetale.constants import PluginSettings, SettingDefault
 
         Setting().set(PluginSettings.EXTERNAL_AUTH_PROVIDERS, [AUTH_PROVIDERS[2]])
         Setting().set(PluginSettings.EXTERNAL_APIKEY_GROUPS, APIKEY_GROUPS)
@@ -539,7 +540,7 @@ class ExternalAccountsTestCase(base.TestCase):
         User().save(self.user)
 
     def test_adding_apikeys(self):
-        from girder.plugins.wholetale.constants import SettingDefault, PluginSettings
+        from girder.plugins.wholetale.constants import PluginSettings, SettingDefault
 
         Setting().set(PluginSettings.EXTERNAL_AUTH_PROVIDERS, [AUTH_PROVIDERS[1]])
         Setting().set(PluginSettings.EXTERNAL_APIKEY_GROUPS, APIKEY_GROUPS)
@@ -621,7 +622,7 @@ class ExternalAccountsTestCase(base.TestCase):
         User().save(self.user)
 
     def test_dataone(self):
-        from girder.plugins.wholetale.constants import SettingDefault, PluginSettings
+        from girder.plugins.wholetale.constants import PluginSettings, SettingDefault
 
         Setting().set(PluginSettings.EXTERNAL_AUTH_PROVIDERS, [DATAONE_PROVIDER])
         provider_info = DATAONE_PROVIDER
@@ -688,8 +689,8 @@ class ExternalAccountsTestCase(base.TestCase):
         self.assertEqual(resp.json["message"], "Invalid JWT Token: 'dataone_token'")
 
         example_jwt = (
-           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6Ikpv"
-           "aG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6Ikpv"
+            "aG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
         )
 
         resp = self.request(

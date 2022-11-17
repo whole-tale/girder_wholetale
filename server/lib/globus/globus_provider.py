@@ -1,34 +1,32 @@
 import os
+import pathlib
 import re
 from typing import Tuple
 from urllib.parse import urlparse
-import pathlib
+
 import requests
-
-from girder.models.item import Item
 from girder.models.folder import Folder
-
-from plugins.wholetale.server.lib.file_map import FileMap
-from ..import_providers import ImportProvider
-from ..entity import Entity
-from ..data_map import DataMap
-from ..import_item import ImportItem
-from ...utils import deep_get
-
+from girder.models.item import Item
 from girder.plugins.globus_handler.clients import Clients
+from plugins.wholetale.server.lib.file_map import FileMap
 
+from ...utils import deep_get
+from ..data_map import DataMap
+from ..entity import Entity
+from ..import_item import ImportItem
+from ..import_providers import ImportProvider
 
-TRANSFER_URL_PREFIX_REGEX = re.compile('^https://app.globus.org/file-manager')
+TRANSFER_URL_PREFIX_REGEX = re.compile("^https://app.globus.org/file-manager")
 
 
 class GlobusImportProvider(ImportProvider):
     def __init__(self):
-        super().__init__('Globus')
+        super().__init__("Globus")
         self.index_id = "1a57bbe5-5272-477f-9d31-343b8258b7a5"
         self.clients = Clients()
 
     def create_regex(self):
-        return re.compile(r'^https://.*anl.gov/mdf/detail.*')
+        return re.compile(r"^https://.*anl.gov/mdf/detail.*")
 
     def lookup(self, entity: Entity) -> DataMap:
         endpoint, path, doi, title = self._extractMeta(entity.getValue())
@@ -38,11 +36,13 @@ class GlobusImportProvider(ImportProvider):
         # tc = self.clients.getUserTransferClient(entity.getUser())
         # size = self._computeSize(tc, endpoint, path, entity.getUser())
         size = -1
-        return DataMap(entity.getValue(), size, doi=doi, name=title, repository=self.name)
+        return DataMap(
+            entity.getValue(), size, doi=doi, name=title, repository=self.name
+        )
 
     def _extractMeta(self, raw_url) -> Tuple[str, str, str, str]:
         url = urlparse(raw_url)
-        if not url.path.startswith('/mdf/detail'):
+        if not url.path.startswith("/mdf/detail"):
             raise Exception("Not an MDF resource page")
 
         globus_id = url.path[11:].strip("/")  # There's no other way...
@@ -55,17 +55,21 @@ class GlobusImportProvider(ImportProvider):
         req = requests.post(
             f"https://search.api.globus.org/v1/index/{self.index_id}/search",
             json=data,
-            headers=headers
+            headers=headers,
         )
         req.raise_for_status()
         globus_meta = req.json()
-        if globus_meta['count'] != 1:
-            raise Exception("Found %i results for '%s'" % (globus_meta['count'], globus_id))
+        if globus_meta["count"] != 1:
+            raise Exception(
+                "Found %i results for '%s'" % (globus_meta["count"], globus_id)
+            )
         meta_prefix = "gmeta.0.entries.0.content"
         globus_uri = deep_get(globus_meta, f"{meta_prefix}.data.endpoint_path")
         globus_url = urlparse(globus_uri)
         identifier = deep_get(globus_meta, f"{meta_prefix}.dc.identifier.identifier")
-        identifier_type = deep_get(globus_meta, f"{meta_prefix}.dc.identifier.identifierType")
+        identifier_type = deep_get(
+            globus_meta, f"{meta_prefix}.dc.identifier.identifierType"
+        )
         if ":" in identifier:
             doi = identifier
         else:
@@ -96,70 +100,71 @@ class GlobusImportProvider(ImportProvider):
                 stack[-1].addFile(item.name, item.size)
         return top
 
-    def _listRecursive(self, user, pid: str, name: str, base_url: str = None, progress=None):
+    def _listRecursive(
+        self, user, pid: str, name: str, base_url: str = None, progress=None
+    ):
         endpoint, path, doi, title = self._extractMeta(pid)
         yield ImportItem(
-            ImportItem.FOLDER,
-            name=title,
-            identifier=doi,
-            meta={"dsRelPath": "/"}
+            ImportItem.FOLDER, name=title, identifier=doi, meta={"dsRelPath": "/"}
         )
         tc = self.clients.getUserTransferClient(user)
         yield from self._listRecursive2(tc, endpoint, path, doi, progress=progress)
         yield ImportItem(ImportItem.END_FOLDER)
 
     def _listRecursive2(self, tc, endpoint: str, path: str, doi: str, progress=None):
-        if path[-1] != '/':
-            path = path + '/'
+        if path[-1] != "/":
+            path = path + "/"
         ds_relative_path = "/".join(pathlib.Path(path).parts[3:])
         if ds_relative_path and ds_relative_path[0] != "/":
             ds_relative_path = f"/{ds_relative_path}"
         if progress:
-            progress.update(increment=1, message='Listing files')
+            progress.update(increment=1, message="Listing files")
         for entry in tc.operation_ls(endpoint, path=path):
-            if entry['type'] == 'dir':
+            if entry["type"] == "dir":
                 yield ImportItem(
                     ImportItem.FOLDER,
-                    name=entry['name'],
+                    name=entry["name"],
                     identifier=doi,
                     meta={"dsRelPath": ds_relative_path + "/" + entry["name"]},
                 )
                 yield from self._listRecursive2(
-                    tc, endpoint, path + entry['name'], doi, progress=progress
+                    tc, endpoint, path + entry["name"], doi, progress=progress
                 )
                 yield ImportItem(ImportItem.END_FOLDER)
-            elif entry['type'] == 'file':
+            elif entry["type"] == "file":
                 yield ImportItem(
-                    ImportItem.FILE, entry['name'], size=entry['size'],
-                    mimeType='application/octet-stream',
-                    url='globus://%s/%s%s' % (endpoint, path, entry['name']),
+                    ImportItem.FILE,
+                    entry["name"],
+                    size=entry["size"],
+                    mimeType="application/octet-stream",
+                    url="globus://%s/%s%s" % (endpoint, path, entry["name"]),
                     identifier=doi,
                     meta={"dsRelPath": ds_relative_path + "/" + entry["name"]},
                 )
 
     def getDatasetUID(self, doc, user):
         try:
-            identifier = doc['meta']['identifier']  # if root of ds, it should have it
+            identifier = doc["meta"]["identifier"]  # if root of ds, it should have it
         except (KeyError, TypeError):
-            if 'folderId' in doc:
+            if "folderId" in doc:
                 path_to_root = Item().parentsToRoot(doc, user=user)
             else:
                 path_to_root = Folder().parentsToRoot(doc, user=user)
             # Collection{WT Catalog} / Folder{WT Catalog} / Folder{Globus ds root}
-            identifier = path_to_root[2]['object']['meta']['identifier']
+            identifier = path_to_root[2]["object"]["meta"]["identifier"]
         return identifier
 
     def getURI(self, doc, user):
-        if 'folderId' in doc:
+        if "folderId" in doc:
             fileObj = Item().childFiles(doc)[0]
-            return fileObj['linkUrl']
+            return fileObj["linkUrl"]
         else:
             path_to_root = Folder().parentsToRoot(doc, user=user)
             root_folder = path_to_root[2]
             # There's always 'globus_metadata.json'...
-            item = Folder().childItems(root_folder['object'], user=user)[0]
+            item = Folder().childItems(root_folder["object"], user=user)[0]
             fileObj = Item().childFiles(item)[0]
-            root_path = os.path.dirname(fileObj['linkUrl'])
+            root_path = os.path.dirname(fileObj["linkUrl"])
             for path in path_to_root[3:]:
-                root_path = os.path.join(root_path, path['object']['name'])
-            return os.path.join(root_path, doc['name'])
+                root_path = os.path.join(root_path, path["object"]["name"])
+            return os.path.join(root_path, doc["name"])

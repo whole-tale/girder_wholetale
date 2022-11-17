@@ -1,21 +1,22 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import cherrypy
 import datetime
 import os
 import pathlib
 import sys
 import traceback
-from fs.osfs import OSFS
+
+import cherrypy
 from fs.copy import copy_fs
+from fs.osfs import OSFS
 from girder import events
 from girder.api.rest import setCurrentUser
 from girder.models.folder import Folder
 from girder.models.user import User
-from girder.utility import parseTimestamp
 from girder.plugins.jobs.constants import JobStatus
 from girder.plugins.jobs.models.job import Job
+from girder.utility import parseTimestamp
 
 from ..constants import CATALOG_NAME, TaleStatus
 from ..lib import pids_to_entities, register_dataMap
@@ -141,7 +142,9 @@ def run(job):
             run["updated"] = parseTimestamp(run_obj["schema:dateModified"])
             run["created"] = parseTimestamp(run_obj["schema:dateCreated"])
             # vv calls save()
-            run_resource.setStatus(id=run["_id"], status=int(run_obj["wt:runStatus"]), params={})
+            run_resource.setStatus(
+                id=run["_id"], status=int(run_obj["wt:runStatus"]), params={}
+            )
 
         # Tale is ready to be built
         Tale().update(

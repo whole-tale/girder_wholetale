@@ -1,5 +1,6 @@
 import jwt
 from girder.exceptions import RestException
+
 from ..verificator import Verificator
 
 
