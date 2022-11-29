@@ -254,6 +254,8 @@ def _wait_for_server(url, token, timeout=30, wait_time=0.5):
         try:
             r = requests.get(url, cookies={'girderToken': token}, timeout=1)
             r.raise_for_status()
+            if int(r.headers.get("Content-Length", "0")) == 0:
+                raise ValueError("HTTP server returns no content")
         except requests.exceptions.HTTPError as err:
             logger.info(
                 'Booting server at [%s], getting HTTP status [%s]', url, err.response.status_code)
@@ -300,7 +302,7 @@ def finalizeInstance(event):
         ):
             # Get a url to the container
             service = getCeleryApp().AsyncResult(job['celeryTaskId']).get()
-            url = service.get("url", "https://google.com")
+            url = service.get("url", "https://girder.hub.yt/")
 
             # Generate the containerInfo
             valid_keys = set(containerInfoSchema['properties'].keys())
