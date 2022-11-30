@@ -6,6 +6,7 @@ import cherrypy
 import copy
 import datetime
 import jsonschema
+import logging
 import os
 import six
 import validators
@@ -31,6 +32,7 @@ from girder.utility.model_importer import ModelImporter
 
 from .constants import PluginSettings, SettingDefault
 from .lib import update_citation
+from .lib.metrics import metricsLogger, _MetricsHandler
 from .rest.account import Account
 from .rest.dataset import Dataset
 from .rest.image import Image
@@ -584,3 +586,6 @@ def load(info):
         if os.path.isfile(logo_path):
             with open(logo_path, "rb") as image_file:
                 ext_provider["logo"] = base64.b64encode(image_file.read()).decode()
+
+    metricsLogger.setLevel(logging.INFO)
+    metricsLogger.addHandler(_MetricsHandler())

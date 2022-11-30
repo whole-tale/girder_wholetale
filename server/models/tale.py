@@ -26,6 +26,7 @@ from ..schema.misc import related_identifiers_schema
 from ..utils import getOrCreateRootFolder, init_progress, notify_event, diff_access
 from ..lib.license import WholeTaleLicense
 from ..lib.manifest_parser import ManifestParser
+from ..lib.metrics import metricsLogger
 
 from gwvolman.tasks import build_tale_image, BUILD_TALE_IMAGE_STEP_TOTAL
 
@@ -245,6 +246,18 @@ class Tale(AccessControlledModel):
                 eventName="tale.update_citation",
                 info={"tale": tale, "user": creator}
             )
+
+        metricsLogger.info(
+            "tale.create",
+            extra={
+                "details": {
+                    "id": tale["_id"],
+                    "imageId": tale["imageId"],
+                    "imageInfo": tale["imageInfo"],
+                }
+            },
+        )
+
         return tale
 
     def _createAuxFolder(self, tale, rootFolderName, creator=None):
