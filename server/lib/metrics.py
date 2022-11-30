@@ -19,12 +19,13 @@ class Record(Model):
 class _MetricsHandler(logging.Handler):
     def handle(self, record):
         user = getCurrentUser()
+        user_id = (user and user["_id"]) or record.details.pop("userId", None)
         Record().save(
             {
                 "type": record.msg,
                 "details": record.details,
                 "ip": cherrypy.request.remote.ip,
-                "userId": user and user["_id"],
+                "userId": user_id,
                 "when": datetime.datetime.utcnow(),
             },
             triggerEvents=False,
