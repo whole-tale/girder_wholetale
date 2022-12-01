@@ -253,6 +253,7 @@ class Instance(AccessControlledModel):
                 "details": {
                     "id": instance["_id"],
                     "taleId": instance["taleId"],
+                    "spawn": spawn,
                 }
             },
         )
