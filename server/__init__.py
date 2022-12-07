@@ -549,6 +549,7 @@ def load(info):
     info['apiRoot'].image = Image()
     events.bind('jobs.job.update.after', 'wholetale', tale.updateBuildStatus)
     events.bind('jobs.job.update.after', 'wholetale', finalizeInstance)
+    events.bind('jobs.job.update.after', 'wholetale', TaleModel._track_publication)
     events.bind('jobs.job.update', 'wholetale', updateNotification)
     events.bind('model.file.validate', 'wholetale', validateFileLink)
     events.bind('oauth.auth_callback.after', 'wholetale', store_other_globus_tokens)
