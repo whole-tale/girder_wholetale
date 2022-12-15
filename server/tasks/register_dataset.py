@@ -7,6 +7,7 @@ from girder.plugins.jobs.models.job import Job
 
 from ..lib import register_dataMap
 from ..lib.data_map import DataMap
+from ..lib.metrics import metricsLogger
 
 
 def run(job):
@@ -31,8 +32,9 @@ def run(job):
     # being emitted, since all we care about is the wt_notification encompassing this job. We lose a
     # lot of granularity here.
     # TODO: pass progress context associated with wt_notification perhaps?
+    dataMaps = DataMap.fromList(data_maps)
     importedData = register_dataMap(
-        DataMap.fromList(data_maps),
+        dataMaps,
         parent,
         parentType,
         user=user,
@@ -54,3 +56,12 @@ def run(job):
         progressCurrent=progressCurrent,
     )
     jobModel.updateJob(job, status=JobStatus.SUCCESS)
+
+    metricsLogger.info(
+        "dataset.import",
+        extra={
+            "details": {
+                "dataMap": [_.toDict() for _ in dataMaps],
+            }
+        },
+    )

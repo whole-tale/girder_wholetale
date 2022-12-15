@@ -22,6 +22,7 @@ from gwvolman.tasks import \
     LAUNCH_CONTAINER_STEP_TOTAL, UPDATE_CONTAINER_STEP_TOTAL
 
 from ..constants import InstanceStatus, PluginSettings
+from ..lib.metrics import metricsLogger
 from ..schema.misc import containerInfoSchema
 from ..utils import init_progress, notify_event
 
@@ -126,6 +127,7 @@ class Instance(AccessControlledModel):
         return self.save(instance)
 
     def deleteInstance(self, instance, user):
+        initial_status = instance["status"]
         instance["status"] = InstanceStatus.DELETING
         instance = self.updateInstance(instance)
         token = Token().createToken(user=user, days=0.5)
@@ -157,6 +159,18 @@ class Instance(AccessControlledModel):
 
         notify_event([instance["creatorId"]], "wt_instance_deleted",
                      {'taleId': instance['taleId'], 'instanceId': instance['_id']})
+
+        metricsLogger.info(
+            "instance.remove",
+            extra={
+                "details": {
+                    "id": instance["_id"],
+                    "taleId": instance["taleId"],
+                    "status": initial_status,
+                    "containerInfo": instance.get("containerInfo"),
+                }
+            },
+        )
 
     def createInstance(self, tale, user, /, *, name=None, save=True, spawn=True):
         if not name:
@@ -233,6 +247,18 @@ class Instance(AccessControlledModel):
 
             notify_event([instance["creatorId"]], "wt_instance_launching",
                          {'taleId': instance['taleId'], 'instanceId': instance['_id']})
+
+        metricsLogger.info(
+            "instance.create",
+            extra={
+                "details": {
+                    "id": instance["_id"],
+                    "taleId": instance["taleId"],
+                    "spawn": spawn,
+                }
+            },
+        )
+
         return instance
 
     def get_logs(self, instance, tail):

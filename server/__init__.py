@@ -6,6 +6,7 @@ import cherrypy
 import copy
 import datetime
 import jsonschema
+import logging
 import os
 import six
 import validators
@@ -31,6 +32,7 @@ from girder.utility.model_importer import ModelImporter
 
 from .constants import PluginSettings, SettingDefault
 from .lib import update_citation
+from .lib.metrics import metricsLogger, _MetricsHandler
 from .rest.account import Account
 from .rest.dataset import Dataset
 from .rest.image import Image
@@ -507,6 +509,10 @@ def store_other_globus_tokens(event):
     user["otherTokens"] = user_tokens
     user["lastLogin"] = datetime.datetime.utcnow()
     User().save(user)
+    metricsLogger.info(
+        "user.login",
+        extra={"details": {"userId": user["_id"]}},
+    )
 
 
 def attachJobInfoSpec(event):
@@ -547,6 +553,7 @@ def load(info):
     info['apiRoot'].image = Image()
     events.bind('jobs.job.update.after', 'wholetale', tale.updateBuildStatus)
     events.bind('jobs.job.update.after', 'wholetale', finalizeInstance)
+    events.bind('jobs.job.update.after', 'wholetale', TaleModel._track_publication)
     events.bind('jobs.job.update', 'wholetale', updateNotification)
     events.bind('model.file.validate', 'wholetale', validateFileLink)
     events.bind('oauth.auth_callback.after', 'wholetale', store_other_globus_tokens)
@@ -584,3 +591,6 @@ def load(info):
         if os.path.isfile(logo_path):
             with open(logo_path, "rb") as image_file:
                 ext_provider["logo"] = base64.b64encode(image_file.read()).decode()
+
+    metricsLogger.setLevel(logging.INFO)
+    metricsLogger.addHandler(_MetricsHandler())
