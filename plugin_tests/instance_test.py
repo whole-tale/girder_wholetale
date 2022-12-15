@@ -378,7 +378,6 @@ class InstanceTestCase(base.TestCase):
                         'mountPoint': instance['containerInfo']['mountPoint'],
                         'name': instance['containerInfo']['name'],
                         'nodeId': instance['containerInfo']['nodeId'],
-                        'urlPath': instance['containerInfo']['urlPath'],
                     }
                 })
             )
@@ -451,7 +450,6 @@ class InstanceTestCase(base.TestCase):
                         'mountPoint': instance['containerInfo']['mountPoint'],
                         'name': instance['containerInfo']['name'],
                         'nodeId': instance['containerInfo']['nodeId'],
-                        'urlPath': instance['containerInfo']['urlPath'],
                     }
                 })
             )
