@@ -167,6 +167,7 @@ class Instance(AccessControlledModel):
                     "id": instance["_id"],
                     "taleId": instance["taleId"],
                     "status": initial_status,
+                    "containerInfo": instance.get("containerInfo"),
                 }
             },
         )
