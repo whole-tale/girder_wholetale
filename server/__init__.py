@@ -509,6 +509,10 @@ def store_other_globus_tokens(event):
     user["otherTokens"] = user_tokens
     user["lastLogin"] = datetime.datetime.utcnow()
     User().save(user)
+    metricsLogger.info(
+        "user.login",
+        extra={"details": {"userId": user["_id"]}},
+    )
 
 
 def attachJobInfoSpec(event):
