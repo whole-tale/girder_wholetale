@@ -19,6 +19,7 @@ from girder.models.user import User
 from girder.models.token import Token
 from girder.models.setting import Setting
 from girder.plugins.jobs.models.job import Job
+from girder.plugins.worker import CustomJobStatus
 from gwvolman.tasks import publish
 
 from girder.plugins.jobs.constants import JobStatus
@@ -609,10 +610,22 @@ class Tale(Resource):
                 tale['imageInfo']['last_build'] = result['last_build']
                 tale['imageInfo']['status'] = ImageStatus.AVAILABLE
             elif status == JobStatus.ERROR:
-                tale['imageInfo']['status'] = ImageStatus.INVALID
+                tale["imageInfo"]["status"] = ImageStatus.INVALID
+            elif status in (JobStatus.CANCELED, CustomJobStatus.CANCELING):
+                tale["imageInfo"]["status"] = ImageStatus.UNAVAILABLE
             elif status in (JobStatus.QUEUED, JobStatus.RUNNING):
                 tale['imageInfo']['jobId'] = job['_id']
                 tale['imageInfo']['status'] = ImageStatus.BUILDING
+
+            delete_instance = status in (
+                JobStatus.ERROR,
+                JobStatus.CANCELED,
+                CustomJobStatus.CANCELING,
+            )
+            if delete_instance and "instance_id" in job:
+                if instance := Instance().load(job["instance_id"], force=True):
+                    instance_creator = User().load(instance["creatorId"], force=True)
+                    Instance().deleteInstance(instance, instance_creator)
 
             # If the status changed, save the object
             if 'status' in tale['imageInfo'] and tale['imageInfo']['status'] != previousStatus:

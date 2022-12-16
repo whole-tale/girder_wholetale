@@ -128,6 +128,8 @@ class Instance(AccessControlledModel):
 
     def deleteInstance(self, instance, user):
         initial_status = instance["status"]
+        if initial_status == InstanceStatus.DELETING:
+            return
         instance["status"] = InstanceStatus.DELETING
         instance = self.updateInstance(instance)
         token = Token().createToken(user=user, days=0.5)
@@ -306,6 +308,8 @@ def finalizeInstance(event):
 
     if job.get("instance_id"):
         instance = Instance().load(job["instance_id"], force=True)
+        if instance is None:
+            return
 
         if (
             instance["status"] == InstanceStatus.LAUNCHING

@@ -25,6 +25,7 @@ from girder.models.user import User
 from girder.plugins.jobs.constants import JobStatus
 from girder.plugins.jobs.models.job import Job as JobModel
 from girder.plugins.worker.utils import jobInfoSpec
+from girder.plugins.worker import CustomJobStatus
 from girder.plugins.oauth.rest import OAuth as OAuthResource
 from girder.plugins.worker import getCeleryApp
 from girder.utility import assetstore_utilities, setting_utilities
@@ -446,7 +447,14 @@ def updateNotification(event):
         would_be_last = \
             int(notification['data']['total']) == int(notification['data']['current']) + increment
         job_status = params["status"] or job["status"]
-        state = JobStatus.toNotificationStatus(int(job_status))
+        if job_status == JobStatus.CANCELED:
+            # ProgressState is not a real enum, but just a collection of strings..
+            # as a result it can be an arbitrary value!
+            state = "canceled"
+        elif job_status == CustomJobStatus.CANCELING:
+            state = "canceling"
+        else:
+            state = JobStatus.toNotificationStatus(int(job_status))
         if state == ProgressState.SUCCESS and not would_be_last:
             state = ProgressState.ACTIVE
 
