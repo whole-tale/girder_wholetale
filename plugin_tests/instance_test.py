@@ -9,13 +9,16 @@ from bson import ObjectId
 from datetime import datetime
 from tests import base
 from girder.exceptions import ValidationException
-from .tests_helpers import get_events, mockOtherRequest
 from girder.utility import config
+
+from .tests_helpers import get_events, mockOtherRequest
 
 
 JobStatus = None
+ImageStatus = None
 Instance = None
 InstanceStatus = None
+Tale = None
 
 
 def setUpModule():
@@ -24,10 +27,11 @@ def setUpModule():
     base.enabledPlugins.append('wholetale')
     base.startServer()
     global JobStatus, CustomJobStatus, Instance, \
-        InstanceStatus
+        InstanceStatus, Tale, ImageStatus
     from girder.plugins.jobs.constants import JobStatus
     from girder.plugins.wholetale.models.instance import Instance
-    from girder.plugins.wholetale.constants import InstanceStatus
+    from girder.plugins.wholetale.models.tale import Tale
+    from girder.plugins.wholetale.constants import InstanceStatus, ImageStatus
 
 
 def tearDownModule():
@@ -501,6 +505,7 @@ class InstanceTestCase(base.TestCase):
         )
         self.assertStatusOk(resp)
         instance = resp.json
+        self.assertNotEqual(instance['status'], InstanceStatus.ERROR)
 
         job = Job().createJob(
             title='Fake build job',
@@ -522,6 +527,54 @@ class InstanceTestCase(base.TestCase):
         Job().updateJob(job, log='job failed', status=JobStatus.ERROR)
         instance = Instance().load(instance['_id'], force=True)
         self.assertEqual(instance['status'], InstanceStatus.ERROR)
+        Instance().remove(instance)
+
+    def testBuildCancel(self):
+        from girder.plugins.jobs.models.job import Job
+        from girder.plugins.worker import CustomJobStatus
+        resp = self.request(
+            path='/instance', method='POST', user=self.user,
+            params={'taleId': str(self.tale_one['_id']),
+                    'name': 'tale that will fail', 'spawn': False}
+        )
+        self.assertStatusOk(resp)
+        instance = resp.json
+        self.assertNotEqual(instance['status'], InstanceStatus.ERROR)
+
+        job = Job().createJob(
+            title='Build Tale Image',
+            type='celery',
+            handler='worker_handler',
+            user=self.user,
+            public=False,
+            args=[str(self.tale_one['_id']), False],
+            kwargs={},
+            otherFields={
+                'wt_notification_id': str(self.notification["_id"]),
+                'instance_id': instance['_id']
+            }
+        )
+        job = Job().save(job)
+        self.assertEqual(job['status'], JobStatus.INACTIVE)
+        Job().updateJob(job, log='job queued', status=JobStatus.QUEUED)
+        Job().updateJob(job, log='job running', status=JobStatus.RUNNING)
+
+        with mock.patch(
+            "girder.plugins.wholetale.models.instance.Instance.deleteInstance"
+        ) as mock_delete:
+            Job().updateJob(job, log='job canceling', status=CustomJobStatus.CANCELING)
+            tale = Tale().load(self.tale_one["_id"], force=True)
+            while tale["imageInfo"]["status"] != ImageStatus.UNAVAILABLE:
+                time.sleep(1)
+                tale = Tale().load(self.tale_one["_id"], force=True)
+        mock_delete.assert_called_once()
+
+        with mock.patch(
+            "girder.plugins.wholetale.models.instance.Instance.deleteInstance"
+        ) as mock_delete:
+            Job().updateJob(job, log='job canceling', status=JobStatus.CANCELED)
+
+        instance = Instance().load(instance['_id'], force=True)
         Instance().remove(instance)
 
     def testLaunchFail(self):
