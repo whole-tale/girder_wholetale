@@ -5,13 +5,16 @@ from urllib.parse import quote
 from girder import events, logger
 from girder.models.folder import Folder
 from girder.models.user import User
+from girder.models.token import Token
 from girder.utility import JsonEncoder
 from girder.utility.model_importer import ModelImporter
 from girder.exceptions import ValidationException
 from girder.constants import AccessType
 from girder.plugins.virtual_resources.rest import VirtualObject
 
-from gwvolman.constants import REPO2DOCKER_VERSION
+import cherrypy
+from girder_client import GirderClient
+from gwvolman.build_utils import ImageBuilder
 
 from .license import WholeTaleLicense
 from . import IMPORT_PROVIDERS
@@ -167,26 +170,31 @@ class Manifest:
 
     def create_image_info(self):
         # TODO: We shouldn't be publishing a Tale that was never built...
-        image_info = self.tale.get("imageInfo", {})
+        token = Token().createToken(user=self.user, days=0.25)
+        girder_client = GirderClient(
+            apiUrl=f"http://localhost:{cherrypy.config['server.socket_port']}/api/v1"
+        )  # getApiUrl doesn't work for local deployment, this should work in any scenario
+        girder_client.token = str(token["_id"])
+        image_builder = ImageBuilder(girder_client, tale=self.tale, auth=False)
+        try:
+            image_digest = image_builder.get_tag()
+        except ValueError:
+            raise  # What should I do in this situation...??
 
-        image_info.setdefault("repo2docker_version", REPO2DOCKER_VERSION)
-        manifest_part = {
-            'schema:hasPart': [{
-                '@id': 'https://github.com/whole-tale/repo2docker_wholetale',
-                '@type': 'schema:SoftwareApplication',
-                'schema:softwareVersion': image_info['repo2docker_version']
-            }]
+        return {
+            "schema:hasPart": [
+                {
+                    "@id": "https://github.com/whole-tale/repo2docker_wholetale",
+                    "@type": "schema:SoftwareApplication",
+                    "schema:softwareVersion": image_builder.container_config.repo2docker_version
+                },
+                {
+                    "@id": image_digest.replace("registry", "images", 1),
+                    "@type": "schema:SoftwareApplication",
+                    "schema:applicationCategory": "DockerImage"
+                }
+            ]
         }
-
-        image_digest = image_info.get("digest")
-        if image_digest is not None:
-            manifest_part['schema:hasPart'].append({
-                '@id': image_digest.replace("registry", "images", 1),
-                '@type': 'schema:SoftwareApplication',
-                'schema:applicationCategory': 'DockerImage'
-            })
-
-        return manifest_part
 
     def create_related_identifiers(self):
         def derive_id_type(identifier):

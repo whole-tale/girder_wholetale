@@ -1,3 +1,4 @@
+import mock
 import copy
 import json
 from operator import itemgetter
@@ -194,7 +195,11 @@ class ManifestTestCase(base.TestCase):
             authors=self.tale_info["authors"],
         )
 
-    def testManifest(self):
+    @mock.patch("gwvolman.build_utils.ImageBuilder")
+    def testManifest(self, mock_builder):
+        mock_builder.return_value.container_config.repo2docker_version = "craigwillis/repo2docker:latest"
+        mock_builder.return_value.get_tag.return_value = \
+            self.tale['imageInfo']['digest'].replace('registry', 'images', 1)
         self._testCreateBasicAttributes()
         self._testAddTaleCreator()
         self._testCreateContext()
@@ -208,7 +213,7 @@ class ManifestTestCase(base.TestCase):
         self._test_create_image_info()
 
     def _testRelatedIdentifiers(self):
-        from girder.plugins.wholetale.lib.manifest import Manifest
+        from server.lib.manifest import Manifest
         from girder.plugins.wholetale.models.tale import Tale
 
         tale = copy.deepcopy(self.tale)

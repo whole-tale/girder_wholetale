@@ -21,6 +21,7 @@ from ..constants import CATALOG_NAME, TaleStatus
 from ..lib import pids_to_entities, register_dataMap
 from ..lib.dataone import DataONELocations  # TODO: get rid of it
 from ..lib.manifest_parser import ManifestParser
+from ..lib.metrics import metricsLogger
 from ..models.tale import Tale
 from ..utils import getOrCreateRootFolder, notify_event
 
@@ -171,3 +172,16 @@ def run(job):
         jobModel.updateJob(job, status=JobStatus.ERROR, log=log)
         notify_event([user["_id"]], "wt_import_failed", {"taleId": tale["_id"]})
         raise
+
+    metricsLogger.info(
+        "tale.import_tale",
+        extra={
+            "details": {
+                "id": tale["_id"],
+                "imageId": tale["imageId"],
+                "imageInfo": tale["imageInfo"],
+                "relatedIdentifiers": tale["relatedIdentifiers"],
+                "userId": user["_id"],  # shortcut
+            }
+        },
+    )

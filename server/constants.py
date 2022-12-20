@@ -37,6 +37,7 @@ class PluginSettings:
     PUBLISHER_REPOS = "wholetale.publisher_repositories"
     DERIVA_EXPORT_URLS = "wholetale.deriva.export_urls"
     DERIVA_SCOPES = "wholetale.deriva.scopes"
+    LOGGER_URL = "wholetale.instance_logger"
 
 
 class SettingDefault:
@@ -138,6 +139,7 @@ class SettingDefault:
         PluginSettings.DERIVA_SCOPES: {
             "pbcconsortium.isrd.isi.edu": DEFAULT_DERIVA_SCOPE
         },
+        PluginSettings.LOGGER_URL: "http://logger:8000/",
     }
 
 

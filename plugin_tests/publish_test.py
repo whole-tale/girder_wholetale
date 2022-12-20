@@ -95,8 +95,12 @@ class PublishTestCase(base.TestCase):
     def testPublishDataONE(self):
         with mock.patch("gwvolman.tasks.publish.apply_async"), mock.patch(
             "gwvolman.tasks.publish.delay"
-        ) as dl:
-
+        ) as dl, mock.patch(
+            "girder.plugins.wholetale.lib.manifest.ImageBuilder"
+        ) as mock_builder:
+            mock_builder.return_value.container_config.repo2docker_version = \
+                "craigwillis/repo2docker:latest"
+            mock_builder.return_value.get_tag.return_value = "images.local.wholetale.org/digest123"
             dl.return_value = FakeJob()
 
             remoteMemberNode = "nowhere"  # non exisiting repository
@@ -151,8 +155,12 @@ class PublishTestCase(base.TestCase):
     def testPublishZenodo(self):
         with mock.patch("gwvolman.tasks.publish.apply_async"), mock.patch(
             "gwvolman.tasks.publish.delay"
-        ) as dl:
-
+        ) as dl, mock.patch(
+            "girder.plugins.wholetale.lib.manifest.ImageBuilder"
+        ) as mock_builder:
+            mock_builder.return_value.container_config.repo2docker_version = \
+                "craigwillis/repo2docker:latest"
+            mock_builder.return_value.get_tag.return_value = "images.local.wholetale.org/digest123"
             dl.return_value = FakeJob()
 
             repository = "sandbox.zenodo.org"

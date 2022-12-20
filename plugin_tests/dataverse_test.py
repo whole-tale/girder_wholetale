@@ -1,4 +1,5 @@
 import json
+import mock
 import os
 import responses
 import time
@@ -385,7 +386,12 @@ class DataverseHarversterTestCase(base.TestCase):
         tale = Tale().createTale(
             image, dataSet, creator=self.user, title="Blah", public=True
         )
-        manifest = Manifest(tale, self.user, expand_folders=True).manifest
+        with mock.patch("server.lib.manifest.ImageBuilder") as mock_builder:
+            mock_builder.return_value.container_config.repo2docker_version = \
+                "craigwillis/repo2docker:latest"
+            mock_builder.return_value.get_tag.return_value = "some_digest"
+            manifest = Manifest(tale, self.user, expand_folders=True).manifest
+
         restored_dataset = ManifestParser(manifest).get_dataset()
         self.assertEqual(restored_dataset, dataSet)
 
@@ -419,7 +425,7 @@ class DataverseHarversterTestCase(base.TestCase):
         self.assertEqual(tale["authors"][0]["lastName"], "Tesler")
 
         # dataverse.icrisat.org failing as of 8/15/2022
-        #datamap = {
+        # datamap = {
         #    "dataId": (
         #        "http://dataverse.icrisat.org/dataset.xhtml?"
         #        "persistentId=doi:10.21421/D2/TCCVS7"
@@ -432,9 +438,9 @@ class DataverseHarversterTestCase(base.TestCase):
         #    "repository": "Dataverse",
         #    "size": 99504,
         #    "tale": False,
-        #}
-        #tale = provider.proto_tale_from_datamap(DataMap.fromDict(datamap), self.user, True)
-        #self.assertEqual(tale["authors"][0]["firstName"], "Pooran")
+        # }
+        # tale = provider.proto_tale_from_datamap(DataMap.fromDict(datamap), self.user, True)
+        # self.assertEqual(tale["authors"][0]["firstName"], "Pooran")
 
     def tearDown(self):
         self.model('user').remove(self.user)

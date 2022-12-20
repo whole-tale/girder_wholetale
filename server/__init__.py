@@ -6,6 +6,7 @@ import cherrypy
 import copy
 import datetime
 import jsonschema
+import logging
 import os
 import six
 import validators
@@ -23,6 +24,8 @@ from girder.models.setting import Setting
 from girder.models.user import User
 from girder.plugins.jobs.constants import JobStatus
 from girder.plugins.jobs.models.job import Job as JobModel
+from girder.plugins.worker.utils import jobInfoSpec
+from girder.plugins.worker import CustomJobStatus
 from girder.plugins.oauth.rest import OAuth as OAuthResource
 from girder.plugins.worker import getCeleryApp
 from girder.utility import assetstore_utilities, setting_utilities
@@ -30,6 +33,7 @@ from girder.utility.model_importer import ModelImporter
 
 from .constants import PluginSettings, SettingDefault
 from .lib import update_citation
+from .lib.metrics import metricsLogger, _MetricsHandler
 from .rest.account import Account
 from .rest.dataset import Dataset
 from .rest.image import Image
@@ -153,6 +157,14 @@ def validateDataverseURL(doc):
         raise ValidationException('Invalid Dataverse URL', 'value')
 
 
+@setting_utilities.validator(PluginSettings.LOGGER_URL)
+def validateLoggerURL(doc):
+    if not doc['value']:
+        doc['value'] = defaultLoggerUrl()
+    if not validators.url(doc['value']):
+        raise ValidationException('Invalid Instance Logger URL', 'value')
+
+
 @setting_utilities.default(PluginSettings.INSTANCE_CAP)
 def defaultInstanceCap():
     return SettingDefault.defaults[PluginSettings.INSTANCE_CAP]
@@ -181,6 +193,11 @@ def defaultDerivaExportUrls():
 @setting_utilities.default(PluginSettings.DERIVA_SCOPES)
 def defaultDerivaScopes():
     return SettingDefault.defaults[PluginSettings.DERIVA_SCOPES]
+
+
+@setting_utilities.default(PluginSettings.LOGGER_URL)
+def defaultLoggerUrl():
+    return SettingDefault.defaults[PluginSettings.LOGGER_URL]
 
 
 @access.public(scope=TokenScope.DATA_READ)
@@ -396,8 +413,9 @@ def updateNotification(event):
 
     job = event.info["job"]
     params = event.info["params"]
-    if "wt_notification_id" in job:
-        notification = Notification().load(job['wt_notification_id'])
+    if "wt_notification_id" in job and (
+        notification := Notification().load(job["wt_notification_id"])
+    ):
         resource = notification["data"]["resource"]
 
         # Add job IDs to the resource
@@ -429,7 +447,14 @@ def updateNotification(event):
         would_be_last = \
             int(notification['data']['total']) == int(notification['data']['current']) + increment
         job_status = params["status"] or job["status"]
-        state = JobStatus.toNotificationStatus(int(job_status))
+        if job_status == JobStatus.CANCELED:
+            # ProgressState is not a real enum, but just a collection of strings..
+            # as a result it can be an arbitrary value!
+            state = "canceled"
+        elif job_status == CustomJobStatus.CANCELING:
+            state = "canceling"
+        else:
+            state = JobStatus.toNotificationStatus(int(job_status))
         if state == ProgressState.SUCCESS and not would_be_last:
             state = ProgressState.ACTIVE
 
@@ -492,6 +517,19 @@ def store_other_globus_tokens(event):
     user["otherTokens"] = user_tokens
     user["lastLogin"] = datetime.datetime.utcnow()
     User().save(user)
+    metricsLogger.info(
+        "user.login",
+        extra={"details": {"userId": user["_id"]}},
+    )
+
+
+def attachJobInfoSpec(event):
+    job = event.info
+    if not job.get("module"):
+        JobModel().updateJob(
+            job,
+            otherFields={"jobInfoSpec": jobInfoSpec(job, token=job.get("token"))}
+        )
 
 
 def load(info):
@@ -523,10 +561,13 @@ def load(info):
     info['apiRoot'].image = Image()
     events.bind('jobs.job.update.after', 'wholetale', tale.updateBuildStatus)
     events.bind('jobs.job.update.after', 'wholetale', finalizeInstance)
+    events.bind('jobs.job.update.after', 'wholetale', TaleModel._track_publication)
     events.bind('jobs.job.update', 'wholetale', updateNotification)
     events.bind('model.file.validate', 'wholetale', validateFileLink)
     events.bind('oauth.auth_callback.after', 'wholetale', store_other_globus_tokens)
     events.bind('heartbeat', 'wholetale', cullIdleInstances)
+    events.unbind("model.job.save.after", "worker")
+    events.bind("model.job.save.after", "wholetale", attachJobInfoSpec)
 
     info['apiRoot'].account = Account()
     info['apiRoot'].repository = Repository()
@@ -558,3 +599,6 @@ def load(info):
         if os.path.isfile(logo_path):
             with open(logo_path, "rb") as image_file:
                 ext_provider["logo"] = base64.b64encode(image_file.read()).decode()
+
+    metricsLogger.setLevel(logging.INFO)
+    metricsLogger.addHandler(_MetricsHandler())

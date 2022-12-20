@@ -16,7 +16,9 @@ from girder.models.item import Item
 from girder.models.user import User
 from girder.models.model_base import AccessControlledModel
 from girder.models.token import Token
+from girder.plugins.jobs.constants import JobStatus
 from girder.plugins.jobs.models.job import Job
+from girder.plugins.worker import getCeleryApp
 from girder.utility import assetstore_utilities
 
 from .image import Image as imageModel
@@ -26,6 +28,7 @@ from ..schema.misc import related_identifiers_schema
 from ..utils import getOrCreateRootFolder, init_progress, notify_event, diff_access
 from ..lib.license import WholeTaleLicense
 from ..lib.manifest_parser import ManifestParser
+from ..lib.metrics import metricsLogger
 
 from gwvolman.tasks import build_tale_image, BUILD_TALE_IMAGE_STEP_TOTAL
 
@@ -245,6 +248,18 @@ class Tale(AccessControlledModel):
                 eventName="tale.update_citation",
                 info={"tale": tale, "user": creator}
             )
+
+        metricsLogger.info(
+            "tale.create",
+            extra={
+                "details": {
+                    "id": tale["_id"],
+                    "imageId": tale["imageId"],
+                    "imageInfo": tale["imageInfo"],
+                }
+            },
+        )
+
         return tale
 
     def _createAuxFolder(self, tale, rootFolderName, creator=None):
@@ -538,3 +553,21 @@ class Tale(AccessControlledModel):
         restored_tale.update(mp.get_tale_fields_from_environment(environment))
         restored_tale["dataSet"] = mp.get_dataset()
         return restored_tale
+
+    @staticmethod
+    def _track_publication(event):
+        job = event.info["job"]
+        if not (job["title"] == "Publish Tale" and job.get("status") == JobStatus.SUCCESS):
+            return
+        publication_info = getCeleryApp().AsyncResult(job["celeryTaskId"]).get()
+
+        metricsLogger.info(
+            "tale.publish",
+            extra={
+                "details": {
+                    "id": ObjectId(job["args"][0]),
+                    "publishInfo": publication_info,
+                    "userId": ObjectId(job["userId"]),
+                }
+            },
+        )

@@ -558,13 +558,24 @@ class TaleTestCase(base.TestCase):
 
         self.assertStatus(resp, 200)
         pth = '/tale/{}/manifest'.format(str(resp.json['_id']))
-        resp = self.request(
-            path=pth, method='GET', user=self.user)
+        with mock.patch(
+            "girder.plugins.wholetale.lib.manifest.ImageBuilder"
+        ) as mock_builder:
+            mock_builder.return_value.container_config.repo2docker_version = \
+                "craigwillis/repo2docker:latest"
+            mock_builder.return_value.get_tag.return_value = "images.local.wholetale.org/digest123"
+
+            resp = self.request(
+                path=pth, method='GET', user=self.user)
         # The contents of the manifest are checked in the manifest tests, so
         # just make sure that we get the right response
         self.assertStatus(resp, 200)
 
-    def testExport(self):
+    @mock.patch("girder.plugins.wholetale.lib.manifest.ImageBuilder")
+    def testExport(self, mock_builder):
+        mock_builder.return_value.container_config.repo2docker_version = \
+            "craigwillis/repo2docker:latest"
+        mock_builder.return_value.get_tag.return_value = "images.local.wholetale.org/digest123"
         resp = self.request(
             path='/tale', method='POST', user=self.user,
             type='application/json',
@@ -589,6 +600,7 @@ class TaleTestCase(base.TestCase):
         resp = self.request(
             path=f"/tale/{tale['_id']}/export", method='GET', isJson=False, user=self.user
         )
+
         with tempfile.TemporaryFile() as fp:
             for content in resp.body:
                 fp.write(content)
@@ -1066,9 +1078,15 @@ class TaleWithWorkspaceTestCase(base.TestCase):
 
     def testExportBag(self):
         tale = self._create_water_tale()
-        resp = self.request(
-            path=f"/tale/{tale['_id']}/export", method='GET', params={'taleFormat': 'bagit'},
-            isJson=False, user=self.user)
+        with mock.patch(
+            "girder.plugins.wholetale.lib.manifest.ImageBuilder"
+        ) as mock_builder:
+            mock_builder.return_value.container_config.repo2docker_version = \
+                "craigwillis/repo2docker:latest"
+            mock_builder.return_value.get_tag.return_value = "images.local.wholetale.org/digest123"
+            resp = self.request(
+                path=f"/tale/{tale['_id']}/export", method='GET', params={'taleFormat': 'bagit'},
+                isJson=False, user=self.user)
         dirpath = tempfile.mkdtemp()
         bag_file = os.path.join(dirpath, resp.headers["Content-Disposition"].split('"')[1])
         with open(bag_file, 'wb') as fp:
@@ -1107,7 +1125,11 @@ class TaleWithWorkspaceTestCase(base.TestCase):
         self.model('tale', 'wholetale').remove(tale)
         self.model('collection').remove(self.data_collection)
 
-    def testExportBagWithRun(self):
+    @mock.patch("girder.plugins.wholetale.lib.manifest.ImageBuilder")
+    def testExportBagWithRun(self, mock_builder):
+        mock_builder.return_value.container_config.repo2docker_version = \
+            "craigwillis/repo2docker:latest"
+        mock_builder.return_value.get_tag.return_value = "images.local.wholetale.org/digest123"
         tale = self._create_water_tale()
 
         resp = self.request(
@@ -1188,11 +1210,20 @@ class TaleWithWorkspaceTestCase(base.TestCase):
     def testTaleManifestTaleCycle(self):
         from server.lib.manifest import Manifest
         tale = self._create_water_tale()
-        manifest_obj = Manifest(tale, self.user)
+        with mock.patch(
+            "server.lib.manifest.ImageBuilder"
+        ) as mock_builder:
+            mock_builder.return_value.container_config.repo2docker_version = \
+                "craigwillis/repo2docker:latest"
+            mock_builder.return_value.get_tag.return_value = "images.local.wholetale.org/digest123"
+            manifest_obj = Manifest(tale, self.user)
         manifest = json.loads(manifest_obj.dump_manifest())
         environment = json.loads(manifest_obj.dump_environment())
         restored_tale = Tale().restoreTale(manifest, environment)
         for key in restored_tale.keys():
+            if key == "imageInfo":
+                print("Original tale doesn't have imageInfo....")
+                continue
             if key == "imageId":
                 self.assertEqual(tale[key], str(restored_tale[key]))
             else:

@@ -14,6 +14,7 @@ from girder.plugins.jobs.models.job import Job
 
 from ..constants import TaleStatus
 from ..models.tale import Tale
+from ..lib.metrics import metricsLogger
 
 
 def run(job):
@@ -48,3 +49,13 @@ def run(job):
         log = "%s: %s\n%s" % (t.__name__, repr(val), traceback.extract_tb(tb))
         jobModel.updateJob(job, status=JobStatus.ERROR, log=log)
         raise
+
+    metricsLogger.info(
+        "tale.copied",
+        extra={
+            "details": {
+                "id": new_tale["_id"],
+                "sourceId": old_tale["_id"],
+            }
+        },
+    )

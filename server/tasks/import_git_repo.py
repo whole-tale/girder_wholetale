@@ -14,6 +14,7 @@ from girder.plugins.jobs.constants import JobStatus
 from girder.plugins.jobs.models.job import Job
 
 from ..constants import InstanceStatus, TaleStatus
+from ..lib.metrics import metricsLogger
 from ..models.instance import Instance
 from ..models.tale import Tale
 from ..utils import notify_event
@@ -129,6 +130,19 @@ def run(job):
         notify_event(users, "wt_import_failed", {"taleId": tale['_id']})
         raise
 
+    metricsLogger.info(
+        "tale.import_git",
+        extra={
+            "details": {
+                "id": tale["_id"],
+                "imageId": tale["imageId"],
+                "imageInfo": tale["imageInfo"],
+                "gitUrl": url,
+                "spawn": spawn,
+                "userId": user["_id"],  # as a shortcut
+            }
+        },
+    )
     # To get rid of ObjectId's, dates etc.
     tale = json.loads(
         json.dumps(tale, sort_keys=True, allow_nan=False, cls=JsonEncoder)

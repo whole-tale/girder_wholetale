@@ -56,7 +56,7 @@ def _get_attrs_via_head(obj, url, headers=None):
     # see https://github.com/IQSS/dataverse/issues/5322
     req = requests.head(url, allow_redirects=True, headers=headers)
     if req.ok:
-        size = int(req.headers.get("Content-Length", obj["size"]))
+        size = int(req.headers.get("Content-Length", default=obj.get("size", "-1")))
     else:
         # Now the magic, since S3 accepts range request, we cheat the system
         # by requesting only 100 bytes to get the headers we want.

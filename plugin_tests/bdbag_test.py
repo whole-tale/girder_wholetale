@@ -1,4 +1,5 @@
 import json
+import mock
 import os
 import tempfile
 import time
@@ -6,9 +7,14 @@ import zipfile
 from pathlib import Path
 
 import bdbag.bdbag_api as bdbag
+from girder import config
 from girder.models.folder import Folder
 from girder.models.item import Item
 from tests import base
+
+
+os.environ["GIRDER_PORT"] = os.environ.get("GIRDER_TEST_PORT", "20200")
+config.loadConfig()  # Must reload config to pickup correct port
 
 
 def setUpModule():
@@ -141,7 +147,7 @@ class BDBagFullTestCase(base.TestCase):
                     "_modelType": "item",
                 }
             )
-    
+
         # Fake imageInfo
         imageInfo = {
             "digest": "registry.local.wholetale.org/digest123"
@@ -163,13 +169,18 @@ class BDBagFullTestCase(base.TestCase):
             fp.write("vim\n")
 
         # Export!
-        resp = self.request(
-            path=f"/tale/{tale['_id']}/export",
-            method="GET",
-            isJson=False,
-            user=self.user,
-            params={"taleFormat": "bagit"},
-        )
+        with mock.patch("girder.plugins.wholetale.lib.manifest.ImageBuilder") as mock_builder:
+            mock_builder.return_value.container_config.repo2docker_version = \
+                "craigwillis/repo2docker:latest"
+            mock_builder.return_value.get_tag.return_value = "images.local.wholetale.org/digest123"
+            resp = self.request(
+                path=f"/tale/{tale['_id']}/export",
+                method="GET",
+                isJson=False,
+                user=self.user,
+                params={"taleFormat": "bagit"},
+            )
+
         self.assertStatusOk(resp)
         with tempfile.TemporaryDirectory() as tmpdirname:
             with tempfile.TemporaryFile() as fp:

@@ -204,7 +204,6 @@ containerInfoSchema = {
     "description": "A subset of docker info parameters used by Tales",
     "type": "object",
     "properties": {
-        "created": {"type": "string", "format": "date-time"},
         "name": {"type": "string"},
         "imageId": {
             "type": "string",
@@ -223,7 +222,6 @@ containerInfoSchema = {
         "nodeId": {"type": "string"},
         "mountPoint": {"type": "string"},
         "volumeName": {"type": "string"},
-        "urlPath": {"type": "string"},
     },
     "required": ["name", "mountPoint", "nodeId", "volumeName"],
 }

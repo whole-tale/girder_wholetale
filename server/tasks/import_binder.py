@@ -36,6 +36,7 @@ from girder.plugins.jobs.models.job import Job
 from ..constants import CATALOG_NAME, InstanceStatus, TaleStatus
 from ..lib import pids_to_entities, register_dataMap
 from ..lib.dataone import DataONELocations  # TODO: get rid of it
+from ..lib.metrics import metricsLogger
 from ..models.instance import Instance
 from ..models.tale import Tale
 from ..utils import getOrCreateRootFolder, notify_event
@@ -262,6 +263,21 @@ def run(job):
         )
         notify_event([user["_id"]], "wt_import_failed", {"taleId": tale["_id"]})
         raise
+
+    metricsLogger.info(
+        "tale.import_binder",
+        extra={
+            "details": {
+                "id": tale["_id"],
+                "imageId": tale["imageId"],
+                "imageInfo": tale["imageInfo"],
+                "spawn": spawn,
+                "asTale": asTale,
+                "dataMap": dataMap.toDict(),
+                "userId": user["_id"],  # shortcut
+            }
+        },
+    )
 
     # To get rid of ObjectId's, dates etc.
     tale = json.loads(

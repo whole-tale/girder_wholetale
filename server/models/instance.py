@@ -10,6 +10,7 @@ from girder import logger
 from girder.constants import AccessType, SortDir, TokenScope
 from girder.exceptions import ValidationException
 from girder.models.model_base import AccessControlledModel
+from girder.models.setting import Setting
 from girder.models.token import Token
 from girder.models.user import User
 from girder.plugins.worker import getCeleryApp
@@ -20,7 +21,8 @@ from gwvolman.tasks import \
     CREATE_VOLUME_STEP_TOTAL, BUILD_TALE_IMAGE_STEP_TOTAL, \
     LAUNCH_CONTAINER_STEP_TOTAL, UPDATE_CONTAINER_STEP_TOTAL
 
-from ..constants import InstanceStatus
+from ..constants import InstanceStatus, PluginSettings
+from ..lib.metrics import metricsLogger
 from ..schema.misc import containerInfoSchema
 from ..utils import init_progress, notify_event
 
@@ -125,6 +127,9 @@ class Instance(AccessControlledModel):
         return self.save(instance)
 
     def deleteInstance(self, instance, user):
+        initial_status = instance["status"]
+        if initial_status == InstanceStatus.DELETING:
+            return
         instance["status"] = InstanceStatus.DELETING
         instance = self.updateInstance(instance)
         token = Token().createToken(user=user, days=0.5)
@@ -156,6 +161,18 @@ class Instance(AccessControlledModel):
 
         notify_event([instance["creatorId"]], "wt_instance_deleted",
                      {'taleId': instance['taleId'], 'instanceId': instance['_id']})
+
+        metricsLogger.info(
+            "instance.remove",
+            extra={
+                "details": {
+                    "id": instance["_id"],
+                    "taleId": instance["taleId"],
+                    "status": initial_status,
+                    "containerInfo": instance.get("containerInfo"),
+                }
+            },
+        )
 
     def createInstance(self, tale, user, /, *, name=None, save=True, spawn=True):
         if not name:
@@ -232,7 +249,30 @@ class Instance(AccessControlledModel):
 
             notify_event([instance["creatorId"]], "wt_instance_launching",
                          {'taleId': instance['taleId'], 'instanceId': instance['_id']})
+
+        metricsLogger.info(
+            "instance.create",
+            extra={
+                "details": {
+                    "id": instance["_id"],
+                    "taleId": instance["taleId"],
+                    "spawn": spawn,
+                }
+            },
+        )
+
         return instance
+
+    def get_logs(self, instance, tail):
+        r = requests.get(
+            Setting().get(PluginSettings.LOGGER_URL),
+            params={"tail": tail, "name": instance["containerInfo"].get("name")}
+        )
+        try:
+            r.raise_for_status()
+            return r.text
+        except requests.exceptions.HTTPError:
+            return f"Logs for instance {instance['_id']} are currently unavailable..."
 
 
 def _wait_for_server(url, token, timeout=30, wait_time=0.5):
@@ -242,6 +282,8 @@ def _wait_for_server(url, token, timeout=30, wait_time=0.5):
         try:
             r = requests.get(url, cookies={'girderToken': token}, timeout=1)
             r.raise_for_status()
+            if int(r.headers.get("Content-Length", "0")) == 0:
+                raise ValueError("HTTP server returns no content")
         except requests.exceptions.HTTPError as err:
             logger.info(
                 'Booting server at [%s], getting HTTP status [%s]', url, err.response.status_code)
@@ -266,6 +308,8 @@ def finalizeInstance(event):
 
     if job.get("instance_id"):
         instance = Instance().load(job["instance_id"], force=True)
+        if instance is None:
+            return
 
         if (
             instance["status"] == InstanceStatus.LAUNCHING
@@ -288,7 +332,7 @@ def finalizeInstance(event):
         ):
             # Get a url to the container
             service = getCeleryApp().AsyncResult(job['celeryTaskId']).get()
-            url = service.get("url", "https://google.com")
+            url = service.get("url", "https://girder.hub.yt/")
 
             # Generate the containerInfo
             valid_keys = set(containerInfoSchema['properties'].keys())
