@@ -22,18 +22,18 @@ build_tpl = r"""
 # Use repo2docker to build the image from the workspace
 docker run  \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  -v "`pwd`/data/workspace:/WholeTale/workspace" \
-  -v "`pwd`/metadata/environment.json:/WholeTale/workspace/environment.json" \
+  -v "`pwd`/data/workspace:{targetMount}/workspace" \
+  -v "`pwd`/metadata/environment.json:{targetMount}/workspace/environment.json" \
   --privileged=true \
   -e DOCKER_HOST=unix:///var/run/docker.sock \
   {repo2docker} \
   jupyter-repo2docker \
     --config=/wholetale/repo2docker_config.py \
-    --target-repo-dir=/WholeTale/workspace \
+    --target-repo-dir={targetMount}/workspace \
     --user-id=1000 --user-name={user} \
     --no-clean --no-run --debug \
     --image-name {image_name} \
-    /WholeTale/workspace
+    {targetMount}/workspace
 """
 
 run_tpl = r"""#!/bin/sh
@@ -227,6 +227,7 @@ class BagTaleExporter(TaleExporter):
             build_cmd = build_tpl.format(
                 repo2docker=container_config.get('repo2docker_version', REPO2DOCKER_VERSION),
                 user=container_config['user'],
+                targetMount=container_config['targetMount'],
                 image_name=image_digest
             )
 
