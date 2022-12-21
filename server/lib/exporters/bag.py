@@ -2,6 +2,7 @@ from datetime import datetime, timezone
 from hashlib import sha1, sha256, md5
 import os
 from urllib.parse import unquote
+import requests
 from . import TaleExporter
 from gwvolman.constants import REPO2DOCKER_VERSION
 
@@ -18,7 +19,7 @@ Payload-Oxum: {oxum}
 """
 
 build_tpl = r"""
-# Use repo2docker to build the image from the workspace when no image digest
+# Use repo2docker to build the image from the workspace
 docker run  \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -v "`pwd`/data/workspace:/WholeTale/workspace" \
@@ -200,34 +201,40 @@ class BagTaleExporter(TaleExporter):
         return oxum
 
     def format_run_file(self, container_config, urlPath, token):
-
         rendered_command = container_config.get('command', '').format(
             base_path='', port=container_config['port'], ip='0.0.0.0', token=token
         )
 
-        taleId = self.manifest["wt:identifier"]
-        image_name = None
         for obj in self.manifest['schema:hasPart']:
             if ('schema:applicationCategory' in
                     obj and obj['schema:applicationCategory'] == 'DockerImage'):
-                image_name = obj['@id']
+                image_digest = obj['@id']
+                break
+        else:
+            raise RuntimeError("Unable to find image in the manifest")
 
-        # If the tale doesn't have a built image, output the command
-        # to build the image with r2d
+        image_name, reference = image_digest.split(":")
+        image_name = image_name.split(":")[0]  # Tag is ignored GET /manifest"
+        image_name = image_name.replace("/tale", "/v2/tale")
+        response = requests.get(f"https://{image_name}/tags/list")
+
         build_cmd = ''
-        if image_name is None:
-            image_name = f"wholetale/tale_{taleId}"
+        try:
+            response.raise_for_status()
+            assert reference in response.json()["tags"]
+        except (requests.exceptions.HTTPError, AssertionError):
+            # No image
             build_cmd = build_tpl.format(
                 repo2docker=container_config.get('repo2docker_version', REPO2DOCKER_VERSION),
                 user=container_config['user'],
-                image_name=image_name
+                image_name=image_digest
             )
 
         return run_tpl.format(
             build_cmd=build_cmd,
             repo2docker=container_config.get('repo2docker_version', REPO2DOCKER_VERSION),
             port=container_config['port'],
-            image_name=image_name,
+            image_name=image_digest,
             command=rendered_command,
             targetMount=container_config['targetMount'],
             urlPath=urlPath,
