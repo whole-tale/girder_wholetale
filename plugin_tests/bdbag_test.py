@@ -1,6 +1,8 @@
 import json
 import mock
 import os
+import re
+import responses
 import tempfile
 import time
 import zipfile
@@ -84,6 +86,21 @@ class BDBagFullTestCase(base.TestCase):
             ),
         )
 
+        responses.get(
+            "https://images.local.wholetale.org/v2/tale/foo/tags/list",
+            body='{"name": "tale/foo", "tags": ["123"]}',
+            status=200,
+            content_type="application/json",
+        )
+        responses.add_passthru(re.compile("https://doi.org/\\w+"))
+        responses.add_passthru(re.compile("https://dataverse.harvard.edu/\\w+"))
+        responses.add_passthru(re.compile("https://cn.dataone.org/\\w+"))
+        responses.add_passthru(re.compile("https://arcticdata.io/\\w+"))
+        responses.add_passthru(re.compile("https://zenodo.org/\\w+"))
+        responses.add_passthru(re.compile("https://www.gw-openscience.org/\\w+"))
+        responses.add_passthru(re.compile("https://dvn-cloud.s3.amazonaws.com/\\w+"))
+
+    @responses.activate
     def testBDBagValidation(self):
         from girder.plugins.jobs.models.job import Job
 
@@ -150,7 +167,7 @@ class BDBagFullTestCase(base.TestCase):
 
         # Fake imageInfo
         imageInfo = {
-            "digest": "registry.local.wholetale.org/digest123"
+            "digest": "registry.local.wholetale.org/tale/foo:123"
         }
 
         # Create tale (use model directly to set imageInfo)
@@ -172,7 +189,8 @@ class BDBagFullTestCase(base.TestCase):
         with mock.patch("girder.plugins.wholetale.lib.manifest.ImageBuilder") as mock_builder:
             mock_builder.return_value.container_config.repo2docker_version = \
                 "craigwillis/repo2docker:latest"
-            mock_builder.return_value.get_tag.return_value = "images.local.wholetale.org/digest123"
+            mock_builder.return_value.get_tag.return_value = \
+                "images.local.wholetale.org/tale/foo:123"
             resp = self.request(
                 path=f"/tale/{tale['_id']}/export",
                 method="GET",
@@ -193,7 +211,6 @@ class BDBagFullTestCase(base.TestCase):
                 )
                 version_id = Path(manifest_path).parts[0]
 
-
                 zip_archive.extractall(tmpdirname)
                 zip_archive.close()
 
@@ -207,8 +224,14 @@ class BDBagFullTestCase(base.TestCase):
             manifest_fs_path = os.path.join(bag_path, "metadata/manifest.json")
             with open(manifest_fs_path, 'r') as fp:
                 manifest_json = json.load(fp)
-                self.assertEqual(manifest_json["schema:hasPart"][1]["@id"], "images.local.wholetale.org/digest123")
+                self.assertEqual(
+                    manifest_json["schema:hasPart"][1]["@id"],
+                    "images.local.wholetale.org/tale/foo:123"
+                )
 
             from server.lib.manifest_parser import ManifestParser
             tale_fields = ManifestParser(manifest_fs_path).get_tale_fields()
-            self.assertEqual(tale_fields["imageInfo"]["digest"], "registry.local.wholetale.org/digest123")
+            self.assertEqual(
+                tale_fields["imageInfo"]["digest"],
+                "registry.local.wholetale.org/tale/foo:123"
+            )

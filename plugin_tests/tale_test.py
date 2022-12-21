@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 import pytest
 import re
+import responses
 import time
 import urllib.request
 import tempfile
@@ -43,7 +44,7 @@ class FakeAsyncResult(object):
 
     def get(self, timeout=None):
         return {
-            'image_digest': 'digest123',
+            'image_digest': 'registry.local.wholetale.org/tale/name:123',
             'repo2docker_version': 1,
             'last_build': 123
         }
@@ -563,7 +564,8 @@ class TaleTestCase(base.TestCase):
         ) as mock_builder:
             mock_builder.return_value.container_config.repo2docker_version = \
                 "craigwillis/repo2docker:latest"
-            mock_builder.return_value.get_tag.return_value = "images.local.wholetale.org/digest123"
+            mock_builder.return_value.get_tag.return_value = \
+                "images.local.wholetale.org/tale/name:123"
 
             resp = self.request(
                 path=pth, method='GET', user=self.user)
@@ -575,7 +577,8 @@ class TaleTestCase(base.TestCase):
     def testExport(self, mock_builder):
         mock_builder.return_value.container_config.repo2docker_version = \
             "craigwillis/repo2docker:latest"
-        mock_builder.return_value.get_tag.return_value = "images.local.wholetale.org/digest123"
+        mock_builder.return_value.get_tag.return_value = \
+            "images.local.wholetale.org/tale/name:123"
         resp = self.request(
             path='/tale', method='POST', user=self.user,
             type='application/json',
@@ -728,7 +731,9 @@ class TaleTestCase(base.TestCase):
 
             tale = Tale().load(tale['_id'], force=True)
             self.assertEqual(tale['imageInfo']['status'], ImageStatus.AVAILABLE)
-            self.assertEqual(tale['imageInfo']['digest'], 'digest123')
+            self.assertEqual(
+                tale['imageInfo']['digest'], 'registry.local.wholetale.org/tale/name:123'
+            )
 
             # Set status to ERROR
             # job = jobModel.load(job['_id'], force=True)
@@ -908,6 +913,15 @@ class TaleWithWorkspaceTestCase(base.TestCase):
         self.homeDirsApps = HOME_DIRS_APPS  # nopep8
         self.clearDAVAuthCache()
 
+        responses.get(
+            "https://images.local.wholetale.org/v2/tale/name/tags/list",
+            body='{"name": "tale/name", "tags": ["123"]}',
+            status=200,
+            content_type="application/json",
+        )
+        responses.add_passthru(re.compile("https://cn.dataone.org/\\w+"))
+        responses.add_passthru(re.compile("https://arcticdata.io/\\w+"))
+
     def clearDAVAuthCache(self):
         # need to do this because the DB is wiped on every test, but the dav domain
         # controller keeps a cache with users/tokens
@@ -1076,6 +1090,7 @@ class TaleWithWorkspaceTestCase(base.TestCase):
         Tale().remove(new_tale)
         Tale().remove(tale)
 
+    @responses.activate
     def testExportBag(self):
         tale = self._create_water_tale()
         with mock.patch(
@@ -1083,10 +1098,17 @@ class TaleWithWorkspaceTestCase(base.TestCase):
         ) as mock_builder:
             mock_builder.return_value.container_config.repo2docker_version = \
                 "craigwillis/repo2docker:latest"
-            mock_builder.return_value.get_tag.return_value = "images.local.wholetale.org/digest123"
+            mock_builder.return_value.get_tag.return_value = \
+                "images.local.wholetale.org/tale/name:123"
+
             resp = self.request(
-                path=f"/tale/{tale['_id']}/export", method='GET', params={'taleFormat': 'bagit'},
-                isJson=False, user=self.user)
+                path=f"/tale/{tale['_id']}/export",
+                method='GET',
+                params={'taleFormat': 'bagit'},
+                isJson=False,
+                user=self.user
+            )
+
         dirpath = tempfile.mkdtemp()
         bag_file = os.path.join(dirpath, resp.headers["Content-Disposition"].split('"')[1])
         with open(bag_file, 'wb') as fp:
@@ -1125,11 +1147,13 @@ class TaleWithWorkspaceTestCase(base.TestCase):
         self.model('tale', 'wholetale').remove(tale)
         self.model('collection').remove(self.data_collection)
 
+    @responses.activate
     @mock.patch("girder.plugins.wholetale.lib.manifest.ImageBuilder")
     def testExportBagWithRun(self, mock_builder):
         mock_builder.return_value.container_config.repo2docker_version = \
             "craigwillis/repo2docker:latest"
-        mock_builder.return_value.get_tag.return_value = "images.local.wholetale.org/digest123"
+        mock_builder.return_value.get_tag.return_value = \
+            "images.local.wholetale.org/tale/name:123"
         tale = self._create_water_tale()
 
         resp = self.request(
@@ -1215,7 +1239,8 @@ class TaleWithWorkspaceTestCase(base.TestCase):
         ) as mock_builder:
             mock_builder.return_value.container_config.repo2docker_version = \
                 "craigwillis/repo2docker:latest"
-            mock_builder.return_value.get_tag.return_value = "images.local.wholetale.org/digest123"
+            mock_builder.return_value.get_tag.return_value = \
+                "images.local.wholetale.org/tale/name:123"
             manifest_obj = Manifest(tale, self.user)
         manifest = json.loads(manifest_obj.dump_manifest())
         environment = json.loads(manifest_obj.dump_environment())
