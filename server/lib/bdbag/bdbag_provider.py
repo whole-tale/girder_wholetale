@@ -211,7 +211,7 @@ class BDBagProvider(ImportProvider):
                     line = _text(f.readline())
 
     def _parse_fetch_line(self, root: _FileTree, line: str) -> None:
-        els = line.split()
+        els = line.split(maxsplit=3)
         if len(els) != 3:
             raise ValueError('Invalid line in fetch.txt: {}'.format(line))
         url = els[0]  # no need to urldecode this one
