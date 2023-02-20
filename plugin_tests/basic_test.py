@@ -50,11 +50,11 @@ class WholeTaleTestCase(base.TestCase):
         f1 = self.model('folder').createFolder(
             c1, 'f1', parentType='collection')
         i1 = self.model('item').createItem('i1', user, f1)
-        i2 = self.model('item').createItem('i2', user, f1)
         assetstore = {'_id': 0}
-        fl1 = self.model('file').createFile(user, i1, 'foo1', 7, assetstore)
+        fl1 = self.model('file').createFile(user, i1, 'i1', 7, assetstore)
+        fl1["path"] = "/dev/null/fl1"
+        self.model('file').save(fl1)
         fl2 = self.model('file').createFile(user, i1, 'foo2', 13, assetstore)
-        fl3 = self.model('file').createFile(user, i2, 'foo3', 19, assetstore)
         f2 = self.model('folder').createFolder(
             f1, 'f2', parentType='folder')
         i3 = self.model('item').createItem('i3', user, f2)
@@ -62,17 +62,47 @@ class WholeTaleTestCase(base.TestCase):
         i4 = self.model('item').createItem('i4', user, f2)
         self.model('file').createFile(user, i4, 'foo5', 65535, assetstore)
         i5 = self.model('item').createItem('i5', user, f2)
-        self.model('file').createFile(user, i5, 'foo6', 2.0 * 1024**8,
-                                      assetstore)
+        f = self.model('file').createFile(user, i5, 'i5', 2.0 * 1024**8,
+                                          assetstore)
+        f["path"] = "/dev/null/f"
+        self.model("file").save(f)
 
         resp = self.request(
             path='/folder/{_id}/listing'.format(**f1), method='GET',
             user=user)
         self.assertStatusOk(resp)
-        self.assertEqual(set(_['_id'] for _ in resp.json['files']),
-                         set((str(fl3['_id']),)))
-        self.assertEqual(set(_['_id'] for _ in resp.json['folders']),
-                         set((str(f2['_id']), str(i1['_id']))))
+        current_dir = resp.json
+        self.assertEqual(current_dir["name"], "/")
+        self.assertEqual(len(current_dir["children"]), 2)
+        for child in current_dir["children"]:
+            self.assertTrue(child["name"] in {"i1", "f2"})
+            if child["name"] == "i1":
+                self.assertEqual(
+                    child["children"][0],
+                    {
+                        "children": [],
+                        "host_path": "/dev/null/fl1",
+                        "name": "i1",
+                        "type": 1,
+                    }
+                )
+            else:
+                self.assertEqual(
+                    child,
+                    {
+                        "children": [
+                            {
+                                "children": [],
+                                "host_path": "/dev/null/f",
+                                "name": "i5",
+                                "type": 1,
+                            }
+                        ],
+                        "name": "f2",
+                        "type": 0,
+                    }
+                )
+
         resp = self.request(
             path='/item/{_id}/listing'.format(**i1), method='GET',
             user=user)

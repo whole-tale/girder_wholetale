@@ -8,6 +8,7 @@ import datetime
 import jsonschema
 import logging
 import os
+import pathlib
 import six
 import validators
 
@@ -281,28 +282,34 @@ def _defaultLogo():
 @boundHandler()
 def listFolder(self, folder, params):
     user = self.getCurrentUser()
-    folders = list(
-        self.model('folder').childFolders(parentType='folder',
-                                          parent=folder, user=user))
+    data = {
+        "name": "/",
+        "type": 0,
+        "children": [],
+    }
+    for fs_path, fobj in Folder().fileList(
+        folder, user=user, data=False, subpath=False, path="",
+    ):
+        try:
+            host_path = fobj["path"]
+        except KeyError:
+            continue
 
-    files = []
-    for item in self.model('folder').childItems(folder=folder):
-        childFiles = list(self.model('item').childFiles(item))
-        if len(childFiles) == 1:
-            fileitem = childFiles[0]
-            if 'imported' not in fileitem and \
-                    fileitem.get('assetstoreId') is not None:
-                try:
-                    store = \
-                        self.model('assetstore').load(fileitem['assetstoreId'])
-                    adapter = assetstore_utilities.getAssetstoreAdapter(store)
-                    fileitem["path"] = adapter.fullPath(fileitem)
-                except (ValidationException, AttributeError):
-                    pass
-            files.append(fileitem)
-        else:
-            folders.append(item)
-    return {'folders': folders, 'files': files}
+        current_level = data
+        fs_path_parts = pathlib.Path(fs_path).parts
+        for part in fs_path_parts:
+            child_dict = None
+            for child in current_level["children"]:
+                if child["name"] == part:
+                    child_dict = child
+                    break
+            if child_dict is None:
+                child_dict = {"name": part, "type": 0, "children": []}
+                current_level["children"].append(child_dict)
+            current_level = child_dict
+        current_level["type"] = 1
+        current_level["host_path"] = host_path
+    return data
 
 
 @access.public(scope=TokenScope.DATA_READ)
