@@ -38,10 +38,24 @@ class PluginSettings:
     DERIVA_EXPORT_URLS = "wholetale.deriva.export_urls"
     DERIVA_SCOPES = "wholetale.deriva.scopes"
     LOGGER_URL = "wholetale.instance_logger"
+    WEBSITE_URL = "wholetale.website_url"
+    DASHBOARD_LINK_TITLE = "wholetale.dashboard_link_title"
+    CATALOG_LINK_TITLE = "wholetale.catalog_link_title"
+    ENABLE_DATA_CATALOG = "wholetale.enable_data_catalog"
+    DASHBOARD_URL = "wholetale.dashboard_url"
+    LOGO = "wholetale.logo"
+    DASHBOARD_TITLE = "core.brand_name"
+    HEADER_COLOR = "core.banner_color"
 
 
 class SettingDefault:
     defaults = {
+        PluginSettings.DASHBOARD_TITLE: "Whole Tale",
+        PluginSettings.HEADER_COLOR: "#132f43",
+        PluginSettings.WEBSITE_URL: "http://wholetale.org",
+        PluginSettings.DASHBOARD_LINK_TITLE: "Tale Dashboard",
+        PluginSettings.CATALOG_LINK_TITLE: "Data Catalog",
+        PluginSettings.ENABLE_DATA_CATALOG: False,
         PluginSettings.INSTANCE_CAP: 2,
         PluginSettings.DATAVERSE_URL: (
             "https://iqss.github.io/dataverse-installations/data/data.json"

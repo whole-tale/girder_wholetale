@@ -1,9 +1,11 @@
 import _ from 'underscore';
 
 import PluginConfigBreadcrumbWidget from 'girder/views/widgets/PluginConfigBreadcrumbWidget';
+import UploadWidget from 'girder/views/widgets/UploadWidget';
+import FolderModel from 'girder/models/FolderModel';
 import View from 'girder/views/View';
 import events from 'girder/events';
-import { restRequest } from 'girder/rest';
+import { restRequest, getApiRoot } from 'girder/rest';
 
 import ConfigViewTemplate from '../templates/configView.pug';
 import '../stylesheets/configView.styl';
@@ -15,6 +17,21 @@ var ConfigView = View.extend({
             this.$('#g-wholetale-error-message').empty();
 
             this._saveSettings([{
+                key: 'wholetale.website_url',
+                value: this.$('#wholetale_website_url').val()
+            }, {
+                key: 'wholetale.dashboard_link_title',
+                value: this.$('#wholetale_dashboard_link_title').val()
+            }, {
+                key: 'wholetale.catalog_link_title',
+                value: this.$('#wholetale_catalog_link_title').val()
+            }, {
+                key: 'wholetale.enable_data_catalog',
+                value: this.$('#wholetale_enable_data_catalog').is(':checked')
+            }, {
+                key: 'wholetale.logo',
+                value: this.logoFileId
+            }, {
                 key: 'wholetale.instance_cap',
                 value: this.$('#wholetale_instance_cap').val()
             }, {
@@ -33,6 +50,11 @@ var ConfigView = View.extend({
                 key: 'wholetale.publisher_repositories',
                 value: this.$('#wholetale_publisher_repositories').val().trim()
             }]);
+        },
+
+        'click #g-wholetale-logo-reset': function (event) {
+            this.logoFileId = null;
+            this._updateLogoDisplay();
         }
     },
     initialize: function () {
@@ -42,6 +64,11 @@ var ConfigView = View.extend({
         });
 
         var keys = [
+            'wholetale.website_url',
+            'wholetale.dashboard_link_title',
+            'wholetale.catalog_link_title',
+            'wholetale.enable_data_catalog',
+            'wholetale.logo',
             'wholetale.instance_cap',
             'wholetale.dataverse_url',
             'wholetale.dataverse_extra_hosts',
@@ -68,9 +95,37 @@ var ConfigView = View.extend({
                 }
             }).done(_.bind(function (resp) {
                 this.defaults = resp;
-                this.render();
+                restRequest({
+                    method: 'GET',
+                    url: 'wholetale/assets'
+                }).done(_.bind(function (resp) {
+                    this.logoFileId = this.settings['wholetale.logo'];
+
+                    this.logoUploader = new UploadWidget({
+                        parent: new FolderModel({_id: resp['wholetale.logo']}),
+                        parentType: 'folder',
+                        title: 'Dashboard Logo',
+                        modal: false,
+                        multiFile: false,
+                        parentView: this
+                    });
+                    this.listenTo(this.logoUploader, 'g:uploadFinished', (event) => {
+                        this.logoFileId = event.files[0].id;
+                        this._updateLogoDisplay();
+                    });
+
+                    this.render();
+                }, this));
             }, this));
         }, this));
+    },
+
+    _updateLogoDisplay: function () {
+        let logoUrl;
+        if (this.logoFileId) {
+            logoUrl = `${getApiRoot()}/file/${this.logoFileId}/download?contentDisposition=inline`;
+            this.$('.g-wholetale-logo-preview img').attr('src', logoUrl);
+        }
     },
 
     render: function () {
@@ -80,6 +135,12 @@ var ConfigView = View.extend({
             JSON: window.JSON
         }));
         this.breadcrumb.setElement(this.$('.g-config-breadcrumb-container')).render();
+
+        this.logoUploader
+            .render()
+            .$el.appendTo(this.$('.g-wholetale-logo-upload-container'));
+        this._updateLogoDisplay();
+
         return this;
     },
 

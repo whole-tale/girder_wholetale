@@ -3,6 +3,28 @@ p.g-wholetale-description
   | Configure Whole Tale plugin
 form#g-wholetale-config-form(role="form")
   .form-group
+    label.control-label(for="wholetale_website_url") Dashboard website URL
+    input.input-sm.form-control#wholetale_website_url(
+      type="text", value=settings['wholetale.website_url'] || null,
+      placeholder=`Default: ${defaults['wholetale.website_url'] || 'none'}`,
+      title="Website url used for header link.")
+    label.control-label(for="wholetale_dashboard_link_title") Dashboard Link Title
+    input.input-sm.form-control#wholetale_dashboard_link_title(
+      type="text", value=settings['wholetale.dashboard_link_title'] || null,
+      placeholder=`Default: ${defaults['wholetale.dashboard_link_title'] || 'none'}`,
+      title="Title for dashboard link in header.")
+  .form-group
+    label(for="wholetale_enable_data_catalog")
+      input#wholetale_enable_data_catalog(
+          type="checkbox", checked=(
+            settings['wholetale.enable_data_catalog'] === null ? defaults['wholetale.enable_data_catalog'] : settings['wholetale.enable_data_catalog']))
+      | Enable Data Catalog
+    label.control-label(for="wholetale_catalog_link_title") Catalog Link Title
+    input.input-sm.form-control#wholetale_catalog_link_title(
+      type="text", value=settings['wholetale.catalog_link_title'] || null,
+      placeholder=`Default: ${defaults['wholetale.catalog_link_title'] || 'none'}`,
+      title="Title for catalog link in header.")
+  .form-group
     label.control-label(for="wholetale_instance_cap") Instance Cap
     input.input-sm.form-control#wholetale_instance_cap(
       type="text", value=settings['wholetale.instance_cap'] || null,
@@ -33,6 +55,15 @@ form#g-wholetale-config-form(role="form")
       placeholder=`Default: ${defaults['wholetale.publisher_repositories'] || '[]'}`,
       title="A mapping of publish repositories to auth providers. (JSON object {\"repository1\": \"authprovider1\", ...})")
         = JSON.stringify(settings['wholetale.publisher_repositories'] || defaults['wholetale.publisher_repositories'], null, 4)
+  .form-group
+    label Header logo
+    .g-wholetale-logo-container
+      .g-wholetale-logo-preview-container
+        .g-wholetale-logo-preview
+          img(alt="Logo")
+        button#g-wholetale-logo-reset.btn.btn-sm.btn-default(
+            type="button", title="Reset default logo") Use default
+      .g-wholetale-logo-upload-container
 
   p#g-wholetale-error-message.g-validation-failed-message
   input.btn.btn-sm.btn-primary(type="submit", value="Save")
