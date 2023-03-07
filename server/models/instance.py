@@ -3,6 +3,7 @@
 
 from bson import ObjectId
 import datetime
+import json
 import requests
 import time
 
@@ -13,6 +14,7 @@ from girder.models.model_base import AccessControlledModel
 from girder.models.setting import Setting
 from girder.models.token import Token
 from girder.models.user import User
+from girder.utility import JsonEncoder
 from girder.plugins.worker import getCeleryApp
 from girder.plugins.jobs.constants import JobStatus, REST_CREATE_JOB_TOKEN_SCOPE
 from gwvolman.tasks import \
@@ -214,6 +216,8 @@ class Instance(AccessControlledModel):
             notification = init_progress(
                 resource, user, 'Creating instance',
                 'Initializing', total)
+
+            user = json.loads(json.dumps(user, cls=JsonEncoder))
 
             buildTask = build_tale_image.signature(
                 args=[str(tale['_id']), False],
