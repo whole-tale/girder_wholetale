@@ -1,15 +1,9 @@
 rdflib
-celery[redis]==4.4.6
-kombu==4.6.11
-jsonpickle==1.5.2  # see #447
+celery[redis]
 python-magic
 requests
-redis==3.5.3
 git+https://github.com/whole-tale/girderfs@master#egg=girderfs
 git+https://github.com/whole-tale/gwvolman@master#egg=gwvolman
-dataone.common==3.4.7
-dataone.libclient==3.4.7
-dataone.cli==3.4.7
 validators
 html2markdown
 lxml
