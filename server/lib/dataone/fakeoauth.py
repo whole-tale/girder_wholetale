@@ -1,8 +1,35 @@
 from urllib.parse import urlparse, urlunparse, quote
-from d1_common.env import D1_ENV_DICT
 
 from girder.api.rest import getApiUrl
 from girder.plugins.oauth.providers.base import ProviderBase
+
+
+D1_ENV_DICT = {
+    "prod": {
+        "name": "Production",
+        "base_url": "https://cn.dataone.org/cn",
+        "host": "cn.dataone.org",
+        "solr_base": "/cn/v1/query/solr/",
+    },
+    "stage": {
+        "name": "Stage",
+        "base_url": "https://cn-stage.test.dataone.org/cn",
+        "host": "cn-stage.test.dataone.org",
+        "solr_base": "/cn/v1/query/solr/",
+    },
+    "sandbox": {
+        "name": "Sandbox",
+        "base_url": "https://cn-sandbox.test.dataone.org/cn",
+        "host": "cn-sandbox.test.dataone.org",
+        "solr_base": "/cn/v1/query/solr/",
+    },
+    "dev": {
+        "name": "Development",
+        "base_url": "https://cn-dev.test.dataone.org/cn",
+        "host": "cn-dev.test.dataone.org",
+        "solr_base": "/cn/v1/query/solr/",
+    },
+}
 
 
 class FakeDataONE(ProviderBase):
