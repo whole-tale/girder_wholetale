@@ -213,3 +213,41 @@ class WholeTaleTestCase(base.TestCase):
         self.assertStatus(resp, 303)
         self.assertEqual(resp.headers["Location"],
                          "https://blah.wholetale.org")
+
+    def testAuthorize(self):
+
+        # Note: additional instance specific tests in instance_tests
+        # Non-instance authorization tests
+        resp = self.request(
+            path="/user/authorize",
+            method="GET",
+            isJson=False,
+            user=self.user,
+        )
+        # Assert 400 "Forward auth request required"
+        self.assertStatus(resp, 400)
+
+        # Non-instance host with valid user
+        resp = self.request(
+            user=self.user,
+            path="/user/authorize",
+            method="GET",
+            additionalHeaders=[("X-Forwarded-Host", "docs.wholetale.org"),
+                               ("X-Forwarded_Uri", "/")],
+            isJson=False,
+        )
+        self.assertStatus(resp, 200)
+
+        # No user
+        resp = self.request(
+            path="/user/authorize",
+            method="GET",
+            additionalHeaders=[("X-Forwarded-Host", "blah.wholetale.org"),
+                               ("X-Forwarded-Uri", "/")],
+            isJson=False,
+        )
+        self.assertStatus(resp, 303)
+        # Confirm redirect to https://girder.{domain}/api/v1/user/sign_in
+        self.assertEqual(resp.headers["Location"],
+                         "https://girder.wholetale.org/api/v1/"
+                         "user/sign_in?redirect=https://blah.wholetale.org/")
