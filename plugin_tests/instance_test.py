@@ -307,7 +307,8 @@ class InstanceTestCase(base.TestCase):
         # Instance authorization checks
         # Missing forward auth headers
         resp = self.request(
-            path="/instance/authorize",
+            path="/user/authorize",
+            params={"instance": True},
             method="GET",
             isJson=False,
             user=self.user,
@@ -318,7 +319,8 @@ class InstanceTestCase(base.TestCase):
         # Valid user, invalid host
         resp = self.request(
             user=self.user,
-            path="/instance/authorize",
+            path="/user/authorize",
+            params={"instance": True},
             method="GET",
             additionalHeaders=[("X-Forwarded-Host", "blah.wholetale.org"),
                                ("X-Forwarded_Uri", "/")],
@@ -330,7 +332,8 @@ class InstanceTestCase(base.TestCase):
         # Valid user, valid host
         resp = self.request(
             user=self.user,
-            path="/instance/authorize",
+            path="/user/authorize",
+            params={"instance": True},
             method="GET",
             additionalHeaders=[("X-Forwarded-Host", "tmp-xxx.wholetale.org"),
                                ("X-Forwarded_Uri", "/")],
@@ -340,7 +343,8 @@ class InstanceTestCase(base.TestCase):
 
         # No user
         resp = self.request(
-            path="/instance/authorize",
+            path="/user/authorize",
+            params={"instance": True},
             method="GET",
             additionalHeaders=[("X-Forwarded-Host", "tmp-xxx.wholetale.org"),
                                ("X-Forwarded-Uri", "/")],

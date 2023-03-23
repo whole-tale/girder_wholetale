@@ -503,6 +503,50 @@ def getJobResult(self, job):
     return result
 
 
+@access.cookie
+@access.public
+@autoDescribeRoute(
+    Description('Initiate oauth login flow')
+    .param("instance", "Authorization is for instance URL",
+           default=False, required=False, dataType="boolean")
+)
+@boundHandler()
+def authorize(self, instance):
+    # This endpoint must be called from a Traefik forward-auth request.
+    # This requires that the core.cookie_domain is set to .(local.)wholetale.org
+    # If instance=true, the X-Forwarded-Host is assumed to be the hostname
+    # for a running instance.
+    user = self.getCurrentUser()
+
+    forwarded_host = cherrypy.request.headers.get('X-Forwarded-Host')
+    forwarded_uri = cherrypy.request.headers.get('X-Forwarded-Uri')
+    if not forwarded_host and not forwarded_uri:
+        raise RestException('Forward auth request required', code=400)
+    subdomain, domain = forwarded_host.split('.', 1)
+
+    if user is None:
+        # If no user, redirect to authentication endpoint to initiate oauth flow
+        redirect = f'https://{forwarded_host}{forwarded_uri}'
+        # As a forward-auth request, the host is the origin (e.g., tmp-xxx.*)
+        # but we need to redirect to Girder.
+        raise cherrypy.HTTPRedirect(
+              f'https://girder.{domain}/api/v1/user/sign_in?redirect={redirect}')
+
+    if instance:
+        inst = self.model('instance', 'wholetale').findOne(
+            {"containerInfo.name": subdomain, "creatorId": user["_id"]}
+        )
+        if inst is None:
+            raise RestException('Access denied for instance', code=403)
+
+        # Authorize can be called quite a lot. Therefore we only update db
+        # once every 5 min.
+        now = datetime.datetime.utcnow()
+        if inst["lastActivity"] + datetime.timedelta(minutes=5) < now:
+            self.model('instance', 'wholetale').update(
+                {"_id": inst["_id"]}, {"$set": {"lastActivity": now}})
+
+
 def store_other_globus_tokens(event):
     globus_token = event.info["token"]
     user = event.info["user"]
@@ -583,6 +627,7 @@ def load(info):
     info['apiRoot'].user.route('PUT', ('settings',), setUserMetadata)
     info['apiRoot'].user.route('GET', ('settings',), getUserMetadata)
     info['apiRoot'].user.route('GET', ('sign_in',), signIn)
+    info['apiRoot'].user.route('GET', ('authorize',), authorize)
 
     ModelImporter.model('user').exposeFields(
         level=AccessType.WRITE, fields=('meta', 'myData', 'lastLogin'))
