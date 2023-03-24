@@ -159,8 +159,7 @@ class WholeTaleTestCase(base.TestCase):
         resp = self.request(
             path='/folder/{_id}/dataset'.format(**f1), user=self.user)
         self.assertStatusOk(resp)
-        self.assertEqual({_['mountPoint'] for _ in resp.json},
-                         {'i1', 'i2', 'f3/i1', 'f3/i2'})
+        self.assertEqual({_['mountPath'] for _ in resp.json}, {'/i1', '/i2', '/f3'})
 
     def testSignIn(self):
         from girder.plugins.oauth.constants import PluginSettings

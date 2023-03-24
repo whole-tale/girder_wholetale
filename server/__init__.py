@@ -18,6 +18,7 @@ from girder.api.rest import \
     boundHandler, loadmodel, RestException
 from girder.constants import AccessType, TokenScope
 from girder.exceptions import GirderException
+from girder.models.folder import Folder
 from girder.models.model_base import ValidationException
 from girder.models.notification import Notification, ProgressState
 from girder.models.setting import Setting
@@ -243,25 +244,25 @@ def listFolder(self, folder, params):
 )
 @boundHandler()
 def getDataSet(self, folder, params):
-    modelFolder = self.model('folder')
-
-    def _getPath(folder, user, path=''):
-        dataSet = [
-            {
-                'itemId': item['_id'],
-                'mountPoint': path + item['name'],
-                '_modelType': 'item',
-            }
-            for item in modelFolder.childItems(folder=folder)
-        ]
-        for childFolder in modelFolder.childFolders(
-                parentType='folder', parent=folder, user=user):
-            dataSet += _getPath(childFolder, user,
-                                path + childFolder['name'] + '/')
-        return dataSet
-
-    user = self.getCurrentUser()
-    return _getPath(folder, user)
+    dataSet = [
+        {
+            "itemId": item["_id"],
+            "mountPath":  "/" + item["name"],
+            "_modelType": "item",
+        }
+        for item in Folder().childItems(folder=folder)
+    ]
+    dataSet += [
+        {
+            "itemId": childFolder["_id"],
+            "mountPath":  "/" + childFolder["name"],
+            "_modelType": "folder",
+        }
+        for childFolder in Folder().childFolders(
+            parentType='folder', parent=folder, user=self.getCurrentUser()
+        )
+    ]
+    return dataSet
 
 
 @access.public(scope=TokenScope.DATA_READ)
