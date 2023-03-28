@@ -19,10 +19,11 @@ from girder.api.rest import \
 from girder.constants import AccessType, TokenScope
 from girder.exceptions import GirderException
 from girder.models.folder import Folder
-from girder.models.model_base import ValidationException
+from girder.models.model_base import AccessException, ValidationException
 from girder.models.notification import Notification, ProgressState
 from girder.models.setting import Setting
 from girder.models.user import User
+from girder.models.file import File
 from girder.plugins.jobs.constants import JobStatus
 from girder.plugins.jobs.models.job import Job as JobModel
 from girder.plugins.worker.utils import jobInfoSpec
@@ -166,6 +167,49 @@ def validateLoggerURL(doc):
         raise ValidationException('Invalid Instance Logger URL', 'value')
 
 
+@setting_utilities.validator(PluginSettings.DASHBOARD_LINK_TITLE)
+def validateDashboardLinkTitle(doc):
+    if not doc['value']:
+        doc['value'] = defaultDashboardLinkTitle()
+    if not isinstance(doc['value'], six.string_types):
+        raise ValidationException('The setting is not a string', 'value')
+
+
+@setting_utilities.validator(PluginSettings.CATALOG_LINK_TITLE)
+def validateCatalogLinkTitle(doc):
+    if not doc['value']:
+        doc['value'] = defaultCatalogLinkTitle()
+    if not isinstance(doc['value'], six.string_types):
+        raise ValidationException('The setting is not a string', 'value')
+
+
+@setting_utilities.validator(PluginSettings.ENABLE_DATA_CATALOG)
+def validateEnableDataCatalog(doc):
+    if not doc['value']:
+        doc['value'] = defaultEnableDataCatalog()
+    if not isinstance(doc['value'], bool):
+        raise ValidationException('The setting is not a boolean', 'value')
+
+
+@setting_utilities.validator(PluginSettings.WEBSITE_URL)
+def validateWebsiteUrl(doc):
+    if not doc['value']:
+        doc['value'] = defaultWebsiteUrl()
+    if not validators.url(doc['value']):
+        raise ValidationException('Invalid  URL', 'value')
+
+
+@setting_utilities.validator(PluginSettings.LOGO)
+def _validateLogo(doc):
+    try:
+        logoFile = File().load(doc['value'], level=AccessType.READ, user=None, exc=True)
+    except AccessException:
+        raise ValidationException('Logo must be publicly readable', 'value')
+
+    # Store this field natively as an ObjectId
+    doc['value'] = logoFile['_id']
+
+
 @setting_utilities.default(PluginSettings.INSTANCE_CAP)
 def defaultInstanceCap():
     return SettingDefault.defaults[PluginSettings.INSTANCE_CAP]
@@ -199,6 +243,31 @@ def defaultDerivaScopes():
 @setting_utilities.default(PluginSettings.LOGGER_URL)
 def defaultLoggerUrl():
     return SettingDefault.defaults[PluginSettings.LOGGER_URL]
+
+
+@setting_utilities.default(PluginSettings.WEBSITE_URL)
+def defaultWebsiteUrl():
+    return SettingDefault.defaults[PluginSettings.WEBSITE_URL]
+
+
+@setting_utilities.default(PluginSettings.DASHBOARD_LINK_TITLE)
+def defaultDashboardLinkTitle():
+    return SettingDefault.defaults[PluginSettings.DASHBOARD_LINK_TITLE]
+
+
+@setting_utilities.default(PluginSettings.CATALOG_LINK_TITLE)
+def defaultCatalogLinkTitle():
+    return SettingDefault.defaults[PluginSettings.CATALOG_LINK_TITLE]
+
+
+@setting_utilities.default(PluginSettings.ENABLE_DATA_CATALOG)
+def defaultEnableDataCatalog():
+    return SettingDefault.defaults[PluginSettings.ENABLE_DATA_CATALOG]
+
+
+@setting_utilities.default(PluginSettings.LOGO)
+def _defaultLogo():
+    return None
 
 
 @access.public(scope=TokenScope.DATA_READ)

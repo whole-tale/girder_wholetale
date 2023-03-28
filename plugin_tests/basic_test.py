@@ -2,8 +2,17 @@
 # -*- coding: utf-8 -*-
 
 import json
+import os
 from tests import base
 from six.moves import urllib
+from girder.models.upload import Upload
+
+DATA_PATH = os.path.join(
+    os.path.dirname(os.environ["GIRDER_TEST_DATA_PREFIX"]),
+    "data_src",
+    "plugins",
+    "wholetale",
+)
 
 
 def setUpModule():
@@ -250,3 +259,102 @@ class WholeTaleTestCase(base.TestCase):
         self.assertEqual(resp.headers["Location"],
                          "https://girder.wholetale.org/api/v1/"
                          "user/sign_in?redirect=https://blah.wholetale.org/")
+
+    def testPluginSettings(self):
+        self.maxDiff = None
+        from girder.plugins.wholetale.constants import PluginSettings, SettingDefault
+
+        # setup basic brand info
+        core_settings = [
+            {
+                "key": "core.brand_name",
+                "value": SettingDefault.defaults[PluginSettings.DASHBOARD_TITLE]
+            }, {
+                "key": "core.banner_color",
+                "value": SettingDefault.defaults[PluginSettings.HEADER_COLOR]
+            }
+        ]
+        resp = self.request('/system/setting', user=self.admin, method='PUT',
+                            params={'list': json.dumps(core_settings)})
+        self.assertStatus(resp, 200)
+
+        # test defaults
+        default_settings = {
+            PluginSettings.HEADER_COLOR:
+                SettingDefault.defaults[PluginSettings.HEADER_COLOR],
+            PluginSettings.DASHBOARD_TITLE:
+                SettingDefault.defaults[PluginSettings.DASHBOARD_TITLE],
+            PluginSettings.CATALOG_LINK_TITLE:
+                SettingDefault.defaults[PluginSettings.CATALOG_LINK_TITLE],
+            PluginSettings.DASHBOARD_LINK_TITLE:
+                SettingDefault.defaults[PluginSettings.DASHBOARD_LINK_TITLE],
+            PluginSettings.DASHBOARD_URL: 'https://dashboard.wholetale.org',
+            PluginSettings.ENABLE_DATA_CATALOG:
+                SettingDefault.defaults[PluginSettings.ENABLE_DATA_CATALOG],
+            PluginSettings.LOGO: '',
+            PluginSettings.WEBSITE_URL:
+                SettingDefault.defaults[PluginSettings.WEBSITE_URL],
+        }
+
+        resp = self.request('/wholetale/settings', user=self.admin, method='GET')
+        self.assertStatus(resp, 200)
+        self.assertEqual(resp.json, default_settings)
+
+        # test validation
+        test_settings = {
+            PluginSettings.WEBSITE_URL: ('not_a_url', 'Invalid  URL'),
+            PluginSettings.DASHBOARD_LINK_TITLE: (1, 'The setting is not a string'),
+            PluginSettings.CATALOG_LINK_TITLE: (1, 'The setting is not a string'),
+            PluginSettings.ENABLE_DATA_CATALOG: ('not_a_boolean', 'The setting is not a boolean'),
+        }
+
+        for key, value in test_settings.items():
+            resp = self.request('/system/setting', user=self.admin, method='PUT',
+                                params={'key': key,
+                                        'value': value[0]})
+            self.assertStatus(resp, 400)
+            self.assertEqual(resp.json, {
+                'field': 'value',
+                'type': 'validation',
+                'message': value[1]
+            })
+
+        # test set default settings
+        for key in test_settings.keys():
+            resp = self.request('/system/setting', user=self.admin, method='PUT',
+                                params={'key': key,
+                                        'value': ''})
+            self.assertStatus(resp, 200)
+
+        resp = self.request('/wholetale/settings', user=self.admin, method='GET')
+        self.assertStatus(resp, 200)
+
+        # test logo
+        col = self.model('collection').createCollection('WholeTale Assets', self.admin,
+                                                        public=False, reuseExisting=True)
+        folder = self.model('folder').createFolder(col, "Logo", parentType='collection',
+                                                   public=True, reuseExisting=True)
+        item = self.model('item').createItem('logo.png', self.admin, folder)
+
+        fname = os.path.join(DATA_PATH, "logo.png")
+        size = os.path.getsize(fname)
+
+        with open(fname, 'rb') as f:
+            Upload().uploadFromFile(f, size, "logo.png", 'item', item, self.admin)
+
+        resp = self.request('/resource/lookup', user=self.admin, method='GET',
+                            params={'path': '/collection/WholeTale Assets/Logo/logo.png/logo.png'})
+        self.assertStatus(resp, 200)
+        logoId = resp.json['_id']
+
+        resp = self.request('/system/setting', user=self.admin, method='PUT',
+                            params={'key': PluginSettings.LOGO, 'value': logoId})
+        self.assertStatus(resp, 200)
+
+        resp = self.request('/wholetale/settings', user=self.admin, method='GET')
+        logoPath = resp.json['wholetale.logo']
+        self.assertEqual(logoPath, f'file/{logoId}/download?contentDisposition=inline')
+
+        resp = self.request('/wholetale/assets', user=self.admin, method='GET')
+        logoAssetFolderId = resp.json['wholetale.logo']
+        self.assertEqual(logoAssetFolderId, str(folder['_id']))
