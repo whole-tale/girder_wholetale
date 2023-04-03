@@ -25,7 +25,8 @@ function _analyzeInWT(e) {
         path: 'folder/' + this.parentModel.id + '/dataset',
         type: 'GET',
     }).done(_.bind(function (dataset) {
-        var dashboardUrl = window.location.origin.replace("girder", "dashboard") + '/mine';
+        let subdomain = window.location.host.split('.')[0]
+        let dashboardUrl = window.location.origin.replace(subdomain, "dashboard") + '/mine';
         const params = new URLSearchParams();
         params.set('name', 'My Tale');
         params.set('asTale', false);
