@@ -19,6 +19,7 @@ from girder.api.rest import \
     boundHandler, loadmodel, RestException
 from girder.constants import AccessType, TokenScope
 from girder.exceptions import GirderException
+from girder.models.assetstore import Assetstore
 from girder.models.folder import Folder
 from girder.models.model_base import AccessException, ValidationException
 from girder.models.notification import Notification, ProgressState
@@ -287,13 +288,16 @@ def listFolder(self, folder, params):
         "type": 0,
         "children": [],
     }
+    # We have only one assetstore, so we can use the current one
+    current_assetstore = Assetstore().getCurrent()
+    assetstore_path = current_assetstore["root"]
     for fs_path, fobj in Folder().fileList(
         folder, user=user, data=False, subpath=False, path="",
     ):
-        try:
+        if fobj.get("imported", False):
             host_path = fobj["path"]
-        except KeyError:
-            continue
+        else:
+            host_path = os.path.join(assetstore_path, fobj["path"])
 
         current_level = data
         fs_path_parts = pathlib.Path(fs_path).parts
