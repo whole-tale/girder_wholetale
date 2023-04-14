@@ -222,8 +222,9 @@ containerInfoSchema = {
         "nodeId": {"type": "string"},
         "mountPoint": {"type": "string"},
         "volumeName": {"type": "string"},
+        "fscontainerId": {"type": "string"},
     },
-    "required": ["name", "mountPoint", "nodeId", "volumeName"],
+    "required": ["name", "fscontainerId", "nodeId", "volumeName"],
 }
 
 imageInfoSchema = {
