@@ -1,11 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import hashlib
 import json
+import tempfile
 import os
 from tests import base
 from six.moves import urllib
 from girder.models.upload import Upload
+from girder.exceptions import GirderException
+from girder.models.assetstore import Assetstore
 
 DATA_PATH = os.path.join(
     os.path.dirname(os.environ["GIRDER_TEST_DATA_PREFIX"]),
@@ -18,9 +22,16 @@ DATA_PATH = os.path.join(
 def setUpModule():
     base.enabledPlugins.append('wholetale')
     base.startServer()
+    try:
+        assetstore = Assetstore().getCurrent()
+    except GirderException:
+        assetstore = Assetstore().createFilesystemAssetstore("test", tempfile.mkdtemp())
+        assetstore["current"] = True
+        Assetstore().save(assetstore)
 
 
 def tearDownModule():
+    Assetstore().remove(Assetstore().getCurrent())
     base.stopServer()
 
 
@@ -50,22 +61,16 @@ class WholeTaleTestCase(base.TestCase):
         f1 = self.model('folder').createFolder(
             c1, 'f1', parentType='collection')
         i1 = self.model('item').createItem('i1', user, f1)
-        assetstore = {'_id': 0}
-        fl1 = self.model('file').createFile(user, i1, 'i1', 7, assetstore)
-        fl1["path"] = "/dev/null/fl1"
-        self.model('file').save(fl1)
-        fl2 = self.model('file').createFile(user, i1, 'foo2', 13, assetstore)
-        f2 = self.model('folder').createFolder(
-            f1, 'f2', parentType='folder')
-        i3 = self.model('item').createItem('i3', user, f2)
-        self.model('file').createFile(user, i3, 'foo4', 23, assetstore)
-        i4 = self.model('item').createItem('i4', user, f2)
-        self.model('file').createFile(user, i4, 'foo5', 65535, assetstore)
-        i5 = self.model('item').createItem('i5', user, f2)
-        f = self.model('file').createFile(user, i5, 'i5', 2.0 * 1024**8,
-                                          assetstore)
-        f["path"] = "/dev/null/f"
-        self.model("file").save(f)
+
+        fname = os.path.join(DATA_PATH, "logo.png")
+        size = os.path.getsize(fname)
+        with open(fname, "rb") as f:
+            Upload().uploadFromFile(f, size, "i1", "item", i1, user)
+
+        f2 = self.model('folder').createFolder(f1, 'f2', parentType='folder')
+        i2 = self.model('item').createItem('i2', user, f2)
+        with open(fname, "rb") as f:
+            Upload().uploadFromFile(f, size, "i2", "item", i2, user)
 
         resp = self.request(
             path='/folder/{_id}/listing'.format(**f1), method='GET',
@@ -74,14 +79,21 @@ class WholeTaleTestCase(base.TestCase):
         current_dir = resp.json
         self.assertEqual(current_dir["name"], "/")
         self.assertEqual(len(current_dir["children"]), 2)
+        with open(fname, "rb") as f:
+            chksum = hashlib.sha512(f.read()).hexdigest()
+
+        host_path = os.path.join(
+            Assetstore().getCurrent().get("root"), chksum[0:2], chksum[2:4], chksum
+        )
+
         for child in current_dir["children"]:
             self.assertTrue(child["name"] in {"i1", "f2"})
             if child["name"] == "i1":
                 self.assertEqual(
-                    child["children"][0],
+                    child,
                     {
                         "children": [],
-                        "host_path": "/dev/null/fl1",
+                        "host_path": host_path,
                         "name": "i1",
                         "type": 1,
                     }
@@ -93,8 +105,8 @@ class WholeTaleTestCase(base.TestCase):
                         "children": [
                             {
                                 "children": [],
-                                "host_path": "/dev/null/f",
-                                "name": "i5",
+                                "host_path": host_path,
+                                "name": "i2",
                                 "type": 1,
                             }
                         ],
@@ -102,14 +114,6 @@ class WholeTaleTestCase(base.TestCase):
                         "type": 0,
                     }
                 )
-
-        resp = self.request(
-            path='/item/{_id}/listing'.format(**i1), method='GET',
-            user=user)
-        self.assertStatusOk(resp)
-        self.assertEqual(resp.json['folders'], [])
-        self.assertEqual(set(_['_id'] for _ in resp.json['files']),
-                         set((str(fl1['_id']), str(fl2['_id']))))
 
     def testHubRoutes(self):
         from girder.plugins.wholetale.constants import API_VERSION
