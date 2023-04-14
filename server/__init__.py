@@ -32,7 +32,7 @@ from girder.plugins.worker.utils import jobInfoSpec
 from girder.plugins.worker import CustomJobStatus
 from girder.plugins.oauth.rest import OAuth as OAuthResource
 from girder.plugins.worker import getCeleryApp
-from girder.utility import assetstore_utilities, setting_utilities
+from girder.utility import setting_utilities
 from girder.utility.model_importer import ModelImporter
 
 from .constants import PluginSettings, SettingDefault
@@ -343,31 +343,6 @@ def getDataSet(self, folder, params):
         )
     ]
     return dataSet
-
-
-@access.public(scope=TokenScope.DATA_READ)
-@loadmodel(model='item', level=AccessType.READ)
-@describeRoute(
-    Description('List the content of an item.')
-    .param('id', 'The ID of the folder.', paramType='path')
-    .errorResponse('ID was invalid.')
-    .errorResponse('Read access was denied for the folder.', 403)
-)
-@boundHandler()
-def listItem(self, item, params):
-    files = []
-    for fileitem in self.model('item').childFiles(item):
-        if 'imported' not in fileitem and \
-                fileitem.get('assetstoreId') is not None:
-            try:
-                store = \
-                    self.model('assetstore').load(fileitem['assetstoreId'])
-                adapter = assetstore_utilities.getAssetstoreAdapter(store)
-                fileitem["path"] = adapter.fullPath(fileitem)
-            except (ValidationException, AttributeError):
-                pass
-        files.append(fileitem)
-    return {'folders': [], 'files': files}
 
 
 @access.user
@@ -702,7 +677,6 @@ def load(info):
     info['apiRoot'].folder.route('GET', (':id', 'listing'), listFolder)
     info['apiRoot'].folder.route('GET', (':id', 'dataset'), getDataSet)
     info['apiRoot'].job.route('GET', (':id', 'result'), getJobResult)
-    info['apiRoot'].item.route('GET', (':id', 'listing'), listItem)
     info['apiRoot'].resource.route('GET', (), listResources)
 
     info['apiRoot'].user.route('PUT', ('settings',), setUserMetadata)
