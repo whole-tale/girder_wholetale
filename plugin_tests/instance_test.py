@@ -487,7 +487,7 @@ class InstanceTestCase(base.TestCase):
                 path='/instance/{_id}'.format(**instance), method='DELETE',
                 user=self.user)
             self.assertStatusOk(resp)
-            mock_apply_async.assert_called_once()
+            self.assertEqual(mock_apply_async.call_count, 2)
 
         resp = self.request(
             path='/instance/{_id}'.format(**instance), method='GET',
