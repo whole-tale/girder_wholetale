@@ -138,8 +138,8 @@ class ManifestTestCase(base.TestCase):
             "Humans and Hydrology at High Latitudes: Water Use Information/usco2005.xls",  # D1 file
             "Twin-mediated Crystal Growth: an Enigma Resolved/data/D_whites_darks_AJS.hdf",  # Globus file
             "A Machine Learning Approach for  Engineering Bulk Metallic Glass Alloys/data/Dmax",  # Globus folder
-            "www.gw-openscience.org/s/events/BBH_events_v3.json",  # HTTP file
-            "www.gw-openscience.org/s/events/GW170104",  # HTTP folder
+            "gwosc.org/s/events/BBH_events_v3.json",  # HTTP file
+            "gwosc.org/s/events/GW170104",  # HTTP folder
         ]
         root = "/collection/WholeTale Catalog/WholeTale Catalog"
         for path in data_paths:
