@@ -15,24 +15,24 @@ wrap(HeaderUserView, 'render', function (render) {
     render.call(this);
 
     // Update based on branding configuration
-    if (! this.branded ) {
+    if (!this.branded) {
         restRequest({
             method: 'GET',
             url: 'wholetale/settings'
         }).done((resp) => {
-            let logoUrl = "";
+            let logoUrl = '';
             if (resp['wholetale.logo']) {
                 logoUrl = `${getApiRoot()}/${resp['wholetale.logo']}`;
             }
             let dashboardUrl = resp['wholetale.dashboard_url'];
             let title = resp['wholetale.dashboard_link_title'];
             let bannerColor = resp['core.banner_color'];
-            
-            if (! $('.g-app-logo').length) {
+
+            if (!$('.g-app-logo').length) {
                 $('.g-app-title').prepend(HeaderLogoTemplate({ logoUrl: logoUrl }));
             }
-            if (! $('.g-dashboard-link').length) {
-                $('.g-quick-search-form').after(HeaderLinkTemplate({ 
+            if (!$('.g-dashboard-link').length) {
+                $('.g-quick-search-form').after(HeaderLinkTemplate({
                     dashboardUrl: dashboardUrl,
                     title: title }));
                 document.getElementsByClassName('g-header-wrapper')[0].style.backgroundColor = bannerColor;
