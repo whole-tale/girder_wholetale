@@ -29,6 +29,15 @@ var ConfigView = View.extend({
                 key: 'wholetale.enable_data_catalog',
                 value: this.$('#wholetale_enable_data_catalog').is(':checked')
             }, {
+                key: 'wholetale.about_href',
+                value: this.$('#wholetale_about_href').val()
+            }, {
+                key: 'wholetale.contact_href',
+                value: this.$('#wholetale_contact_href').val()
+            }, {
+                key: 'wholetale.bug_href',
+                value: this.$('#wholetale_bug_href').val()
+            }, {
                 key: 'wholetale.logo',
                 value: this.logoFileId
             }, {
@@ -68,6 +77,9 @@ var ConfigView = View.extend({
             'wholetale.dashboard_link_title',
             'wholetale.catalog_link_title',
             'wholetale.enable_data_catalog',
+            'wholetale.about_href',
+            'wholetale.contact_href',
+            'wholetale.bug_href',
             'wholetale.logo',
             'wholetale.instance_cap',
             'wholetale.dataverse_url',

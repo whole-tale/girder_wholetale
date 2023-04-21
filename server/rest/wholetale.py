@@ -54,6 +54,9 @@ class wholeTale(Resource):
             logoUrl = ""
 
         return {
+            PluginSettings.ABOUT_HREF: settings.get(PluginSettings.ABOUT_HREF),
+            PluginSettings.CONTACT_HREF: settings.get(PluginSettings.CONTACT_HREF),
+            PluginSettings.BUG_HREF: settings.get(PluginSettings.BUG_HREF),
             PluginSettings.WEBSITE_URL: settings.get(PluginSettings.WEBSITE_URL),
             PluginSettings.DASHBOARD_LINK_TITLE: settings.get(PluginSettings.DASHBOARD_LINK_TITLE),
             PluginSettings.CATALOG_LINK_TITLE: settings.get(PluginSettings.CATALOG_LINK_TITLE),

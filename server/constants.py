@@ -46,6 +46,9 @@ class PluginSettings:
     LOGO = "wholetale.logo"
     DASHBOARD_TITLE = "core.brand_name"
     HEADER_COLOR = "core.banner_color"
+    ABOUT_HREF = "wholetale.about_href"
+    CONTACT_HREF = "wholetale.contact_href"
+    BUG_HREF = "wholetale.bug_href"
 
 
 class SettingDefault:
@@ -154,6 +157,9 @@ class SettingDefault:
             "pbcconsortium.isrd.isi.edu": DEFAULT_DERIVA_SCOPE
         },
         PluginSettings.LOGGER_URL: "http://logger:8000/",
+        PluginSettings.ABOUT_HREF: "https://wholetale.org/",
+        PluginSettings.CONTACT_HREF: "https://groups.google.com/forum/#!forum/wholetale",
+        PluginSettings.BUG_HREF: "https://github.com/whole-tale/whole-tale/issues/new",
     }
 
 
