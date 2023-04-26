@@ -294,6 +294,9 @@ class WholeTaleTestCase(base.TestCase):
             PluginSettings.LOGO: '',
             PluginSettings.WEBSITE_URL:
                 SettingDefault.defaults[PluginSettings.WEBSITE_URL],
+            PluginSettings.ABOUT_HREF: SettingDefault.defaults[PluginSettings.ABOUT_HREF],
+            PluginSettings.CONTACT_HREF: SettingDefault.defaults[PluginSettings.CONTACT_HREF],
+            PluginSettings.BUG_HREF: SettingDefault.defaults[PluginSettings.BUG_HREF],
         }
 
         resp = self.request('/wholetale/settings', user=self.admin, method='GET')

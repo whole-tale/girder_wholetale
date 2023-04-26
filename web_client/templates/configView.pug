@@ -19,11 +19,27 @@ form#g-wholetale-config-form(role="form")
           type="checkbox", checked=(
             settings['wholetale.enable_data_catalog'] === null ? defaults['wholetale.enable_data_catalog'] : settings['wholetale.enable_data_catalog']))
       | Enable Data Catalog
+  .form-group
     label.control-label(for="wholetale_catalog_link_title") Catalog Link Title
     input.input-sm.form-control#wholetale_catalog_link_title(
       type="text", value=settings['wholetale.catalog_link_title'] || null,
       placeholder=`Default: ${defaults['wholetale.catalog_link_title'] || 'none'}`,
       title="Title for catalog link in header.")
+    label.control-label(for="wholetale_about_href") About href
+    input.input-sm.form-control#wholetale_about_href(
+      type="text", value=settings['wholetale.about_href'] || null,
+      placeholder=`Default: ${defaults['wholetale.about_href'] || 'none'}`,
+      title="About link in the footer.")
+    label.control-label(for="wholetale_contact_href") Contact href
+    input.input-sm.form-control#wholetale_contact_href(
+      type="text", value=settings['wholetale.contact_href'] || null,
+      placeholder=`Default: ${defaults['wholetale.contact_href'] || 'none'}`,
+      title="Contact link in the footer.")
+    label.control-label(for="wholetale_bug_href") Report a Bug href
+    input.input-sm.form-control#wholetale_bug_href(
+      type="text", value=settings['wholetale.bug_href'] || null,
+      placeholder=`Default: ${defaults['wholetale.bug_href'] || 'none'}`,
+      title="Report a Bug link in the footer.")
   .form-group
     label.control-label(for="wholetale_instance_cap") Instance Cap
     input.input-sm.form-control#wholetale_instance_cap(

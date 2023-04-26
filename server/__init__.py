@@ -210,6 +210,15 @@ def _validateLogo(doc):
     doc['value'] = logoFile['_id']
 
 
+@setting_utilities.validator({
+    PluginSettings.ABOUT_HREF,
+    PluginSettings.CONTACT_HREF,
+    PluginSettings.BUG_HREF,
+})
+def validateHref(doc):
+    pass
+
+
 @setting_utilities.default(PluginSettings.INSTANCE_CAP)
 def defaultInstanceCap():
     return SettingDefault.defaults[PluginSettings.INSTANCE_CAP]
@@ -268,6 +277,21 @@ def defaultEnableDataCatalog():
 @setting_utilities.default(PluginSettings.LOGO)
 def _defaultLogo():
     return None
+
+
+@setting_utilities.default(PluginSettings.ABOUT_HREF)
+def defaultAboutHref():
+    return SettingDefault.defaults[PluginSettings.ABOUT_HREF]
+
+
+@setting_utilities.default(PluginSettings.CONTACT_HREF)
+def defaultContactHref():
+    return SettingDefault.defaults[PluginSettings.CONTACT_HREF]
+
+
+@setting_utilities.default(PluginSettings.BUG_HREF)
+def defaultBugHref():
+    return SettingDefault.defaults[PluginSettings.BUG_HREF]
 
 
 @access.public(scope=TokenScope.DATA_READ)
