@@ -284,7 +284,7 @@
     "wt:identifier": "6203fac3bd966c5a430ba0ee"
   },
   {
-    "uri": "https://www.gw-openscience.org/s/events/BBH_events_v3.json",
+    "uri": "https://gwosc.org/s/events/BBH_events_v3.json",
     "bundledAs": {
       "folder": "./data/",
       "filename": "BBH_events_v3.json"
@@ -293,7 +293,7 @@
     "wt:identifier": "6203fac3bd966c5a430ba11d"
   },
   {
-    "uri": "https://www.gw-openscience.org/s/events/GW170104/GW170104_4_template.hdf5",
+    "uri": "https://gwosc.org/s/events/GW170104/GW170104_4_template.hdf5",
     "bundledAs": {
       "folder": "./data/GW170104/",
       "filename": "GW170104_4_template.hdf5"
@@ -302,7 +302,7 @@
     "wt:identifier": "6203fac3bd966c5a430ba110"
   },
   {
-    "uri": "https://www.gw-openscience.org/s/events/GW170104/H-H1_LOSC_4_V1-1167559920-32.hdf5",
+    "uri": "https://gwosc.org/s/events/GW170104/H-H1_LOSC_4_V1-1167559920-32.hdf5",
     "bundledAs": {
       "folder": "./data/GW170104/",
       "filename": "H-H1_LOSC_4_V1-1167559920-32.hdf5"
@@ -311,7 +311,7 @@
     "wt:identifier": "6203fac3bd966c5a430ba112"
   },
   {
-    "uri": "https://www.gw-openscience.org/s/events/GW170104/L-L1_LOSC_4_V1-1167559920-32.hdf5",
+    "uri": "https://gwosc.org/s/events/GW170104/L-L1_LOSC_4_V1-1167559920-32.hdf5",
     "bundledAs": {
       "folder": "./data/GW170104/",
       "filename": "L-L1_LOSC_4_V1-1167559920-32.hdf5"

@@ -97,7 +97,7 @@ class BDBagFullTestCase(base.TestCase):
         responses.add_passthru(re.compile("https://cn.dataone.org/\\w+"))
         responses.add_passthru(re.compile("https://arcticdata.io/\\w+"))
         responses.add_passthru(re.compile("https://zenodo.org/\\w+"))
-        responses.add_passthru(re.compile("https://www.gw-openscience.org/\\w+"))
+        responses.add_passthru(re.compile("https://gwosc.org/\\w+"))
         responses.add_passthru(re.compile("https://dvn-cloud.s3.amazonaws.com/\\w+"))
 
     @responses.activate
@@ -109,7 +109,7 @@ class BDBagFullTestCase(base.TestCase):
             "doi:10.7910/DVN/RLMYMR",
             "doi:10.18739/A23M1P",
             "doi:10.5281/zenodo.6038195",
-            "https://www.gw-openscience.org/s/events/BBH_events_v3.json",
+            "https://gwosc.org/s/events/BBH_events_v3.json",
         ]
 
         resp = self.request(

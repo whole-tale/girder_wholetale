@@ -1,6 +1,3 @@
-import _ from 'underscore';
-
-import { restRequest } from 'girder/rest';
 import { wrap } from 'girder/utilities/PluginUtils';
 import { getCurrentUser } from 'girder/auth';
 
@@ -21,18 +18,20 @@ wrap(HierarchyWidget, 'render', function (render) {
 });
 
 function _analyzeInWT(e) {
-    restRequest({
-        path: 'folder/' + this.parentModel.id + '/dataset',
-        type: 'GET',
-    }).done(_.bind(function (dataset) {
-        let subdomain = window.location.host.split('.')[0]
-        let dashboardUrl = window.location.origin.replace(subdomain, "dashboard") + '/mine';
-        const params = new URLSearchParams();
-        params.set('name', 'My Tale');
-        params.set('asTale', false);
-        params.set('dataSet', JSON.stringify(dataset));
-        window.location.assign(dashboardUrl + `?${params.toString()}`);
-    }, this));
+    let subdomain = window.location.host.split('.')[0];
+    let dashboardUrl = window.location.origin.replace(subdomain, 'dashboard') + '/mine';
+    const params = new URLSearchParams();
+    params.set('name', 'My Tale');
+    params.set('asTale', false);
+    const dataSet = [
+        {
+            'itemId': this.parentModel.id,
+            'mountPath': '/',
+            '_modelType': 'folder'
+        }
+    ];
+    params.set('dataSet', JSON.stringify(dataSet));
+    window.location.assign(dashboardUrl + `?${params.toString()}`);
 }
 
 HierarchyWidget.prototype.events['click .g-createTale-button'] = _analyzeInWT;
