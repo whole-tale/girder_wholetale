@@ -1,4 +1,7 @@
-version: 2.0
+version: 2.1
+orbs:
+  codecov: codecov/codecov@3
+
 jobs:
   build:
     docker:
@@ -34,11 +37,6 @@ jobs:
             mkdir /girder/build
             ctest -VV -S /girder/plugins/wholetale/cmake/circle_continuous.cmake
       - run:
-          name: Install Codecov client
-          command: python3 -m pip install codecov
-      - run:
           name: Collect coverage reports
           command: coverage combine /girder/build/test/coverage/python_temp/
-      - run:
-          name: Uploading Coverage Results
-          command: codecov
+      - codecov/upload

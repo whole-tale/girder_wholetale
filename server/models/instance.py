@@ -135,8 +135,6 @@ class Instance(AccessControlledModel):
         instance["status"] = InstanceStatus.DELETING
         instance = self.updateInstance(instance)
         token = Token().createToken(user=user, days=0.5)
-        app = getCeleryApp()
-        active_queues = list(app.control.inspect().active_queues().keys())
 
         instanceTask = shutdown_container.signature(
             args=[str(instance['_id'])], queue='manager', girder_client_token=str(token['_id']),
@@ -146,17 +144,12 @@ class Instance(AccessControlledModel):
         notify_event([instance['creatorId']], 'wt_instance_deleting',
                      {'taleId': instance['taleId'], 'instanceId': instance['_id']})
 
-        try:
-            queue = 'celery@{}'.format(instance['containerInfo']['nodeId'])
-            if queue in active_queues:
-                volumeTask = remove_volume.signature(
-                    args=[str(instance['_id'])],
-                    girder_client_token=str(token['_id']),
-                    queue=instance['containerInfo']['nodeId']
-                ).apply_async()
-                volumeTask.get(timeout=TASK_TIMEOUT)
-        except KeyError:
-            pass
+        volumeTask = remove_volume.signature(
+            args=[str(instance['_id'])],
+            girder_client_token=str(token['_id']),
+            queue=instance['containerInfo']['nodeId']
+        ).apply_async()
+        volumeTask.get(timeout=TASK_TIMEOUT)
 
         # TODO: handle error
         self.remove(instance)

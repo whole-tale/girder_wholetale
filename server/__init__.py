@@ -8,6 +8,7 @@ import datetime
 import jsonschema
 import logging
 import os
+import pathlib
 import six
 import validators
 
@@ -18,6 +19,7 @@ from girder.api.rest import \
     boundHandler, loadmodel, RestException
 from girder.constants import AccessType, TokenScope
 from girder.exceptions import GirderException
+from girder.models.assetstore import Assetstore
 from girder.models.folder import Folder
 from girder.models.model_base import AccessException, ValidationException
 from girder.models.notification import Notification, ProgressState
@@ -30,7 +32,7 @@ from girder.plugins.worker.utils import jobInfoSpec
 from girder.plugins.worker import CustomJobStatus
 from girder.plugins.oauth.rest import OAuth as OAuthResource
 from girder.plugins.worker import getCeleryApp
-from girder.utility import assetstore_utilities, setting_utilities
+from girder.utility import setting_utilities
 from girder.utility.model_importer import ModelImporter
 
 from .constants import PluginSettings, SettingDefault
@@ -305,28 +307,37 @@ def defaultBugHref():
 @boundHandler()
 def listFolder(self, folder, params):
     user = self.getCurrentUser()
-    folders = list(
-        self.model('folder').childFolders(parentType='folder',
-                                          parent=folder, user=user))
-
-    files = []
-    for item in self.model('folder').childItems(folder=folder):
-        childFiles = list(self.model('item').childFiles(item))
-        if len(childFiles) == 1:
-            fileitem = childFiles[0]
-            if 'imported' not in fileitem and \
-                    fileitem.get('assetstoreId') is not None:
-                try:
-                    store = \
-                        self.model('assetstore').load(fileitem['assetstoreId'])
-                    adapter = assetstore_utilities.getAssetstoreAdapter(store)
-                    fileitem["path"] = adapter.fullPath(fileitem)
-                except (ValidationException, AttributeError):
-                    pass
-            files.append(fileitem)
+    data = {
+        "name": "/",
+        "type": 0,
+        "children": [],
+    }
+    # We have only one assetstore, so we can use the current one
+    current_assetstore = Assetstore().getCurrent()
+    assetstore_path = current_assetstore["root"]
+    for fs_path, fobj in Folder().fileList(
+        folder, user=user, data=False, subpath=False, path="",
+    ):
+        if fobj.get("imported", False):
+            host_path = fobj["path"]
         else:
-            folders.append(item)
-    return {'folders': folders, 'files': files}
+            host_path = os.path.join(assetstore_path, fobj["path"])
+
+        current_level = data
+        fs_path_parts = pathlib.Path(fs_path).parts
+        for part in fs_path_parts:
+            child_dict = None
+            for child in current_level["children"]:
+                if child["name"] == part:
+                    child_dict = child
+                    break
+            if child_dict is None:
+                child_dict = {"name": part, "type": 0, "children": []}
+                current_level["children"].append(child_dict)
+            current_level = child_dict
+        current_level["type"] = 1
+        current_level["host_path"] = host_path
+    return data
 
 
 @access.public(scope=TokenScope.DATA_READ)
@@ -356,31 +367,6 @@ def getDataSet(self, folder, params):
         )
     ]
     return dataSet
-
-
-@access.public(scope=TokenScope.DATA_READ)
-@loadmodel(model='item', level=AccessType.READ)
-@describeRoute(
-    Description('List the content of an item.')
-    .param('id', 'The ID of the folder.', paramType='path')
-    .errorResponse('ID was invalid.')
-    .errorResponse('Read access was denied for the folder.', 403)
-)
-@boundHandler()
-def listItem(self, item, params):
-    files = []
-    for fileitem in self.model('item').childFiles(item):
-        if 'imported' not in fileitem and \
-                fileitem.get('assetstoreId') is not None:
-            try:
-                store = \
-                    self.model('assetstore').load(fileitem['assetstoreId'])
-                adapter = assetstore_utilities.getAssetstoreAdapter(store)
-                fileitem["path"] = adapter.fullPath(fileitem)
-            except (ValidationException, AttributeError):
-                pass
-        files.append(fileitem)
-    return {'folders': [], 'files': files}
 
 
 @access.user
@@ -715,7 +701,6 @@ def load(info):
     info['apiRoot'].folder.route('GET', (':id', 'listing'), listFolder)
     info['apiRoot'].folder.route('GET', (':id', 'dataset'), getDataSet)
     info['apiRoot'].job.route('GET', (':id', 'result'), getJobResult)
-    info['apiRoot'].item.route('GET', (':id', 'listing'), listItem)
     info['apiRoot'].resource.route('GET', (), listResources)
 
     info['apiRoot'].user.route('PUT', ('settings',), setUserMetadata)
