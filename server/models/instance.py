@@ -144,12 +144,15 @@ class Instance(AccessControlledModel):
         notify_event([instance['creatorId']], 'wt_instance_deleting',
                      {'taleId': instance['taleId'], 'instanceId': instance['_id']})
 
-        volumeTask = remove_volume.signature(
-            args=[str(instance['_id'])],
-            girder_client_token=str(token['_id']),
-            queue=instance['containerInfo']['nodeId']
-        ).apply_async()
-        volumeTask.get(timeout=TASK_TIMEOUT)
+        try:
+            volumeTask = remove_volume.signature(
+                args=[str(instance['_id'])],
+                girder_client_token=str(token['_id']),
+                queue=instance['containerInfo']['nodeId']
+            ).apply_async()
+            volumeTask.get(timeout=TASK_TIMEOUT)
+        except KeyError:
+            pass
 
         # TODO: handle error
         self.remove(instance)
