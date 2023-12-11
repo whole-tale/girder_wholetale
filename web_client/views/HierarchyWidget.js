@@ -7,8 +7,9 @@ import WholeTaleHierarchyWidget from '../templates/WholeTaleHierarchyWidget.pug'
 
 wrap(HierarchyWidget, 'render', function (render) {
     var widget = this;
+    const folderHeader = widget.$('.g-folder-header-buttons');
 
-    if (getCurrentUser() && widget.parentModel.resourceName === 'folder') {
+    if (getCurrentUser() && widget.parentModel.resourceName === 'folder' && folderHeader.length > 0) {
         render.call(widget);
         $(WholeTaleHierarchyWidget()).prependTo(widget.$('.g-folder-header-buttons'));
         document.getElementsByClassName('g-createTale-button')[0].style.display = 'inline';
