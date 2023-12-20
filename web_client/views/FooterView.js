@@ -11,15 +11,11 @@ wrap(FooterView, 'initialize', function (initialize, ...args) {
     this.bugHref = 'https://github.com/whole-tale/whole-tale/issues/new';
     initialize.apply(this, args);
 
-    console.log('initializing footer');
-    console.log('apiRoot', args);
-
     if (!this.wtSettings) {
         restRequest({
             url: 'wholetale/settings',
             method: 'GET'
         }).done((resp) => {
-            console.log('got settings', resp);
             this.wtSettings = resp;
             this.aboutHref = resp['wholetale.about_href'];
             this.contactHref = resp['wholetale.contact_href'];
@@ -30,8 +26,6 @@ wrap(FooterView, 'initialize', function (initialize, ...args) {
 });
 
 wrap(FooterView, 'render', function (render) {
-    console.log('rendering footer');
-    console.log(this.aboutHref);
     this.$el.html(LayoutFooterTemplate({
         apiRoot: apiRoot,
         aboutHref: this.aboutHref,
