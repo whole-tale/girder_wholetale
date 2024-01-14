@@ -14,7 +14,7 @@ from girder.plugins.virtual_resources.rest import VirtualObject
 
 import cherrypy
 from girder_client import GirderClient
-from gwvolman.build_utils import ImageBuilder
+from gwvolman.r2d import ImageBuilder
 
 from .license import WholeTaleLicense
 from . import IMPORT_PROVIDERS

@@ -30,7 +30,8 @@ from ..lib.license import WholeTaleLicense
 from ..lib.manifest_parser import ManifestParser
 from ..lib.metrics import metricsLogger
 
-from gwvolman.tasks import build_tale_image, BUILD_TALE_IMAGE_STEP_TOTAL
+from gwvolman.tasks import build_tale_image
+from gwvolman.tasks_base import BUILD_TALE_IMAGE_STEP_TOTAL
 
 
 # Whenever the Tale object schema is modified (e.g. fields are added or
