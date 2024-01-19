@@ -194,6 +194,11 @@ containerConfigSchema = {
                 "Subpath appended to the randomly generated " "container URL"
             ),
         },
+        "extra_build_files": {
+            "type": "array",
+            "description": "List of extra files to be copied into the container for r2d.",
+            "items": {"type": "string"},
+        },
     },
     "additionalProperties": False,
 }
