@@ -49,6 +49,7 @@ class PluginSettings:
     ABOUT_HREF = "wholetale.about_href"
     CONTACT_HREF = "wholetale.contact_href"
     BUG_HREF = "wholetale.bug_href"
+    MOUNTS = "wholetale.mounts"
 
 
 class SettingDefault:
@@ -160,6 +161,33 @@ class SettingDefault:
         PluginSettings.ABOUT_HREF: "https://wholetale.org/",
         PluginSettings.CONTACT_HREF: "https://groups.google.com/forum/#!forum/wholetale",
         PluginSettings.BUG_HREF: "https://github.com/whole-tale/whole-tale/issues/new",
+        PluginSettings.MOUNTS: [
+            {
+                "type": "data",
+                "protocol": "girderfs",
+                "location": "data",
+            },
+            {
+                "type": "home",
+                "protocol": "bind",
+                "location": "home",
+            },
+            {
+                "type": "workspace",
+                "protocol": "bind",
+                "location": "workspace",
+            },
+            {
+                "type": "versions",
+                "protocol": "girderfs",
+                "location": "versions",
+            },
+            {
+                "type": "runs",
+                "protocol": "girderfs",
+                "location": "runs",
+            },
+        ],
     }
 
 

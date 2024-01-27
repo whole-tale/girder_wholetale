@@ -216,6 +216,7 @@ def _validateLogo(doc):
     PluginSettings.ABOUT_HREF,
     PluginSettings.CONTACT_HREF,
     PluginSettings.BUG_HREF,
+    PluginSettings.MOUNTS,
 })
 def validateHref(doc):
     pass
@@ -294,6 +295,11 @@ def defaultContactHref():
 @setting_utilities.default(PluginSettings.BUG_HREF)
 def defaultBugHref():
     return SettingDefault.defaults[PluginSettings.BUG_HREF]
+
+
+@setting_utilities.default(PluginSettings.MOUNTS)
+def defaultMounts():
+    return SettingDefault.defaults[PluginSettings.MOUNTS]
 
 
 @access.public(scope=TokenScope.DATA_READ)

@@ -139,7 +139,7 @@ class Instance(AccessControlledModel):
         instance = self.updateInstance(instance)
         token = Token().createToken(user=user, days=0.5)
 
-        shutdown_container.apply_async(
+        task1 = shutdown_container.apply_async(
             args=[str(instance["_id"])], girder_client_token=str(token['_id']),
             queue="manager", time_limit=TASK_TIMEOUT,
         )
@@ -148,7 +148,7 @@ class Instance(AccessControlledModel):
 
         try:
             queue = instance['containerInfo'].get('nodeId', 'celery')
-            remove_volume.apply_async(
+            task2 = remove_volume.apply_async(
                 args=[str(instance['_id'])],
                 girder_client_token=str(token['_id']),
                 queue=queue, time_limit=TASK_TIMEOUT
@@ -156,7 +156,13 @@ class Instance(AccessControlledModel):
         except KeyError:
             pass
 
-        # TODO: handle error
+        # TODO: handle errors
+        # wait for tasks to finish
+        task1.get(timeout=TASK_TIMEOUT)
+        try:
+            task2.get(timeout=TASK_TIMEOUT)
+        except UnboundLocalError:
+            pass
         self.remove(instance)
 
         notify_event([instance["creatorId"]], "wt_instance_deleted",
@@ -228,7 +234,7 @@ class Instance(AccessControlledModel):
                 immutable=True
             )
             volumeTask = create_volume.signature(
-                args=[str(instance['_id'])],
+                args=[str(instance['_id']), Setting().get(PluginSettings.MOUNTS)],
                 girder_job_other_fields={
                     'wt_notification_id': str(notification['_id']),
                     'instance_id': str(instance['_id']),
