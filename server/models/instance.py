@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from bson import ObjectId
 import datetime
 import json
-import requests
 import time
 
+import requests
+from bson import ObjectId
 from girder import logger
 from girder.constants import AccessType, SortDir, TokenScope
 from girder.exceptions import ValidationException
@@ -14,25 +14,30 @@ from girder.models.model_base import AccessControlledModel
 from girder.models.setting import Setting
 from girder.models.token import Token
 from girder.models.user import User
-from girder.utility import JsonEncoder
+from girder.plugins.jobs.constants import REST_CREATE_JOB_TOKEN_SCOPE, JobStatus
+from girder.plugins.wholetale.models.image import Image
+from girder.plugins.wholetale.models.tale import Tale
 from girder.plugins.worker import getCeleryApp
-from girder.plugins.jobs.constants import JobStatus, REST_CREATE_JOB_TOKEN_SCOPE
-from gwvolman.tasks import \
-    create_volume, launch_container, update_container, shutdown_container, \
-    remove_volume, build_tale_image
-from gwvolman.tasks_base import BUILD_TALE_IMAGE_STEP_TOTAL
-from gwvolman.tasks_docker import (
+from girder.utility import JsonEncoder
+from gwvolman.constants import (
+    BUILD_TALE_IMAGE_STEP_TOTAL,
     CREATE_VOLUME_STEP_TOTAL,
     LAUNCH_CONTAINER_STEP_TOTAL,
     UPDATE_CONTAINER_STEP_TOTAL,
 )
+from gwvolman.tasks import (
+    build_tale_image,
+    create_volume,
+    launch_container,
+    remove_volume,
+    shutdown_container,
+    update_container,
+)
+
 from ..constants import InstanceStatus, PluginSettings
 from ..lib.metrics import metricsLogger
 from ..schema.misc import containerInfoSchema
 from ..utils import init_progress, notify_event
-
-from girder.plugins.wholetale.models.tale import Tale
-from girder.plugins.wholetale.models.image import Image
 
 TASK_TIMEOUT = 15.0
 BUILD_TIMEOUT = 360.0
