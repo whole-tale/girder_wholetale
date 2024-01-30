@@ -16,6 +16,7 @@ from girder.api.rest import Resource, filtermodel, RestException,\
 from girder.constants import AccessType, SortDir, TokenScope
 from girder.models.assetstore import Assetstore
 from girder.models.folder import Folder
+from girder.models.item import Item
 from girder.models.user import User
 from girder.models.token import Token
 from girder.models.setting import Setting
@@ -806,20 +807,24 @@ class Tale(Resource):
             )
             current_level = data["children"][-1]
             if obj["_modelType"] == "item":
-                current_level["type"] = 1
+                model = Item()
+                doc = Item().load(obj["itemId"], level=AccessType.READ, user=user)
             elif obj["_modelType"] == "folder":
-                folder = Folder().load(obj["itemId"], level=AccessType.READ, user=user)
-                for fs_path, fobj in Folder().fileList(
-                    folder, user=user, data=False, subpath=False, path="",
-                ):
-                    if fobj.get("imported", False):
-                        host_path = fobj["path"]
-                    else:
-                        if assetstore_path := assetstore_paths[fobj["assetstoreId"]]:
-                            host_path = os.path.join(assetstore_path, fobj["path"])
-                        else:
-                            host_path = fobj["path"]
+                model = Folder()
+                doc = Folder().load(obj["itemId"], level=AccessType.READ, user=user)
 
+            for fs_path, fobj in model.fileList(
+                doc, user=user, data=False, subpath=False, path="",
+            ):
+                if fobj.get("imported", False):
+                    host_path = fobj["path"]
+                else:
+                    if assetstore_path := assetstore_paths[fobj["assetstoreId"]]:
+                        host_path = os.path.join(assetstore_path, fobj["path"])
+                    else:
+                        host_path = fobj["path"]
+
+                if obj["_modelType"] == "folder":
                     current_level = data["children"][-1]
                     fs_path_parts = pathlib.Path(fs_path).parts
                     for part in fs_path_parts:
@@ -832,6 +837,6 @@ class Tale(Resource):
                             child_dict = {"name": part, "type": 0, "children": []}
                             current_level["children"].append(child_dict)
                         current_level = child_dict
-                    current_level["type"] = 1
-                    current_level["host_path"] = host_path
+                current_level["host_path"] = host_path
+                current_level["type"] = 1
         return data
