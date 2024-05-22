@@ -14,7 +14,9 @@ from girder.api.rest import Resource, filtermodel, RestException,\
     setResponseHeader, setContentDisposition
 
 from girder.constants import AccessType, SortDir, TokenScope
+from girder.models.assetstore import Assetstore
 from girder.models.folder import Folder
+from girder.models.item import Item
 from girder.models.user import User
 from girder.models.token import Token
 from girder.models.setting import Setting
@@ -62,6 +64,7 @@ class Tale(Resource):
         self.route('PUT', (':id', 'access'), self.updateTaleAccess)
         self.route('PUT', (':id', 'git'), self.updateTaleWithGitRepo)
         self.route('GET', (':id', 'export'), self.exportTale)
+        self.route('GET', (':id', 'listing'), self.listTaleFiles)
         self.route('GET', (':id', 'manifest'), self.generateManifest)
         self.route('PUT', (':id', 'build'), self.buildImage)
         self.route('PUT', (':id', 'publish'), self.publishTale)
@@ -773,3 +776,67 @@ class Tale(Resource):
             change_status=False,
             title="Adding git repo to the Tale's workspace"
         )
+
+    @access.user(scope=TokenScope.DATA_READ)
+    @autoDescribeRoute(
+        Description('Convert Tale dataSet into structure consumable by passthroughfs.')
+        .modelParam(
+            "id",
+            description="The ID of the tale that is going to be listed.",
+            model="tale",
+            plugin="wholetale",
+            level=AccessType.READ,
+        )
+    )
+    def listTaleFiles(self, tale):
+        assetstore_paths = {_["_id"]: _.get("root") for _ in Assetstore().find()}
+        user = self.getCurrentUser()
+        data = {
+            "name": "/",
+            "type": 0,
+            "children": [],
+        }
+
+        for obj in tale["dataSet"]:
+            data["children"].append(
+                {
+                    "name": obj["mountPath"],
+                    "type": 0,
+                    "children": [],
+                }
+            )
+            current_level = data["children"][-1]
+            if obj["_modelType"] == "item":
+                model = Item()
+                doc = Item().load(obj["itemId"], level=AccessType.READ, user=user)
+            elif obj["_modelType"] == "folder":
+                model = Folder()
+                doc = Folder().load(obj["itemId"], level=AccessType.READ, user=user)
+
+            for fs_path, fobj in model.fileList(
+                doc, user=user, data=False, subpath=False, path="",
+            ):
+                if fobj.get("imported", False):
+                    host_path = fobj["path"]
+                else:
+                    if assetstore_path := assetstore_paths[fobj["assetstoreId"]]:
+                        host_path = os.path.join(assetstore_path, fobj["path"])
+                    else:
+                        host_path = fobj["path"]
+
+                if obj["_modelType"] == "folder":
+                    current_level = data["children"][-1]
+                    fs_path_parts = pathlib.Path(fs_path).parts
+                    for part in fs_path_parts:
+                        child_dict = None
+                        for child in current_level["children"]:
+                            if child["name"] == part:
+                                child_dict = child
+                                break
+                        if child_dict is None:
+                            child_dict = {"name": part, "type": 0, "children": []}
+                            current_level["children"].append(child_dict)
+                        current_level = child_dict
+                current_level["host_path"] = host_path
+                current_level["type"] = 1
+        return data

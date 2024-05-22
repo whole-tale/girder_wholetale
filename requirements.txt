@@ -6,7 +6,7 @@ git+https://github.com/whole-tale/girderfs@master#egg=girderfs
 git+https://github.com/whole-tale/gwvolman@master#egg=gwvolman
 validators
 html2markdown
-lxml
+lxml[html_clean]
 GitPython
 httpio>=0.3.0
 fs

@@ -1,37 +1,35 @@
 # -*- coding: utf-8 -*-
 
-from bson.objectid import ObjectId
 import datetime
 import json
-import jsonschema
 import tempfile
 import zipfile
 
+import jsonschema
+from bson.objectid import ObjectId
 from girder import events
 from girder.constants import AccessType
 from girder.exceptions import GirderException, ValidationException
 from girder.models.assetstore import Assetstore
 from girder.models.folder import Folder
 from girder.models.item import Item
-from girder.models.user import User
 from girder.models.model_base import AccessControlledModel
 from girder.models.token import Token
+from girder.models.user import User
 from girder.plugins.jobs.constants import JobStatus
 from girder.plugins.jobs.models.job import Job
 from girder.plugins.worker import getCeleryApp
 from girder.utility import assetstore_utilities
+from gwvolman.constants import BUILD_TALE_IMAGE_STEP_TOTAL
+from gwvolman.tasks import build_tale_image
 
-from .image import Image as imageModel
-from ..schema.misc import dataSetSchema
 from ..constants import TaleStatus
-from ..schema.misc import related_identifiers_schema
-from ..utils import getOrCreateRootFolder, init_progress, notify_event, diff_access
 from ..lib.license import WholeTaleLicense
 from ..lib.manifest_parser import ManifestParser
 from ..lib.metrics import metricsLogger
-
-from gwvolman.tasks import build_tale_image, BUILD_TALE_IMAGE_STEP_TOTAL
-
+from ..schema.misc import dataSetSchema, related_identifiers_schema
+from ..utils import diff_access, getOrCreateRootFolder, init_progress, notify_event
+from .image import Image as imageModel
 
 # Whenever the Tale object schema is modified (e.g. fields are added or
 # removed) increase `_currentTaleFormat` to retroactively apply those

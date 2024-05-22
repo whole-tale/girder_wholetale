@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from bson import ObjectId
 import datetime
 import json
-import requests
 import time
 
+import requests
+from bson import ObjectId
 from girder import logger
 from girder.constants import AccessType, SortDir, TokenScope
 from girder.exceptions import ValidationException
@@ -14,22 +14,30 @@ from girder.models.model_base import AccessControlledModel
 from girder.models.setting import Setting
 from girder.models.token import Token
 from girder.models.user import User
-from girder.utility import JsonEncoder
+from girder.plugins.jobs.constants import REST_CREATE_JOB_TOKEN_SCOPE, JobStatus
+from girder.plugins.wholetale.models.image import Image
+from girder.plugins.wholetale.models.tale import Tale
 from girder.plugins.worker import getCeleryApp
-from girder.plugins.jobs.constants import JobStatus, REST_CREATE_JOB_TOKEN_SCOPE
-from gwvolman.tasks import \
-    create_volume, launch_container, update_container, shutdown_container, \
-    remove_volume, build_tale_image, \
-    CREATE_VOLUME_STEP_TOTAL, BUILD_TALE_IMAGE_STEP_TOTAL, \
-    LAUNCH_CONTAINER_STEP_TOTAL, UPDATE_CONTAINER_STEP_TOTAL
+from girder.utility import JsonEncoder
+from gwvolman.constants import (
+    BUILD_TALE_IMAGE_STEP_TOTAL,
+    CREATE_VOLUME_STEP_TOTAL,
+    LAUNCH_CONTAINER_STEP_TOTAL,
+    UPDATE_CONTAINER_STEP_TOTAL,
+)
+from gwvolman.tasks import (
+    build_tale_image,
+    create_volume,
+    launch_container,
+    remove_volume,
+    shutdown_container,
+    update_container,
+)
 
 from ..constants import InstanceStatus, PluginSettings
 from ..lib.metrics import metricsLogger
 from ..schema.misc import containerInfoSchema
 from ..utils import init_progress, notify_event
-
-from girder.plugins.wholetale.models.tale import Tale
-from girder.plugins.wholetale.models.image import Image
 
 TASK_TIMEOUT = 15.0
 BUILD_TIMEOUT = 360.0
@@ -108,7 +116,7 @@ class Instance(AccessControlledModel):
             'Initializing', total)
 
         update_container.signature(
-            args=[str(instance['_id'])], queue='manager',
+            args=[str(instance['_id'])], queue="manager",
             girder_job_other_fields={
                 'wt_notification_id': str(notification['_id'])
             },
@@ -136,25 +144,30 @@ class Instance(AccessControlledModel):
         instance = self.updateInstance(instance)
         token = Token().createToken(user=user, days=0.5)
 
-        instanceTask = shutdown_container.signature(
-            args=[str(instance['_id'])], queue='manager', girder_client_token=str(token['_id']),
-        ).apply_async()
-        instanceTask.get(timeout=TASK_TIMEOUT)
-
+        task1 = shutdown_container.apply_async(
+            args=[str(instance["_id"])], girder_client_token=str(token['_id']),
+            queue="manager", time_limit=TASK_TIMEOUT,
+        )
         notify_event([instance['creatorId']], 'wt_instance_deleting',
                      {'taleId': instance['taleId'], 'instanceId': instance['_id']})
 
         try:
-            volumeTask = remove_volume.signature(
+            queue = instance['containerInfo'].get('nodeId', 'celery')
+            task2 = remove_volume.apply_async(
                 args=[str(instance['_id'])],
                 girder_client_token=str(token['_id']),
-                queue=instance['containerInfo']['nodeId']
-            ).apply_async()
-            volumeTask.get(timeout=TASK_TIMEOUT)
+                queue=queue, time_limit=TASK_TIMEOUT
+            )
         except KeyError:
             pass
 
-        # TODO: handle error
+        # TODO: handle errors
+        # wait for tasks to finish
+        task1.get(timeout=TASK_TIMEOUT)
+        try:
+            task2.get(timeout=TASK_TIMEOUT)
+        except UnboundLocalError:
+            pass
         self.remove(instance)
 
         notify_event([instance["creatorId"]], "wt_instance_deleted",
@@ -226,7 +239,7 @@ class Instance(AccessControlledModel):
                 immutable=True
             )
             volumeTask = create_volume.signature(
-                args=[str(instance['_id'])],
+                args=[str(instance['_id']), Setting().get(PluginSettings.MOUNTS)],
                 girder_job_other_fields={
                     'wt_notification_id': str(notification['_id']),
                     'instance_id': str(instance['_id']),
@@ -242,7 +255,6 @@ class Instance(AccessControlledModel):
                 },
                 girder_client_token=str(token['_id']),
                 girder_user=user,
-                queue='manager'
             )
 
             (buildTask | volumeTask | serviceTask).apply_async()
